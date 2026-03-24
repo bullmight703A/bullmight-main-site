@@ -138,6 +138,43 @@
         </div>
 
     </div>
+
+    <!-- Full Width: GitNexus Zero-Server Knowledge Graph -->
+    <div class="col-span-1 lg:col-span-3 mt-2 flex flex-col">
+        <div class="bg-bullmight-surface p-6 rounded-xl border border-bullmight-green/30 shadow-[0_0_20px_rgba(0,255,163,0.05)] relative overflow-hidden group flex-grow">
+            <div class="absolute right-0 top-0 opacity-10 pointer-events-none"><i data-lucide="git-merge" class="w-48 h-48 -mr-10 -mt-10"></i></div>
+            
+            <h2 class="text-xl font-bold text-white mb-2 flex items-center relative z-10"><i data-lucide="network" class="w-6 h-6 text-bullmight-cyan mr-2"></i> GITNEXUS / CORE ARCHITECTURE GRAPH</h2>
+            <p class="text-bullmight-grey text-sm mb-6 font-mono relative z-10">Zero-Server Code Intelligence Engine activated. Mapping OpenClaw repositories to ensure synchronized agent logic.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative z-10">
+                <!-- Visual Graph Placeholder -->
+                <div class="col-span-3 bg-bullmight-bg border border-bullmight-grey/20 rounded-lg p-4 h-56 flex flex-col items-center justify-center cursor-pointer hover:border-bullmight-cyan transition-colors">
+                    <div class="text-center font-mono animate-pulse">
+                        <i data-lucide="boxes" class="w-10 h-10 mx-auto mb-3 text-bullmight-cyan"></i>
+                        <p class="text-bullmight-cyan text-sm font-bold">AWAITING REPOSITORY PACKET</p>
+                        <p class="text-xs text-bullmight-grey mt-2">Drag & Drop GitHub URL or .ZIP to generate Graph RAG</p>
+                    </div>
+                </div>
+                
+                <!-- Status Sidebar -->
+                <div class="col-span-1 space-y-4 font-mono text-xs flex flex-col justify-between">
+                    <div class="bg-bullmight-bg border border-bullmight-green/30 p-4 rounded-md shadow-inner flex-grow">
+                        <span class="block text-bullmight-green mb-2 text-[10px] tracking-widest">INDEX DIRECTORY</span>
+                        <span class="block text-white mb-1"><i data-lucide="folder" class="w-3 h-3 inline mr-1"></i> .gitnexus/</span>
+                        <span class="block text-bullmight-grey"><i data-lucide="file-json" class="w-3 h-3 inline mr-1"></i> registry.json</span>
+                    </div>
+                    <div class="bg-bullmight-bg border border-bullmight-cyan/30 p-4 rounded-md shadow-inner flex-grow">
+                        <span class="block text-bullmight-cyan mb-2 text-[10px] tracking-widest">OBSERVED AGENTS</span>
+                        <span class="block text-white">IRO (Local)</span>
+                        <span class="block text-white">Volt</span>
+                        <span class="block text-white">Masterchef</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <?php wp_footer(); ?>
