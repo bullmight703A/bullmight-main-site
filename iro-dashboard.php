@@ -89,34 +89,65 @@
     <!-- Column 2 & 3: Automation Webhook & Live Logs -->
     <div class="col-span-1 lg:col-span-2 flex flex-col gap-6">
         
-        <!-- Webhook Trigger Panel -->
-        <div class="bg-bullmight-surface p-6 rounded-xl border border-bullmight-cyan/30 shadow-[0_0_20px_rgba(0,240,255,0.05)] relative overflow-hidden">
+        <!-- Conversational Agent Terminal (Antigravity Style) -->
+        <div class="bg-bullmight-surface flex flex-col rounded-xl border border-bullmight-cyan/30 shadow-[0_0_20px_rgba(0,240,255,0.05)] relative overflow-hidden h-[500px]">
             <div class="absolute -right-20 -top-20 w-64 h-64 bg-bullmight-cyan/5 rounded-full blur-[50px] pointer-events-none"></div>
             
-            <h2 class="text-xl font-bold text-white mb-2 flex items-center relative z-10"><i data-lucide="zap" class="w-6 h-6 text-bullmight-cyan mr-2"></i> OPENCLAW INJECTION PORT</h2>
-            <p class="text-bullmight-grey text-sm mb-6 font-mono relative z-10">Directly route a URL, artifact, or raw text string into n8n for agent enrichment.</p>
-            
-            <form onsubmit="event.preventDefault(); alert('Webhook initialization skipped. (Demo Mode)');" class="relative z-10">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-mono text-bullmight-cyan mb-1">PAYLOAD_DATA [String/URL]</label>
-                        <input type="text" placeholder="https://example.com/lead-data" class="w-full bg-bullmight-bg border border-bullmight-grey/40 rounded-lg px-4 py-3 text-white placeholder-bullmight-grey/40 focus:outline-none focus:border-bullmight-cyan focus:ring-1 focus:ring-bullmight-cyan font-mono text-sm transition-all" required>
-                    </div>
-                    <div class="md:col-span-1">
-                        <label class="block text-xs font-mono text-bullmight-cyan mb-1">ROUTING_KEY</label>
-                        <select class="w-full bg-bullmight-bg border border-bullmight-grey/40 rounded-lg px-4 py-3 text-white outline-none focus:border-bullmight-cyan font-mono text-sm">
-                            <option value="enrich">n8n: Enrich Lead</option>
-                            <option value="scrape">Agent: Deep Scrape</option>
-                            <option value="report">Masterchef: Audit</option>
-                        </select>
-                    </div>
+            <!-- Chat Header -->
+            <div class="px-6 py-4 border-b border-bullmight-grey/20 relative z-10 flex justify-between items-center bg-bullmight-surface/80 backdrop-blur-sm">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center"><i data-lucide="message-square" class="w-5 h-5 text-bullmight-cyan mr-2"></i> AGENT COMMUNICATIONS</h2>
+                    <p class="text-bullmight-grey text-xs font-mono">Direct secure line to your OpenClaw Fleet.</p>
                 </div>
-                <div class="flex justify-end mt-4">
-                    <button type="submit" class="bg-bullmight-cyan text-bullmight-bg px-8 py-3 rounded-md font-bold hover:bg-white transition-all flex items-center justify-center group shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-                        <i data-lucide="send" class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform"></i> FIRE WEBHOOK
+                <div class="flex items-center space-x-3">
+                    <select class="bg-bullmight-bg border border-bullmight-cyan/40 text-bullmight-cyan px-4 py-2 rounded font-mono text-xs focus:outline-none focus:border-bullmight-cyan shadow-inner">
+                        <option value="iro" selected>Target: IRO (Local)</option>
+                        <option value="masterchef">Target: Masterchef</option>
+                        <option value="volt">Target: Volt</option>
+                        <option value="picasso">Target: Picasso</option>
+                    </select>
+                    
+                    <button type="button" class="bg-red-900/40 border border-red-500/50 text-red-400 hover:bg-red-600 hover:text-white px-4 py-2 rounded text-xs font-bold font-mono transition-colors shadow-[0_0_10px_rgba(255,0,0,0.1)] flex items-center" onclick="alert('Sending PM2 restart sequence & flushing active bridge queue...');">
+                        <i data-lucide="refresh-cw" class="w-3 h-3 mr-1"></i> RESTART AGENT
                     </button>
                 </div>
-            </form>
+            </div>
+            
+            <!-- Chat History Area -->
+            <div class="flex-grow p-6 overflow-y-auto space-y-6 relative z-10 wimper-scroll bg-bullmight-bg/30">
+                <!-- User Message -->
+                <div class="flex justify-end">
+                    <div class="bg-bullmight-cyan text-bullmight-bg px-5 py-3 rounded-2xl rounded-tr-sm max-w-[80%]">
+                        <p class="text-sm font-medium">IRO, analyze the new Kidazzle SEO architecture and confirm the JSON-LD schemas parsed correctly.</p>
+                        <span class="text-[10px] text-bullmight-bg/60 mt-1 block text-right font-mono">18:02 PM</span>
+                    </div>
+                </div>
+                
+                <!-- Agent Message (IRO) -->
+                <div class="flex justify-start">
+                    <div class="bg-bullmight-bg border border-bullmight-grey/30 text-white px-5 py-3 rounded-2xl rounded-tl-sm max-w-[80%] shadow-md">
+                        <div class="flex items-center mb-2">
+                            <i data-lucide="cpu" class="w-4 h-4 text-bullmight-green mr-2"></i>
+                            <span class="text-xs font-bold text-bullmight-green font-mono">AGENT_IRO</span>
+                        </div>
+                        <p class="text-sm text-bullmight-grey leading-relaxed">I have analyzed the current Kidazzle SEO architecture. The JSON-LD schema (Answer Engine Optimization) is correctly injecting the <code>@type: DeveloperApplication</code> metadata natively. The OpenClaw pipeline is completely unobstructed.</p>
+                        <span class="text-[10px] text-bullmight-grey/50 mt-2 block font-mono">18:03 PM</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="p-4 border-t border-bullmight-grey/20 bg-bullmight-surface relative z-10">
+                <form onsubmit="event.preventDefault(); alert('Chat engine initializing. Waiting for WebSocket connection to openclaw bridge!');" class="relative flex items-center">
+                    <button type="button" class="absolute left-4 text-bullmight-grey hover:text-white transition-colors" onclick="alert('Upload Dialog: Ready to accept artifacts.');">
+                        <i data-lucide="paperclip" class="w-5 h-5"></i>
+                    </button>
+                    <input type="text" placeholder="Upload artifact or send an instruction to an agent..." class="w-full bg-bullmight-bg border border-bullmight-grey/40 rounded-full pl-12 pr-12 py-3 text-white placeholder-bullmight-grey/40 focus:outline-none focus:border-bullmight-cyan focus:ring-1 focus:ring-bullmight-cyan transition-all text-sm shadow-inner" required>
+                    <button type="submit" class="absolute right-2 bg-bullmight-cyan text-bullmight-bg p-2 rounded-full hover:bg-white transition-all shadow-[0_0_10px_rgba(0,240,255,0.3)]">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
         </div>
 
         <!-- Live Terminal Log -->
