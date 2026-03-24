@@ -1,0 +1,17 @@
+/*
+Theme Name: Bullmight Mission Control
+Theme URI: https://bullmight.com
+Author: Antigravity / OpenClaw
+Description: The Mission Control root terminal theme for Bullmight.
+Version: 1.0.0
+Text Domain: bullmight
+*/
+
+/* Custom CSS for additional terminal effects not handled by Tailwind */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.terminal-cursor {
+  animation: cursor-blink 1s step-end infinite;
+}
