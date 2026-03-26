@@ -179,6 +179,14 @@
                             <div class="text-[10px] text-cyber-slate/60 font-mono">Awaiting Trigger. Blocked by Robert until Test 1 is reviewed.</div>
                         </div>
                     </div>
+                    <!-- Cron Item -->
+                    <div class="flex gap-3 items-start">
+                        <div class="w-2 h-2 rounded-full bg-[#B026FF] mt-1.5 shrink-0 blink-slow"></div>
+                        <div class="space-y-1">
+                            <div class="text-xs text-white">Mailgun API Deliverability</div>
+                            <div class="text-[10px] text-[#B026FF]/80 font-mono">Monitoring... Infrastructure Optimal. Open Rate: 42%.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -196,10 +204,14 @@
                     <span class="text-xs opacity-50">Secure channel directly to OpenClaw Engine node.</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button class="text-xs px-3 py-1.5 border border-cyber-border hover:bg-cyber-border hover:text-white rounded transition-colors flex items-center gap-2">
-                        <i data-lucide="upload-cloud" class="w-3 h-3"></i> Add Skill File
-                    </button>
-                    <button class="text-xs px-3 py-1.5 bg-cyber-cyan text-black hover:bg-white font-bold rounded transition-colors" onclick="clearTerminal()">CLEAR LOG</button>
+                    <div class="flex items-center bg-cyber-dark border border-cyber-border rounded overflow-hidden">
+                        <div class="bg-cyber-border px-2 py-1.5 flex items-center justify-center">
+                            <i data-lucide="github" class="w-3 h-3 text-white"></i>
+                        </div>
+                        <input type="text" placeholder="Paste GitHub / Skill URL..." class="bg-transparent text-[10px] text-white px-2 py-1.5 outline-none w-40 focus:w-64 transition-all" />
+                        <button class="text-[9px] font-bold text-black bg-cyber-cyan px-3 py-1.5 hover:bg-white transition-colors" onclick="alert('Skill appended to vector DB.')">ADD SKILL</button>
+                    </div>
+                    <button class="text-[10px] px-3 py-1.5 border border-cyber-border hover:bg-white hover:text-black font-bold rounded transition-colors" onclick="clearTerminal()">CLEAR LOG</button>
                 </div>
             </div>
 
@@ -258,40 +270,80 @@
             
             <!-- CRM Opportunities -->
             <div class="p-5 border-b border-cyber-border">
-                <h2 class="text-[10px] uppercase font-bold tracking-widest text-[#00FFA3] mb-4 flex items-center gap-2">
-                    <i data-lucide="bar-chart-3" class="w-3 h-3"></i> Local SEO & GHL Pipeline (Live)
+                <h2 class="text-[10px] uppercase font-bold tracking-widest text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="bar-chart-3" class="w-3 h-3 text-[#00F0FF]"></i> Live Pipeline Opportunities
                 </h2>
                 <div class="space-y-4">
-                    <div class="bg-cyber-subpanel border border-[#00FFA3]/20 rounded p-4 relative overflow-hidden group">
-                        <!-- WIMPER BG Pattern -->
-                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9IiMwMEZGQTMiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-20"></div>
+                    
+                    <!-- KIDAZZLE -->
+                    <div class="bg-cyber-subpanel border border-[#00F0FF]/30 rounded p-4 relative overflow-hidden group hover:border-[#00F0FF]/60 transition-colors shadow-[0_0_10px_rgba(0,240,255,0.05)]">
+                        <div class="absolute inset-0 bg-gradient-to-br from-[#00F0FF]/5 to-transparent"></div>
                         <div class="relative z-10">
-                            <div class="text-[10px] uppercase tracking-widest text-[#00FFA3] mb-1 font-bold">Wimper Target Pool</div>
-                            <div class="text-xl font-bold text-white mb-2">14,000 Linked</div>
-                            <div class="w-full bg-cyber-dark h-1.5 rounded-full overflow-hidden">
-                                <div class="bg-[#00FFA3] h-full w-[0%]"></div>
+                            <div class="text-[10px] uppercase tracking-widest text-[#00F0FF] mb-2 font-bold flex justify-between items-center">
+                                <span>Kidazzle Pipeline</span>
+                                <span class="text-white text-xs">12 Active</span>
                             </div>
-                            <div class="text-[9px] text-[#00FFA3]/70 mt-2 font-mono uppercase">Status: Volting...</div>
+                            
+                            <!-- Traffic -->
+                            <div class="flex justify-between items-center text-[9px] mb-2 border-b border-cyber-border/50 pb-2">
+                                <span class="text-cyber-slate">kidazzle.com Traffic (24h)</span>
+                                <span class="text-[#00F0FF] font-mono">1,402</span>
+                            </div>
+
+                            <!-- Lead Box -->
+                            <div class="text-[9px] text-cyber-slate mb-1 mt-2 uppercase tracking-wider font-bold">Recent Leads / Tours</div>
+                            <div class="space-y-1.5">
+                                <div class="bg-cyber-dark/50 p-1.5 rounded flex justify-between items-center text-[9px]">
+                                    <span class="text-white font-mono">Jones, M.</span>
+                                    <span class="text-cyber-slate">Mar 27</span>
+                                    <span class="text-[#00F0FF]">Midtown</span>
+                                </div>
+                                <div class="bg-cyber-dark/50 p-1.5 rounded flex justify-between items-center text-[9px]">
+                                    <span class="text-white font-mono">Smith, T.</span>
+                                    <span class="text-cyber-slate">Mar 28</span>
+                                    <span class="text-[#00F0FF]">Doral</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="bg-cyber-subpanel border border-[#00F0FF]/20 rounded p-4 relative overflow-hidden group hover:border-[#00F0FF]/50 transition-colors">
-                        <!-- Kidazzle BG Pattern -->
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#00F0FF]/5 to-transparent"></div>
+                    <!-- WIMPER -->
+                    <div class="bg-cyber-subpanel border border-[#00FFA3]/30 rounded p-4 relative overflow-hidden group hover:border-[#00FFA3]/60 transition-colors shadow-[0_0_10px_rgba(0,255,163,0.05)]">
+                        <!-- WIMPER BG Pattern -->
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9IiMwMEZGQTMiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-20"></div>
                         <div class="relative z-10">
-                            <div class="text-[10px] uppercase tracking-widest text-[#00F0FF] mb-1 font-bold">Kidazzle Opportunities</div>
-                            <div class="flex justify-between items-center mb-3">
-                                <div>
-                                    <div class="text-2xl font-bold text-white leading-none">12 +</div>
-                                    <div class="text-[9px] text-cyber-slate mt-1">Pending Tours</div>
-                                </div>
-                                <div class="bg-[#00F0FF]/10 text-[#00F0FF] rounded-full px-2 py-1 flex items-center gap-1 text-[10px] font-bold">
-                                    <i data-lucide="trending-up" class="w-3 h-3"></i> 24h
-                                </div>
+                            <div class="text-[10px] uppercase tracking-widest text-[#00FFA3] mb-2 font-bold flex justify-between items-center">
+                                <span>Wimper Program</span>
+                                <span class="text-white text-xs">14,000 Pool</span>
                             </div>
-                            <div class="flex gap-2">
-                                <span class="bg-cyber-dark text-cyber-slate border border-cyber-border text-[9px] px-1.5 py-0.5 rounded">Midtown</span>
-                                <span class="bg-cyber-dark text-cyber-slate border border-cyber-border text-[9px] px-1.5 py-0.5 rounded">Doral</span>
+                            
+                            <!-- Opps -->
+                            <div class="text-[9px] text-[#00FFA3]/70 font-mono mb-2">OPPORTUNITIES: 4 Pending</div>
+
+                            <!-- Contact Box -->
+                            <div class="text-[9px] text-cyber-slate mb-1 mt-2 uppercase tracking-wider font-bold">Recent Calls & Webinars</div>
+                            <div class="space-y-1.5">
+                                <div class="bg-cyber-dark/50 p-1.5 rounded flex justify-between items-center text-[9px]">
+                                    <div>
+                                        <span class="text-white font-mono block">Davis, L. </span>
+                                        <span class="text-cyber-slate font-mono text-[8px]">(404) 555-0192</span>
+                                    </div>
+                                    <span class="bg-[#00FFA3]/20 text-[#00FFA3] rounded px-1 py-0.5">Call In</span>
+                                </div>
+                                <div class="bg-cyber-dark/50 p-1.5 rounded flex justify-between items-center text-[9px]">
+                                    <div>
+                                        <span class="text-white font-mono block">Miller, R.</span>
+                                        <span class="text-cyber-slate font-mono text-[8px]">(305) 555-8841</span>
+                                    </div>
+                                    <span class="bg-[#B026FF]/20 text-[#B026FF] rounded px-1 py-0.5">Webinar</span>
+                                </div>
+                                <div class="bg-cyber-dark/50 p-1.5 rounded flex justify-between items-center text-[9px]">
+                                    <div>
+                                        <span class="text-white font-mono block">Chen, W.</span>
+                                        <span class="text-cyber-slate font-mono text-[8px]">(770) 555-3319</span>
+                                    </div>
+                                    <span class="bg-[#FF5C00]/20 text-[#FF5C00] rounded px-1 py-0.5">Replied YES</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -335,10 +387,12 @@
                         </div>
                     </a>
 
-                    <!-- Add New -->
-                    <button class="w-full border border-dashed border-cyber-border hover:border-cyber-slate text-cyber-slate rounded p-3 text-xs flex items-center justify-center gap-2 transition-colors">
-                        <i data-lucide="plus" class="w-3 h-3"></i> Upload Reference Doc
-                    </button>
+                    <!-- Add New / File Upload -->
+                    <label class="w-full border border-dashed border-cyber-border hover:border-[#B026FF] hover:text-[#B026FF] text-cyber-slate rounded p-3 text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer group">
+                        <i data-lucide="upload" class="w-3 h-3 group-hover:-translate-y-0.5 transition-transform"></i> 
+                        <span>Upload Reference Doc</span>
+                        <input type="file" class="hidden" onchange="alert('Asset processing pipeline triggered. Distributing to Picasso and Agent nodes.')">
+                    </label>
 
                 </div>
             </div>
