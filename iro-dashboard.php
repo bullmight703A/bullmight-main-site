@@ -2,6 +2,22 @@
 /**
  * Template Name: IRO Mission Control v3.0
  */
+
+// Load Telemetry Data
+$telemetry_path = 'C:/Users/kidaz/.openclaw/workspace/bridge/telemetry.json';
+$telemetry = ['kidazzle' => [], 'wimper' => []];
+if (file_exists($telemetry_path)) {
+    $telemetry_data = file_get_contents($telemetry_path);
+    if ($telemetry_data) {
+        $telemetry = json_decode($telemetry_data, true);
+    }
+}
+$kidazzle = $telemetry['kidazzle'] ?? [];
+$wimper = $telemetry['wimper'] ?? [];
+
+$kidazzle_pool = number_format($kidazzle['leadsToday'] ?? 12);
+$wimper_pool = number_format($wimper['pool'] ?? 14000);
+$wimper_pending = $wimper['pendingOps'] ?? 4;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -281,7 +297,7 @@
                         <div class="relative z-10">
                             <div class="text-[10px] uppercase tracking-widest text-[#00F0FF] mb-2 font-bold flex justify-between items-center">
                                 <span>Kidazzle Pipeline</span>
-                                <span class="text-white text-xs">12 Active</span>
+                                <span class="text-white text-xs"><?php echo $kidazzle_pool; ?> Active</span>
                             </div>
                             
                             <!-- Traffic -->
@@ -314,11 +330,11 @@
                         <div class="relative z-10">
                             <div class="text-[10px] uppercase tracking-widest text-[#00FFA3] mb-2 font-bold flex justify-between items-center">
                                 <span>Wimper Program</span>
-                                <span class="text-white text-xs">14,000 Pool</span>
+                                <span class="text-white text-xs"><?php echo $wimper_pool; ?> Pool</span>
                             </div>
                             
                             <!-- Opps -->
-                            <div class="text-[9px] text-[#00FFA3]/70 font-mono mb-2">OPPORTUNITIES: 4 Pending</div>
+                            <div class="text-[9px] text-[#00FFA3]/70 font-mono mb-2">OPPORTUNITIES: <?php echo $wimper_pending; ?> Pending</div>
 
                             <!-- Contact Box -->
                             <div class="text-[9px] text-cyber-slate mb-1 mt-2 uppercase tracking-wider font-bold">Recent Calls & Webinars</div>

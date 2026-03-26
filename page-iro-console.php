@@ -2,6 +2,29 @@
 /**
  * Template Name: IRO Mission Control
  */
+
+// Load Telemetry Data
+$telemetry_path = 'C:/Users/kidaz/.openclaw/workspace/bridge/telemetry.json';
+$telemetry = ['kidazzle' => [], 'wimper' => []];
+if (file_exists($telemetry_path)) {
+    $telemetry_data = file_get_contents($telemetry_path);
+    if ($telemetry_data) {
+        $telemetry = json_decode($telemetry_data, true);
+    }
+}
+$kidazzle = $telemetry['kidazzle'] ?? [];
+$wimper = $telemetry['wimper'] ?? [];
+
+$kidazzle_leads = number_format($kidazzle['leadsToday'] ?? 14);
+$kidazzle_appts = number_format($kidazzle['appointmentsBooked'] ?? 3);
+$kidazzle_value = $kidazzle['pipelineValue'] ?? '$12,400';
+
+$wimper_sent = number_format($wimper['outreachSent'] ?? 245);
+$wimper_replies = number_format($wimper['warmReplies'] ?? 8);
+$wimper_value = $wimper['projectedValue'] ?? '$45,000';
+
+// Note: For Wimper B2B Outreach Sent we can show the large pool if we want
+$wimper_sent_display = number_format($wimper['pool'] ?? 14000);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -155,15 +178,15 @@
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between border-b border-cyber-border pb-1">
                             <span className="text-cyber-gray">New Leads Today</span>
-                            <span className="text-white font-bold">14</span>
+                            <span className="text-white font-bold"><?php echo $kidazzle_leads; ?></span>
                           </div>
                           <div className="flex justify-between border-b border-cyber-border pb-1">
                             <span className="text-cyber-gray">Appointments Booked</span>
-                            <span className="text-white font-bold">3</span>
+                            <span className="text-white font-bold"><?php echo $kidazzle_appts; ?></span>
                           </div>
                           <div className="flex justify-between pt-1">
                             <span className="text-cyber-gray">Pipeline Value</span>
-                            <span className="text-cyber-green font-bold">$12,400</span>
+                            <span className="text-cyber-green font-bold"><?php echo $kidazzle_value; ?></span>
                           </div>
                         </div>
                       </div>
@@ -173,16 +196,16 @@
                         <h3 className="text-cyber-cyan font-bold mb-2 flex items-center"><IconBarChart className="w-4 h-4 mr-2"/> WIMPER B2B</h3>
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between border-b border-cyber-border pb-1">
-                            <span className="text-cyber-gray">Outreach Sent</span>
-                            <span className="text-white font-bold">245</span>
+                            <span className="text-cyber-gray">Outreach Pool</span>
+                            <span className="text-white font-bold"><?php echo $wimper_sent_display; ?></span>
                           </div>
                           <div className="flex justify-between border-b border-cyber-border pb-1">
                             <span className="text-cyber-gray">Warm Replies</span>
-                            <span className="text-white font-bold">8</span>
+                            <span className="text-white font-bold"><?php echo $wimper_replies; ?></span>
                           </div>
                           <div className="flex justify-between pt-1">
                             <span className="text-cyber-gray">Projected Value</span>
-                            <span className="text-cyber-green font-bold">$45,000</span>
+                            <span className="text-cyber-green font-bold"><?php echo $wimper_value; ?></span>
                           </div>
                         </div>
                       </div>
