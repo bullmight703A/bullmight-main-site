@@ -324,7 +324,7 @@ const CocoHill = () => {
 
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        root.render(<CocoHill />);
     </script>
 </body>
 </html>
