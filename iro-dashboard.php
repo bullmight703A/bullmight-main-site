@@ -95,7 +95,7 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
                     <h2 class="text-[10px] uppercase font-bold tracking-widest text-white/50 flex items-center gap-2">
                         <i data-lucide="network" class="w-3 h-3"></i> Agent Fleet
                     </h2>
-                    <button class="text-[10px] bg-cyber-border hover:bg-white text-white hover:text-black px-2 py-1 rounded transition-colors font-bold uppercase tracking-widest" onclick="alert('Master Restart Triggered. Rebooting PM2 processes.')">Restart All</button>
+                    <button class="text-[10px] bg-cyber-border hover:bg-white text-white hover:text-black px-2 py-1 rounded transition-colors font-bold uppercase tracking-widest" onclick="restartAgent('all')">Restart All</button>
                 </div>
                 
                 <div class="space-y-3">
@@ -105,13 +105,9 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
                             <span class="font-bold text-white text-sm flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-[#00F0FF]"></div> IRO</span>
                             <span class="text-[9px] text-[#00F0FF] uppercase tracking-widest border border-[#00F0FF]/30 px-1.5 rounded">Core</span>
                         </div>
-                        <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center justify-between mt-2 pt-2 border-t border-[#00F0FF]/10">
                             <span class="text-xs text-cyber-slate/70">Sys Admin & Comms</span>
-                            <button class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-cyber-slate hover:text-white"><i data-lucide="rotate-cw" class="w-3 h-3"></i></button>
-                        </div>
-                        <div class="border-t border-[#00F0FF]/10 pt-2 flex gap-1 mt-2">
-                            <input type="text" class="flex-1 bg-cyber-dark text-[9px] px-2 py-1 rounded text-white border border-[#00F0FF]/20 focus:border-[#00F0FF] outline-none" placeholder="Telegram API / Instruct..." onkeydown="if(event.key==='Enter') window.open('https://web.telegram.org/a/#1234567', '_blank')" />
-                            <button onclick="window.open('https://web.telegram.org/a/#1234567', '_blank')" class="bg-[#00F0FF]/20 text-[#00F0FF] px-2 rounded hover:bg-[#00F0FF] hover:text-black transition-colors" title="Launch Telegram App"><i data-lucide="send" class="w-3 h-3"></i></button>
+                            <button onclick="restartAgent('iro')" class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-cyber-dark border border-cyber-border px-2 py-1 rounded text-cyber-slate hover:text-white hover:border-[#00F0FF] flex items-center gap-1"><i data-lucide="rotate-cw" class="w-3 h-3"></i> RESTART</button>
                         </div>
                     </div>
                     
@@ -121,13 +117,9 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
                             <span class="font-bold text-white text-sm flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-[#FF5C00]"></div> Masterchef</span>
                             <span class="text-[9px] text-[#FF5C00] uppercase tracking-widest border border-[#FF5C00]/30 px-1.5 rounded">GHL/Web</span>
                         </div>
-                        <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center justify-between mt-2 pt-2 border-t border-[#FF5C00]/10">
                             <span class="text-xs text-cyber-slate/70">WIMPER Email Sequence</span>
-                            <button class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-cyber-slate hover:text-white"><i data-lucide="rotate-cw" class="w-3 h-3"></i></button>
-                        </div>
-                        <div class="border-t border-[#FF5C00]/10 pt-2 flex gap-1 mt-2">
-                            <input type="text" class="flex-1 bg-cyber-dark text-[9px] px-2 py-1 rounded text-white border border-[#FF5C00]/20 focus:border-[#FF5C00] outline-none" placeholder="Telegram API / Instruct..." onkeydown="if(event.key==='Enter') window.open('https://web.telegram.org/a/#1234567', '_blank')" />
-                            <button onclick="window.open('https://web.telegram.org/a/#1234567', '_blank')" class="bg-[#FF5C00]/20 text-[#FF5C00] px-2 rounded hover:bg-[#FF5C00] hover:text-black transition-colors" title="Launch Telegram App"><i data-lucide="send" class="w-3 h-3"></i></button>
+                            <button onclick="restartAgent('masterchef')" class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-cyber-dark border border-cyber-border px-2 py-1 rounded text-cyber-slate hover:text-white hover:border-[#FF5C00] flex items-center gap-1"><i data-lucide="rotate-cw" class="w-3 h-3"></i> RESTART</button>
                         </div>
                     </div>
                     
@@ -137,13 +129,9 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
                             <span class="font-bold text-white text-sm flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-[#B026FF]"></div> Volt</span>
                             <span class="text-[9px] text-[#B026FF] uppercase tracking-widest border border-[#B026FF]/30 px-1.5 rounded">Data</span>
                         </div>
-                        <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center justify-between mt-2 pt-2 border-t border-[#B026FF]/10">
                             <span class="text-xs text-cyber-slate/70">Scraping & SEO Metric</span>
-                            <button class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-cyber-slate hover:text-white"><i data-lucide="rotate-cw" class="w-3 h-3"></i></button>
-                        </div>
-                        <div class="border-t border-[#B026FF]/10 pt-2 flex gap-1 mt-2">
-                            <input type="text" class="flex-1 bg-cyber-dark text-[9px] px-2 py-1 rounded text-white border border-[#B026FF]/20 focus:border-[#B026FF] outline-none" placeholder="Telegram API / Instruct..." onkeydown="if(event.key==='Enter') window.open('https://web.telegram.org/a/#1234567', '_blank')" />
-                            <button onclick="window.open('https://web.telegram.org/a/#1234567', '_blank')" class="bg-[#B026FF]/20 text-[#B026FF] px-2 rounded hover:bg-[#B026FF] hover:text-white transition-colors" title="Launch Telegram App"><i data-lucide="send" class="w-3 h-3"></i></button>
+                            <button onclick="restartAgent('volt')" class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-cyber-dark border border-cyber-border px-2 py-1 rounded text-cyber-slate hover:text-white hover:border-[#B026FF] flex items-center gap-1"><i data-lucide="rotate-cw" class="w-3 h-3"></i> RESTART</button>
                         </div>
                     </div>
 
@@ -153,13 +141,9 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
                             <span class="font-bold text-white text-sm flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-[#00FFA3]"></div> Picasso</span>
                             <span class="text-[9px] text-[#00FFA3] uppercase tracking-widest border border-[#00FFA3]/30 px-1.5 rounded">Media</span>
                         </div>
-                        <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center justify-between mt-2 pt-2 border-t border-[#00FFA3]/10">
                             <span class="text-xs text-cyber-slate/70">Awaiting HeyGen Task</span>
-                            <button class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-cyber-slate hover:text-white"><i data-lucide="rotate-cw" class="w-3 h-3"></i></button>
-                        </div>
-                        <div class="border-t border-[#00FFA3]/10 pt-2 flex gap-1 mt-2">
-                            <input type="text" class="flex-1 bg-cyber-dark text-[9px] px-2 py-1 rounded text-white border border-[#00FFA3]/20 focus:border-[#00FFA3] outline-none" placeholder="Telegram API / Instruct..." onkeydown="if(event.key==='Enter') window.open('https://web.telegram.org/a/#1234567', '_blank')" />
-                            <button onclick="window.open('https://web.telegram.org/a/#1234567', '_blank')" class="bg-[#00FFA3]/20 text-[#00FFA3] px-2 rounded hover:bg-[#00FFA3] hover:text-black transition-colors" title="Launch Telegram App"><i data-lucide="send" class="w-3 h-3"></i></button>
+                            <button onclick="restartAgent('picasso')" class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-cyber-dark border border-cyber-border px-2 py-1 rounded text-cyber-slate hover:text-white hover:border-[#00FFA3] flex items-center gap-1"><i data-lucide="rotate-cw" class="w-3 h-3"></i> RESTART</button>
                         </div>
                     </div>
                 </div>
@@ -292,7 +276,7 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
                 <div class="space-y-4">
                     
                     <!-- KIDAZZLE -->
-                    <div class="bg-cyber-subpanel border border-[#00F0FF]/30 rounded p-4 relative overflow-hidden group hover:border-[#00F0FF]/60 transition-colors shadow-[0_0_10px_rgba(0,240,255,0.05)]">
+                    <div class="bg-cyber-subpanel border border-[#00F0FF]/30 rounded p-5 min-h-[170px] relative overflow-hidden group hover:border-[#00F0FF]/60 transition-colors shadow-[0_0_10px_rgba(0,240,255,0.05)]">
                         <div class="absolute inset-0 bg-gradient-to-br from-[#00F0FF]/5 to-transparent"></div>
                         <div class="relative z-10">
                             <div class="text-[10px] uppercase tracking-widest text-[#00F0FF] mb-2 font-bold flex justify-between items-center">
@@ -307,24 +291,31 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
                             </div>
 
                             <!-- Lead Box -->
-                            <div class="text-[9px] text-cyber-slate mb-1 mt-2 uppercase tracking-wider font-bold">Recent Leads / Tours</div>
-                            <div class="space-y-1.5">
+                            <div class="flex justify-between items-center mt-3 mb-1 border-b border-cyber-border/30 pb-1">
+                                <span class="text-[9px] text-cyber-slate uppercase tracking-wider font-bold">Recent Leads / Tours</span>
+                                <span class="text-[9px] text-cyber-slate uppercase tracking-wider font-bold">Tag</span>
+                            </div>
+                            <div class="space-y-1.5 pt-1">
                                 <div class="bg-cyber-dark/50 p-1.5 rounded flex justify-between items-center text-[9px]">
-                                    <span class="text-white font-mono">Jones, M.</span>
-                                    <span class="text-cyber-slate">Mar 27</span>
-                                    <span class="text-[#00F0FF]">Midtown</span>
+                                    <div>
+                                        <span class="text-white font-mono block">Jones, M.</span>
+                                        <span class="text-cyber-slate font-mono text-[8px]">Mar 27</span>
+                                    </div>
+                                    <span class="bg-[#00F0FF]/20 text-[#00F0FF] rounded px-1.5 py-0.5">Midtown</span>
                                 </div>
                                 <div class="bg-cyber-dark/50 p-1.5 rounded flex justify-between items-center text-[9px]">
-                                    <span class="text-white font-mono">Smith, T.</span>
-                                    <span class="text-cyber-slate">Mar 28</span>
-                                    <span class="text-[#00F0FF]">Doral</span>
+                                    <div>
+                                        <span class="text-white font-mono block">Smith, T.</span>
+                                        <span class="text-cyber-slate font-mono text-[8px]">Mar 28</span>
+                                    </div>
+                                    <span class="bg-[#00F0FF]/20 text-[#00F0FF] rounded px-1.5 py-0.5">Doral</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- WIMPER -->
-                    <div class="bg-cyber-subpanel border border-[#00FFA3]/30 rounded p-4 relative overflow-hidden group hover:border-[#00FFA3]/60 transition-colors shadow-[0_0_10px_rgba(0,255,163,0.05)]">
+                    <div class="bg-cyber-subpanel border border-[#00FFA3]/30 rounded p-5 min-h-[220px] relative overflow-hidden group hover:border-[#00FFA3]/60 transition-colors shadow-[0_0_10px_rgba(0,255,163,0.05)]">
                         <!-- WIMPER BG Pattern -->
                         <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9IiMwMEZGQTMiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-20"></div>
                         <div class="relative z-10">
@@ -337,28 +328,31 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
                             <div class="text-[9px] text-[#00FFA3]/70 font-mono mb-2">OPPORTUNITIES: <?php echo $wimper_pending; ?> Pending</div>
 
                             <!-- Contact Box -->
-                            <div class="text-[9px] text-cyber-slate mb-1 mt-2 uppercase tracking-wider font-bold">Recent Calls & Webinars</div>
-                            <div class="space-y-1.5">
+                            <div class="flex justify-between items-center mt-3 mb-1 border-b border-cyber-border/30 pb-1">
+                                <span class="text-[9px] text-cyber-slate uppercase tracking-wider font-bold">Recent Calls & Webinars</span>
+                                <span class="text-[9px] text-cyber-slate uppercase tracking-wider font-bold">Tag</span>
+                            </div>
+                            <div class="space-y-1.5 pt-1">
                                 <div class="bg-cyber-dark/50 p-1.5 rounded flex justify-between items-center text-[9px]">
                                     <div>
                                         <span class="text-white font-mono block">Davis, L. </span>
                                         <span class="text-cyber-slate font-mono text-[8px]">(404) 555-0192</span>
                                     </div>
-                                    <span class="bg-[#00FFA3]/20 text-[#00FFA3] rounded px-1 py-0.5">Call In</span>
+                                    <span class="bg-[#00FFA3]/20 text-[#00FFA3] rounded px-1.5 py-0.5">Call In</span>
                                 </div>
                                 <div class="bg-cyber-dark/50 p-1.5 rounded flex justify-between items-center text-[9px]">
                                     <div>
                                         <span class="text-white font-mono block">Miller, R.</span>
                                         <span class="text-cyber-slate font-mono text-[8px]">(305) 555-8841</span>
                                     </div>
-                                    <span class="bg-[#B026FF]/20 text-[#B026FF] rounded px-1 py-0.5">Webinar</span>
+                                    <span class="bg-[#B026FF]/20 text-[#B026FF] rounded px-1.5 py-0.5">Webinar</span>
                                 </div>
                                 <div class="bg-cyber-dark/50 p-1.5 rounded flex justify-between items-center text-[9px]">
                                     <div>
                                         <span class="text-white font-mono block">Chen, W.</span>
                                         <span class="text-cyber-slate font-mono text-[8px]">(770) 555-3319</span>
                                     </div>
-                                    <span class="bg-[#FF5C00]/20 text-[#FF5C00] rounded px-1 py-0.5">Replied YES</span>
+                                    <span class="bg-[#FF5C00]/20 text-[#FF5C00] rounded px-1.5 py-0.5">Replied YES</span>
                                 </div>
                             </div>
                         </div>
@@ -508,6 +502,54 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
             const anchor = document.getElementById('chat-anchor');
             chat.innerHTML = '';
             chat.appendChild(anchor);
+        }
+
+        function restartAgent(target) {
+            const chatWindow = document.getElementById('chat-window');
+            const anchor = document.getElementById('chat-anchor');
+
+            const botBlock = document.createElement('div');
+            botBlock.className = 'flex justify-start max-w-3xl mb-6 fade-in';
+            botBlock.innerHTML = `
+                <div class="flex-1 space-y-2">
+                    <div class="text-[10px] font-bold text-[#FF5C00] px-2 flex items-center gap-1">
+                        <i data-lucide="rotate-cw" class="w-3 h-3 animate-spin"></i> COMMAND
+                    </div>
+                    <div class="bg-cyber-panel border border-[#FF5C00]/30 rounded p-4 shadow-lg text-sm text-white/90">
+                        Initiating PM2 restart for process: <b>${target.toUpperCase()}</b>
+                    </div>
+                </div>
+            `;
+            chatWindow.insertBefore(botBlock, anchor);
+            lucide.createIcons();
+            scrollToBottom();
+
+            fetch('http://localhost:3004/api/restart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target: target })
+            }).then(res => {
+                setTimeout(() => {
+                    const ackBlock = document.createElement('div');
+                    ackBlock.className = 'flex justify-start max-w-3xl mb-6 fade-in';
+                    ackBlock.innerHTML = `
+                        <div class="flex-1 space-y-2">
+                            <div class="text-[10px] font-bold text-cyber-cyan px-2 flex items-center gap-1">
+                                <i data-lucide="check-circle" class="w-3 h-3"></i> SYSTEM MGR
+                            </div>
+                            <div class="message-bubble bot p-4 shadow-lg text-sm text-white/90">
+                                <span class="text-xs font-mono opacity-50 block mb-2">[SYS_ACK]</span>
+                                PM2 Process <b>${target.toUpperCase()}</b> fully rebooted and back online.
+                            </div>
+                        </div>
+                    `;
+                    chatWindow.insertBefore(ackBlock, anchor);
+                    lucide.createIcons();
+                    scrollToBottom();
+                }, 1000);
+            }).catch(e => {
+                setTimeout(() => simulateBotError(), 600);
+            });
         }
 
         // Submitting textarea on Enter (allow shift+enter for lines)
