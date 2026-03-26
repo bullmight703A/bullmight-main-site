@@ -89,9 +89,13 @@
                             <span class="font-bold text-white text-sm flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-[#00F0FF]"></div> IRO</span>
                             <span class="text-[9px] text-[#00F0FF] uppercase tracking-widest border border-[#00F0FF]/30 px-1.5 rounded">Core</span>
                         </div>
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between mb-2">
                             <span class="text-xs text-cyber-slate/70">Sys Admin & Comms</span>
                             <button class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-cyber-slate hover:text-white"><i data-lucide="rotate-cw" class="w-3 h-3"></i></button>
+                        </div>
+                        <div class="border-t border-[#00F0FF]/10 pt-2 flex gap-1 mt-2">
+                            <input type="text" class="flex-1 bg-cyber-dark text-[9px] px-2 py-1 rounded text-white border border-[#00F0FF]/20 focus:border-[#00F0FF] outline-none" placeholder="Telegram API / Instruct..." onkeydown="if(event.key==='Enter') window.open('https://web.telegram.org/a/#1234567', '_blank')" />
+                            <button onclick="window.open('https://web.telegram.org/a/#1234567', '_blank')" class="bg-[#00F0FF]/20 text-[#00F0FF] px-2 rounded hover:bg-[#00F0FF] hover:text-black transition-colors" title="Launch Telegram App"><i data-lucide="send" class="w-3 h-3"></i></button>
                         </div>
                     </div>
                     
@@ -101,9 +105,13 @@
                             <span class="font-bold text-white text-sm flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-[#FF5C00]"></div> Masterchef</span>
                             <span class="text-[9px] text-[#FF5C00] uppercase tracking-widest border border-[#FF5C00]/30 px-1.5 rounded">GHL/Web</span>
                         </div>
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between mb-2">
                             <span class="text-xs text-cyber-slate/70">WIMPER Email Sequence</span>
                             <button class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-cyber-slate hover:text-white"><i data-lucide="rotate-cw" class="w-3 h-3"></i></button>
+                        </div>
+                        <div class="border-t border-[#FF5C00]/10 pt-2 flex gap-1 mt-2">
+                            <input type="text" class="flex-1 bg-cyber-dark text-[9px] px-2 py-1 rounded text-white border border-[#FF5C00]/20 focus:border-[#FF5C00] outline-none" placeholder="Telegram API / Instruct..." onkeydown="if(event.key==='Enter') window.open('https://web.telegram.org/a/#1234567', '_blank')" />
+                            <button onclick="window.open('https://web.telegram.org/a/#1234567', '_blank')" class="bg-[#FF5C00]/20 text-[#FF5C00] px-2 rounded hover:bg-[#FF5C00] hover:text-black transition-colors" title="Launch Telegram App"><i data-lucide="send" class="w-3 h-3"></i></button>
                         </div>
                     </div>
                     
@@ -113,21 +121,29 @@
                             <span class="font-bold text-white text-sm flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-[#B026FF]"></div> Volt</span>
                             <span class="text-[9px] text-[#B026FF] uppercase tracking-widest border border-[#B026FF]/30 px-1.5 rounded">Data</span>
                         </div>
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between mb-2">
                             <span class="text-xs text-cyber-slate/70">Scraping & SEO Metric</span>
                             <button class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-cyber-slate hover:text-white"><i data-lucide="rotate-cw" class="w-3 h-3"></i></button>
                         </div>
+                        <div class="border-t border-[#B026FF]/10 pt-2 flex gap-1 mt-2">
+                            <input type="text" class="flex-1 bg-cyber-dark text-[9px] px-2 py-1 rounded text-white border border-[#B026FF]/20 focus:border-[#B026FF] outline-none" placeholder="Telegram API / Instruct..." onkeydown="if(event.key==='Enter') window.open('https://web.telegram.org/a/#1234567', '_blank')" />
+                            <button onclick="window.open('https://web.telegram.org/a/#1234567', '_blank')" class="bg-[#B026FF]/20 text-[#B026FF] px-2 rounded hover:bg-[#B026FF] hover:text-white transition-colors" title="Launch Telegram App"><i data-lucide="send" class="w-3 h-3"></i></button>
+                        </div>
                     </div>
-                    
+
                     <!-- Agent: PICASSO -->
                     <div class="bg-cyber-subpanel border border-[#00FFA3]/20 rounded p-3 hover:border-[#00FFA3]/50 transition-colors group">
                         <div class="flex items-center justify-between mb-2">
                             <span class="font-bold text-white text-sm flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-[#00FFA3]"></div> Picasso</span>
                             <span class="text-[9px] text-[#00FFA3] uppercase tracking-widest border border-[#00FFA3]/30 px-1.5 rounded">Media</span>
                         </div>
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between mb-2">
                             <span class="text-xs text-cyber-slate/70">Awaiting HeyGen Task</span>
                             <button class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-cyber-slate hover:text-white"><i data-lucide="rotate-cw" class="w-3 h-3"></i></button>
+                        </div>
+                        <div class="border-t border-[#00FFA3]/10 pt-2 flex gap-1 mt-2">
+                            <input type="text" class="flex-1 bg-cyber-dark text-[9px] px-2 py-1 rounded text-white border border-[#00FFA3]/20 focus:border-[#00FFA3] outline-none" placeholder="Telegram API / Instruct..." onkeydown="if(event.key==='Enter') window.open('https://web.telegram.org/a/#1234567', '_blank')" />
+                            <button onclick="window.open('https://web.telegram.org/a/#1234567', '_blank')" class="bg-[#00FFA3]/20 text-[#00FFA3] px-2 rounded hover:bg-[#00FFA3] hover:text-black transition-colors" title="Launch Telegram App"><i data-lucide="send" class="w-3 h-3"></i></button>
                         </div>
                     </div>
                 </div>
@@ -246,21 +262,38 @@
                     <i data-lucide="bar-chart-3" class="w-3 h-3"></i> Local SEO & GHL Pipeline (Live)
                 </h2>
                 <div class="space-y-4">
-                    <div class="bg-cyber-subpanel border border-[#00FFA3]/20 rounded p-4">
-                        <div class="text-xs text-cyber-slate mb-1">EasyGrow Active Target</div>
-                        <div class="text-xl font-bold text-white mb-2">14,000 Emails</div>
-                        <div class="w-full bg-cyber-dark h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-[#00FFA3] h-full w-[2%]"></div>
+                    <div class="bg-cyber-subpanel border border-[#00FFA3]/20 rounded p-4 relative overflow-hidden group">
+                        <!-- WIMPER BG Pattern -->
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9IiMwMEZGQTMiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-20"></div>
+                        <div class="relative z-10">
+                            <div class="text-[10px] uppercase tracking-widest text-[#00FFA3] mb-1 font-bold">Wimper Target Pool</div>
+                            <div class="text-xl font-bold text-white mb-2">14,000 Linked</div>
+                            <div class="w-full bg-cyber-dark h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-[#00FFA3] h-full w-[0%]"></div>
+                            </div>
+                            <div class="text-[9px] text-[#00FFA3]/70 mt-2 font-mono uppercase">Status: Volting...</div>
                         </div>
-                        <div class="text-[9px] text-[#00FFA3] mt-2 font-mono">STATUS: PENDING TEST REVIEW</div>
                     </div>
 
-                    <div class="bg-cyber-subpanel border border-cyber-border rounded p-4">
-                        <div class="flex justify-between items-end mb-2">
-                            <div class="text-xs text-cyber-slate">Kidazzle Footprint</div>
-                            <div class="text-lg font-bold text-white">8 Hubs</div>
+                    <div class="bg-cyber-subpanel border border-[#00F0FF]/20 rounded p-4 relative overflow-hidden group hover:border-[#00F0FF]/50 transition-colors">
+                        <!-- Kidazzle BG Pattern -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-[#00F0FF]/5 to-transparent"></div>
+                        <div class="relative z-10">
+                            <div class="text-[10px] uppercase tracking-widest text-[#00F0FF] mb-1 font-bold">Kidazzle Opportunities</div>
+                            <div class="flex justify-between items-center mb-3">
+                                <div>
+                                    <div class="text-2xl font-bold text-white leading-none">12 +</div>
+                                    <div class="text-[9px] text-cyber-slate mt-1">Pending Tours</div>
+                                </div>
+                                <div class="bg-[#00F0FF]/10 text-[#00F0FF] rounded-full px-2 py-1 flex items-center gap-1 text-[10px] font-bold">
+                                    <i data-lucide="trending-up" class="w-3 h-3"></i> 24h
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="bg-cyber-dark text-cyber-slate border border-cyber-border text-[9px] px-1.5 py-0.5 rounded">Midtown</span>
+                                <span class="bg-cyber-dark text-cyber-slate border border-cyber-border text-[9px] px-1.5 py-0.5 rounded">Doral</span>
+                            </div>
                         </div>
-                        <div class="text-[10px] text-cyber-slate/50">Next: Setup Yext/GMB Local Mapping</div>
                     </div>
                 </div>
             </div>
