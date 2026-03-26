@@ -154,7 +154,7 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
                 <h2 class="text-[10px] uppercase font-bold tracking-widest text-white/50 mb-4 flex items-center gap-2">
                     <i data-lucide="server-cog" class="w-3 h-3"></i> Active Cron Queue
                 </h2>
-                <div class="space-y-4 flex-1 overflow-y-auto custom-scrollbar pr-2">
+                <div class="space-y-4 flex-1 overflow-y-auto custom-scrollbar pr-2 mb-6">
                     <!-- Cron Item -->
                     <div class="flex gap-3 items-start">
                         <div class="w-2 h-2 rounded-full bg-cyber-green mt-1.5 shrink-0 blink-slow"></div>
@@ -163,28 +163,19 @@ $wimper_pending = $wimper['pendingOps'] ?? 4;
                             <div class="text-[10px] text-cyber-slate/60 font-mono">Runs every 12 hours. Next in 4h.</div>
                         </div>
                     </div>
-                    <!-- Cron Item -->
-                    <div class="flex gap-3 items-start">
-                        <div class="w-2 h-2 rounded-full bg-cyber-orange mt-1.5 shrink-0"></div>
-                        <div class="space-y-1">
-                            <div class="text-xs text-white">AFC n8n Lesson Engine</div>
-                            <div class="text-[10px] text-cyber-orange/80 font-mono">Action Required - Validating Classroom 4 Rules.</div>
-                        </div>
-                    </div>
-                    <!-- Cron Item -->
-                    <div class="flex gap-3 items-start">
-                        <div class="w-2 h-2 rounded-full bg-cyber-cyan mt-1.5 shrink-0"></div>
-                        <div class="space-y-1">
-                            <div class="text-xs text-white">EasyGrow 5W Email Pipeline</div>
-                            <div class="text-[10px] text-cyber-slate/60 font-mono">Awaiting Trigger. Blocked by Robert until Test 1 is reviewed.</div>
-                        </div>
-                    </div>
-                    <!-- Cron Item -->
-                    <div class="flex gap-3 items-start">
-                        <div class="w-2 h-2 rounded-full bg-[#B026FF] mt-1.5 shrink-0 blink-slow"></div>
-                        <div class="space-y-1">
-                            <div class="text-xs text-white">Mailgun API Deliverability</div>
-                            <div class="text-[10px] text-[#B026FF]/80 font-mono">Monitoring... Infrastructure Optimal. Open Rate: 42%.</div>
+                </div>
+
+                <!-- ADDED: Tool Approvals Extraction from composiohq/secure-openclaw -->
+                <h2 class="text-[10px] uppercase font-bold tracking-widest text-[#FF5C00] mb-4 flex items-center gap-2">
+                    <i data-lucide="shield-alert" class="w-3 h-3"></i> Pending Approvals
+                </h2>
+                <div class="space-y-3">
+                    <div class="bg-cyber-dark border border-[#FF5C00]/30 rounded p-3">
+                        <div class="text-[10px] text-cyber-slate mb-1">IRO Core requests permission:</div>
+                        <div class="text-xs text-white font-mono mb-3"><span class="text-cyber-cyan">Send_Email</span> ("Davis, L. - Custom Follow-up")</div>
+                        <div class="flex gap-2">
+                            <button class="flex-1 bg-[#00FFA3]/20 hover:bg-[#00FFA3] text-[#00FFA3] hover:text-black border border-[#00FFA3]/50 rounded text-[10px] font-bold py-1 transition-colors" onclick="alert('Tool action approved. Webhook fired.')">APPROVE (Y)</button>
+                            <button class="flex-1 bg-[#FF5C00]/20 hover:bg-[#FF5C00] text-[#FF5C00] hover:text-white border border-[#FF5C00]/50 rounded text-[10px] font-bold py-1 transition-colors" onclick="alert('Tool action denied.')">DENY (N)</button>
                         </div>
                     </div>
                 </div>
