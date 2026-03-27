@@ -81,16 +81,25 @@
             The master terminal to build your audience. We provide the templated subdomains, you provide the value. Because at Bullmight, <strong>we do fun shit.</strong>
         </p>
 
-        <!-- Node Input -->
-        <div class="max-w-xl mx-auto flex flex-col sm:flex-row items-center bg-bullmight-surface p-2 rounded-lg shadow-2xl border border-bullmight-grey/30 mb-12 focus-within:border-bullmight-cyan/60 transition-colors">
-            <div class="flex-grow flex items-center px-4 py-3 sm:py-0 w-full font-mono">
-              <span class="text-bullmight-grey font-medium text-sm">bullmight.com/</span>
-              <input type="text" placeholder="your-node" class="flex-grow outline-none bg-transparent text-bullmight-cyan font-medium ml-1 placeholder-bullmight-grey/50">
+        <!-- Newsletter Capture Form -->
+        <form class="max-w-2xl mx-auto flex flex-col gap-4 bg-bullmight-surface p-6 rounded-lg shadow-2xl border border-bullmight-grey/30 mb-12 relative z-10 w-full">
+            <h3 class="text-white font-bold text-lg mb-2 text-left tracking-wide">REQUEST MISSION CONTROL INTEL:</h3>
+            <div class="flex flex-col sm:flex-row gap-4 w-full">
+                <input type="text" placeholder="Designation (Name)" class="flex-grow bg-bullmight-bg border border-bullmight-grey/30 px-4 py-3 rounded outline-none text-bullmight-cyan focus:border-bullmight-cyan/60 transition-colors font-mono w-full" required>
+                <input type="email" placeholder="Direct Comms (Email)" class="flex-grow bg-bullmight-bg border border-bullmight-grey/30 px-4 py-3 rounded outline-none text-bullmight-cyan focus:border-bullmight-cyan/60 transition-colors font-mono w-full" required>
+                <input type="tel" placeholder="SMS (Phone)" class="flex-grow bg-bullmight-bg border border-bullmight-grey/30 px-4 py-3 rounded outline-none text-bullmight-cyan focus:border-bullmight-cyan/60 transition-colors font-mono w-full">
             </div>
-            <button class="w-full sm:w-auto bg-bullmight-cyan text-bullmight-bg px-8 py-3 rounded-md font-bold hover:bg-white transition-all flex items-center justify-center whitespace-nowrap">
-              Mount Node <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+            <select class="w-full bg-bullmight-bg border border-bullmight-grey/30 px-4 py-3 rounded outline-none text-bullmight-cyan focus:border-bullmight-cyan/60 transition-colors font-mono appearance-none" required>
+                <option value="" disabled selected>Select Primary Objective...</option>
+                <option value="ai_agent_infrastructure">AI Agent Infrastructure & Scalability</option>
+                <option value="seo_data_routing">SEO Data Routing & Lead Generation</option>
+                <option value="outbound_funnels">Automated Outbound Funnels (Wimper)</option>
+                <option value="general_intel">General OpenClaw Master Intel</option>
+            </select>
+            <button type="button" class="w-full bg-bullmight-cyan text-bullmight-bg px-8 py-3 mt-4 rounded-md font-bold hover:bg-white transition-all flex items-center justify-center whitespace-nowrap text-lg shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+              INITIATE SECURE UPLINK <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
             </button>
-        </div>
+        </form>
 
         <!-- Telemetry Data -->
         <div class="flex flex-wrap justify-center gap-8 text-bullmight-grey font-mono text-xs tracking-wider">

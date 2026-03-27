@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: IRO Mission Control
+ * Template Name: IRO 5.0 (Pipeline Bridge)
  */
 
 // Load Telemetry Data
@@ -100,12 +100,14 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
           ]);
           const [pendingErrors, setPendingErrors] = useState([]);
           const [deliverables, setDeliverables] = useState([]);
+          const [kidazzleOpps, setKidazzleOpps] = useState([]);
+          const [wimperOpps, setWimperOpps] = useState([]);
           const [telemetry, setTelemetry] = useState({ kidazzle: { leadsToday: 14, appointmentsBooked: 3, pipelineValue: "$12,400" }, wimper: { pool: 14000, warmReplies: 8, projectedValue: "$45,000" } });
 
           React.useEffect(() => {
               const fetchErrors = async () => {
                   try {
-                      const res = await fetch('http://74.92.194.249:3005/api/errors').catch(e => null);
+                      const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/errors').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          setPendingErrors(data);
@@ -115,7 +117,7 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
               
               const fetchDeliverables = async () => {
                   try {
-                      const res = await fetch('http://74.92.194.249:3005/api/deliverables').catch(e => null);
+                      const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/deliverables').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          setDeliverables(data);
@@ -125,7 +127,7 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
               
               const fetchTelemetry = async () => {
                   try {
-                      const res = await fetch('http://74.92.194.249:3005/api/telemetry').catch(e => null);
+                      const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/telemetry').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          if(data && Object.keys(data).length > 0) {
@@ -157,7 +159,7 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
 
           const handleApproveAsset = async (url) => {
               try {
-                  const res = await fetch('http://74.92.194.249:3005/api/command', {
+                  const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/command', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({ target: 'GHL_SOCIAL', message: `APPROVE_IMAGE: ${url}` })
@@ -190,13 +192,14 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
               </header>
 
               {/* Main Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              {/* Main Grid: 3 Equal Columns */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
                 
-                {/* Left Column: Agents & Telemetry */}
-                <div className="lg:col-span-4 space-y-6">
-                  
+                {/* Column 1: Agent Fleet & Cron Jobs */}
+                <div className="flex flex-col space-y-6">
                   {/* Agent Fleet Status */}
-                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg">
+                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 shadow-lg flex-shrink-0">
                     <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
                       <IconCpu className="w-4 h-4 mr-2" /> AGENT FLEET STATUS
                     </h2>
@@ -225,7 +228,7 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                   </div>
 
                   {/* Cron Jobs & Error Pending Alerts */}
-                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg mt-6">
+                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 shadow-lg flex-grow flex flex-col min-h-[400px]">
                     <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center relative">
                       <IconCpu className="w-4 h-4 mr-2" /> ACTIVE CRON JOBS / SYSTEM ALERTS
                       {pendingErrors.length > 0 && (
@@ -235,7 +238,7 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                           </span>
                       )}
                     </h2>
-                    <div className="space-y-3">
+                    <div className="space-y-3 flex-grow overflow-y-auto max-h-[1000px] custom-scrollbar">
                       {pendingErrors.length === 0 ? (
                          <div className="text-xs text-cyber-green p-3 bg-cyber-subpanel border border-cyber-green/20 rounded">
                            NO PENDING ERRORS. SYSTEM NOMINAL.
@@ -254,129 +257,41 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                       ))}
                     </div>
                   </div>
-                  
-                  {/* Local Deliverables (Asset Stream) */}
-                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg mt-6">
-                    <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
-                      <IconFileText className="w-4 h-4 mr-2" /> ASSETS CREATED
-                    </h2>
-                    <div className="space-y-3 max-h-64 overflow-y-auto custom-scrollbar pr-2">
-                      {deliverables.length === 0 ? (
-                         <div className="text-xs text-cyber-gray">No assets generated yet.</div>
-                      ) : deliverables.map((file, idx) => (
-                        <a key={idx} href={file.url} download target="_blank" className="flex items-center p-3 bg-cyber-subpanel rounded border border-cyber-border hover:border-cyber-cyan/30 transition-colors group">
-                           {file.type === 'pdf' ? (
-                               <div className="w-10 h-10 shrink-0 bg-red-900/30 text-red-500 rounded flex items-center justify-center mr-3 font-bold text-xs group-hover:bg-red-900/50">PDF</div>
-                           ) : file.type === 'md' ? (
-                               <div className="w-10 h-10 shrink-0 bg-blue-900/30 text-blue-500 rounded flex items-center justify-center mr-3 font-bold text-xs group-hover:bg-blue-900/50">MD</div>
-                           ) : (
-                               <div className="w-10 h-10 shrink-0 rounded overflow-hidden mr-3 border border-cyber-border group-hover:border-cyber-cyan/50 relative">
-                                  <img src={file.url} alt={file.name} className="w-full h-full object-cover" />
-                               </div>
-                           )}
-                           <div className="flex-grow overflow-hidden flex justify-between items-center">
-                               <div>
-                                   <div className="text-xs font-bold text-[#E2E8F0] truncate group-hover:text-cyber-cyan transition-colors">{file.name}</div>
-                                   <div className="text-[10px] text-cyber-gray uppercase mt-0.5">Click to Download</div>
-                               </div>
-                               {(file.type === 'png' || file.type === 'jpg' || file.type === 'jpeg') && (
-                                   <button 
-                                      onClick={(e) => { e.preventDefault(); handleApproveAsset(file.url); }}
-                                      className="ml-2 bg-cyber-pink hover:bg-red-500 text-white text-[10px] px-2 py-1 rounded shadow-lg transition-colors border border-red-500/50"
-                                   >
-                                      SEND TO GHL PLANNER
-                                   </button>
-                               )}
-                           </div>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
                 </div>
 
-                {/* Middle/Right Column: Conversation & Wimper/Kidazzle */}
-                <div className="lg:col-span-8 flex flex-col space-y-6">
-                  
-                  {/* Kidazzle & Wimper Opportunities Section */}
-                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 shadow-lg">
-                    <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
-                      <IconTarget className="w-4 h-4 mr-2" /> OPPORTUNITY PIPELINES (GHL SYNC)
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kidazzle */}
-                      <div className="p-4 bg-cyber-subpanel rounded border border-cyber-pink/20">
-                        <h3 className="text-cyber-pink font-bold mb-2 flex items-center"><IconUsers className="w-4 h-4 mr-2"/> Kidazzle B2C</h3>
-                        <div className="space-y-2 text-sm">
-                          <div className="flex justify-between border-b border-cyber-border pb-1">
-                            <span className="text-cyber-gray">New Leads Today</span>
-                            <span className="text-white font-bold">{telemetry.kidazzle.leadsToday || 0}</span>
-                          </div>
-                          <div className="flex justify-between border-b border-cyber-border pb-1">
-                            <span className="text-cyber-gray">Appointments Booked</span>
-                            <span className="text-white font-bold">{telemetry.kidazzle.appointmentsBooked || 0}</span>
-                          </div>
-                          <div className="flex justify-between pt-1">
-                            <span className="text-cyber-gray">Pipeline Value</span>
-                            <span className="text-cyber-green font-bold">{telemetry.kidazzle.pipelineValue || "$0"}</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* WIMPER */}
-                      <div className="p-4 bg-cyber-subpanel rounded border border-cyber-cyan/20">
-                        <h3 className="text-cyber-cyan font-bold mb-2 flex items-center"><IconBarChart className="w-4 h-4 mr-2"/> WIMPER B2B</h3>
-                        <div className="space-y-2 text-sm">
-                          <div className="flex justify-between border-b border-cyber-border pb-1">
-                            <span className="text-cyber-gray">Outreach Pool</span>
-                            <span className="text-white font-bold">{telemetry.wimper.pool || 0}</span>
-                          </div>
-                          <div className="flex justify-between border-b border-cyber-border pb-1">
-                            <span className="text-cyber-gray">Warm Replies</span>
-                            <span className="text-white font-bold">{telemetry.wimper.warmReplies || 0}</span>
-                          </div>
-                          <div className="flex justify-between pt-1">
-                            <span className="text-cyber-gray">Projected Value</span>
-                            <span className="text-cyber-green font-bold">{telemetry.wimper.projectedValue || "$0"}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Conversation Tab / Command Center */}
-                  <div className="bg-cyber-panel border border-cyber-border flex-grow rounded-md shadow-lg flex flex-col min-h-[400px]">
+                {/* Column 2: Dashboard Command Center */}
+                <div className="flex flex-col h-full bg-cyber-panel border border-cyber-border rounded-md shadow-lg min-h-[850px]">
                     {/* Tabs */}
-                    <div className="flex border-b border-cyber-border">
+                    <div className="flex flex-wrap border-b border-cyber-border rounded-t-lg overflow-hidden shrink-0">
                       <button 
                         onClick={() => setActiveTab('dashboard')}
-                        className={`flex-1 py-3 text-sm font-bold transition-colors ${activeTab === 'dashboard' ? 'text-cyber-cyan border-b-2 border-cyber-cyan bg-cyber-highlight' : 'text-cyber-gray hover:text-[#E2E8F0]'}`}
+                        className={`flex-1 py-3 px-2 text-[11px] font-bold transition-colors ${activeTab === 'dashboard' ? 'text-cyber-cyan border-b-2 border-cyber-cyan bg-cyber-highlight' : 'text-cyber-gray hover:text-[#E2E8F0]'}`}
                       >
-                        INTERACTIVE CONVERSATION
+                        TACTICAL COMMS
                       </button>
-                      <button 
-                        onClick={() => setActiveTab('logs')}
-                        className={`flex-1 py-3 text-sm font-bold transition-colors ${activeTab === 'logs' ? 'text-cyber-cyan border-b-2 border-cyber-cyan bg-cyber-highlight' : 'text-cyber-gray hover:text-[#E2E8F0]'}`}
-                      >
-                        RAW TERMINAL LOGS
+                      <button onClick={() => setActiveTab('kidazzle')} className={`flex-1 py-3 px-2 text-[11px] font-bold transition-colors ${activeTab === 'kidazzle' ? 'text-cyber-pink border-b-2 border-cyber-pink bg-cyber-highlight' : 'text-cyber-gray hover:text-[#E2E8F0]'}`}>DA PIPELINE</button>
+                      <button onClick={() => setActiveTab('wimper')} className={`flex-1 py-3 px-2 text-[11px] font-bold transition-colors ${activeTab === 'wimper' ? 'text-cyber-cyan border-b-2 border-cyber-cyan bg-cyber-highlight' : 'text-cyber-gray hover:text-[#E2E8F0]'}`}>WIMPER PIPELINE</button>
+                      <button onClick={() => setActiveTab('logs')} className={`flex-1 py-3 px-2 text-[11px] font-bold transition-colors ${activeTab === 'logs' ? 'text-cyber-cyan border-b-2 border-cyber-cyan bg-cyber-highlight' : 'text-cyber-gray hover:text-[#E2E8F0]'}`}>
+                        RAW LOGS
                       </button>
                     </div>
 
                     {/* Chat Area */}
                     {activeTab === 'dashboard' && (
-                      <div className="flex flex-col flex-grow p-4 bg-cyber-subpanel">
-                        <div className="flex-grow space-y-4 overflow-y-auto mb-4 custom-scrollbar pr-2 min-h-[250px] max-h-[350px]">
+                      <div className="flex flex-col flex-grow p-4 bg-cyber-subpanel rounded-b-lg">
+                        <div className="flex-grow space-y-4 overflow-y-auto mb-4 custom-scrollbar pr-2 min-h-[350px]">
                           {chatHistory.map((chat, idx) => (
                             <div key={idx} className={`flex ${chat.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
-                              <div className={`p-3 rounded-lg max-w-[80%] ${chat.sender === 'You' ? 'bg-cyber-highlight border border-cyber-border' : 'bg-cyber-cyan/10 border border-cyber-cyan/30'}`}>
+                              <div className={`p-3 rounded-lg max-w-[90%] ${chat.sender === 'You' ? 'bg-cyber-highlight border border-cyber-border' : 'bg-cyber-cyan/10 border border-cyber-cyan/30'}`}>
                                 <span className="text-xs font-bold block mb-1" style={{ color: chat.sender === 'You' ? '#8E8E93' : '#00F0FF' }}>{chat.sender}</span>
-                                <p className="text-sm">{chat.msg}</p>
+                                <p className="text-sm shadow-sm">{chat.msg}</p>
                               </div>
                             </div>
                           ))}
                         </div>
                         
                         {/* Doc Upload & Chat Input */}
-                        <div className="pt-3 border-t border-cyber-border space-y-3">
+                        <div className="pt-3 border-t border-cyber-border space-y-3 shrink-0">
                           <div className="flex space-x-2">
                             <div className="flex-grow bg-cyber-panel border border-cyber-border rounded flex items-center px-3 focus-within:border-cyber-cyan/50">
                               <IconFileText className="w-4 h-4 text-cyber-gray mr-2" />
@@ -384,12 +299,12 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                                 type="text" 
                                 value={docLink}
                                 onChange={(e) => setDocLink(e.target.value)}
-                                placeholder="Paste Google Docs URL for agent training..." 
-                                className="bg-transparent border-none outline-none w-full text-sm py-2.5 text-[#E2E8F0] placeholder-cyber-gray"
+                                placeholder="Paste Google Docs URL..." 
+                                className="bg-transparent border-none outline-none w-full text-sm py-2 text-[#E2E8F0] placeholder-cyber-gray"
                               />
                             </div>
-                            <button onClick={() => setDocLink('')} className="bg-cyber-highlight border border-cyber-border hover:border-cyber-cyan px-4 rounded text-sm font-bold flex items-center transition-colors">
-                              <IconLink className="w-4 h-4 mr-2" /> UPLOAD
+                            <button onClick={() => setDocLink('')} className="bg-cyber-highlight border border-cyber-border hover:border-cyber-cyan px-3 rounded text-xs font-bold flex items-center transition-colors">
+                              <IconLink className="w-3 h-3 mr-1" /> LINK
                             </button>
                           </div>
                           
@@ -398,24 +313,62 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                               type="text" 
                               value={chatInput}
                               onChange={(e) => setChatInput(e.target.value)}
-                              onKeyDown={(e) => e.key === 'Enter' && handleSendChat()}
-                              placeholder="Talk to IRO... command execution, workflow modification, etc." 
+                              onKeyDown={(e) => e.key === 'Enter' && handleRealSendChat()}
+                              placeholder="Command IRO..." 
                               className="flex-grow bg-cyber-panel border border-cyber-border rounded px-4 py-3 text-sm focus:outline-none focus:border-cyber-cyan/50"
                             />
                             <button 
-                              onClick={handleSendChat}
-                              className="bg-cyber-cyan text-cyber-subpanel font-bold px-6 rounded hover:bg-white transition-colors flex items-center"
+                              onClick={handleRealSendChat}
+                              className="bg-cyber-cyan text-cyber-subpanel font-bold px-4 rounded hover:bg-white transition-colors flex items-center text-sm"
                             >
-                              <IconSend className="w-4 h-4 mr-2" /> EXECUTE
+                              <IconSend className="w-4 h-4 mr-1" /> SEND
                             </button>
                           </div>
                         </div>
                       </div>
                     )}
+                    
+                    {/* Kidazzle Opps */}
+                    {activeTab === 'kidazzle' && (
+                      <div className="p-4 bg-cyber-subpanel flex-grow overflow-y-auto max-h-[850px] custom-scrollbar rounded-b-lg">
+                         <h3 className="text-cyber-pink font-bold mb-4">DA Pipeline ({kidazzleOpps.length} Live)</h3>
+                         <div className="space-y-2">
+                            {kidazzleOpps.map((opp, i) => (
+                               <div key={i} className="p-3 border border-cyber-pink/30 bg-cyber-highlight rounded flex justify-between hover:border-cyber-pink transition-colors cursor-pointer">
+                                  <div>
+                                    <div className="font-bold text-[#E2E8F0] text-sm">{opp.name || opp.contactName || "Unknown"}</div>
+                                    <div className="text-xs text-cyber-gray mt-1">Value: <span className="text-cyber-pink">{opp.monetaryValue ? '$'+opp.monetaryValue : '$0'}</span> | <span className="text-white">{opp.status || 'open'}</span></div>
+                                  </div>
+                                  <div className="text-[10px] text-cyber-gray flex items-center whitespace-nowrap">{new Date(opp.updatedAt || opp.createdAt).toLocaleDateString()}</div>
+                               </div>
+                            ))}
+                            {kidazzleOpps.length === 0 && <div className="text-cyber-gray text-xs">No opportunities mapped/loading...</div>}
+                         </div>
+                      </div>
+                    )}
+                    
+                    {/* Wimper Opps */}
+                    {activeTab === 'wimper' && (
+                      <div className="p-4 bg-cyber-subpanel flex-grow overflow-y-auto max-h-[850px] custom-scrollbar rounded-b-lg">
+                         <h3 className="text-cyber-cyan font-bold mb-4">Wimper Pipeline ({wimperOpps.length} Live)</h3>
+                         <div className="space-y-2">
+                            {wimperOpps.map((opp, i) => (
+                               <div key={i} className="p-3 border border-cyber-cyan/30 bg-cyber-highlight rounded flex justify-between hover:border-cyber-cyan transition-colors cursor-pointer">
+                                  <div>
+                                    <div className="font-bold text-[#E2E8F0] text-sm">{opp.name || opp.contactName || "Unknown"}</div>
+                                    <div className="text-xs text-cyber-gray mt-1">Value: <span className="text-cyber-cyan">{opp.monetaryValue ? '$'+opp.monetaryValue : '$0'}</span> | <span className="text-white">{opp.status || 'open'}</span></div>
+                                  </div>
+                                  <div className="text-[10px] text-cyber-gray flex items-center whitespace-nowrap">{new Date(opp.updatedAt || opp.createdAt).toLocaleDateString()}</div>
+                               </div>
+                            ))}
+                            {wimperOpps.length === 0 && <div className="text-cyber-gray text-xs">No opportunities mapped/loading...</div>}
+                         </div>
+                      </div>
+                    )}
 
                     {/* Logs Area */}
                     {activeTab === 'logs' && (
-                      <div className="p-4 bg-cyber-subpanel flex-grow text-sm space-y-2 overflow-y-auto max-h-[400px]">
+                      <div className="p-4 bg-cyber-subpanel flex-grow text-sm space-y-2 overflow-y-auto max-h-[850px] custom-scrollbar rounded-b-lg">
                         {logs.map((log, i) => (
                           <div key={i} className="flex space-x-3">
                             <span className="text-cyber-gray">[{log.time}]</span>
@@ -427,10 +380,49 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                         <div className="animate-pulse text-cyber-gray mt-2">&gt; Waiting for input...</div>
                       </div>
                     )}
-                  </div>
+                </div>
 
+                {/* Column 3: Assets Created */}
+                <div className="flex flex-col space-y-6 flex-grow min-h-[850px]">
+                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg flex-grow">
+                    <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
+                      <IconFileText className="w-4 h-4 mr-2" /> ASSETS CREATED & PENDING REVIEW
+                    </h2>
+                    <div className="flex flex-col space-y-4 max-h-[800px] overflow-y-auto custom-scrollbar pr-2 flex-grow">
+                      {deliverables.length === 0 ? (
+                         <div className="text-xs text-cyber-gray">No assets generated yet.</div>
+                      ) : deliverables.map((file, idx) => (
+                        <a key={idx} href={file.url} download target="_blank" className="flex flex-col items-center bg-cyber-subpanel rounded border border-cyber-border hover:border-cyber-cyan/50 transition-colors group overflow-hidden shrink-0">
+                           {file.type === 'pdf' ? (
+                               <div className="w-full h-32 shrink-0 bg-red-900/30 text-red-500 rounded-t flex items-center justify-center font-bold text-3xl group-hover:bg-red-900/50">PDF</div>
+                           ) : file.type === 'md' ? (
+                               <div className="w-full h-32 shrink-0 bg-blue-900/30 text-blue-500 rounded-t flex items-center justify-center font-bold text-3xl group-hover:bg-blue-900/50">MARKDOWN</div>
+                           ) : (
+                               <div className="w-full h-48 shrink-0 border-b border-cyber-border relative overflow-hidden">
+                                  <img src={file.url} alt={file.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                               </div>
+                           )}
+                           <div className="p-4 w-full flex flex-col justify-between bg-cyber-highlight">
+                               <div>
+                                   <div className="text-sm font-bold text-[#E2E8F0] truncate group-hover:text-cyber-cyan transition-colors" title={file.name}>{file.name}</div>
+                                   <div className="text-[10px] text-cyber-gray uppercase mt-1">Click to Download</div>
+                               </div>
+                               {(file.type === 'png' || file.type === 'jpg' || file.type === 'jpeg') && (
+                                   <button 
+                                      onClick={(e) => { e.preventDefault(); handleApproveAsset(file.url); }}
+                                      className="mt-3 bg-cyber-pink hover:bg-red-500 text-white font-bold text-xs px-3 py-2.5 rounded shadow-lg transition-colors border border-red-500/50 w-full uppercase"
+                                   >
+                                      SEND TO GHL PLANNER
+                                   </button>
+                               )}
+                           </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
+
             </div>
           );
         };
