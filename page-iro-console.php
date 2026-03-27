@@ -105,7 +105,7 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
           React.useEffect(() => {
               const fetchErrors = async () => {
                   try {
-                      const res = await fetch('http://74.92.194.249:3004/api/errors').catch(e => null);
+                      const res = await fetch('http://74.92.194.249:3005/api/errors').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          setPendingErrors(data);
@@ -115,7 +115,7 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
               
               const fetchDeliverables = async () => {
                   try {
-                      const res = await fetch('http://74.92.194.249:3004/api/deliverables').catch(e => null);
+                      const res = await fetch('http://74.92.194.249:3005/api/deliverables').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          setDeliverables(data);
@@ -125,7 +125,7 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
               
               const fetchTelemetry = async () => {
                   try {
-                      const res = await fetch('http://74.92.194.249:3004/api/telemetry').catch(e => null);
+                      const res = await fetch('http://74.92.194.249:3005/api/telemetry').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          if(data && Object.keys(data).length > 0) {
