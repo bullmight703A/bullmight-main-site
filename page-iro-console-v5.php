@@ -148,13 +148,22 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
               return () => clearInterval(intv);
           }, []);
 
-          const handleSendChat = () => {
-            if (!chatInput.trim()) return;
-            setChatHistory([...chatHistory, { sender: 'You', msg: chatInput }]);
+          const handleSendChat = async () => {
+            if(!chatInput.trim()) return;
+            const msg = chatInput;
+            setChatHistory(prev => [...prev, {sender: 'You', msg}]);
             setChatInput('');
-            setTimeout(() => {
-              setChatHistory(prev => [...prev, { sender: 'IRO', msg: 'Acknowledged. Processing your request and dispatching to Agents.' }]);
-            }, 1000);
+            try {
+               const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/chat', {
+                   method: 'POST',
+                   headers: { 'Content-Type': 'application/json' },
+                   body: JSON.stringify({ message: msg })
+               });
+               const data = await res.json();
+               setChatHistory(prev => [...prev, {sender: 'IRO', msg: data.reply || "Command executed."}]);
+            } catch(e) {
+               setChatHistory(prev => [...prev, {sender: 'SYSTEM', msg: "BRIDGE DISCONNECTED."}]);
+            }
           };
 
           const handleApproveAsset = async (url) => {
@@ -313,12 +322,12 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                               type="text" 
                               value={chatInput}
                               onChange={(e) => setChatInput(e.target.value)}
-                              onKeyDown={(e) => e.key === 'Enter' && handleRealSendChat()}
+                              onKeyDown={(e) => e.key === 'Enter' && handleSendChat()}
                               placeholder="Command IRO..." 
                               className="flex-grow bg-cyber-panel border border-cyber-border rounded px-4 py-3 text-sm focus:outline-none focus:border-cyber-cyan/50"
                             />
                             <button 
-                              onClick={handleRealSendChat}
+                              onClick={handleSendChat}
                               className="bg-cyber-cyan text-cyber-subpanel font-bold px-4 rounded hover:bg-white transition-colors flex items-center text-sm"
                             >
                               <IconSend className="w-4 h-4 mr-1" /> SEND
