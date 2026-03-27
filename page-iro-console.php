@@ -155,6 +155,19 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
             }, 1000);
           };
 
+          const handleApproveAsset = async (url) => {
+              try {
+                  const res = await fetch('http://74.92.194.249:3005/api/command', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ target: 'GHL_SOCIAL', message: `APPROVE_IMAGE: ${url}` })
+                  });
+                  if(res.ok) alert("Asset Approved! Pushing to GHL Social Planner Drafts.");
+              } catch(e) {
+                  alert("Error dispatching approval.");
+              }
+          };
+
           const handleRestartAgent = (agent) => {
             setLogs(prev => [...prev, { time: new Date().toLocaleTimeString('en-US',{hour12:false}), msg: `System: Restarting ${agent}...`, type: 'warning' }]);
           };
@@ -261,9 +274,19 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                                   <img src={file.url} alt={file.name} className="w-full h-full object-cover" />
                                </div>
                            )}
-                           <div className="flex-grow overflow-hidden">
-                               <div className="text-xs font-bold text-[#E2E8F0] truncate group-hover:text-cyber-cyan transition-colors">{file.name}</div>
-                               <div className="text-[10px] text-cyber-gray uppercase mt-0.5">Click to Download</div>
+                           <div className="flex-grow overflow-hidden flex justify-between items-center">
+                               <div>
+                                   <div className="text-xs font-bold text-[#E2E8F0] truncate group-hover:text-cyber-cyan transition-colors">{file.name}</div>
+                                   <div className="text-[10px] text-cyber-gray uppercase mt-0.5">Click to Download</div>
+                               </div>
+                               {(file.type === 'png' || file.type === 'jpg' || file.type === 'jpeg') && (
+                                   <button 
+                                      onClick={(e) => { e.preventDefault(); handleApproveAsset(file.url); }}
+                                      className="ml-2 bg-cyber-pink hover:bg-red-500 text-white text-[10px] px-2 py-1 rounded shadow-lg transition-colors border border-red-500/50"
+                                   >
+                                      SEND TO GHL PLANNER
+                                   </button>
+                               )}
                            </div>
                         </a>
                       ))}
