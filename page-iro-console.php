@@ -63,6 +63,8 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body { margin: 0; background-color: #07090F; color: #E2E8F0; }
+        /* Fix mobile lock */
+        html, body { overflow-x: hidden; height: auto; min-height: 100vh; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #2D3142; border-radius: 20px; }
@@ -96,6 +98,53 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
           const [chatHistory, setChatHistory] = useState([
             { sender: 'IRO', msg: 'Console initialized. Awaiting commands for agent assignment.' }
           ]);
+          const [pendingErrors, setPendingErrors] = useState([]);
+          const [deliverables, setDeliverables] = useState([]);
+          const [telemetry, setTelemetry] = useState({ kidazzle: { leadsToday: 14, appointmentsBooked: 3, pipelineValue: "$12,400" }, wimper: { pool: 14000, warmReplies: 8, projectedValue: "$45,000" } });
+
+          React.useEffect(() => {
+              const fetchErrors = async () => {
+                  try {
+                      const res = await fetch('http://74.92.194.249:3004/api/errors').catch(e => null);
+                      if (res && res.ok) {
+                         const data = await res.json();
+                         setPendingErrors(data);
+                      }
+                  } catch(e) {}
+              };
+              
+              const fetchDeliverables = async () => {
+                  try {
+                      const res = await fetch('http://74.92.194.249:3004/api/deliverables').catch(e => null);
+                      if (res && res.ok) {
+                         const data = await res.json();
+                         setDeliverables(data);
+                      }
+                  } catch(e) {}
+              };
+              
+              const fetchTelemetry = async () => {
+                  try {
+                      const res = await fetch('http://74.92.194.249:3004/api/telemetry').catch(e => null);
+                      if (res && res.ok) {
+                         const data = await res.json();
+                         if(data && Object.keys(data).length > 0) {
+                            setTelemetry(prev => ({...prev, ...data}));
+                         }
+                      }
+                  } catch(e) {}
+              };
+
+              fetchErrors();
+              fetchDeliverables();
+              fetchTelemetry();
+              const intv = setInterval(() => {
+                  fetchErrors();
+                  fetchDeliverables();
+                  fetchTelemetry();
+              }, 10000); // Polls every 10 seconds natively
+              return () => clearInterval(intv);
+          }, []);
 
           const handleSendChat = () => {
             if (!chatInput.trim()) return;
@@ -161,6 +210,65 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                       ))}
                     </div>
                   </div>
+
+                  {/* Cron Jobs & Error Pending Alerts */}
+                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg mt-6">
+                    <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center relative">
+                      <IconCpu className="w-4 h-4 mr-2" /> ACTIVE CRON JOBS / SYSTEM ALERTS
+                      {pendingErrors.length > 0 && (
+                          <span className="absolute right-0 top-0 flex h-3 w-3">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                          </span>
+                      )}
+                    </h2>
+                    <div className="space-y-3">
+                      {pendingErrors.length === 0 ? (
+                         <div className="text-xs text-cyber-green p-3 bg-cyber-subpanel border border-cyber-green/20 rounded">
+                           NO PENDING ERRORS. SYSTEM NOMINAL.
+                         </div>
+                      ) : pendingErrors.map((err, idx) => (
+                        <div key={idx} className="flex flex-col p-3 bg-cyber-subpanel rounded border border-cyber-pink/40 animate-pulse">
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="font-bold text-xs text-red-500 block flex items-center">
+                               <IconRefresh className="w-3 h-3 mr-1" /> ERROR PENDING / UPDATE
+                            </span>
+                            <span className="text-xs text-cyber-gray">{err.timestamp ? new Date(err.timestamp).toLocaleTimeString('en-US') : 'N/A'}</span>
+                          </div>
+                          <div className="text-xs text-cyber-gray mb-1">Workflow: <span className="text-[#E2E8F0]">{err.workflowId}</span></div>
+                          <div className="text-xs text-white">{err.nodeName}: {err.message}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Local Deliverables (Asset Stream) */}
+                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg mt-6">
+                    <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
+                      <IconFileText className="w-4 h-4 mr-2" /> ASSETS CREATED
+                    </h2>
+                    <div className="space-y-3 max-h-64 overflow-y-auto custom-scrollbar pr-2">
+                      {deliverables.length === 0 ? (
+                         <div className="text-xs text-cyber-gray">No assets generated yet.</div>
+                      ) : deliverables.map((file, idx) => (
+                        <a key={idx} href={file.url} download target="_blank" className="flex items-center p-3 bg-cyber-subpanel rounded border border-cyber-border hover:border-cyber-cyan/30 transition-colors group">
+                           {file.type === 'pdf' ? (
+                               <div className="w-10 h-10 shrink-0 bg-red-900/30 text-red-500 rounded flex items-center justify-center mr-3 font-bold text-xs group-hover:bg-red-900/50">PDF</div>
+                           ) : file.type === 'md' ? (
+                               <div className="w-10 h-10 shrink-0 bg-blue-900/30 text-blue-500 rounded flex items-center justify-center mr-3 font-bold text-xs group-hover:bg-blue-900/50">MD</div>
+                           ) : (
+                               <div className="w-10 h-10 shrink-0 rounded overflow-hidden mr-3 border border-cyber-border group-hover:border-cyber-cyan/50 relative">
+                                  <img src={file.url} alt={file.name} className="w-full h-full object-cover" />
+                               </div>
+                           )}
+                           <div className="flex-grow overflow-hidden">
+                               <div className="text-xs font-bold text-[#E2E8F0] truncate group-hover:text-cyber-cyan transition-colors">{file.name}</div>
+                               <div className="text-[10px] text-cyber-gray uppercase mt-0.5">Click to Download</div>
+                           </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Middle/Right Column: Conversation & Wimper/Kidazzle */}
@@ -171,22 +279,22 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                     <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
                       <IconTarget className="w-4 h-4 mr-2" /> OPPORTUNITY PIPELINES (GHL SYNC)
                     </h2>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* Kidazzle */}
                       <div className="p-4 bg-cyber-subpanel rounded border border-cyber-pink/20">
                         <h3 className="text-cyber-pink font-bold mb-2 flex items-center"><IconUsers className="w-4 h-4 mr-2"/> Kidazzle B2C</h3>
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between border-b border-cyber-border pb-1">
                             <span className="text-cyber-gray">New Leads Today</span>
-                            <span className="text-white font-bold"><?php echo $kidazzle_leads; ?></span>
+                            <span className="text-white font-bold">{telemetry.kidazzle.leadsToday || 0}</span>
                           </div>
                           <div className="flex justify-between border-b border-cyber-border pb-1">
                             <span className="text-cyber-gray">Appointments Booked</span>
-                            <span className="text-white font-bold"><?php echo $kidazzle_appts; ?></span>
+                            <span className="text-white font-bold">{telemetry.kidazzle.appointmentsBooked || 0}</span>
                           </div>
                           <div className="flex justify-between pt-1">
                             <span className="text-cyber-gray">Pipeline Value</span>
-                            <span className="text-cyber-green font-bold"><?php echo $kidazzle_value; ?></span>
+                            <span className="text-cyber-green font-bold">{telemetry.kidazzle.pipelineValue || "$0"}</span>
                           </div>
                         </div>
                       </div>
@@ -197,15 +305,15 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between border-b border-cyber-border pb-1">
                             <span className="text-cyber-gray">Outreach Pool</span>
-                            <span className="text-white font-bold"><?php echo $wimper_sent_display; ?></span>
+                            <span className="text-white font-bold">{telemetry.wimper.pool || 0}</span>
                           </div>
                           <div className="flex justify-between border-b border-cyber-border pb-1">
                             <span className="text-cyber-gray">Warm Replies</span>
-                            <span className="text-white font-bold"><?php echo $wimper_replies; ?></span>
+                            <span className="text-white font-bold">{telemetry.wimper.warmReplies || 0}</span>
                           </div>
                           <div className="flex justify-between pt-1">
                             <span className="text-cyber-gray">Projected Value</span>
-                            <span className="text-cyber-green font-bold"><?php echo $wimper_value; ?></span>
+                            <span className="text-cyber-green font-bold">{telemetry.wimper.projectedValue || "$0"}</span>
                           </div>
                         </div>
                       </div>
@@ -213,7 +321,7 @@ $wimper_sent_display = number_format($wimper['pool'] ?? 14000);
                   </div>
 
                   {/* Conversation Tab / Command Center */}
-                  <div className="bg-cyber-panel border border-cyber-border flex-grow rounded-md shadow-lg flex flex-col overflow-hidden min-h-[400px]">
+                  <div className="bg-cyber-panel border border-cyber-border flex-grow rounded-md shadow-lg flex flex-col min-h-[400px]">
                     {/* Tabs */}
                     <div className="flex border-b border-cyber-border">
                       <button 
