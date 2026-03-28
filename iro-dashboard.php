@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: IRO 5.0 (Pipeline Bridge)
+ * Routing Template: IRO Dashboard Legacy
  */
 
 // Load Telemetry Data
