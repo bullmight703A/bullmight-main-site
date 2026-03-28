@@ -4,12 +4,14 @@
  */
 
 // Load Telemetry Data
-$telemetry_path = 'C:/Users/kidaz/.openclaw/workspace/bridge/telemetry.json';
 $telemetry = ['kidazzle' => [], 'wimper' => []];
-if (file_exists($telemetry_path)) {
-    $telemetry_data = file_get_contents($telemetry_path);
-    if ($telemetry_data) {
-        $telemetry = json_decode($telemetry_data, true);
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    $telemetry_path = 'C:/Users/kidaz/.openclaw/workspace/bridge/telemetry.json';
+    if (file_exists($telemetry_path)) {
+        $telemetry_data = file_get_contents($telemetry_path);
+        if ($telemetry_data) {
+            $telemetry = json_decode($telemetry_data, true);
+        }
     }
 }
 $kidazzle = $telemetry['kidazzle'] ?? [];
