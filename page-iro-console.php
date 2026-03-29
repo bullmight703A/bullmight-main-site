@@ -66,11 +66,13 @@
         const Search = p => <Icon {...p} d='<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>'/>;
         const FileBarChart = p => <Icon {...p} d='<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="M8 18v-3"/><path d="M16 18v-8"/>'/>;
         const ShieldCheck = p => <Icon {...p} d='<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>'/>;
+        const CheckSquare = p => <Icon {...p} d='<polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>'/>;
 
         const App = () => {
           const [activeTab, setActiveTab] = useState('CHAT');
           const [inputValue, setInputValue] = useState('');
           const [githubUrl, setGithubUrl] = useState('');
+          const [taskValue, setTaskValue] = useState('');
           
           const [chatMessages, setChatMessages] = useState([
             { role: 'system', text: 'Secure connection re-established via Cloudflare.' },
@@ -129,12 +131,13 @@
                     { agent: 'IRO', task: 'Syncing GHL Array: Atlanta Federal', color: 'bg-cyan-400' },
                     { agent: 'PICASSO', task: 'Generating Flyer PNG...', color: 'bg-slate-500' },
                     { agent: 'VOLT', task: 'Parsing recent SMS payload', color: 'bg-yellow-400' },
-                    { agent: 'IRO', task: 'Monitoring Local Host Node 4', color: 'bg-cyan-400' }
+                    { agent: 'IRO', task: 'Monitoring Local Host Node 4', color: 'bg-cyan-400' },
+                    { agent: 'PICASSO', task: 'Social Media Crop: 1080p', color: 'bg-slate-500' }
                   ];
                   setActivities(prev => {
                       const next = [...prev];
                       next.unshift({ ...dynamicTasks[Math.floor(Math.random() * dynamicTasks.length)], id: Date.now() });
-                      if(next.length > 3) next.pop(); // Keep only 3 active arrays visible
+                      if(next.length > 3) next.pop();
                       return next;
                   });
               };
@@ -143,7 +146,7 @@
               const intv = setInterval(fetchErrors, 10000);
               const keepAliveIntv = setInterval(pingAgents, 300000); 
               const healthIntv = setInterval(updateHealth, 5000);
-              const rotateIntv = setInterval(rotateActivity, 15000); // Rotates every 15 seconds
+              const rotateIntv = setInterval(rotateActivity, 15000); 
               
               return () => { clearInterval(intv); clearInterval(keepAliveIntv); clearInterval(healthIntv); clearInterval(rotateIntv); };
           }, []);
@@ -168,7 +171,7 @@
             setChatMessages([...chatMessages, { role: 'user', text: inputValue }]);
             setInputValue('');
             setTimeout(() => {
-              setChatMessages(prev => [...prev, { role: 'agent', text: 'Executing query securely through local Ollama cloud vector...', name: 'OLLAMA CORE' }]);
+              setChatMessages(prev => [...prev, { role: 'agent', text: 'Executing query securely through local OpenClaw cloud vector...', name: 'OLLAMA CORE' }]);
             }, 1500);
           };
 
@@ -181,19 +184,31 @@
                setActiveTab('CHAT');
              }, 1000);
           };
+          
+          const handleAddTask = () => {
+             if (!taskValue) return;
+             const submittedTask = taskValue;
+             setTaskValue('');
+             setChatMessages(prev => [...prev, { role: 'user', text: `Added Webhook Task: ${submittedTask}` }]);
+             setTimeout(() => {
+               setChatMessages(prev => [...prev, { role: 'agent', text: `Task successfully pinged via webhook to GoHighLevel CRM queue: "${submittedTask}".`, name: 'MASTERCHEF' }]);
+               setActiveTab('CHAT');
+             }, 1000);
+          };
 
           const handleToolClick = (toolName) => {
              setChatMessages(prev => [...prev, { role: 'user', text: `Initiate CRON Job: ${toolName}` }]);
              setTimeout(() => {
-               setChatMessages(prev => [...prev, { role: 'agent', text: `Acknowledged ${toolName}. Execution protocol locked. I will update this chat directly regarding the payload status.`, name: 'IRO' }]);
+               setChatMessages(prev => [...prev, { role: 'agent', text: `Acknowledged ${toolName}. Execution payload transmitted. I will update this chat directly regarding the results.`, name: 'IRO' }]);
                setActiveTab('CHAT');
              }, 800);
           };
 
-          const recoveredLeads = [
-            { name: 'Sarah Connor', phone: '+1 (555) 012-3456', email: 's.connor@cyberdyne.io', tags: ['Hot Lead', 'Enterprise'], status: 'Follow-up' },
-            { name: 'Rick Deckard', phone: '+1 (555) 987-6543', email: 'deckard@blade.run', tags: ['Tech', 'Inquiry'], status: 'Nurture' },
-            { name: 'Ellen Ripley', phone: '+1 (555) 246-8102', email: 'ripley@weyland.corp', tags: ['Urgent', 'Recovery'], status: 'Call Back' }
+          // KIDAZZLE MISSED OPPORTUNITIES
+          const missedOpportunities = [
+            { name: 'Sarah Connor', phone: '+1 (555) 012-3456', email: 's.connor@cyberdyne.io', issue: 'Phone Pick-up Gap', time: '14 mins ago', urgency: 'High' },
+            { name: 'Rick Deckard', phone: '+1 (555) 987-6543', email: 'deckard@blade.run', issue: 'Unanswered Text / SMS Blocked', time: '1 hr ago', urgency: 'Medium' },
+            { name: 'Ellen Ripley', phone: '+1 (555) 246-8102', email: 'ripley@weyland.corp', issue: 'Webhook Fallback Failed', time: '3 hrs ago', urgency: 'Critical' }
           ];
 
           const emailDomains = [
@@ -207,11 +222,11 @@
               <header className="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/30 pb-4 mb-6 gap-4">
                 <div className="flex items-center gap-3 w-full md:w-auto">
                   <div className="w-3 h-3 rounded-full border border-cyan-400 animate-pulse shadow-[0_0_8px_cyan]" />
-                  <h1 className="text-xl md:text-2xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center v5.2</h1>
+                  <h1 className="text-xl md:text-2xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center v5.4</h1>
                 </div>
                 <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6 text-xs tracking-widest w-full md:w-auto">
                   <div className="flex items-center gap-3 px-4 py-1.5 rounded bg-cyan-950/20 border border-cyan-400/20 text-cyan-400 font-bold uppercase whitespace-nowrap">
-                    System: Secure & Redundant
+                    System: Secure & Tracking
                   </div>
                   <button className="text-slate-400 hover:text-white transition-colors">Exit_Cmd</button>
                 </div>
@@ -242,8 +257,6 @@
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5 min-h-[180px]">
                     <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5">Agent Activity</h2>
                     <div className="space-y-4">
-                      
-                      {/* Dynamic Rotating Indicators */}
                       {activities.map(act => (
                         <div key={act.id} className="p-3 rounded border border-slate-800 bg-slate-950/40 animate-in fade-in slide-in-from-top-1 duration-500">
                           <div className="flex items-center gap-2 mb-1.5">
@@ -253,8 +266,6 @@
                           <p className="text-[11px] text-slate-400 truncate">{act.task}</p>
                         </div>
                       ))}
-
-                      {/* Error Overrides */}
                       {pendingErrors.length > 0 && pendingErrors.map((err, idx) => (
                            <div key={idx} className="p-3 rounded border border-red-900/50 bg-red-950/10 relative overflow-hidden group">
                              <div className="absolute inset-0 bg-red-600/10 animate-pulse pointer-events-none" />
@@ -351,43 +362,52 @@
                         </div>
                       )}
 
+                      {/* KIDAZZLE TAB - Opportunities & Gaps Focus */}
                       {activeTab === 'KIDAZZLE' && (
                         <div className="p-5 h-full overflow-y-auto space-y-6 custom-scrollbar">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                             <div className="bg-slate-900/40 border border-slate-800 p-4 rounded">
-                              <p className="text-[11px] text-slate-400 uppercase font-bold mb-2">Total Pipeline Value</p>
-                              <p className="text-2xl font-bold text-cyan-400">$1.82M</p>
+                              <p className="text-[11px] text-slate-400 uppercase font-bold mb-2">Total Pipeline</p>
+                              <p className="text-xl font-bold text-cyan-400">$1.82M</p>
                               <div className="mt-3 h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
                                 <div className="h-full bg-cyan-500 w-[72%]" />
                               </div>
                             </div>
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded">
+                              <p className="text-[11px] text-slate-400 uppercase font-bold mb-2">Missed Gaps</p>
+                              <p className="text-xl font-bold text-red-500">14 Leads</p>
+                              <p className="text-[10px] text-slate-500 mt-2 font-bold uppercase tracking-widest"><Phone size={10} className="inline mr-1" /> Pending Routing</p>
+                            </div>
                             <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col justify-center">
-                              <button className="w-full py-3 bg-yellow-600/10 border border-yellow-600/40 text-yellow-500 rounded text-[11px] hover:bg-yellow-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
-                                 <Clock size={14} /> Kidazzle EOD Export
+                              <button className="w-full flex-1 bg-yellow-600/10 border border-yellow-600/40 text-yellow-500 rounded text-[11px] hover:bg-yellow-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
+                                 <Clock size={14} /> EOD Export
                               </button>
                             </div>
                           </div>
 
                           <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden">
-                            <div className="bg-slate-950 p-3 border-b border-slate-800">
-                              <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={14}/> Recovery Operations (GHL)</h3>
+                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
+                              <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Phone size={14}/> Missed Opportunities / Gaps</h3>
+                              <span className="text-[10px] bg-red-900/30 text-red-400 px-2 py-1 rounded font-bold uppercase tracking-wider">Urgent Phone Follow-up</span>
                             </div>
                             <div className="p-3 space-y-3">
-                              {recoveredLeads.map((lead, i) => (
-                                <div key={i} className="p-4 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-start sm:items-center">
+                              {missedOpportunities.map((lead, i) => (
+                                <div key={i} className="p-4 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-red-900/50 transition-all justify-between items-start sm:items-center">
                                   <div className="flex-1">
-                                    <p className="text-sm font-bold text-slate-100 uppercase">{lead.name}</p>
+                                    <div className="flex justify-between w-full">
+                                      <p className="text-sm font-bold text-slate-100 uppercase">{lead.name}</p>
+                                      <span className="text-[10px] text-slate-500 whitespace-nowrap">{lead.time}</span>
+                                    </div>
                                     <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 mt-2">
-                                      <span className="text-[11px] text-slate-400 flex items-center gap-1.5 font-bold"><Phone size={12}/> {lead.phone}</span>
+                                      <span className="text-[11px] text-slate-400 flex items-center gap-1.5 font-bold"><Phone size={12} className="text-red-400"/> {lead.phone}</span>
                                       <span className="text-[11px] text-slate-400 flex items-center gap-1.5 font-bold"><Mail size={12}/> {lead.email}</span>
                                     </div>
-                                    <div className="flex flex-wrap gap-2 mt-3">
-                                      {lead.tags.map(tag => (
-                                        <span key={tag} className="text-[10px] bg-slate-900 text-cyan-600 border border-cyan-900/30 px-2 py-1 rounded uppercase font-bold">{tag}</span>
-                                      ))}
+                                    <div className="flex flex-wrap gap-2 mt-3 items-center">
+                                      <span className="text-[10px] bg-slate-900 text-yellow-500 border border-yellow-900/30 px-2 py-1 rounded uppercase font-bold">{lead.issue}</span>
+                                      <span className={`text-[10px] font-bold uppercase tracking-widest ${lead.urgency==='Critical' ? 'text-red-500' : 'text-slate-500'}`}>[{lead.urgency}]</span>
                                     </div>
                                   </div>
-                                  <button className="self-end sm:self-center p-3 bg-green-950/20 text-green-500 rounded-full hover:bg-green-500 hover:text-black transition-all shadow-[0_0_10px_rgba(34,197,94,0.1)]">
+                                  <button className="self-end sm:self-center p-3 bg-red-950/20 text-red-400 rounded-full hover:bg-red-500 hover:text-black transition-all shadow-[0_0_10px_rgba(239,68,68,0.1)]">
                                     <Phone size={18} />
                                   </button>
                                 </div>
@@ -397,28 +417,37 @@
                         </div>
                       )}
 
+                      {/* WIMPER TAB - Tasks, Ads, Social Media */}
                       {activeTab === 'WIMPER' && (
                         <div className="p-5 h-full overflow-y-auto space-y-6 custom-scrollbar">
-                          {/* Wimper Specific EOD Report */}
-                          <div className="bg-slate-900/40 border border-slate-800 p-5 rounded flex flex-col sm:flex-row justify-between items-center gap-5">
-                            <div className="flex items-center gap-4">
-                              <FileBarChart size={28} className="text-cyan-500" />
-                              <div>
-                                <h3 className="text-sm font-bold text-slate-200 uppercase">Wimper Tech EOD Summary</h3>
-                                <p className="text-[10px] text-slate-400 uppercase mt-1">Status: Awaiting Final Validation</p>
-                              </div>
+                          
+                          {/* Top Section: Quick Add Form */}
+                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row gap-4 items-center shadow-inner">
+                            <div className="flex-1 w-full relative">
+                              <CheckSquare size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-cyan-700" />
+                              <input 
+                                 type="text" 
+                                 value={taskValue}
+                                 onChange={(e) => setTaskValue(e.target.value)}
+                                 onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
+                                 placeholder="Add specific WIMPER task to queue (Webhooks to GHL)..." 
+                                 className="w-full bg-slate-950/60 border border-slate-800 rounded py-2 pl-9 pr-3 text-xs focus:outline-none focus:border-cyan-500 text-slate-100" 
+                              />
                             </div>
-                            <button className="w-full sm:w-auto text-[11px] bg-cyan-600/10 border border-cyan-600/40 text-cyan-400 px-5 py-2.5 rounded hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
-                               <Clock size={14} /> Generate Tech EOD
+                            <button onClick={handleAddTask} className="w-full sm:w-auto text-[11px] bg-cyan-600 hover:bg-cyan-500 text-black px-5 py-2.5 rounded transition-all font-bold uppercase flex items-center justify-center gap-2">
+                              <Send size={14} /> Add Task
                             </button>
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded">
-                              <div className="flex items-center gap-2 mb-4 text-cyan-400 font-bold uppercase text-[11px]">
-                                <Mail size={16} /> Cold Email Delivery
+                            {/* Cold Email Block */}
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col">
+                              <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2 text-cyan-400 font-bold uppercase text-[11px]">
+                                  <Mail size={16} /> Cold Email Delivery
+                                </div>
                               </div>
-                              <div className="space-y-3">
+                              <div className="space-y-3 flex-1">
                                 {emailDomains.map(d => (
                                   <div key={d.domain} className="p-3 bg-slate-950/40 border border-slate-800/60 rounded">
                                     <div className="flex justify-between text-xs mb-2">
@@ -434,39 +463,52 @@
                               </div>
                             </div>
 
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded">
-                              <div className="flex items-center gap-2 mb-4 text-yellow-500 font-bold uppercase text-[11px]">
-                                <Search size={16} /> Scraper Intelligence
+                            {/* Ads Reporting Block */}
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col">
+                              <div className="flex items-center gap-2 mb-4 text-green-400 font-bold uppercase text-[11px]">
+                                <TrendingUp size={16} /> Ad Reporting Systems (GHL)
                               </div>
                               <div className="space-y-4">
                                 <div>
-                                  <div className="flex justify-between mb-2 uppercase font-bold text-[10px]"><span>Active Progress</span><span>72%</span></div>
+                                  <div className="flex justify-between mb-2 uppercase font-bold text-[10px]"><span>Facebook Return On Spend</span><span className="text-green-400">2.4x</span></div>
                                   <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-yellow-500 w-[72%] shadow-[0_0_10px_orange]" />
+                                    <div className="h-full bg-green-500 w-[60%] shadow-[0_0_10px_green]" />
                                   </div>
                                 </div>
-                                <div className="bg-slate-950/60 p-3 rounded text-xs text-slate-400 border-l-2 border-yellow-600">
-                                   [INF] Extraction: LinkedIn-Lead-Pool-B
-                                   <br /><span className="mt-1 block">[RES] 4,201 records indexed</span>
+                                <div className="bg-slate-950/60 p-3 rounded text-xs text-slate-400 border-l-2 border-green-600">
+                                   [GHL] Camp: B2B-Wimper-Retarget
+                                   <br /><span className="mt-1 block">[RES] 14 Clicks / $12.44 CPA</span>
                                 </div>
                               </div>
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            {[
-                              { icon: <Layers size={16}/>, label: 'n8n Hooks', val: 'Active', color: 'text-green-500' },
-                              { icon: <Database size={16}/>, label: 'Vector DB', val: 'Optimized', color: 'text-cyan-500' },
-                              { icon: <Zap size={16}/>, label: 'Latency', val: '14ms', color: 'text-yellow-500' },
-                              { icon: <ShieldCheck size={16}/>, label: 'Proxy Wall', val: 'Secure', color: 'text-green-400' }
-                            ].map((s, idx) => (
-                              <div key={idx} className="bg-slate-900/40 border border-slate-800 p-3 rounded text-center shadow-inner">
-                                <div className="text-slate-400 mb-2 flex justify-center">{s.icon}</div>
-                                <p className="text-[10px] text-slate-400 uppercase font-bold truncate mb-1">{s.label}</p>
-                                <p className={`text-xs font-bold uppercase ${s.color}`}>{s.val}</p>
+                          {/* Social Media Block */}
+                          <div className="bg-slate-900/40 border border-slate-800 p-5 rounded">
+                              <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2 text-yellow-500 font-bold uppercase text-[11px]">
+                                  <Layers size={16} /> Social Media Delivery Pipeline
+                                </div>
+                                <span className="text-[10px] px-2 py-1 bg-yellow-900/20 text-yellow-500 rounded border border-yellow-900/50 uppercase font-bold tracking-widest animate-pulse">
+                                  1 Post / Hour Sync
+                                </span>
                               </div>
-                            ))}
+                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+                                {[
+                                  { icon: 'IG', label: 'Instagram', val: 'Posted 12m ago', color: 'text-green-400' },
+                                  { icon: 'FB', label: 'Facebook', val: 'Queued (48m)', color: 'text-yellow-500' },
+                                  { icon: 'IN', label: 'LinkedIn', val: 'Posted 2h ago', color: 'text-green-400' },
+                                  { icon: 'X', label: 'Twitter/X', val: 'Queued (1h 4m)', color: 'text-slate-400' }
+                                ].map((s, idx) => (
+                                  <div key={idx} className="bg-slate-950/40 border border-slate-800/60 p-3 rounded text-center shadow-inner">
+                                    <p className="text-[11px] text-slate-300 font-bold mb-2">{s.icon}</p>
+                                    <p className="text-[9px] text-slate-500 uppercase font-bold truncate mb-1">{s.label}</p>
+                                    <p className={`text-[10px] font-bold uppercase truncate ${s.color}`}>{s.val}</p>
+                                  </div>
+                                ))}
+                              </div>
                           </div>
+
                         </div>
                       )}
                     </div>
@@ -524,7 +566,7 @@
                 <div className="flex gap-8"><span>Instance: IRO_Node_X1_bullmight_master</span><span>Uptime: Active Sync</span></div>
                 <div className="flex gap-5 items-center font-bold tracking-tighter">
                   <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_green] animate-pulse"></span> All Nodes OK</span>
-                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-5 uppercase">Ver 5.2.0_Final</span>
+                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-5 uppercase">Ver 5.4.1_Final_Reporting</span>
                 </div>
               </footer>
             </div>
