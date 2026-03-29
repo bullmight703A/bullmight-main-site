@@ -100,7 +100,7 @@
           useEffect(() => {
               const fetchErrors = async () => {
                   try {
-                      const res = await fetch('http://74.92.194.249:3004/api/errors').catch(e => null);
+                      const res = await fetch('http://127.0.0.1:3005/api/errors').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          setPendingErrors(Array.isArray(data) ? data : []);
@@ -110,7 +110,7 @@
               
               const pingAgents = async () => {
                   try {
-                      await fetch('http://74.92.194.249:3004/api/ping', { 
+                      await fetch('http://127.0.0.1:3005/api/ping', { 
                           method: 'POST', body: JSON.stringify({ action: 'keep-alive' })
                       }).catch(e => null);
                   } catch(e) {}
@@ -118,7 +118,7 @@
 
               const updateHealth = async () => {
                   try {
-                      const res = await fetch('http://74.92.194.249:3004/api/hardware');
+                      const res = await fetch('http://127.0.0.1:3005/api/hardware');
                       if (res.ok) {
                          const hw = await res.json();
                          setSystemHealth({
@@ -177,14 +177,25 @@
             }, 2000);
           };
 
-          const handleSendMessage = (e) => {
+          const handleSendMessage = async (e) => {
             e.preventDefault();
             if (!inputValue.trim()) return;
-            setChatMessages([...chatMessages, { role: 'user', text: inputValue }]);
+            const msg = inputValue;
+            setChatMessages(prev => [...prev, { role: 'user', text: msg }]);
             setInputValue('');
-            setTimeout(() => {
-              setChatMessages(prev => [...prev, { role: 'agent', text: 'Executing query securely through local OpenClaw cloud vector...', name: 'OLLAMA CORE' }]);
-            }, 1500);
+            
+            try {
+                // Connect straight back to the live terminal node
+                const res = await fetch('http://127.0.0.1:3005/api/chat', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg })
+                });
+                const data = await res.json();
+                setChatMessages(prev => [...prev, { role: 'agent', text: data.reply, name: 'IRO TERMINAL' }]);
+            } catch (err) {
+                setChatMessages(prev => [...prev, { role: 'agent', text: 'Could not connect to Port 3005 bridge. Terminal is offline.', name: 'SYSTEM RED' }]);
+            }
           };
 
           const handleSyncGithub = () => {
