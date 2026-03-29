@@ -402,6 +402,13 @@
                       {activeTab === 'KIDAZZLE' && (
                         <div className="p-5 h-full overflow-y-auto space-y-6 custom-scrollbar">
 
+                          {/* DAILY ENROLLMENTS TRACKER */}
+                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group">
+                            <p className="text-[11px] text-slate-400 uppercase font-bold group-hover:text-cyan-400 transition-colors">Daily Enrollments</p>
+                            <p className="text-2xl font-black text-green-500">4</p>
+                            <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">Pending Final Sync</p>
+                          </div>
+
                           <div className="bg-slate-900/40 border border-slate-800 rounded">
                             <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
                               <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Layers size={14}/> Processed Lesson Plans</h3>
@@ -456,22 +463,21 @@
                       {activeTab === 'WIMPER' && (
                         <div className="p-5 h-full overflow-y-auto space-y-6 custom-scrollbar">
                           
-                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row gap-4 items-center shadow-inner">
-                            <div className="flex-1 w-full relative">
-                              <CheckSquare size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-cyan-700" />
-                              <input 
-                                 type="text" 
-                                 value={taskValue}
-                                 onChange={(e) => setTaskValue(e.target.value)}
-                                 onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
-                                 placeholder="Add specific WIMPER task to queue (Webhooks to GHL)..." 
-                                 className="w-full bg-slate-950/60 border border-slate-800 rounded py-2 pl-9 pr-3 text-xs focus:outline-none focus:border-cyan-500 text-slate-100" 
-                              />
+                          {/* WIMPER COLD EMAIL / SCRAPER MODULE */}
+                          <div className="bg-slate-900/40 border border-slate-800 p-5 rounded shadow-inner">
+                            <div className="flex justify-between items-center mb-4">
+                              <h3 className="text-xs text-slate-400 uppercase font-bold flex items-center gap-2"><Zap size={14} className="text-yellow-400" /> Lead Scraper & Cold Email</h3>
+                              <span className="text-[10px] bg-green-900/30 text-green-400 px-2 py-1 rounded tracking-widest font-bold">ACTIVE: Scraping</span>
                             </div>
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group">
-                              <p className="text-[11px] text-slate-400 uppercase font-bold group-hover:text-cyan-400 transition-colors">Daily Enrollments</p>
-                              <p className="text-2xl font-bold text-green-500">4</p>
-                              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">Pending Final Sync</p>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="bg-slate-950/40 border border-slate-800 p-3 rounded text-center flex flex-col justify-center">
+                                 <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">New Leads Scraped</p>
+                                 <p className="text-xl font-black text-cyan-400 mt-1">142</p>
+                              </div>
+                              <div className="bg-slate-950/40 border border-slate-800 p-3 rounded text-center flex flex-col justify-center">
+                                 <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Emails Delivered</p>
+                                 <p className="text-xl font-black text-yellow-400 mt-1">89</p>
+                              </div>
                             </div>
                           </div>
 
