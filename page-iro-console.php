@@ -116,13 +116,19 @@
                   } catch(e) {}
               };
 
-              const updateHealth = () => {
-                  setSystemHealth(prev => ({
-                     cpu: Math.max(10, Math.min(99, prev.cpu + (Math.random() * 10 - 5))),
-                     ram: Math.max(20, Math.min(99, prev.ram + (Math.random() * 4 - 2))),
-                     disk: prev.disk,
-                     net: Math.max(5, Math.min(100, prev.net + (Math.random() * 20 - 10)))
-                  }));
+              const updateHealth = async () => {
+                  try {
+                      const res = await fetch('http://74.92.194.249:3004/api/hardware');
+                      if (res.ok) {
+                         const hw = await res.json();
+                         setSystemHealth({
+                            cpu: hw.cpu || 0,
+                            ram: hw.ram || 0,
+                            disk: hw.disk || 0,
+                            net: hw.net || 0
+                         });
+                      }
+                  } catch(e) {}
               };
 
               const updateLessonStatus = () => {
