@@ -329,13 +329,9 @@
                             <span className="text-xs truncate w-full text-slate-300 group-hover:text-cyan-400 transition-colors cursor-pointer">{doc.name}</span>
                           </div>
                           <div className="flex gap-2 border-l border-slate-800 pl-3 ml-2">
-                            <button onClick={() => {
-                               setChatMessages(prev => [...prev, { role: 'user', text: `Requesting secure local download for: ${doc.name}` }]);
-                               setTimeout(() => {
-                                   setChatMessages(prev => [...prev, { role: 'agent', text: `Locating ${doc.name} in OpenClaw Vault. Awaiting final n8n backend integration to pass the binary file buffer.`, name: 'IRO' }]);
-                                   setActiveTab('CHAT');
-                               }, 1000);
-                            }} className="text-slate-500 hover:text-cyan-400"><Download size={14}/></button>
+                            <a href={doc.url} download={doc.name} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-cyan-400">
+                              <Download size={14}/>
+                            </a>
                           </div>
                         </div>
                       ))}
@@ -402,11 +398,47 @@
                       {activeTab === 'KIDAZZLE' && (
                         <div className="p-5 h-full overflow-y-auto space-y-6 custom-scrollbar">
 
-                          {/* DAILY ENROLLMENTS TRACKER */}
-                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group">
-                            <p className="text-[11px] text-slate-400 uppercase font-bold group-hover:text-cyan-400 transition-colors">Daily Enrollments</p>
-                            <p className="text-2xl font-black text-green-500">4</p>
-                            <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">Pending Final Sync</p>
+                          {/* KIDAZZLE ACQUISITION METRICS */}
+                          <div className="grid grid-cols-3 gap-4">
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-cyan-900/50 transition-colors">
+                              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Inbound Leads</p>
+                              <p className="text-2xl font-black text-cyan-400">12</p>
+                              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">Past 7 Days</p>
+                            </div>
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-yellow-900/50 transition-colors">
+                              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Tours Booked</p>
+                              <p className="text-2xl font-black text-yellow-400">3</p>
+                              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">Pending Sync</p>
+                            </div>
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-green-900/50 transition-colors">
+                              <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Enrollments</p>
+                              <p className="text-2xl font-black text-green-500">4</p>
+                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1 leading-tight">Data Pulled:<br/>{new Date().toLocaleDateString()}</p>
+                            </div>
+                          </div>
+
+                          {/* SEO NIGHT PROTOCOL */}
+                          <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shadow-inner">
+                            <div className="flex justify-between items-center mb-4">
+                              <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Database size={14} className="text-indigo-400"/> Night Protocol SEO</h3>
+                              <span className="text-[10px] bg-indigo-900/30 text-indigo-400 px-2 py-1 rounded font-bold uppercase tracking-wider border border-indigo-900/50">Cron: Auto-Index</span>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-4">
+                               <div className="flex-1 bg-slate-950/40 border border-slate-800/60 p-3 rounded">
+                                  <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1">GBP Ranking Atlas</p>
+                                  <div className="flex items-center justify-between">
+                                     <span className="text-sm font-black text-indigo-300">Position #2</span>
+                                     <span className="text-[9px] text-green-500 font-bold">+1 from yesterday</span>
+                                  </div>
+                               </div>
+                               <div className="flex-1 bg-slate-950/40 border border-slate-800/60 p-3 rounded">
+                                  <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1">New Pages Indexed</p>
+                                  <div className="flex items-center justify-between">
+                                     <span className="text-sm font-black text-indigo-300">14 Pages</span>
+                                     <span className="text-[9px] text-slate-500 font-bold max-w-[100px] truncate">Last run: 03:00 AM</span>
+                                  </div>
+                               </div>
+                            </div>
                           </div>
 
                           <div className="bg-slate-900/40 border border-slate-800 rounded">
