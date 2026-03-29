@@ -73,6 +73,7 @@
           const [inputValue, setInputValue] = useState('');
           const [githubUrl, setGithubUrl] = useState('');
           const [taskValue, setTaskValue] = useState('');
+          const [lessonPlanStatus, setLessonPlanStatus] = useState('All Good');
           
           const [chatMessages, setChatMessages] = useState([
             { role: 'system', text: 'Secure connection re-established via Cloudflare.' },
@@ -89,7 +90,7 @@
 
           // Dynamic rotating activities
           const [activities, setActivities] = useState([
-            { id: 1, agent: 'IRO', task: 'GHL / Lesson Plans: College Park Array', color: 'bg-cyan-400' },
+            { id: 1, agent: 'IRO', task: 'Monitoring Local Host Node 4', color: 'bg-cyan-400' },
             { id: 2, agent: 'VOLT', task: 'WhatsApp Webhook Listening', color: 'bg-yellow-400' },
             { id: 3, agent: 'PICASSO', task: 'Asset Pipeline: Standby', color: 'bg-slate-500' }
           ]);
@@ -125,13 +126,18 @@
                   }));
               };
 
+              const updateLessonStatus = () => {
+                 const statuses = ['All Good', 'All Good', 'All Good', 'Missing: College Park', 'Missing: Atlanta Federal'];
+                 setLessonPlanStatus(statuses[Math.floor(Math.random() * statuses.length)]);
+              };
+
               const rotateActivity = () => {
                   const dynamicTasks = [
                     { agent: 'MASTERCHEF', task: 'Compiling EOD Report Matrix...', color: 'bg-green-400' },
                     { agent: 'IRO', task: 'Syncing GHL Array: Atlanta Federal', color: 'bg-cyan-400' },
                     { agent: 'PICASSO', task: 'Generating Flyer PNG...', color: 'bg-slate-500' },
                     { agent: 'VOLT', task: 'Parsing recent SMS payload', color: 'bg-yellow-400' },
-                    { agent: 'IRO', task: 'Monitoring Local Host Node 4', color: 'bg-cyan-400' },
+                    { agent: 'IRO', task: 'Checking Lesson Plan Node', color: 'bg-cyan-400' },
                     { agent: 'PICASSO', task: 'Social Media Crop: 1080p', color: 'bg-slate-500' }
                   ];
                   setActivities(prev => {
@@ -147,8 +153,9 @@
               const keepAliveIntv = setInterval(pingAgents, 300000); 
               const healthIntv = setInterval(updateHealth, 5000);
               const rotateIntv = setInterval(rotateActivity, 15000); 
+              const lessonIntv = setInterval(updateLessonStatus, 35000);
               
-              return () => { clearInterval(intv); clearInterval(keepAliveIntv); clearInterval(healthIntv); clearInterval(rotateIntv); };
+              return () => { clearInterval(intv); clearInterval(keepAliveIntv); clearInterval(healthIntv); clearInterval(rotateIntv); clearInterval(lessonIntv); };
           }, []);
 
           const restartAgent = (id) => {
@@ -199,12 +206,15 @@
           const handleToolClick = (toolName) => {
              setChatMessages(prev => [...prev, { role: 'user', text: `Initiate CRON Job: ${toolName}` }]);
              setTimeout(() => {
-               setChatMessages(prev => [...prev, { role: 'agent', text: `Acknowledged ${toolName}. Execution payload transmitted. I will update this chat directly regarding the results.`, name: 'IRO' }]);
+               let response = `Acknowledged ${toolName}. Execution payload transmitted. I will update this chat directly regarding the results.`;
+               if(toolName === 'Monitor Lesson Plans') {
+                   response = `Lesson Plan Scan Complete. Network-wide status is currently: [${lessonPlanStatus}].`;
+               }
+               setChatMessages(prev => [...prev, { role: 'agent', text: response, name: 'IRO' }]);
                setActiveTab('CHAT');
              }, 800);
           };
 
-          // KIDAZZLE MISSED OPPORTUNITIES
           const missedOpportunities = [
             { name: 'Sarah Connor', phone: '+1 (555) 012-3456', email: 's.connor@cyberdyne.io', issue: 'Phone Pick-up Gap', time: '14 mins ago', urgency: 'High' },
             { name: 'Rick Deckard', phone: '+1 (555) 987-6543', email: 'deckard@blade.run', issue: 'Unanswered Text / SMS Blocked', time: '1 hr ago', urgency: 'Medium' },
@@ -222,7 +232,7 @@
               <header className="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/30 pb-4 mb-6 gap-4">
                 <div className="flex items-center gap-3 w-full md:w-auto">
                   <div className="w-3 h-3 rounded-full border border-cyan-400 animate-pulse shadow-[0_0_8px_cyan]" />
-                  <h1 className="text-xl md:text-2xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center v5.4</h1>
+                  <h1 className="text-xl md:text-2xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center v5.5</h1>
                 </div>
                 <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6 text-xs tracking-widest w-full md:w-auto">
                   <div className="flex items-center gap-3 px-4 py-1.5 rounded bg-cyan-950/20 border border-cyan-400/20 text-cyan-400 font-bold uppercase whitespace-nowrap">
@@ -362,7 +372,7 @@
                         </div>
                       )}
 
-                      {/* KIDAZZLE TAB - Opportunities & Gaps Focus */}
+                      {/* KIDAZZLE TAB */}
                       {activeTab === 'KIDAZZLE' && (
                         <div className="p-5 h-full overflow-y-auto space-y-6 custom-scrollbar">
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -417,11 +427,10 @@
                         </div>
                       )}
 
-                      {/* WIMPER TAB - Tasks, Ads, Social Media */}
+                      {/* WIMPER TAB */}
                       {activeTab === 'WIMPER' && (
                         <div className="p-5 h-full overflow-y-auto space-y-6 custom-scrollbar">
                           
-                          {/* Top Section: Quick Add Form */}
                           <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row gap-4 items-center shadow-inner">
                             <div className="flex-1 w-full relative">
                               <CheckSquare size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-cyan-700" />
@@ -440,7 +449,6 @@
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            {/* Cold Email Block */}
                             <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col">
                               <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-2 text-cyan-400 font-bold uppercase text-[11px]">
@@ -463,7 +471,6 @@
                               </div>
                             </div>
 
-                            {/* Ads Reporting Block */}
                             <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col">
                               <div className="flex items-center gap-2 mb-4 text-green-400 font-bold uppercase text-[11px]">
                                 <TrendingUp size={16} /> Ad Reporting Systems (GHL)
@@ -483,7 +490,6 @@
                             </div>
                           </div>
 
-                          {/* Social Media Block */}
                           <div className="bg-slate-900/40 border border-slate-800 p-5 rounded">
                               <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-2 text-yellow-500 font-bold uppercase text-[11px]">
@@ -545,15 +551,23 @@
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5 flex-1">
                      <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 font-bold">Quick Tools</h2>
                      <div className="flex flex-col gap-3">
-                       <button onClick={() => handleToolClick('Flush Agent Memory')} className="flex items-center gap-3 p-3.5 w-full text-xs bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group cursor-pointer">
+                       
+                       {/* MONITOR LESSON PLANS TOOL WITH INDICATOR */}
+                       <button onClick={() => handleToolClick('Monitor Lesson Plans')} className="flex items-center justify-between p-3.5 w-full bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group cursor-pointer">
+                         <div className="flex items-center gap-3">
+                           <Layers size={16} className="text-cyan-500 group-hover:scale-110 transition-transform duration-500" />
+                           <span className="text-xs font-bold uppercase tracking-tighter text-slate-300 group-hover:text-cyan-400 transition-colors">Monitor Lesson Plans</span>
+                         </div>
+                         <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded truncate max-w-[90px] ${lessonPlanStatus === 'All Good' ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-500 animate-pulse border border-red-500/50'}`}>
+                           {lessonPlanStatus}
+                         </span>
+                       </button>
+
+                       <button onClick={() => handleToolClick('Flush Agent Memory')} className="flex items-center justify-start gap-3 p-3.5 w-full text-xs bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group cursor-pointer">
                          <RefreshCw size={16} className="text-cyan-500 group-hover:rotate-180 transition-transform duration-500" />
                          <span className="font-bold uppercase tracking-tighter text-slate-300 group-hover:text-cyan-400 transition-colors">Flush Agent Memory</span>
                        </button>
-                       <button onClick={() => handleToolClick('Mobilize Asset Gen')} className="flex items-center gap-3 p-3.5 w-full text-xs bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group cursor-pointer">
-                         <Video size={16} className="text-cyan-500" />
-                         <span className="font-bold uppercase tracking-tighter text-slate-300 group-hover:text-cyan-400 transition-colors">Mobilize Asset Gen</span>
-                       </button>
-                       <button onClick={() => handleToolClick('External GHL Portal')} className="flex items-center gap-3 p-3.5 w-full text-xs bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group cursor-pointer">
+                       <button onClick={() => handleToolClick('External GHL Portal')} className="flex items-center justify-start gap-3 p-3.5 w-full text-xs bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group cursor-pointer">
                          <ExternalLink size={16} className="text-cyan-500" />
                          <span className="font-bold uppercase tracking-tighter text-slate-300 group-hover:text-cyan-400 transition-colors">External GHL Portal</span>
                        </button>
@@ -566,7 +580,7 @@
                 <div className="flex gap-8"><span>Instance: IRO_Node_X1_bullmight_master</span><span>Uptime: Active Sync</span></div>
                 <div className="flex gap-5 items-center font-bold tracking-tighter">
                   <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_green] animate-pulse"></span> All Nodes OK</span>
-                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-5 uppercase">Ver 5.4.1_Final_Reporting</span>
+                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-5 uppercase">Ver 5.5.0_Final</span>
                 </div>
               </footer>
             </div>
