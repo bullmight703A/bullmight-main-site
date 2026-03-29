@@ -246,10 +246,10 @@
                     <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 font-bold">Docs & Exports (Vault)</h2>
                     <div className="space-y-2 overflow-y-auto pr-1">
                       {[
-                        { name: 'KIDazzle_Enrollment_Flyer.png', url: '/wp-content/uploads/KIDazzle_Flyer.png', type: 'IMG', error: false },
+                        { name: 'KIDazzle_Enrollment_Flyer.png', url: '/wp-content/uploads/KIDazzle_Flyer.png', type: 'PNG', error: false },
                         { name: 'WIMPER_Audit_Review_Q3.pdf', url: '/wp-content/uploads/Wimper_Audit.pdf', type: 'PDF', error: false },
-                        { name: 'GHL_Pipeline_Export.csv', url: '#', type: 'CSV', error: false },
-                        { name: 'Volt_Error_Log_01.txt', url: '#', type: 'TXT', error: true }
+                        { name: 'Volt_Campaign_Graphic_01.jpeg', url: '#', type: 'JPEG', error: false },
+                        { name: 'Picasso_Social_Media.png', url: '#', type: 'PNG', error: false }
                       ].map((doc, i) => (
                         <div key={i} className="flex items-center justify-between p-2 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group">
                           <div className="flex items-center gap-2 overflow-hidden flex-1">
