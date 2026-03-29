@@ -28,6 +28,9 @@
       body { margin: 0; background-color: #0a0f14; }
       .scrollbar-hide::-webkit-scrollbar { display: none; }
       .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #1e293b; border-radius: 20px; }
     </style>
     <!-- React & ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -78,7 +81,7 @@
           const [agents, setAgents] = useState([
             { id: 'iro', name: 'IRO', status: 'ONLINE & LISTENING', color: 'text-cyan-400', isRestarting: false },
             { id: 'masterchef', name: 'MASTERCHEF', status: 'AWAITING TASK', color: 'text-yellow-400', isRestarting: false },
-            { id: 'volt', name: 'VOLT', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false },
+            { id: 'volt', name: 'VOLT', status: 'WHATSAPP SYNCED', color: 'text-slate-500', isRestarting: false },
             { id: 'picasso', name: 'PICASSO', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false }
           ]);
 
@@ -160,6 +163,14 @@
              }, 1000);
           };
 
+          const handleToolClick = (toolName) => {
+             setChatMessages(prev => [...prev, { role: 'system', text: `Tool Triggered: ${toolName}` }]);
+             setTimeout(() => {
+               setChatMessages(prev => [...prev, { role: 'agent', text: `Acknowledged execution of ${toolName} protocol. Routing instruction to the associated agent cluster.`, name: 'IRO' }]);
+               setActiveTab('CHAT');
+             }, 800);
+          };
+
           const recoveredLeads = [
             { name: 'Sarah Connor', phone: '+1 (555) 012-3456', email: 's.connor@cyberdyne.io', tags: ['Hot Lead', 'Enterprise'], status: 'Follow-up' },
             { name: 'Rick Deckard', phone: '+1 (555) 987-6543', email: 'deckard@blade.run', tags: ['Tech', 'Inquiry'], status: 'Nurture' },
@@ -177,7 +188,7 @@
               <header className="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/30 pb-4 mb-6 gap-4">
                 <div className="flex items-center gap-3 w-full md:w-auto">
                   <div className="w-3 h-3 rounded-full border border-cyan-400 animate-pulse shadow-[0_0_8px_cyan]" />
-                  <h1 className="text-lg md:text-xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center v5.1</h1>
+                  <h1 className="text-lg md:text-xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center v5.2</h1>
                 </div>
                 <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6 text-[10px] tracking-widest w-full md:w-auto">
                   <div className="flex items-center gap-2 px-3 py-1 rounded bg-cyan-950/20 border border-cyan-400/20 text-cyan-400 font-bold uppercase whitespace-nowrap">
@@ -191,9 +202,9 @@
                 
                 {/* LEFT COLUMN: AGENTS & DOCUMENTS */}
                 <div className="col-span-12 lg:col-span-3 flex flex-col gap-4 md:gap-6 order-2 lg:order-1">
-                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 h-full flex flex-col">
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex flex-col">
                     <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Agent Fleet</h2>
+                      <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Agents</h2>
                       <button onClick={handleRestartAll} className="text-[9px] bg-cyan-600/20 border border-cyan-500/40 text-cyan-400 px-2 py-1 rounded hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase">Restart All</button>
                     </div>
                     <div className="space-y-2">
@@ -210,18 +221,26 @@
                   </section>
 
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 min-h-[150px]">
-                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Activity Monitor</h2>
+                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Agent Activity</h2>
                     <div className="space-y-3">
-                      <div className="p-2 rounded border border-slate-800 bg-slate-950/40">
-                        <div className="flex items-center gap-2 mb-1">
-                          <div className="w-2 h-2 rounded-full bg-cyan-400" />
-                          <span className="text-[11px] font-bold uppercase">IRO: GHL Sync / Lesson Plans</span>
-                        </div>
-                        <p className="text-[9px] text-slate-500">Processing nodes. Last sync: College Park</p>
-                      </div>
                       
-                      {pendingErrors.length > 0 ? (
-                         pendingErrors.map((err, idx) => (
+                      {/* Dynamic Continuous Indicators */}
+                      {[
+                        { agent: 'IRO', task: 'GHL / Lesson Plans: College Park Array', color: 'bg-cyan-400' },
+                        { agent: 'VOLT', task: 'WhatsApp Webhook Listening', color: 'bg-yellow-400' },
+                        { agent: 'PICASSO', task: 'Asset Pipeline: Standby', color: 'bg-slate-500' }
+                      ].map(act => (
+                        <div key={act.agent} className="p-2 rounded border border-slate-800 bg-slate-950/40">
+                          <div className="flex items-center gap-2 mb-1">
+                            <div className={`w-2 h-2 rounded-full ${act.color} animate-pulse`} />
+                            <span className="text-[11px] font-bold uppercase">{act.agent} Activity</span>
+                          </div>
+                          <p className="text-[9px] text-slate-500 truncate">{act.task}</p>
+                        </div>
+                      ))}
+
+                      {/* Error Overrides */}
+                      {pendingErrors.length > 0 && pendingErrors.map((err, idx) => (
                            <div key={idx} className="p-2 rounded border border-red-900/50 bg-red-950/10 relative overflow-hidden group">
                              <div className="absolute inset-0 bg-red-600/10 animate-pulse pointer-events-none" />
                              <div className="relative z-10">
@@ -232,12 +251,7 @@
                                <p className="text-[9px] text-red-400/80 uppercase font-bold tracking-tighter">Bottleneck: {err.message || 'Error occurred'}</p>
                              </div>
                            </div>
-                         ))
-                      ) : (
-                         <div className="p-2 rounded border border-slate-800 bg-slate-950/40">
-                           <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest text-center mt-1">No Active Loops</p>
-                         </div>
-                      )}
+                      ))}
                     </div>
                   </section>
 
@@ -249,7 +263,9 @@
                         { name: 'KIDazzle_Enrollment_Flyer.png', url: '/wp-content/uploads/KIDazzle_Flyer.png', type: 'PNG', error: false },
                         { name: 'WIMPER_Audit_Review_Q3.pdf', url: '/wp-content/uploads/Wimper_Audit.pdf', type: 'PDF', error: false },
                         { name: 'Volt_Campaign_Graphic_01.jpeg', url: '#', type: 'JPEG', error: false },
-                        { name: 'Picasso_Social_Media.png', url: '#', type: 'PNG', error: false }
+                        { name: 'Picasso_Social_Media.png', url: '#', type: 'PNG', error: false },
+                        { name: 'Lead_Gen_Report_Mar29.pdf', url: '#', type: 'PDF', error: false },
+                        { name: 'Brigance_Score_Export.pdf', url: '#', type: 'PDF', error: false }
                       ].map((doc, i) => (
                         <div key={i} className="flex items-center justify-between p-2 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group">
                           <div className="flex items-center gap-2 overflow-hidden flex-1">
@@ -297,7 +313,7 @@
                     <div className="flex-1 relative bg-slate-950/10 overflow-hidden">
                       {activeTab === 'CHAT' && (
                         <div className="h-full flex flex-col p-4">
-                          <div className="flex-1 overflow-y-auto space-y-4 mb-4 scrollbar-hide">
+                          <div className="flex-1 overflow-y-auto space-y-4 mb-4 custom-scrollbar pr-2">
                             {chatMessages.map((msg, i) => (
                               <div key={i} className="text-[11px] duration-300">
                                 {msg.role === 'system' ? (
@@ -313,7 +329,7 @@
                               </div>
                             ))}
                           </div>
-                          <form onSubmit={handleSendMessage} className="flex gap-2 bg-slate-950/40 p-1 rounded border border-slate-800 focus-within:border-cyan-500/50 transition-colors">
+                          <form onSubmit={handleSendMessage} className="flex gap-2 bg-slate-950/40 p-1 rounded border border-slate-800 focus-within:border-cyan-500/50 transition-colors mt-auto">
                             <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Send mission instructions to Cloud Ollama LLM..." className="flex-1 bg-transparent p-2 text-xs focus:outline-none font-bold placeholder:text-slate-600" />
                             <button type="submit" className="text-cyan-500 p-2 hover:bg-cyan-500 hover:text-black rounded transition-all"><Send size={14} /></button>
                           </form>
@@ -444,7 +460,7 @@
 
                 {/* RIGHT COLUMN: SYSTEM HEALTH (CIRCLES) & QUICK TOOLS */}
                 <div className="col-span-12 lg:col-span-3 flex flex-col gap-4 order-3">
-                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 h-full flex flex-col justify-center">
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 h-[auto]">
                     <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6 font-bold flex items-center"><ActivityMonitorIcon /> Live Health Dashboard</h2>
                     <div className="grid grid-cols-2 gap-y-10 gap-x-4 pb-4">
                       {[
@@ -472,15 +488,15 @@
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1">
                      <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 font-bold">Quick Tools</h2>
                      <div className="flex flex-col gap-2">
-                       <button className="flex items-center gap-3 p-3 w-full text-[10px] bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group">
+                       <button onClick={() => handleToolClick('Flush Agent Memory')} className="flex items-center gap-3 p-3 w-full text-[10px] bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group">
                          <RefreshCw size={14} className="text-cyan-500 group-hover:rotate-180 transition-transform duration-500" />
                          <span className="font-bold uppercase tracking-tighter">Flush Agent Memory</span>
                        </button>
-                       <button className="flex items-center gap-3 p-3 w-full text-[10px] bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group">
+                       <button onClick={() => handleToolClick('Mobilize Asset Gen')} className="flex items-center gap-3 p-3 w-full text-[10px] bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group">
                          <Video size={14} className="text-cyan-500" />
                          <span className="font-bold uppercase tracking-tighter">Mobilize Asset Gen</span>
                        </button>
-                       <button className="flex items-center gap-3 p-3 w-full text-[10px] bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group">
+                       <button onClick={() => handleToolClick('External GHL Portal')} className="flex items-center gap-3 p-3 w-full text-[10px] bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group">
                          <ExternalLink size={14} className="text-cyan-500" />
                          <span className="font-bold uppercase tracking-tighter">External GHL Portal</span>
                        </button>
