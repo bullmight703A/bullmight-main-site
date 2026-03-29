@@ -329,7 +329,13 @@
                             <span className="text-xs truncate w-full text-slate-300 group-hover:text-cyan-400 transition-colors cursor-pointer">{doc.name}</span>
                           </div>
                           <div className="flex gap-2 border-l border-slate-800 pl-3 ml-2">
-                            <a href={doc.url} download className="text-slate-500 hover:text-cyan-400"><Download size={14}/></a>
+                            <button onClick={() => {
+                               setChatMessages(prev => [...prev, { role: 'user', text: `Requesting secure local download for: ${doc.name}` }]);
+                               setTimeout(() => {
+                                   setChatMessages(prev => [...prev, { role: 'agent', text: `Locating ${doc.name} in OpenClaw Vault. Awaiting final n8n backend integration to pass the binary file buffer.`, name: 'IRO' }]);
+                                   setActiveTab('CHAT');
+                               }, 1000);
+                            }} className="text-slate-500 hover:text-cyan-400"><Download size={14}/></button>
                           </div>
                         </div>
                       ))}
@@ -386,7 +392,7 @@
                             ))}
                           </div>
                           <form onSubmit={handleSendMessage} className="flex gap-3 bg-slate-950/40 p-2 rounded border border-slate-800 focus-within:border-cyan-500/50 transition-colors mt-auto">
-                            <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Send mission instructions to Cloud Ollama LLM..." className="flex-1 bg-transparent p-2 text-sm focus:outline-none font-bold placeholder:text-slate-500" />
+                            <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Let's talk..." className="flex-1 bg-transparent p-2 text-sm focus:outline-none font-bold placeholder:text-slate-500" />
                             <button type="submit" className="text-cyan-500 p-3 hover:bg-cyan-500 hover:text-black rounded transition-all"><Send size={16} /></button>
                           </form>
                         </div>
