@@ -215,7 +215,7 @@
              setTimeout(() => {
                let response = `Acknowledged ${toolName}. Execution payload transmitted. I will update this chat directly regarding the results.`;
                if(toolName === 'Monitor Lesson Plans') {
-                   response = `Lesson Plan Scan Complete. Network-wide status is currently: [${lessonPlanStatus}].`;
+                   response = `Lesson Plan Scan Complete. Network-wide status: [${lessonPlanStatus}]. Last 3 processed: 1) College Park - Toddler A (14m ago), 2) Atlanta Federal - Pre-K (1h ago), 3) Hampton - Infant Suite (2h ago).`;
                }
                setChatMessages(prev => [...prev, { role: 'agent', text: response, name: 'IRO' }]);
                setActiveTab('CHAT');
