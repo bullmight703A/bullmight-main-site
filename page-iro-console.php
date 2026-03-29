@@ -88,7 +88,6 @@
             { id: 'picasso', name: 'PICASSO', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false }
           ]);
 
-          // Dynamic rotating activities
           const [activities, setActivities] = useState([
             { id: 1, agent: 'IRO', task: 'Monitoring Local Host Node 4', color: 'bg-cyan-400' },
             { id: 2, agent: 'VOLT', task: 'WhatsApp Webhook Listening', color: 'bg-yellow-400' },
@@ -203,6 +202,14 @@
              }, 1000);
           };
 
+          const handlePipelineCall = (leadName) => {
+              setChatMessages(prev => [...prev, { role: 'user', text: `Initiate Call & Pipeline Advance Protocol: ${leadName}` }]);
+              setTimeout(() => {
+                  setChatMessages(prev => [...prev, { role: 'agent', text: `Call bridged to ${leadName}. Firing webhook to advance DA Pipeline stage to "Contacted / Follow-up".`, name: 'IRO' }]);
+                  setActiveTab('CHAT');
+              }, 1000);
+          };
+
           const handleToolClick = (toolName) => {
              setChatMessages(prev => [...prev, { role: 'user', text: `Initiate CRON Job: ${toolName}` }]);
              setTimeout(() => {
@@ -215,10 +222,23 @@
              }, 800);
           };
 
+          // KIDAZZLE MISSED OPPORTUNITIES & LESSON PLANS
           const missedOpportunities = [
-            { name: 'Sarah Connor', phone: '+1 (555) 012-3456', email: 's.connor@cyberdyne.io', issue: 'Phone Pick-up Gap', time: '14 mins ago', urgency: 'High' },
-            { name: 'Rick Deckard', phone: '+1 (555) 987-6543', email: 'deckard@blade.run', issue: 'Unanswered Text / SMS Blocked', time: '1 hr ago', urgency: 'Medium' },
-            { name: 'Ellen Ripley', phone: '+1 (555) 246-8102', email: 'ripley@weyland.corp', issue: 'Webhook Fallback Failed', time: '3 hrs ago', urgency: 'Critical' }
+            { name: 'Dr. John Carter', phone: '+1 (555) 012-3456', email: 'jcarter@pediatric.io', issue: 'Phone Pick-up Gap', time: '14 mins ago', urgency: 'High' },
+            { name: 'Sarah Deckard', phone: '+1 (555) 987-6543', email: 'sdeckard@blade.run', issue: 'Unanswered Text / SMS Blocked', time: '1 hr ago', urgency: 'Medium' }
+          ];
+
+          const lessonPlansProcessed = [
+            { location: 'College Park', room: 'Toddler Room A', time: '14 mins ago', status: 'Synced to GHL' },
+            { location: 'Atlanta Federal Center', room: 'Pre-K Core', time: '1 hr ago', status: 'Synced to GHL' },
+            { location: 'Hampton', room: 'Infant Suite', time: '2 hrs ago', status: 'Approved' }
+          ];
+
+          // WIMPER LEADS DORMANT > 12H
+          const wimperDormantLeads = [
+            { name: 'Emily Thorne', phone: '+1 (555) 765-4321', email: 'ethorne@grayson.io', status: 'Awaiting Demo', time: '14 hrs ago' },
+            { name: 'Ian Malcolm', phone: '+1 (555) 123-9876', email: 'imalcolm@chaos.org', status: 'Lead In', time: '18 hrs ago' },
+            { name: 'Arthur Dent', phone: '+1 (555) 442-9988', email: 'adent@galaxy.corp', status: 'Initial Contact', time: '21 hrs ago' }
           ];
 
           const emailDomains = [
@@ -232,7 +252,7 @@
               <header className="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/30 pb-4 mb-6 gap-4">
                 <div className="flex items-center gap-3 w-full md:w-auto">
                   <div className="w-3 h-3 rounded-full border border-cyan-400 animate-pulse shadow-[0_0_8px_cyan]" />
-                  <h1 className="text-xl md:text-2xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center v5.5</h1>
+                  <h1 className="text-xl md:text-2xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center v5.5.1</h1>
                 </div>
                 <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6 text-xs tracking-widest w-full md:w-auto">
                   <div className="flex items-center gap-3 px-4 py-1.5 rounded bg-cyan-950/20 border border-cyan-400/20 text-cyan-400 font-bold uppercase whitespace-nowrap">
@@ -294,7 +314,7 @@
                   {/* DOCUMENT VAULT */}
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5 flex-1 overflow-hidden flex flex-col min-h-[300px]">
                     <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5 font-bold">Docs & Exports (Vault)</h2>
-                    <div className="space-y-3 overflow-y-auto pr-2">
+                    <div className="space-y-3 overflow-y-auto pr-2 custom-scrollbar">
                       {[
                         { name: 'KIDazzle_Enrollment_Flyer.png', url: '/wp-content/uploads/KIDazzle_Flyer.png', type: 'PNG', error: false },
                         { name: 'WIMPER_Audit_Review_Q3.pdf', url: '/wp-content/uploads/Wimper_Audit.pdf', type: 'PDF', error: false },
@@ -372,32 +392,31 @@
                         </div>
                       )}
 
-                      {/* KIDAZZLE TAB */}
+                      {/* KIDAZZLE TAB - Opportunities & Gaps, Lesson Plans */}
                       {activeTab === 'KIDAZZLE' && (
                         <div className="p-5 h-full overflow-y-auto space-y-6 custom-scrollbar">
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded">
-                              <p className="text-[11px] text-slate-400 uppercase font-bold mb-2">Total Pipeline</p>
-                              <p className="text-xl font-bold text-cyan-400">$1.82M</p>
-                              <div className="mt-3 h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-cyan-500 w-[72%]" />
-                              </div>
+
+                          <div className="bg-slate-900/40 border border-slate-800 rounded">
+                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
+                              <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Layers size={14}/> Processed Lesson Plans</h3>
+                              <span className="text-[10px] bg-cyan-900/30 text-cyan-400 px-2 py-1 rounded font-bold uppercase tracking-wider">Automated Matrix</span>
                             </div>
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded">
-                              <p className="text-[11px] text-slate-400 uppercase font-bold mb-2">Missed Gaps</p>
-                              <p className="text-xl font-bold text-red-500">14 Leads</p>
-                              <p className="text-[10px] text-slate-500 mt-2 font-bold uppercase tracking-widest"><Phone size={10} className="inline mr-1" /> Pending Routing</p>
-                            </div>
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col justify-center">
-                              <button className="w-full flex-1 bg-yellow-600/10 border border-yellow-600/40 text-yellow-500 rounded text-[11px] hover:bg-yellow-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
-                                 <Clock size={14} /> EOD Export
-                              </button>
+                            <div className="p-3 space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
+                              {lessonPlansProcessed.map((lp, i) => (
+                                <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex justify-between items-center group hover:border-cyan-900 transition-all">
+                                   <div>
+                                     <p className="text-[11px] font-bold text-slate-200 uppercase">{lp.location} - <span className="text-cyan-400">{lp.room}</span></p>
+                                     <p className="text-[9px] text-slate-500 uppercase mt-1">Status: {lp.status}</p>
+                                   </div>
+                                   <span className="text-[9px] font-bold text-slate-500">{lp.time}</span>
+                                </div>
+                              ))}
                             </div>
                           </div>
 
                           <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden">
                             <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
-                              <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Phone size={14}/> Missed Opportunities / Gaps</h3>
+                              <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Phone size={14}/> Missed Phone Connectivity / Gaps</h3>
                               <span className="text-[10px] bg-red-900/30 text-red-400 px-2 py-1 rounded font-bold uppercase tracking-wider">Urgent Phone Follow-up</span>
                             </div>
                             <div className="p-3 space-y-3">
@@ -417,7 +436,7 @@
                                       <span className={`text-[10px] font-bold uppercase tracking-widest ${lead.urgency==='Critical' ? 'text-red-500' : 'text-slate-500'}`}>[{lead.urgency}]</span>
                                     </div>
                                   </div>
-                                  <button className="self-end sm:self-center p-3 bg-red-950/20 text-red-400 rounded-full hover:bg-red-500 hover:text-black transition-all shadow-[0_0_10px_rgba(239,68,68,0.1)]">
+                                  <button onClick={() => handlePipelineCall(lead.name)} className="self-end sm:self-center p-3 bg-red-950/20 text-red-400 rounded-full hover:bg-red-500 hover:text-black transition-all shadow-[0_0_10px_rgba(239,68,68,0.1)]">
                                     <Phone size={18} />
                                   </button>
                                 </div>
@@ -448,71 +467,32 @@
                             </button>
                           </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col">
-                              <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-2 text-cyan-400 font-bold uppercase text-[11px]">
-                                  <Mail size={16} /> Cold Email Delivery
-                                </div>
-                              </div>
-                              <div className="space-y-3 flex-1">
-                                {emailDomains.map(d => (
-                                  <div key={d.domain} className="p-3 bg-slate-950/40 border border-slate-800/60 rounded">
-                                    <div className="flex justify-between text-xs mb-2">
-                                      <span className="text-slate-100 font-bold">{d.domain}</span>
-                                      <span className={d.status === 'Healthy' ? 'text-green-500' : 'text-yellow-500'}>{d.status}</span>
-                                    </div>
-                                    <div className="flex justify-between text-[10px] text-slate-400 uppercase font-bold">
-                                      <span>Sent: {d.sent}</span>
-                                      <span>Resp: {d.responses} ({Math.round((d.responses/d.sent)*100)}%)</span>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
+                          {/* WIMPER DA PIPELINE - DORMANT LEADS */}
+                          <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden">
+                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
+                              <h3 className="text-xs text-slate-400 uppercase font-bold flex items-center gap-2"><Phone size={14}/> Wimper Enrollment Pipeline (DA)</h3>
+                              <span className="text-[10px] bg-yellow-900/30 text-yellow-500 px-2 py-1 rounded tracking-widest font-bold">Uncontacted &gt; 12h</span>
                             </div>
-
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col">
-                              <div className="flex items-center gap-2 mb-4 text-green-400 font-bold uppercase text-[11px]">
-                                <TrendingUp size={16} /> Ad Reporting Systems (GHL)
-                              </div>
-                              <div className="space-y-4">
-                                <div>
-                                  <div className="flex justify-between mb-2 uppercase font-bold text-[10px]"><span>Facebook Return On Spend</span><span className="text-green-400">2.4x</span></div>
-                                  <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-green-500 w-[60%] shadow-[0_0_10px_green]" />
+                            <div className="p-3 space-y-3">
+                              {wimperDormantLeads.map((lead, i) => (
+                                <div key={i} className="p-4 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group justify-between items-center hover:border-cyan-900 transition-all">
+                                  <div className="flex-1">
+                                    <div className="flex justify-between w-full">
+                                      <p className="text-sm font-bold text-slate-100 uppercase">{lead.name}</p>
+                                      <span className="text-[10px] text-slate-500">{lead.time}</span>
+                                    </div>
+                                    <div className="flex gap-4 mt-2">
+                                      <span className="text-[11px] text-slate-400 flex items-center gap-1.5 font-bold"><Phone size={12}/> {lead.phone}</span>
+                                      <span className="text-[11px] text-slate-400 flex items-center gap-1.5 font-bold"><Mail size={12}/> {lead.email}</span>
+                                    </div>
+                                    <span className="text-[10px] bg-slate-900 text-cyan-600 border border-cyan-900/30 px-2 py-1 rounded inline-block uppercase font-bold mt-3">Stage: {lead.status}</span>
                                   </div>
+                                  <button onClick={() => handlePipelineCall(lead.name)} className="p-3 bg-green-950/20 text-green-500 rounded-full hover:bg-green-500 hover:text-black transition-all shadow-[0_0_10px_rgba(34,197,94,0.1)]">
+                                    <Phone size={18} />
+                                  </button>
                                 </div>
-                                <div className="bg-slate-950/60 p-3 rounded text-xs text-slate-400 border-l-2 border-green-600">
-                                   [GHL] Camp: B2B-Wimper-Retarget
-                                   <br /><span className="mt-1 block">[RES] 14 Clicks / $12.44 CPA</span>
-                                </div>
-                              </div>
+                              ))}
                             </div>
-                          </div>
-
-                          <div className="bg-slate-900/40 border border-slate-800 p-5 rounded">
-                              <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-2 text-yellow-500 font-bold uppercase text-[11px]">
-                                  <Layers size={16} /> Social Media Delivery Pipeline
-                                </div>
-                                <span className="text-[10px] px-2 py-1 bg-yellow-900/20 text-yellow-500 rounded border border-yellow-900/50 uppercase font-bold tracking-widest animate-pulse">
-                                  1 Post / Hour Sync
-                                </span>
-                              </div>
-                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
-                                {[
-                                  { icon: 'IG', label: 'Instagram', val: 'Posted 12m ago', color: 'text-green-400' },
-                                  { icon: 'FB', label: 'Facebook', val: 'Queued (48m)', color: 'text-yellow-500' },
-                                  { icon: 'IN', label: 'LinkedIn', val: 'Posted 2h ago', color: 'text-green-400' },
-                                  { icon: 'X', label: 'Twitter/X', val: 'Queued (1h 4m)', color: 'text-slate-400' }
-                                ].map((s, idx) => (
-                                  <div key={idx} className="bg-slate-950/40 border border-slate-800/60 p-3 rounded text-center shadow-inner">
-                                    <p className="text-[11px] text-slate-300 font-bold mb-2">{s.icon}</p>
-                                    <p className="text-[9px] text-slate-500 uppercase font-bold truncate mb-1">{s.label}</p>
-                                    <p className={`text-[10px] font-bold uppercase truncate ${s.color}`}>{s.val}</p>
-                                  </div>
-                                ))}
-                              </div>
                           </div>
 
                         </div>
@@ -580,7 +560,7 @@
                 <div className="flex gap-8"><span>Instance: IRO_Node_X1_bullmight_master</span><span>Uptime: Active Sync</span></div>
                 <div className="flex gap-5 items-center font-bold tracking-tighter">
                   <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_green] animate-pulse"></span> All Nodes OK</span>
-                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-5 uppercase">Ver 5.5.0_Final</span>
+                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-5 uppercase">Ver 5.5.1_Final</span>
                 </div>
               </footer>
             </div>
