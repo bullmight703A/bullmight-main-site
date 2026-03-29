@@ -59,6 +59,7 @@
         const IconFileText = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>;
         const IconLink = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>;
         const IconSend = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>;
+        const IconDownload = ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
 
         const IROConsole = () => {
           const [activeTab, setActiveTab] = useState('dashboard');
@@ -72,6 +73,18 @@
             { sender: 'IRO', msg: 'Console initialized online. Agent fleet active and awaiting dispatch.' }
           ]);
           const [pendingErrors, setPendingErrors] = useState([]);
+          
+          // New: State mapping for agent artifact downloads
+          const [agentDocs, setAgentDocs] = useState([
+            { id: 1, name: 'KIDazzle_College_Park_Flyer.png', url: '#', type: 'image' },
+            { id: 2, name: 'WIMPER_Audit_Review_Q3.pdf', url: '#', type: 'doc' }
+          ]);
+          
+          // New: State mapping for exact lesson plan locations
+          const [lessonPlans, setLessonPlans] = useState([
+            { id: 1, location: 'College Park', classroom: 'Toddler Room A', status: 'SYNCED', time: new Date().toLocaleTimeString('en-US',{hour: '2-digit', minute:'2-digit'}) },
+            { id: 2, location: 'Atlanta Federal Center', classroom: 'Pre-K 1', status: 'SYNCED', time: '09:15 AM' }
+          ]);
 
           React.useEffect(() => {
               const fetchErrors = async () => {
@@ -80,7 +93,6 @@
                       const res = await fetch('http://74.92.194.249:3004/api/errors').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
-                         // Fix: Enforce array type to prevent React runtime crash during map()
                          setPendingErrors(Array.isArray(data) ? data : []);
                       } else {
                          setPendingErrors([]);
@@ -167,7 +179,7 @@
                         { name: 'IRO', status: 'ONLINE & LISTENING', color: 'text-cyber-green', actions: 'Managing UI & Conversational memory' },
                         { name: 'MASTERCHEF', status: 'GHL AUTOMATION', color: 'text-cyber-cyan', actions: 'Running workflow #14022 for Wimper/Kidazzle' },
                         { name: 'VOLT', status: 'WHATSAPP SYNCED', color: 'text-cyber-orange', actions: 'Processing leads & listening on WhatsApp' },
-                        { name: 'PICASSO', status: 'STNDBY_MODE', color: 'text-cyber-gray', actions: 'Awaiting flyer/media generation tasks' }
+                        { name: 'PICASSO', status: 'ACTIVE', color: 'text-cyber-cyan', actions: 'Pushing flyers to Artifact Vault' }
                       ].map(agent => (
                         <div key={agent.name} className="flex flex-col p-3 bg-cyber-subpanel rounded border border-cyber-border hover:border-cyber-cyan/30 transition-colors">
                           <div className="flex justify-between items-center mb-1">
@@ -186,10 +198,31 @@
                     </div>
                   </div>
 
+                  {/* Agent Artifact Vault */}
+                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg mt-6">
+                    <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
+                      <IconDownload className="w-4 h-4 mr-2" /> AGENT ARTIFACT VAULT
+                    </h2>
+                    <div className="text-xs text-cyber-gray mb-3 pb-2 border-b border-cyber-border">System-generated files and media ready for immediate local download.</div>
+                    <div className="space-y-2">
+                      {agentDocs.map(doc => (
+                        <div key={doc.id} className="flex justify-between items-center bg-cyber-subpanel p-2.5 rounded border border-cyber-border hover:border-cyber-cyan/50 transition-colors group cursor-pointer">
+                           <div className="flex items-center space-x-2 truncate">
+                             <IconFileText className="w-3 h-3 text-cyber-cyan flex-shrink-0" />
+                             <span className="text-xs text-[#E2E8F0] truncate group-hover:text-cyber-cyan transition-colors">{doc.name}</span>
+                           </div>
+                           <a href={doc.url} download className="text-[10px] font-bold bg-cyber-highlight px-2.5 py-1 rounded text-cyber-cyan hover:bg-cyber-cyan hover:text-cyber-subpanel transition-colors border border-cyber-cyan/30 flex-shrink-0 flex items-center">
+                             <IconDownload className="w-3 h-3 mr-1" /> GET
+                           </a>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Cron Jobs & Error Pending Alerts */}
                   <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg mt-6">
                     <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
-                      <IconCpu className="w-4 h-4 mr-2" /> ACTIVE CRON JOBS / SYSTEM ALERTS
+                      <IconCpu className="w-4 h-4 mr-2" /> ACTIVE CRON JOBS / ALERTS
                     </h2>
                     <div className="space-y-3">
                       {(!Array.isArray(pendingErrors) || pendingErrors.length === 0) ? (
@@ -264,16 +297,35 @@
                     <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
                       <IconFileText className="w-4 h-4 mr-2" /> LESSON PLAN AUTOMATION STATUS
                     </h2>
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                         <div className="flex justify-between items-center bg-cyber-subpanel p-3 rounded border border-cyber-border">
                           <div className="flex items-center space-x-3">
                               <span className="relative flex h-3 w-3">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyber-cyan opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-cyber-cyan"></span>
                               </span>
-                              <span className="text-xs font-bold text-white">Brigance Console Matrix Sync</span>
+                              <span className="text-xs font-bold text-white uppercase">Brigance Matrix Active</span>
                           </div>
                           <span className="text-xs text-cyber-green">ONLINE & ROUTING</span>
+                        </div>
+                        
+                        {/* Dynamic Location/Classroom Indicators */}
+                        <div className="pt-2">
+                           <h3 className="text-[10px] tracking-widest uppercase text-cyber-cyan mb-2">Recently Synced Network Nodes:</h3>
+                           <div className="space-y-2">
+                             {lessonPlans.map(lp => (
+                               <div key={lp.id} className="flex justify-between items-center border-l-2 border-cyber-cyan pl-3 py-1.5 bg-cyber-subpanel/50 rounded-r">
+                                  <div className="flex flex-col">
+                                    <span className="text-sm text-[#E2E8F0] font-bold">{lp.location}</span>
+                                    <span className="text-xs text-cyber-gray font-medium">Classroom Array: <span className="text-white">{lp.classroom}</span></span>
+                                  </div>
+                                  <div className="flex flex-col items-end pr-3">
+                                    <span className="text-xs text-cyber-green font-bold bg-cyber-green/10 px-2 py-0.5 rounded">{lp.status}</span>
+                                    <span className="text-[10px] text-cyber-gray mt-1">{lp.time}</span>
+                                  </div>
+                               </div>
+                             ))}
+                           </div>
                         </div>
                     </div>
                   </div>
