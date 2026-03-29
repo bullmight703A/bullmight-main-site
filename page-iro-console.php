@@ -468,9 +468,11 @@
                                  className="w-full bg-slate-950/60 border border-slate-800 rounded py-2 pl-9 pr-3 text-xs focus:outline-none focus:border-cyan-500 text-slate-100" 
                               />
                             </div>
-                            <button onClick={handleAddTask} className="w-full sm:w-auto text-[11px] bg-cyan-600 hover:bg-cyan-500 text-black px-5 py-2.5 rounded transition-all font-bold uppercase flex items-center justify-center gap-2">
-                              <Send size={14} /> Add Task
-                            </button>
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group">
+                              <p className="text-[11px] text-slate-400 uppercase font-bold group-hover:text-cyan-400 transition-colors">Daily Enrollments</p>
+                              <p className="text-2xl font-bold text-green-500">4</p>
+                              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">Pending Final Sync</p>
+                            </div>
                           </div>
 
                           {/* WIMPER DA PIPELINE - DORMANT LEADS */}
@@ -552,10 +554,6 @@
                        <button onClick={() => handleToolClick('Flush Agent Memory')} className="flex items-center justify-start gap-3 p-3.5 w-full text-xs bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group cursor-pointer">
                          <RefreshCw size={16} className="text-cyan-500 group-hover:rotate-180 transition-transform duration-500" />
                          <span className="font-bold uppercase tracking-tighter text-slate-300 group-hover:text-cyan-400 transition-colors">Flush Agent Memory</span>
-                       </button>
-                       <button onClick={() => handleToolClick('External GHL Portal')} className="flex items-center justify-start gap-3 p-3.5 w-full text-xs bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group cursor-pointer">
-                         <ExternalLink size={16} className="text-cyan-500" />
-                         <span className="font-bold uppercase tracking-tighter text-slate-300 group-hover:text-cyan-400 transition-colors">External GHL Portal</span>
                        </button>
                      </div>
                   </section>
