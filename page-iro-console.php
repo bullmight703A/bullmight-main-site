@@ -25,7 +25,7 @@
       }
     </script>
     <style>
-      body { margin: 0; background-color: #0a0f14; font-size: 14px; }
+      body { margin: 0; background-color: #0a0f14; font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
       .scrollbar-hide::-webkit-scrollbar { display: none; }
       .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       .custom-scrollbar::-webkit-scrollbar { width: 8px; }
@@ -100,7 +100,7 @@
           useEffect(() => {
               const fetchErrors = async () => {
                   try {
-                      const res = await fetch('http://127.0.0.1:3005/api/errors').catch(e => null);
+                      const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/errors', { headers: { 'Bypass-Tunnel-Reminder': 'true' } }).catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          setPendingErrors(Array.isArray(data) ? data : []);
@@ -110,15 +110,16 @@
               
               const pingAgents = async () => {
                   try {
-                      await fetch('http://127.0.0.1:3005/api/ping', { 
-                          method: 'POST', body: JSON.stringify({ action: 'keep-alive' })
+                      await fetch('https://bullmight-bridge-3006.loca.lt/api/ping', { 
+                          method: 'POST', body: JSON.stringify({ action: 'keep-alive' }),
+                          headers: { 'Bypass-Tunnel-Reminder': 'true', 'Content-Type': 'application/json' }
                       }).catch(e => null);
                   } catch(e) {}
               };
 
               const updateHealth = async () => {
                   try {
-                      const res = await fetch('http://127.0.0.1:3005/api/hardware');
+                      const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/hardware', { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
                       if (res.ok) {
                          const hw = await res.json();
                          setSystemHealth({
@@ -186,9 +187,9 @@
             
             try {
                 // Connect straight back to the live terminal node
-                const res = await fetch('http://127.0.0.1:3005/api/chat', { 
+                const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/chat', { 
                     method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true' },
                     body: JSON.stringify({ message: msg })
                 });
                 const data = await res.json();
@@ -232,7 +233,7 @@
              setTimeout(() => {
                let response = `Acknowledged ${toolName}. Execution payload transmitted. I will update this chat directly regarding the results.`;
                if(toolName === 'Monitor Lesson Plans') {
-                   response = `Lesson Plan Scan Complete. Network-wide status: [${lessonPlanStatus}]. Last 3 processed: 1) College Park - Toddler A (14m ago), 2) Atlanta Federal - Pre-K (1h ago), 3) Hampton - Infant Suite (2h ago).`;
+                   response = `Lesson Plan Scan Complete. Network-wide status: [${lessonPlanStatus}]. Last 3 processed: 1) Hampton - Infant Suite (14m ago), 2) College Park - Toddler A (1h ago), 3) Atlanta Federal - Pre-K (2h ago).`;
                }
                setChatMessages(prev => [...prev, { role: 'agent', text: response, name: 'IRO' }]);
                setActiveTab('CHAT');
@@ -333,12 +334,11 @@
                     <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5 font-bold">Docs & Exports (Vault)</h2>
                     <div className="space-y-3 overflow-y-auto pr-2 custom-scrollbar">
                       {[
-                        { name: 'KIDazzle_Enrollment_Flyer.png', url: '/wp-content/uploads/KIDazzle_Flyer.png', type: 'PNG', error: false },
-                        { name: 'WIMPER_Audit_Review_Q3.pdf', url: '/wp-content/uploads/Wimper_Audit.pdf', type: 'PDF', error: false },
-                        { name: 'Volt_Campaign_Graphic_01.jpeg', url: '#', type: 'JPEG', error: false },
-                        { name: 'Picasso_Social_Media.png', url: '#', type: 'PNG', error: false },
-                        { name: 'Lead_Gen_Report_Mar29.pdf', url: '#', type: 'PDF', error: false },
-                        { name: 'Brigance_Score_Export.pdf', url: '#', type: 'PDF', error: false }
+                        { name: 'KIDazzle_Enrollment_Flyer.png', url: 'https://bullmight.com/wp-content/uploads/2026/03/KIDazzle_Flyer.png', type: 'PNG', error: false },
+                        { name: '1_services_gbp_best_practices_playbook.pdf', url: 'https://bullmight.com/wp-content/uploads/2026/03/1_services_gbp_best_practices_playbook_2026.pdf', type: 'PDF', error: false },
+                        { name: 'WIMPER_Audit_Review_Q3.pdf', url: 'https://bullmight.com/wp-content/uploads/2026/03/Wimper_Audit.pdf', type: 'PDF', error: false },
+                        { name: '(N8N WEBHOOK) Picasso_Social_Media_Gen', url: 'https://bullmight-n8n-u46728.vm.elestio.app/webhook/social-image-gen', type: 'WEBHOOK', error: false },
+                        { name: 'Brigance_Score_Export.pdf', url: 'https://bullmight.com/wp-content/uploads/2026/03/Brigance_Score.pdf', type: 'PDF', error: false }
                       ].map((doc, i) => (
                         <div key={i} className="flex items-center justify-between p-2.5 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group">
                           <div className="flex items-center gap-3 overflow-hidden flex-1 pl-1">
