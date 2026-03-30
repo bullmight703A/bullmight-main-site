@@ -154,8 +154,27 @@
                   });
               };
 
-              fetchErrors(); pingAgents();
-              const intv = setInterval(fetchErrors, 10000);
+              fetchErrors(); pingAgents(); updateHealth();
+              
+              const pollWebhookEvents = () => {
+                  fetch('https://omaha-indianapolis-hawaiian-separate.trycloudflare.com/api/events', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
+                      .then(r => r.json())
+                      .then(evs => {
+                          if (evs && evs.length > 0) {
+                              setChatMessages(p => {
+                                  let upd = [...p];
+                                  evs.forEach(e => upd.push({ role: 'system', text: e }));
+                                  return upd;
+                              });
+                          }
+                      }).catch(() => {});
+              };
+              
+              const intv = setInterval(() => {
+                  updateHealth();
+                  pollWebhookEvents();
+                  fetchErrors();
+              }, 5000);
               const keepAliveIntv = setInterval(pingAgents, 300000); 
               const healthIntv = setInterval(updateHealth, 5000);
               const rotateIntv = setInterval(rotateActivity, 15000); 
