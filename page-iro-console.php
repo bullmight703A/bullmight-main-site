@@ -100,7 +100,7 @@
           useEffect(() => {
               const fetchErrors = async () => {
                   try {
-                      const res = await fetch('https://omaha-indianapolis-hawaiian-separate.trycloudflare.com/api/errors', { headers: { 'Bypass-Tunnel-Reminder': 'true' } }).catch(e => null);
+                      const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/errors', { headers: { 'Bypass-Tunnel-Reminder': 'true' } }).catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          setPendingErrors(Array.isArray(data) ? data : []);
@@ -110,7 +110,7 @@
               
               const pingAgents = async () => {
                   try {
-                      await fetch('https://omaha-indianapolis-hawaiian-separate.trycloudflare.com/api/ping', { 
+                      await fetch('https://bullmight-bridge-3006.loca.lt/api/ping', { 
                           method: 'POST', body: JSON.stringify({ action: 'keep-alive' }),
                           headers: { 'Bypass-Tunnel-Reminder': 'true', 'Content-Type': 'application/json' }
                       }).catch(e => null);
@@ -119,7 +119,7 @@
 
               const updateHealth = async () => {
                   try {
-                      const res = await fetch('https://omaha-indianapolis-hawaiian-separate.trycloudflare.com/api/hardware', { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
+                      const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/hardware', { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
                       if (res.ok) {
                          const hw = await res.json();
                          setSystemHealth({
@@ -157,7 +157,7 @@
               fetchErrors(); pingAgents(); updateHealth();
               
               const pollWebhookEvents = () => {
-                  fetch('https://omaha-indianapolis-hawaiian-separate.trycloudflare.com/api/events', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
+                  fetch('https://bullmight-bridge-3006.loca.lt/api/events', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
                       .then(r => r.json())
                       .then(evs => {
                           if (evs && evs.length > 0) {
@@ -206,7 +206,7 @@
             
             try {
                 // Connect straight back to the live terminal node
-                const res = await fetch('https://omaha-indianapolis-hawaiian-separate.trycloudflare.com/api/chat', { 
+                const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/chat', { 
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true' },
                     body: JSON.stringify({ message: msg })
