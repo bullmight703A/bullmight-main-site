@@ -25,7 +25,7 @@
       }
     </script>
     <style>
-      body { margin: 0; background-color: #0a0f14; font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+      body { margin: 0; background-color: #0a0f14; font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; zoom: 0.85; }
       .scrollbar-hide::-webkit-scrollbar { display: none; }
       .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       .custom-scrollbar::-webkit-scrollbar { width: 8px; }
