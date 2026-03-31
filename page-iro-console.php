@@ -469,20 +469,23 @@
 
                           {/* KIDAZZLE ACQUISITION METRICS */}
                           <div className="grid grid-cols-3 gap-4">
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-cyan-900/50 transition-colors">
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-cyan-900/50 transition-colors relative">
+                              <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
                               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Inbound Leads</p>
                               <p className="text-2xl font-black text-cyan-400">12</p>
-                              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">Past 7 Days</p>
+                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">GHL Webhook: OK</p>
                             </div>
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-yellow-900/50 transition-colors">
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-yellow-900/50 transition-colors relative">
+                              <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse"></div>
                               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Tours Booked</p>
                               <p className="text-2xl font-black text-yellow-400">3</p>
-                              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">Pending Sync</p>
+                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">Pending GHL Cal Sync</p>
                             </div>
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-green-900/50 transition-colors">
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-green-900/50 transition-colors relative">
+                              <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></div>
                               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Enrollments</p>
                               <p className="text-2xl font-black text-green-500">4</p>
-                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1 leading-tight">Data Pulled:<br/>{new Date().toLocaleDateString()}</p>
+                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">N8N Pipe: Validated</p>
                             </div>
                           </div>
 
@@ -524,7 +527,7 @@
                                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">7-Day Rotation (Since Thursday)</span>
                                </div>
                                <div className="flex gap-2 justify-between">
-                                 {[ { id:'H', c:4 }, { id:'WE', c:3 }, { id:'CP', c:4 }, { id:'AFC', c:0 }, { id:'SUM', c:4 }, { id:'EP', c:2 }, { id:'MIA', c:0 }, { id:'MEM', c:1 } ].map(loc => (
+                                 {[ { id:'H', c:4 }, { id:'WE', c:3 }, { id:'CP', c:4 }, { id:'AFC', c:0 }, { id:'SUM', c:4 }, { id:'MIA', c:0 }, { id:'MEM', c:1 } ].map(loc => (
                                    <div key={loc.id} className={`flex-1 ${loc.c === 0 ? 'bg-red-950/40 border-red-500/50' : 'bg-slate-900/50 border-slate-800/50'} border rounded flex flex-col items-center p-1.5 transition-colors`}>
                                      <span className="text-[10px] text-slate-400 font-bold">{loc.id}</span>
                                      <span className={`text-[11px] font-bold ${loc.c === 0 ? 'text-red-400' : 'text-cyan-400'}`}>{loc.c}</span>
@@ -665,6 +668,41 @@
                     </div>
                   </section>
 
+                  {/* SEARCH ATLAS / GOOGLE MY BUSINESS SCANNER */}
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5">
+                    <div className="flex justify-between items-center mb-5">
+                      <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                        <Search size={14} className="text-indigo-400" /> Search Atlas
+                      </h2>
+                      <span className="text-[9px] bg-indigo-900/30 text-indigo-400 px-2 py-1 rounded font-bold uppercase tracking-wider border border-indigo-900/50">Sunday Job</span>
+                    </div>
+                    
+                    <div className="p-3 bg-slate-950/40 border border-slate-800/40 rounded group hover:border-indigo-900/50 transition-all">
+                       <div className="flex justify-between items-center mb-3">
+                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">GBP Rank (5 Mile)</span>
+                          <span className="text-[10px] text-green-500 font-bold uppercase tracking-widest">Active</span>
+                       </div>
+                       
+                       <div className="grid grid-cols-2 gap-2">
+                          {[ {loc: 'Hampton', r: '2.1'}, {loc: 'West End', r: '3.4'}, {loc: 'Coll. Pk', r: '1.8'}, {loc: 'Summit', r: '2.5'} ].map(l => (
+                             <div key={l.loc} className="flex flex-col bg-slate-900/50 p-2 rounded border border-slate-800">
+                                <span className="text-[9px] text-slate-500 font-bold uppercase truncate">{l.loc}</span>
+                                <span className="text-sm font-black text-indigo-400">#{l.r}</span>
+                             </div>
+                          ))}
+                       </div>
+                       
+                       <div className="mt-4 pt-3 border-t border-slate-800/50 flex flex-col gap-2">
+                         <div className="flex justify-between items-center">
+                           <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Network Cost</span>
+                           <span className="text-[9px] text-slate-400 font-bold uppercase">~ $2.80 / week</span>
+                         </div>
+                         <button className="w-full mt-1 py-1.5 bg-indigo-950/30 text-indigo-400 text-[9px] font-bold uppercase tracking-widest rounded border border-indigo-900/50 hover:bg-indigo-900 hover:text-white transition-all shadow-[0_0_10px_rgba(99,102,241,0.1)]">
+                           Trigger Manual Scan
+                         </button>
+                       </div>
+                    </div>
+                  </section>
 
                 </div>
               </div>
