@@ -76,6 +76,13 @@
           const [githubUrl, setGithubUrl] = useState('');
           const [taskValue, setTaskValue] = useState('');
           const [lessonPlanStatus, setLessonPlanStatus] = useState('All Good');
+          const [isThinking, setIsThinking] = useState(false);
+          const [contactedLeads, setContactedLeads] = useState([]);
+          const [nightProtocolActive, setNightProtocolActive] = useState(true);
+
+          const toggleContacted = (leadName) => {
+              setContactedLeads(prev => prev.includes(leadName) ? prev.filter(n => n !== leadName) : [...prev, leadName]);
+          };
           
           const [chatMessages, setChatMessages] = useState([
             { role: 'system', text: 'Secure connection re-established via Cloudflare.' },
@@ -211,6 +218,7 @@
             const msg = inputValue;
             setChatMessages(prev => [...prev, { role: 'user', text: msg }]);
             setInputValue('');
+            setIsThinking(true);
             
             try {
                 // Connect straight back to the live terminal node
@@ -220,8 +228,10 @@
                     body: JSON.stringify({ message: msg })
                 });
                 const data = await res.json();
-                setChatMessages(prev => [...prev, { role: 'agent', text: data.reply, name: 'IRO TERMINAL' }]);
+                setIsThinking(false);
+                setChatMessages(prev => [...prev, { role: 'agent', text: data.reply, name: 'IRO Talking' }]);
             } catch (err) {
+                setIsThinking(false);
                 setChatMessages(prev => [...prev, { role: 'agent', text: 'Could not connect to Port 3005 bridge. Terminal is offline.', name: 'SYSTEM RED' }]);
             }
           };
@@ -433,6 +443,17 @@
                                 )}
                               </div>
                             ))}
+                            {isThinking && (
+                               <div className="p-3 rounded mx-1 bg-cyan-950/10 border-l-2 border-cyan-800/50 text-left animate-in fade-in duration-300">
+                                  <span className="text-cyan-400 font-bold block mb-2 text-xs">IRO Thinking //</span>
+                                  <div className="flex gap-1.5 items-center h-2 mt-2">
+                                     <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+                                     <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+                                     <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+                                     <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-bounce" style={{animationDelay: '450ms'}}></div>
+                                  </div>
+                               </div>
+                            )}
                             <div ref={chatEndRef} />
                           </div>
                           <form onSubmit={handleSendMessage} className="flex gap-3 bg-slate-950/40 p-2 rounded border border-slate-800 focus-within:border-cyan-500/50 transition-colors mt-auto shrink-0">
@@ -469,7 +490,9 @@
                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shadow-inner">
                             <div className="flex justify-between items-center mb-4">
                               <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Database size={14} className="text-indigo-400"/> Night Protocol SEO</h3>
-                              <span className="text-[10px] bg-indigo-900/30 text-indigo-400 px-2 py-1 rounded font-bold uppercase tracking-wider border border-indigo-900/50">Cron: Auto-Index</span>
+                              <button onClick={() => setNightProtocolActive(!nightProtocolActive)} className={`text-[9px] px-2 py-1 rounded font-bold uppercase tracking-wider border transition-colors cursor-pointer ${nightProtocolActive ? 'bg-indigo-900/30 text-indigo-400 border-indigo-900/50 hover:bg-indigo-900/60' : 'bg-slate-900 text-slate-500 border-slate-800 hover:text-slate-300'}`}>
+                                {nightProtocolActive ? 'Status: Scheduled' : 'Status: Paused'}
+                              </button>
                             </div>
                             <div className="flex flex-col sm:flex-row gap-4">
                                <div className="flex-1 bg-slate-950/40 border border-slate-800/60 p-3 rounded">
@@ -483,7 +506,7 @@
                                   <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1">New Pages Indexed</p>
                                   <div className="flex items-center justify-between">
                                      <span className="text-sm font-black text-indigo-300">14 Pages</span>
-                                     <span className="text-[9px] text-slate-500 font-bold max-w-[100px] truncate">Last run: 03:00 AM</span>
+                                     <span className="text-[9px] text-green-500 font-bold flex items-center gap-1"><CheckSquare size={10}/> Completed 03:00 AM</span>
                                   </div>
                                </div>
                             </div>
@@ -501,7 +524,7 @@
                                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">7-Day Rotation (Since Thursday)</span>
                                </div>
                                <div className="flex gap-2 justify-between">
-                                 {[ { id:'H', c: 4 }, { id:'CP', c: 4 }, { id:'AFC', c: 0 }, { id:'SW', c: 4 }, { id:'EP', c: 2 }, { id:'R', c: 4 } ].map(loc => (
+                                 {[ { id:'H', c:4 }, { id:'WE', c:3 }, { id:'CP', c:4 }, { id:'AFC', c:0 }, { id:'SUM', c:4 }, { id:'EP', c:2 }, { id:'MIA', c:0 }, { id:'MEM', c:1 } ].map(loc => (
                                    <div key={loc.id} className={`flex-1 ${loc.c === 0 ? 'bg-red-950/40 border-red-500/50' : 'bg-slate-900/50 border-slate-800/50'} border rounded flex flex-col items-center p-1.5 transition-colors`}>
                                      <span className="text-[10px] text-slate-400 font-bold">{loc.id}</span>
                                      <span className={`text-[11px] font-bold ${loc.c === 0 ? 'text-red-400' : 'text-cyan-400'}`}>{loc.c}</span>
@@ -527,7 +550,7 @@
                               <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Phone size={14}/> Missed Phone Connectivity / Gaps</h3>
                               <span className="text-[10px] bg-red-900/30 text-red-400 px-2 py-1 rounded font-bold uppercase tracking-wider">Urgent Phone Follow-up</span>
                             </div>
-                            <div className="p-3 space-y-3">
+                            <div className="p-3 space-y-3 max-h-60 overflow-y-auto custom-scrollbar">
                               {missedOpportunities.map((lead, i) => (
                                 <div key={i} className="p-4 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-red-900/50 transition-all justify-between items-start sm:items-center">
                                   <div className="flex-1">
@@ -544,9 +567,14 @@
                                       <span className={`text-[10px] font-bold uppercase tracking-widest ${lead.urgency==='Critical' ? 'text-red-500' : 'text-slate-500'}`}>[{lead.urgency}]</span>
                                     </div>
                                   </div>
-                                  <button onClick={() => handlePipelineCall(lead.name)} className="self-end sm:self-center p-3 bg-red-950/20 text-red-400 rounded-full hover:bg-red-500 hover:text-black transition-all shadow-[0_0_10px_rgba(239,68,68,0.1)]">
-                                    <Phone size={18} />
-                                  </button>
+                                  <div className="self-end sm:self-center flex flex-col gap-2 items-center">
+                                    <button onClick={() => toggleContacted(lead.name)} className={`px-2 py-1 text-[9px] font-bold uppercase rounded border transition-colors ${contactedLeads.includes(lead.name) ? 'bg-green-900/20 text-green-500 border-green-500/30' : 'bg-slate-900/50 text-slate-400 border-slate-700 hover:border-cyan-500 hover:text-cyan-400'}`}>
+                                      {contactedLeads.includes(lead.name) ? 'Communicated' : 'Talk To'}
+                                    </button>
+                                    <button onClick={() => handlePipelineCall(lead.name)} className="p-2.5 bg-red-950/20 text-red-400 rounded-full hover:bg-red-500 hover:text-black transition-all shadow-[0_0_10px_rgba(239,68,68,0.1)] flex items-center justify-center">
+                                      <Phone size={16} />
+                                    </button>
+                                  </div>
                                 </div>
                               ))}
                             </div>
