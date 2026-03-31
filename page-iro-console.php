@@ -245,7 +245,7 @@
                 setChatMessages(prev => [...prev, { role: 'agent', text: data.reply, name: 'IRO Talking' }]);
             } catch (err) {
                 setIsThinking(false);
-                setChatMessages(prev => [...prev, { role: 'agent', text: 'Could not connect to Port 3005 bridge. Terminal is offline.', name: 'SYSTEM RED' }]);
+                setChatMessages(prev => [...prev, { role: 'agent', text: 'Could not connect to the Bridge. Terminal is offline. Please manually restart the OpenClaw Gateway.', name: 'SYSTEM RED' }]);
             }
           };
 
@@ -667,7 +667,7 @@
                       ].map(gauge => (
                         <div key={gauge.label} className="flex flex-col items-center gap-3">
                           <div className="relative w-24 h-24 transition-all duration-1000">
-                            <svg className="w-full h-full transform -rotate-90">
+                            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 96 96">
                               <circle cx="48" cy="48" r="42" fill="none" stroke="currentColor" strokeWidth="4" className="text-slate-900" />
                               <circle cx="48" cy="48" r="42" fill="none" stroke="currentColor" strokeWidth="5" className={gauge.color} strokeDasharray={263.89} strokeDashoffset={263.89 - (gauge.val / 100) * 263.89} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease-out' }} />
                             </svg>
@@ -697,7 +697,7 @@
                        </div>
                        
                        <div className="grid grid-cols-2 gap-2">
-                          {[ {loc: 'Hampton', r: '2.1'}, {loc: 'West End', r: '3.4'}, {loc: 'Coll. Pk', r: '1.8'}, {loc: 'Summit', r: '2.5'} ].map(l => (
+                          {[ {loc: 'Hampton', r: '2.1'}, {loc: 'West End', r: '3.4'}, {loc: 'Coll. Pk', r: '1.8'}, {loc: 'Summit', r: '2.5'}, {loc: 'Atl Federal', r: '1.1'}, {loc: 'Memphis', r: '4.2'}, {loc: 'Miami', r: '3.9'} ].map(l => (
                              <div key={l.loc} className="flex flex-col bg-slate-900/50 p-2 rounded border border-slate-800">
                                 <span className="text-[9px] text-slate-500 font-bold uppercase truncate">{l.loc}</span>
                                 <span className="text-sm font-black text-indigo-400">#{l.r}</span>
