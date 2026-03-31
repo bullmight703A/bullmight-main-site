@@ -86,11 +86,28 @@
               setContactedLeads(prev => prev.includes(leadName) ? prev.filter(n => n !== leadName) : [...prev, leadName]);
           };
           
-          const [chatMessages, setChatMessages] = useState([
+          const initialMessages = [
             { role: 'system', text: 'Secure connection re-established via Cloudflare.' },
             { role: 'user', text: '@IRO, check the GHL pipeline for the new tech leads.' },
             { role: 'agent', text: 'IRO: Accessing GoHighLevel API... 14 new opportunities found.', name: 'IRO' },
-          ]);
+          ];
+          const [chatMessages, setChatMessages] = useState(() => {
+             try {
+                const saved = localStorage.getItem('iro_chat_history');
+                return saved ? JSON.parse(saved) : initialMessages;
+             } catch(e) { return initialMessages; }
+          });
+          const [notesText, setNotesText] = useState(() => {
+             return localStorage.getItem('iro_notes_md') || '';
+          });
+
+          useEffect(() => {
+              localStorage.setItem('iro_chat_history', JSON.stringify(chatMessages));
+          }, [chatMessages]);
+
+          useEffect(() => {
+              localStorage.setItem('iro_notes_md', notesText);
+          }, [notesText]);
 
           const [agents, setAgents] = useState([
             { id: 'iro', name: 'IRO', status: 'ONLINE & LISTENING', color: 'text-cyan-400', isRestarting: false },
@@ -431,7 +448,7 @@
 
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex border-b border-slate-800 bg-slate-950/20 shrink-0">
-                      {['CHAT', 'KIDAZZLE', 'WIMPER'].map(tab => (
+                      {['CHAT', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-5 sm:px-10 py-4 text-xs font-bold tracking-widest transition-all ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -648,6 +665,22 @@
                             </div>
                           </div>
 
+                        </div>
+                      )}
+
+                      {/* NOTES TAB */}
+                      {activeTab === 'NOTES' && (
+                        <div className="p-5 h-full overflow-y-auto space-y-6 custom-scrollbar flex flex-col">
+                          <div className="flex justify-between items-center mb-2">
+                             <h3 className="text-xs text-slate-400 uppercase font-bold flex items-center gap-2"><FileText size={14} className="text-indigo-400" /> Persistent Notes (MD)</h3>
+                             <span className="text-[10px] bg-indigo-900/30 text-indigo-400 px-2 py-1 rounded tracking-widest font-bold border border-indigo-900/50">Auto-Saved to Local Storage</span>
+                          </div>
+                          <textarea 
+                             value={notesText}
+                             onChange={(e) => setNotesText(e.target.value)}
+                             placeholder="Write markdown, scratchpad notes, or 'talk to this later' reminders here... Data persists across reloads."
+                             className="flex-1 w-full bg-slate-950/40 border border-slate-800/60 rounded p-4 text-sm text-slate-300 focus:outline-none focus:border-indigo-500 custom-scrollbar resize-none font-mono"
+                          />
                         </div>
                       )}
                     </div>
