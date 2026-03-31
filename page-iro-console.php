@@ -25,7 +25,8 @@
       }
     </script>
     <style>
-      body { margin: 0; background-color: #0a0f14; font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; zoom: 0.85; }
+      body { margin: 0; background-color: #0a0f14; font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+      @media (min-width: 1024px) { body { zoom: 0.90; } }
       .scrollbar-hide::-webkit-scrollbar { display: none; }
       .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       .custom-scrollbar::-webkit-scrollbar { width: 8px; }
@@ -41,7 +42,7 @@
 <body>
     <div id="iro-root"></div>
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
 
         // --- LUCIDE SVG ICONS ---
         const Icon = ({d, size=24, className=""}) => <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{__html: d}}></svg>;
@@ -69,6 +70,7 @@
         const CheckSquare = p => <Icon {...p} d='<polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>'/>;
 
         const App = () => {
+          const chatEndRef = useRef(null);
           const [activeTab, setActiveTab] = useState('CHAT');
           const [inputValue, setInputValue] = useState('');
           const [githubUrl, setGithubUrl] = useState('');
@@ -183,6 +185,12 @@
               return () => { clearInterval(intv); clearInterval(keepAliveIntv); clearInterval(healthIntv); clearInterval(rotateIntv); clearInterval(lessonIntv); };
           }, []);
 
+          useEffect(() => {
+              if (activeTab === 'CHAT' && chatEndRef.current) {
+                  chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+              }
+          }, [chatMessages, activeTab]);
+
           const restartAgent = (id) => {
             setAgents(prev => prev.map(a => a.id === id ? { ...a, isRestarting: true, status: 'REBOOTING...' } : a));
             setTimeout(() => {
@@ -284,7 +292,7 @@
           ];
 
           return (
-            <div className="h-[98vh] min-h-[98vh] max-h-screen overflow-hidden bg-[#0a0f14] text-slate-200 font-mono p-4 md:p-6 selection:bg-cyan-500/30 flex flex-col">
+            <div className="min-h-screen h-full w-full overflow-x-hidden bg-[#0a0f14] text-slate-200 font-mono p-4 md:p-6 selection:bg-cyan-500/30 flex flex-col pb-10">
               {/* HEADER */}
               <header className="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/30 pb-4 mb-6 gap-4">
                 <div className="flex items-center gap-3 w-full md:w-auto">
@@ -425,8 +433,9 @@
                                 )}
                               </div>
                             ))}
+                            <div ref={chatEndRef} />
                           </div>
-                          <form onSubmit={handleSendMessage} className="flex gap-3 bg-slate-950/40 p-2 rounded border border-slate-800 focus-within:border-cyan-500/50 transition-colors mt-auto">
+                          <form onSubmit={handleSendMessage} className="flex gap-3 bg-slate-950/40 p-2 rounded border border-slate-800 focus-within:border-cyan-500/50 transition-colors mt-auto shrink-0">
                             <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Let's talk..." className="flex-1 bg-transparent p-2 text-sm focus:outline-none font-bold placeholder:text-slate-500" />
                             <button type="submit" className="text-cyan-500 p-3 hover:bg-cyan-500 hover:text-black rounded transition-all"><Send size={16} /></button>
                           </form>
@@ -480,10 +489,25 @@
                             </div>
                           </div>
 
-                          <div className="bg-slate-900/40 border border-slate-800 rounded">
-                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
-                              <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Layers size={14}/> Processed Lesson Plans</h3>
-                              <span className="text-[10px] bg-cyan-900/30 text-cyan-400 px-2 py-1 rounded font-bold uppercase tracking-wider">Automated Matrix</span>
+                          <div className="bg-slate-900/40 border border-slate-800 rounded flex flex-col">
+                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center sm:flex-row flex-col gap-2">
+                              <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold w-full sm:w-auto"><Layers size={14}/> Processed Lesson Plans</h3>
+                              <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded ${lessonPlanStatus === 'All Good' ? 'bg-green-900/30 text-green-400 border border-green-500/30' : 'bg-red-900/30 text-red-500 animate-pulse border border-red-500/50'}`}>
+                                Auto-Rollup: {lessonPlanStatus}
+                              </span>
+                            </div>
+                            <div className="p-3 border-b border-slate-800 bg-slate-950/20">
+                               <div className="flex justify-between items-center mb-2">
+                                 <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">7-Day Rotation (Since Thursday)</span>
+                               </div>
+                               <div className="flex gap-2 justify-between">
+                                 {[ { id:'H', c: 4 }, { id:'CP', c: 4 }, { id:'AFC', c: 0 }, { id:'SW', c: 4 }, { id:'EP', c: 2 }, { id:'R', c: 4 } ].map(loc => (
+                                   <div key={loc.id} className={`flex-1 ${loc.c === 0 ? 'bg-red-950/40 border-red-500/50' : 'bg-slate-900/50 border-slate-800/50'} border rounded flex flex-col items-center p-1.5 transition-colors`}>
+                                     <span className="text-[10px] text-slate-400 font-bold">{loc.id}</span>
+                                     <span className={`text-[11px] font-bold ${loc.c === 0 ? 'text-red-400' : 'text-cyan-400'}`}>{loc.c}</span>
+                                   </div>
+                                 ))}
+                               </div>
                             </div>
                             <div className="p-3 space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
                               {lessonPlansProcessed.map((lp, i) => (
@@ -613,27 +637,7 @@
                     </div>
                   </section>
 
-                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5 flex-1">
-                     <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 font-bold">Quick Tools</h2>
-                     <div className="flex flex-col gap-3">
-                       
-                       {/* MONITOR LESSON PLANS TOOL WITH INDICATOR */}
-                       <button onClick={() => handleToolClick('Monitor Lesson Plans')} className="flex items-center justify-between p-3.5 w-full bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group cursor-pointer">
-                         <div className="flex items-center gap-3">
-                           <Layers size={16} className="text-cyan-500 group-hover:scale-110 transition-transform duration-500" />
-                           <span className="text-xs font-bold uppercase tracking-tighter text-slate-300 group-hover:text-cyan-400 transition-colors">Monitor Lesson Plans</span>
-                         </div>
-                         <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded truncate max-w-[90px] ${lessonPlanStatus === 'All Good' ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-500 animate-pulse border border-red-500/50'}`}>
-                           {lessonPlanStatus}
-                         </span>
-                       </button>
 
-                       <button onClick={() => handleToolClick('Flush Agent Memory')} className="flex items-center justify-start gap-3 p-3.5 w-full text-xs bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 transition-colors group cursor-pointer">
-                         <RefreshCw size={16} className="text-cyan-500 group-hover:rotate-180 transition-transform duration-500" />
-                         <span className="font-bold uppercase tracking-tighter text-slate-300 group-hover:text-cyan-400 transition-colors">Flush Agent Memory</span>
-                       </button>
-                     </div>
-                  </section>
                 </div>
               </div>
               
