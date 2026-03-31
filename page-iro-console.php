@@ -147,7 +147,7 @@
 
               const updateHealth = async () => {
                   try {
-                      const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/hardware', { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
+                      const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/health', { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
                       if (res.ok) {
                          const hw = await res.json();
                          setSystemHealth({
@@ -160,9 +160,16 @@
                   } catch(e) {}
               };
 
-              const updateLessonStatus = () => {
-                 const statuses = ['All Good', 'All Good', 'All Good', 'Missing: College Park', 'Missing: Atlanta Federal'];
-                 setLessonPlanStatus(statuses[Math.floor(Math.random() * statuses.length)]);
+              const updateLessonStatus = async () => {
+                  try {
+                      const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/lesson-plan-status', { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
+                      if (res.ok) {
+                          const data = await res.json();
+                          setLessonPlanStatus(`${data.location || 'GLOBAL'}: ${data.status || 'Active'}`);
+                      }
+                  } catch (e) {
+                      setLessonPlanStatus('N8N Telemetry Offline');
+                  }
               };
 
               const rotateActivity = () => {
