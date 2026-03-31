@@ -73,6 +73,8 @@
           const chatEndRef = useRef(null);
           const [activeTab, setActiveTab] = useState('CHAT');
           const [inputValue, setInputValue] = useState('');
+          const [githubUrl, setGithubUrl] = useState('');
+          const [taskValue, setTaskValue] = useState('');
           const [fileProgress, setFileProgress] = useState(0);
           const [liveLessonPlans, setLiveLessonPlans] = useState([]);
           const [lessonPlanStatus, setLessonPlanStatus] = useState('All Good');
@@ -553,7 +555,7 @@
                                      <p className="text-[11px] font-bold text-slate-200 uppercase">{lp.location} - <span className="text-cyan-400">{lp.room}</span></p>
                                      <p className="text-[9px] text-slate-500 uppercase mt-1">Status: {lp.status}</p>
                                    </div>
-                                   <span className="text-[9px] font-bold text-slate-500">{lp.time === 'Awaiting webhook' ? lp.time : new Date(lp.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                                   <span className="text-[9px] font-bold text-slate-500">{(!lp.time || lp.time === 'Awaiting webhook') ? 'Awaiting webhook' : (!isNaN(new Date(lp.time).getTime()) ? new Date(lp.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Syncing...')}</span>
                                 </div>
                               ))}
                             </div>
