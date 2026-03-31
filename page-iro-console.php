@@ -425,7 +425,7 @@
                       ))}
                     </div>
 
-                    <div className="flex-1 relative bg-slate-950/10 overflow-hidden">
+                    <div className="flex-1 relative bg-slate-950/10 overflow-hidden h-[500px] xl:h-[650px]">
                       {activeTab === 'CHAT' && (
                         <div className="h-full flex flex-col p-5">
                           <div className="flex-1 overflow-y-auto space-y-5 mb-5 custom-scrollbar pr-3">
