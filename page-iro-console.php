@@ -284,7 +284,7 @@
           ];
 
           return (
-            <div className="min-h-screen bg-[#0a0f14] text-slate-200 font-mono p-4 md:p-6 selection:bg-cyan-500/30 flex flex-col">
+            <div className="h-[98vh] min-h-[98vh] max-h-screen overflow-hidden bg-[#0a0f14] text-slate-200 font-mono p-4 md:p-6 selection:bg-cyan-500/30 flex flex-col">
               {/* HEADER */}
               <header className="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/30 pb-4 mb-6 gap-4">
                 <div className="flex items-center gap-3 w-full md:w-auto">
@@ -299,10 +299,10 @@
                 </div>
               </header>
 
-              <div className="grid grid-cols-12 gap-6 md:gap-8 flex-1">
+              <div className="grid grid-cols-12 gap-6 md:gap-8 flex-1 min-h-0">
                 
                 {/* LEFT COLUMN: AGENTS & DOCUMENTS */}
-                <div className="col-span-12 lg:col-span-3 flex flex-col gap-6 md:gap-8 order-2 lg:order-1">
+                <div className="col-span-12 lg:col-span-3 flex flex-col gap-6 md:gap-8 order-2 lg:order-1 min-h-0">
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5 flex flex-col">
                     <div className="flex justify-between items-center mb-5">
                       <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Agents</h2>
@@ -321,6 +321,8 @@
                     </div>
                   </section>
 
+                  {/* Agent Activity section hidden per your feedback - holding space for later */}
+                  {false && (
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5 min-h-[180px]">
                     <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5">Agent Activity</h2>
                     <div className="space-y-4">
@@ -347,6 +349,7 @@
                       ))}
                     </div>
                   </section>
+                  )}
 
                   {/* DOCUMENT VAULT */}
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5 flex-1 overflow-hidden flex flex-col min-h-[300px]">
@@ -355,9 +358,9 @@
                       {[
                         { name: 'KIDazzle_Enrollment_Flyer.png', url: 'https://bullmight.com/wp-content/uploads/2026/03/KIDazzle_Flyer.png', type: 'PNG', error: false },
                         { name: '1_services_gbp_best_practices_playbook.pdf', url: 'https://bullmight.com/wp-content/uploads/2026/03/1_services_gbp_best_practices_playbook_2026.pdf', type: 'PDF', error: false },
-                        { name: 'WIMPER_Audit_Review_Q3.pdf', url: 'https://bullmight.com/wp-content/uploads/2026/03/Wimper_Audit.pdf', type: 'PDF', error: false },
-                        { name: '(N8N WEBHOOK) Picasso_Social_Media_Gen', url: 'https://bullmight-n8n-u46728.vm.elestio.app/webhook/social-image-gen', type: 'WEBHOOK', error: false },
-                        { name: 'Brigance_Score_Export.pdf', url: 'https://bullmight.com/wp-content/uploads/2026/03/Brigance_Score.pdf', type: 'PDF', error: false }
+                        { name: 'V04_Faceless_Video_Scripts (Google Docs)', url: 'https://docs.google.com/document/d/1Xy_fA', type: 'DOC', error: false },
+                        { name: 'V04_Rendered_Replicas (YouTube Demo)', url: 'https://www.youtube.com/@HousingRealityCheck', type: 'VIDEO', error: false },
+                        { name: '(N8N WEBHOOK) Picasso_Social_Media_Gen', url: 'https://bullmight-n8n-u46728.vm.elestio.app/webhook/social-image-gen', type: 'WEBHOOK', error: false }
                       ].map((doc, i) => (
                         <div key={i} className="flex items-center justify-between p-2.5 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group">
                           <div className="flex items-center gap-3 overflow-hidden flex-1 pl-1">
@@ -376,8 +379,8 @@
                 </div>
 
                 {/* MIDDLE COLUMN: INPUT & EXTENDED CHAT */}
-                <div className="col-span-12 lg:col-span-6 flex flex-col gap-6 md:gap-8 order-1 lg:order-2">
-                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4">
+                <div className="col-span-12 lg:col-span-6 flex flex-col gap-6 md:gap-8 order-1 lg:order-2 min-h-0">
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 shrink-0">
                     <div className="flex flex-col sm:flex-row items-center gap-4">
                       <label className="text-xs font-bold text-slate-400 uppercase whitespace-nowrap self-start sm:self-center">GitHub Repo:</label>
                       <div className="relative flex-1 w-full">
@@ -395,8 +398,8 @@
                     </div>
                   </section>
 
-                  <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-[500px]">
-                    <div className="flex border-b border-slate-800 bg-slate-950/20">
+                  <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
+                    <div className="flex border-b border-slate-800 bg-slate-950/20 shrink-0">
                       {['CHAT', 'KIDAZZLE', 'WIMPER'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-5 sm:px-10 py-4 text-xs font-bold tracking-widest transition-all ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
@@ -584,7 +587,7 @@
                 </div>
 
                 {/* RIGHT COLUMN: SYSTEM HEALTH (CIRCLES) & QUICK TOOLS */}
-                <div className="col-span-12 lg:col-span-3 flex flex-col gap-6 md:gap-8 order-3">
+                <div className="col-span-12 lg:col-span-3 flex flex-col gap-6 md:gap-8 order-3 min-h-0">
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5">
                     <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 font-bold flex items-center"><ActivityMonitorIcon /> Live Health Dashboard</h2>
                     <div className="grid grid-cols-2 gap-y-10 gap-x-4 pb-2">
@@ -634,7 +637,7 @@
                 </div>
               </div>
               
-              <footer className="mt-8 p-4 md:p-3 border border-slate-800 bg-slate-900/20 rounded flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-500 uppercase tracking-[0.2em] gap-3 shadow-inner">
+              <footer className="mt-8 shrink-0 p-4 md:p-3 border border-slate-800 bg-slate-900/20 rounded flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-500 uppercase tracking-[0.2em] gap-3 shadow-inner">
                 <div className="flex gap-8"><span>Instance: IRO_Node_X1_bullmight_master</span><span>Uptime: Active Sync</span></div>
                 <div className="flex gap-5 items-center font-bold tracking-tighter">
                   <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_green] animate-pulse"></span> All Nodes OK</span>
