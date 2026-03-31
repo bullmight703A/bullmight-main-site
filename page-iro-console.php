@@ -73,8 +73,8 @@
           const chatEndRef = useRef(null);
           const [activeTab, setActiveTab] = useState('CHAT');
           const [inputValue, setInputValue] = useState('');
-          const [githubUrl, setGithubUrl] = useState('');
-          const [taskValue, setTaskValue] = useState('');
+          const [fileProgress, setFileProgress] = useState(0);
+          const [liveLessonPlans, setLiveLessonPlans] = useState([]);
           const [lessonPlanStatus, setLessonPlanStatus] = useState('All Good');
           const [isThinking, setIsThinking] = useState(false);
           const [contactedLeads, setContactedLeads] = useState([]);
@@ -179,15 +179,26 @@
                       }).catch(() => {});
               };
               
+              const fetchLessonPlans = () => {
+                  fetch('https://bullmight-bridge-3006.loca.lt/api/lesson-plans', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
+                      .then(r => r.json())
+                      .then(data => { if(data && Array.isArray(data) && data.length > 0) setLiveLessonPlans(data); })
+                      .catch(() => {});
+              };
+              
               const intv = setInterval(() => {
                   updateHealth();
                   pollWebhookEvents();
                   fetchErrors();
+                  fetchLessonPlans();
               }, 5000);
               const keepAliveIntv = setInterval(pingAgents, 300000); 
               const healthIntv = setInterval(updateHealth, 5000);
               const rotateIntv = setInterval(rotateActivity, 15000); 
               const lessonIntv = setInterval(updateLessonStatus, 35000);
+              
+              // Initial fetch
+              fetchLessonPlans();
               
               return () => { clearInterval(intv); clearInterval(keepAliveIntv); clearInterval(healthIntv); clearInterval(rotateIntv); clearInterval(lessonIntv); };
           }, []);
@@ -283,10 +294,10 @@
             { name: 'Sarah Deckard', phone: '+1 (555) 987-6543', email: 'sdeckard@blade.run', issue: 'Unanswered Text / SMS Blocked', time: '1 hr ago', urgency: 'Medium' }
           ];
 
-          const lessonPlansProcessed = [
-            { location: 'College Park', room: 'Toddler Room A', time: '14 mins ago', status: 'Synced to GHL' },
-            { location: 'Atlanta Federal Center', room: 'Pre-K Core', time: '1 hr ago', status: 'Synced to GHL' },
-            { location: 'Hampton', room: 'Infant Suite', time: '2 hrs ago', status: 'Approved' }
+          const lessonPlansProcessed = liveLessonPlans.length > 0 ? liveLessonPlans : [
+            { location: 'College Park', room: 'Toddler Room A', time: 'Awaiting webhook', status: 'Pending N8N Sync' },
+            { location: 'Atlanta Federal Center', room: 'Pre-K Core', time: 'Awaiting webhook', status: 'Pending N8N Sync' },
+            { location: 'Hampton', room: 'Infant Suite', time: 'Awaiting webhook', status: 'Pending N8N Sync' }
           ];
 
           // WIMPER LEADS DORMANT > 12H
@@ -542,7 +553,7 @@
                                      <p className="text-[11px] font-bold text-slate-200 uppercase">{lp.location} - <span className="text-cyan-400">{lp.room}</span></p>
                                      <p className="text-[9px] text-slate-500 uppercase mt-1">Status: {lp.status}</p>
                                    </div>
-                                   <span className="text-[9px] font-bold text-slate-500">{lp.time}</span>
+                                   <span className="text-[9px] font-bold text-slate-500">{lp.time === 'Awaiting webhook' ? lp.time : new Date(lp.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                                 </div>
                               ))}
                             </div>
