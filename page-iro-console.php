@@ -920,8 +920,31 @@ if ( ! is_user_logged_in() ) {
 
         const ActivityMonitorIcon = () => <svg className="w-3.5 h-3.5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
 
+        
+        class ErrorBoundary extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = { hasError: false, errorStr: '' };
+          }
+
+          static getDerivedStateFromError(error) {
+            return { hasError: true, errorStr: error.toString() + '\n' + error.stack };
+          }
+
+          render() {
+            if (this.state.hasError) {
+              return <div style={{padding: '50px', background: 'darkred', color: 'white', zIndex: 99999, position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', overflowY: 'auto'}}>
+                  <h1>FATAL REACT CRASH</h1>
+                  <pre style={{whiteSpace:'pre-wrap'}}>{this.state.errorStr}</pre>
+              </div>;
+            }
+            return this.props.children;
+          }
+        }
+
         const root = ReactDOM.createRoot(document.getElementById('iro-root'));
-        root.render(<App />);
+        root.render(<ErrorBoundary><App /></ErrorBoundary>);
+
     </script>
 </body>
 </html>
