@@ -750,19 +750,26 @@ if ( ! is_user_logged_in() ) {
                        
                        <div className="grid grid-cols-2 gap-2">
                           {[ 
-                            {loc: 'Hampton', rank: '#2.1'}, 
-                            {loc: 'West End', rank: '#3.4'}, 
-                            {loc: 'Coll. Pk', rank: '#1.8'}, 
-                            {loc: 'Summit', rank: '#2.5'}, 
-                            {loc: 'Atl Federal', rank: '#1.1'}, 
-                            {loc: 'Memphis', rank: '#4.2'}, 
-                            {loc: 'Miami', rank: '#3.9'} 
-                          ].map((l, i) => (
-                             <div key={i} className="flex flex-col bg-slate-900/50 p-2 rounded border border-slate-800 cursor-default opacity-80">
-                                <span className="text-[10px] text-slate-400 font-bold uppercase truncate">{l.loc}</span>
-                                <span className="text-[12px] font-black tracking-widest text-indigo-400 mt-0.5">{l.rank}</span>
+                            {loc: 'Hampton', slug: '-84.30'}, 
+                            {loc: 'West End', slug: '-84.41'}, 
+                            {loc: 'Coll. Pk', slug: '-84.44'}, 
+                            {loc: 'Summit', slug: '-84.38'}, 
+                            {loc: 'Atl Federal', slug: '-84.39'}, 
+                            {loc: 'Memphis', slug: '-89.95'}, 
+                            {loc: 'Miami', slug: '-80.32'} 
+                          ].map((l, i) => {
+                             const matched = heatmapData.filter(d => d.coordinates && d.coordinates.includes(l.slug));
+                             let localRankDisplay = matched.length > 0 ? "LIVE: ONLINE" : "AWAITING SYNC";
+                             let bgColor = matched.length > 0 ? "bg-indigo-900/40" : "bg-slate-900/50";
+                             let textColor = matched.length > 0 ? "text-emerald-400" : "text-indigo-400 opacity-60";
+                             
+                             return (
+                             <div key={i} className={`flex flex-col ${bgColor} p-2 rounded border ${matched.length > 0 ? 'border-emerald-500/30' : 'border-slate-800'} cursor-default transition-all duration-500`}>
+                                <span className={`text-[10px] font-bold uppercase truncate ${matched.length > 0 ? 'text-indigo-300' : 'text-slate-500'}`}>{l.loc}</span>
+                                <span className={`text-[10px] font-black tracking-widest mt-0.5 ${textColor}`}>{localRankDisplay}</span>
                              </div>
-                          ))}
+                             );
+                          })}
                        </div>
                        
                        <div className="mt-4 pt-3 border-t border-slate-800/50 flex flex-col gap-2">
