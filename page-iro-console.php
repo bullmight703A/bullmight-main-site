@@ -74,6 +74,7 @@ if ( ! is_user_logged_in() ) {
         const ShieldCheck = p => <Icon {...p} d='<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>'/>;
         const CheckSquare = p => <Icon {...p} d='<polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>'/>;
 
+        const ActivityMonitorIcon = () => <svg className="w-3.5 h-3.5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>;
         const App = () => {
           const chatEndRef = useRef(null);
           const [activeTab, setActiveTab] = useState('CHAT');
@@ -918,7 +919,7 @@ if ( ! is_user_logged_in() ) {
           );
         };
 
-        const ActivityMonitorIcon = () => <svg className="w-3.5 h-3.5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+
 
         
         class ErrorBoundary extends React.Component {
