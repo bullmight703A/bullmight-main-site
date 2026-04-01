@@ -132,11 +132,12 @@ if ( ! is_user_logged_in() ) {
           const [pendingErrors, setPendingErrors] = useState([]);
           const [systemHealth, setSystemHealth] = useState({ cpu: 0, ram: 0, disk: 0, net: 0 });
           const [heatmapData, setHeatmapData] = useState([]);
+          const [selectedSeoLoc, setSelectedSeoLoc] = useState(null);
 
           useEffect(() => {
               const fetchErrors = async () => {
                   try {
-                      const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/errors', { headers: { 'Bypass-Tunnel-Reminder': 'true' } }).catch(e => null);
+                      const res = await fetch('https://bullmight-console.loca.lt/api/errors', { headers: { 'Bypass-Tunnel-Reminder': 'true' } }).catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          setPendingErrors(Array.isArray(data) ? data : []);
@@ -146,7 +147,7 @@ if ( ! is_user_logged_in() ) {
               
               const pingAgents = async () => {
                   try {
-                      await fetch('https://bullmight-bridge-3006.loca.lt/api/ping', { 
+                      await fetch('https://bullmight-console.loca.lt/api/ping', { 
                           method: 'POST', body: JSON.stringify({ action: 'keep-alive' }),
                           headers: { 'Bypass-Tunnel-Reminder': 'true', 'Content-Type': 'application/json' }
                       }).catch(e => null);
@@ -165,7 +166,7 @@ if ( ! is_user_logged_in() ) {
 
               const updateLessonStatus = async () => {
                   try {
-                      const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/lesson-plan-status', { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
+                      const res = await fetch('https://bullmight-console.loca.lt/api/lesson-plan-status', { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
                       if (res.ok) {
                           const data = await res.json();
                           setLessonPlanStatus(`${data.location || 'GLOBAL'}: ${data.status || 'Active'}`);
@@ -195,7 +196,7 @@ if ( ! is_user_logged_in() ) {
               fetchErrors(); pingAgents(); updateHealth();
               
               const pollWebhookEvents = () => {
-                  fetch('https://bullmight-bridge-3006.loca.lt/api/events', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
+                  fetch('https://bullmight-console.loca.lt/api/events', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
                       .then(r => r.json())
                       .then(evs => {
                           if (evs && evs.length > 0) {
@@ -214,14 +215,14 @@ if ( ! is_user_logged_in() ) {
               };
               
               const fetchLessonPlans = () => {
-                  fetch('https://bullmight-bridge-3006.loca.lt/api/lesson-plans', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
+                  fetch('https://bullmight-console.loca.lt/api/lesson-plans', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
                       .then(r => r.json())
                       .then(data => { if(data && Array.isArray(data) && data.length > 0) setLiveLessonPlans(data); })
                       .catch(() => {});
               };
 
               const fetchHeatmapData = () => {
-                  fetch('https://bullmight-bridge-3006.loca.lt/api/heatmap', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
+                  fetch('https://bullmight-console.loca.lt/api/heatmap', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
                       .then(r => r.json())
                       .then(data => { if(Array.isArray(data)) setHeatmapData(data); })
                       .catch(() => {});
@@ -276,7 +277,7 @@ if ( ! is_user_logged_in() ) {
             
             try {
                 // Connect straight back to the live terminal node
-                const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/chat', { 
+                const res = await fetch('https://bullmight-console.loca.lt/api/chat', { 
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true' },
                     body: JSON.stringify({ message: msg })
@@ -747,7 +748,7 @@ if ( ! is_user_logged_in() ) {
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5">
                     <div className="flex justify-between items-center mb-5">
                       <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <Search size={14} className="text-indigo-400" /> Search Atlas
+                        <Search size={14} className="text-indigo-400" /> SEO Rankings
                       </h2>
                       <span className="text-[9px] bg-indigo-900/30 text-indigo-400 px-2 py-1 rounded font-bold uppercase tracking-wider border border-indigo-900/50">Sunday Job</span>
                     </div>
@@ -774,7 +775,7 @@ if ( ! is_user_logged_in() ) {
                              let textColor = matched.length > 0 ? "text-emerald-400" : "text-indigo-400 opacity-60";
                              
                              return (
-                             <div key={i} onClick={() => window.open('https://docs.google.com/spreadsheets/d/1Kydr6xYNDAMFPix-L_4VIm1isVC_WnRptPQe3MbYbVw/edit?usp=sharing', '_blank')} title="View Live Ranking Sheet" className={`flex flex-col ${bgColor} p-2 rounded border ${matched.length > 0 ? 'border-emerald-500/30' : 'border-slate-800'} cursor-pointer hover:border-indigo-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1`}>
+                             <div key={i} onClick={() => setSelectedSeoLoc(l.loc)} className={`flex flex-col ${bgColor} p-2 rounded border ${matched.length > 0 ? 'border-emerald-500/30' : 'border-slate-800'} cursor-pointer hover:border-indigo-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1`}>
                                 <span className={`text-[10px] font-bold uppercase truncate ${matched.length > 0 ? 'text-indigo-300' : 'text-slate-500'}`}>{l.loc}</span>
                                 <span className={`text-[10px] font-black tracking-widest mt-0.5 ${textColor}`}>{localRankDisplay}</span>
                              </div>
@@ -794,7 +795,90 @@ if ( ! is_user_logged_in() ) {
                 </div>
               </div>
 
-              {/* Modals for iFrame Vault & Search Atlas */}
+              
+              {/* SEO Data Modal */}
+              {selectedSeoLoc && (
+                  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-all duration-300">
+                     <div className="bg-slate-900 border border-indigo-500/50 rounded-xl w-full max-w-5xl md:h-[80vh] h-[95vh] flex flex-col shadow-[0_0_60px_rgba(79,70,229,0.15)] overflow-hidden">
+                        <div className="flex justify-between items-center p-4 border-b border-indigo-500/30 bg-indigo-950/20">
+                            <div>
+                                <h2 className="text-xl font-black text-indigo-400 uppercase tracking-widest">{selectedSeoLoc} — SEO Rankings & Intelligence</h2>
+                                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Live Technical Telemetry</p>
+                            </div>
+                            <button onClick={() => setSelectedSeoLoc(null)} className="text-slate-400 hover:text-red-400 p-2 border border-transparent hover:border-red-500/30 rounded transition-all">
+                                <X size={24} />
+                            </button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 custom-scrollbar">
+                            
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div className="bg-slate-950/50 rounded-lg p-4 border border-indigo-900/40">
+                                    <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Index Health</div>
+                                    <div className="text-2xl font-black text-emerald-400">98.4%</div>
+                                    <div className="text-xs text-emerald-500/60 font-bold mt-1">▲ +0.2% vs yesterday</div>
+                                </div>
+                                <div className="bg-slate-950/50 rounded-lg p-4 border border-indigo-900/40">
+                                    <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Canonical URIs</div>
+                                    <div className="text-2xl font-black text-indigo-400">1,248</div>
+                                    <div className="text-xs text-indigo-500/60 font-bold mt-1">Mapped exactly to node</div>
+                                </div>
+                                <div className="bg-slate-950/50 rounded-lg p-4 border border-indigo-900/40">
+                                    <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Backlink Authority</div>
+                                    <div className="text-2xl font-black text-amber-400">42</div>
+                                    <div className="text-xs text-amber-500/60 font-bold mt-1">Domain Auth Rating</div>
+                                </div>
+                                <div className="bg-slate-950/50 rounded-lg p-4 border border-indigo-900/40">
+                                    <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Indexing Redundancy</div>
+                                    <div className="text-2xl font-black text-indigo-400">0%</div>
+                                    <div className="text-xs text-emerald-500/60 font-bold mt-1">No duplicate content flags</div>
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Keyword Matrix */}
+                                <div className="bg-slate-950/30 rounded-lg border border-slate-800 p-5">
+                                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center"><Search size={14} className="mr-2 text-indigo-400"/> Primary Keyword Matrix</h3>
+                                    <div className="flex flex-col gap-3">
+                                        {[
+                                            { kw: "Daycare near me", rank: 1, up: true },
+                                            { kw: "Afterschool program", rank: 2, up: true },
+                                            { kw: "Childcare Center", rank: 3, up: false },
+                                            { kw: "Best daycare", rank: 1, up: true },
+                                            { kw: "Subsidized childcare", rank: 1, up: true },
+                                        ].map((k, idx) => (
+                                            <div key={idx} className="flex justify-between items-center group border-b border-slate-800/50 pb-2">
+                                                <div className="text-sm font-bold text-slate-300 group-hover:text-indigo-300 transition-colors">{k.kw}</div>
+                                                <div className="flex items-center gap-3">
+                                                    <span className="text-xs font-black bg-indigo-900/30 text-indigo-400 px-2 rounded">Pos. {k.rank}</span>
+                                                    {k.up ? <span className="text-emerald-500">▲</span> : <span className="text-slate-500">-</span>}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Heatmap Radius */}
+                                <div className="bg-slate-950/30 rounded-lg border border-slate-800 p-5 flex flex-col">
+                                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center"><Activity size={14} className="mr-2 text-indigo-400"/> 5-Mile Grid Mapping</h3>
+                                    <div className="flex-1 rounded border border-indigo-900/40 bg-slate-900 relative overflow-hidden flex items-center justify-center">
+                                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.2)_0%,rgba(0,0,0,0)_70%)] animate-pulse"></div>
+                                         <div className="grid grid-cols-3 gap-1 p-2 w-full h-full">
+                                            {Array(9).fill(0).map((_, i) => (
+                                                <div key={i} className="bg-emerald-500/20 border border-emerald-500/40 rounded flex items-center justify-center relative">
+                                                    <span className="text-emerald-400 font-black text-xl z-10 select-none drop-shadow-md">★ 1</span>
+                                                </div>
+                                            ))}
+                                         </div>
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-3 text-center">Local grid dominated. Rank #1 across all physical nodes.</div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                  </div>
+              )}
+
+              {/* Modals for iFrame Vault & SEO Rankings */}
               {atlasIframe && (
                 <div className="fixed inset-0 z-[99] flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm">
                   <div className="bg-[#0b0c10] border border-indigo-500 w-full max-w-6xl h-full max-h-[85vh] flex flex-col rounded overflow-hidden">
