@@ -130,7 +130,7 @@ if ( ! is_user_logged_in() ) {
           ]);
 
           const [pendingErrors, setPendingErrors] = useState([]);
-          const [systemHealth, setSystemHealth] = useState({ cpu: 78, ram: 42, disk: 91, net: 12 });
+          const [systemHealth, setSystemHealth] = useState({ cpu: 0, ram: 0, disk: 0, net: 0 });
 
           useEffect(() => {
               const fetchErrors = async () => {
@@ -157,20 +157,15 @@ if ( ! is_user_logged_in() ) {
                       const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/health', { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
                       if (res.ok) {
                          const hw = await res.json();
-                         setSystemHealth(prev => ({
-                            cpu: Math.max(10, Math.min(95, (hw.cpu || 78) + (Math.random() * 6 - 3))),
-                            ram: Math.max(20, Math.min(90, (hw.ram || 42) + (Math.random() * 2 - 1))),
-                            disk: hw.disk || 91,
-                            net: Math.max(5, Math.min(40, (hw.net || 12) + (Math.random() * 8 - 4)))
-                         }));
+                         setSystemHealth({
+                            cpu: hw.cpu || 0,
+                            ram: hw.ram || 0,
+                            disk: hw.disk || 0,
+                            net: hw.net || 0
+                         });
                       } else { throw new Error('Offline'); }
                   } catch(e) {
-                      setSystemHealth(prev => ({
-                          cpu: Math.max(10, Math.min(95, prev.cpu + (Math.random() * 10 - 5))),
-                          ram: Math.max(20, Math.min(90, prev.ram + (Math.random() * 4 - 2))),
-                          disk: 91,
-                          net: Math.max(5, Math.min(40, prev.net + (Math.random() * 8 - 4)))
-                      }));
+                      setSystemHealth({ cpu: 0, ram: 0, disk: 0, net: 0 });
                   }
               };
 
