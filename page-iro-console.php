@@ -72,6 +72,8 @@
         const App = () => {
           const chatEndRef = useRef(null);
           const [activeTab, setActiveTab] = useState('CHAT');
+          const [atlasIframe, setAtlasIframe] = useState(null);
+          const [vaultIframe, setVaultIframe] = useState(null);
           const [inputValue, setInputValue] = useState('');
           const [githubUrl, setGithubUrl] = useState('');
           const [taskValue, setTaskValue] = useState('');
@@ -411,20 +413,25 @@
                     <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5 font-bold">Docs & Exports (Vault)</h2>
                     <div className="space-y-3 overflow-y-auto pr-2 custom-scrollbar">
                       {[
-                        { name: 'KIDazzle_Enrollment_Flyer.png', url: 'https://bullmight.com/wp-content/uploads/2026/03/KIDazzle_Flyer.png', type: 'PNG', error: false },
-                        { name: '1_services_gbp_best_practices_playbook.pdf', url: 'https://bullmight.com/wp-content/uploads/2026/03/1_services_gbp_best_practices_playbook_2026.pdf', type: 'PDF', error: false },
-                        { name: 'V04_Faceless_Video_Scripts (Google Docs)', url: 'https://docs.google.com/document/d/1Xy_fA', type: 'DOC', error: false },
-                        { name: 'V04_Rendered_Replicas (YouTube Demo)', url: 'https://www.youtube.com/@HousingRealityCheck', type: 'VIDEO', error: false },
-                        { name: '(N8N WEBHOOK) Picasso_Social_Media_Gen', url: 'https://bullmight-n8n-u46728.vm.elestio.app/webhook/social-image-gen', type: 'WEBHOOK', error: false }
+                        { name: 'KIDazzle_Enrollment_Flyer.png', url: 'https://bullmight.com/wp-content/uploads/2026/03/KIDazzle_Flyer.png', type: 'download', error: false },
+                        { name: '1_services_gbp_best_practices_playbook.pdf', url: 'https://bullmight.com/wp-content/uploads/2026/03/1_services_gbp_best_practices_playbook_2026.pdf', type: 'download', error: false },
+                        { name: 'V04_Faceless_Video_Scripts (Google Docs)', url: 'https://docs.google.com/document/d/1Xy_fA/preview', type: 'iframe', error: false },
+                        { name: 'V04_Rendered_Replicas (YouTube Demo)', url: 'https://www.youtube.com/@HousingRealityCheck', type: 'iframe', error: false },
+                        { name: '(N8N WEBHOOK) Picasso_Social_Media_Gen', url: 'https://bullmight-n8n-u46728.vm.elestio.app/webhook/social-image-gen', type: 'download', error: false }
                       ].map((doc, i) => (
-                        <div key={i} className="flex items-center justify-between p-2.5 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group">
-                          <div className="flex items-center gap-3 overflow-hidden flex-1 pl-1">
-                            <FileText size={14} className={doc.error ? "text-red-500" : "text-cyan-600"} />
+                        <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-2.5 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group gap-2">
+                          <div className="flex items-center gap-3 overflow-hidden flex-1 pl-1 w-full max-w-full sm:max-w-[70%]">
+                            <FileText size={14} className={doc.error ? "text-red-500 shrink-0" : "text-cyan-600 shrink-0"} />
                             <span className="text-xs truncate w-full text-slate-300 group-hover:text-cyan-400 transition-colors cursor-pointer">{doc.name}</span>
                           </div>
-                          <div className="flex gap-2 border-l border-slate-800 pl-3 ml-2">
-                            <a href={doc.url} download={doc.name} target="_blank" rel="noreferrer" className="text-slate-500 hover:text-cyan-400">
-                              <Download size={14}/>
+                          <div className="flex gap-2 w-full sm:w-auto sm:border-l sm:border-slate-800 sm:pl-3 justify-end items-center">
+                            {doc.type === 'iframe' && (
+                              <button onClick={() => setVaultIframe(doc.url)} className="text-[10px] font-bold bg-cyan-900/30 text-cyan-400 hover:bg-cyan-900/60 px-2 py-1 rounded transition-colors uppercase">
+                                View
+                              </button>
+                            )}
+                            <a href={doc.url} download={doc.type === 'download' ? doc.name : undefined} target="_blank" rel="noreferrer" className="text-[10px] bg-slate-800 text-slate-400 hover:text-white px-2 py-1 rounded transition-colors uppercase flex items-center gap-1">
+                              <Download size={12} /> DL
                             </a>
                           </div>
                         </div>
@@ -465,7 +472,7 @@
                     <div className="flex-1 relative bg-slate-950/10 overflow-hidden h-[500px] xl:h-[650px]">
                       {activeTab === 'CHAT' && (
                         <div className="h-full flex flex-col p-5">
-                          <div className="flex-1 overflow-y-auto space-y-5 mb-5 custom-scrollbar pr-3">
+                          <div className="flex-1 min-h-0 overflow-y-auto space-y-5 mb-5 custom-scrollbar pr-3">
                             {chatMessages.map((msg, i) => (
                               <div key={i} className="text-sm duration-300">
                                 {msg.role === 'system' ? (
@@ -737,8 +744,16 @@
                        </div>
                        
                        <div className="grid grid-cols-2 gap-2">
-                          {[ {loc: 'Hampton', r: '2.1'}, {loc: 'West End', r: '3.4'}, {loc: 'Coll. Pk', r: '1.8'}, {loc: 'Summit', r: '2.5'}, {loc: 'Atl Federal', r: '1.1'}, {loc: 'Memphis', r: '4.2'}, {loc: 'Miami', r: '3.9'} ].map(l => (
-                             <div key={l.loc} className="flex flex-col bg-slate-900/50 p-2 rounded border border-slate-800">
+                          {[ 
+                            {loc: 'Hampton', r: '2.1', url: 'https://searchatlas.com/local-audit/hampton'}, 
+                            {loc: 'West End', r: '3.4', url: 'https://searchatlas.com/local-audit/west-end'}, 
+                            {loc: 'Coll. Pk', r: '1.8', url: 'https://searchatlas.com/local-audit/college-park'}, 
+                            {loc: 'Summit', r: '2.5', url: 'https://searchatlas.com/local-audit/summit'}, 
+                            {loc: 'Atl Federal', r: '1.1', url: 'https://searchatlas.com/local-audit/atlanta-federal'}, 
+                            {loc: 'Memphis', r: '4.2', url: 'https://searchatlas.com/local-audit/memphis'}, 
+                            {loc: 'Miami', r: '3.9', url: 'https://searchatlas.com/local-audit/miami'} 
+                          ].map(l => (
+                             <div key={l.loc} onClick={() => setAtlasIframe(l.url)} className="flex flex-col bg-slate-900/50 p-2 rounded border border-slate-800 hover:border-indigo-500 hover:bg-slate-800 cursor-pointer transition-colors">
                                 <span className="text-[9px] text-slate-500 font-bold uppercase truncate">{l.loc}</span>
                                 <span className="text-sm font-black text-indigo-400">#{l.r}</span>
                              </div>
@@ -759,6 +774,35 @@
 
                 </div>
               </div>
+
+              {/* Modals for iFrame Vault & Search Atlas */}
+              {atlasIframe && (
+                <div className="fixed inset-0 z-[99] flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm">
+                  <div className="bg-[#0b0c10] border border-indigo-500 w-full max-w-6xl h-full max-h-[85vh] flex flex-col rounded overflow-hidden">
+                    <div className="flex justify-between items-center border-b border-indigo-900/50 p-4 bg-slate-900">
+                      <h3 className="text-indigo-400 font-bold uppercase tracking-widest text-sm">SEARCH ATLAS (5-MILE RADIUS VERIFICATION)</h3>
+                      <button onClick={() => setAtlasIframe(null)} className="text-red-400 hover:text-white px-3 py-1 border border-red-500/50 hover:bg-red-900/30 rounded text-xs transition-colors">&times; CLOSE</button>
+                    </div>
+                    <div className="flex justify-between p-3 bg-slate-950 items-center">
+                       <span className="text-[10px] text-green-500 font-bold uppercase">TARGET: Child care near me • Day care near me • Infant near me</span>
+                       <a href={atlasIframe} target="_blank" rel="noreferrer" className="text-[10px] text-indigo-400 underline uppercase hover:text-white">Open External Link</a>
+                    </div>
+                    <iframe src={atlasIframe} className="w-full h-full bg-slate-50 border-0" sandbox="allow-same-origin allow-scripts allow-popups"></iframe>
+                  </div>
+                </div>
+              )}
+
+              {vaultIframe && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+                  <div className="bg-slate-900 border border-cyan-500 w-full max-w-5xl h-[80vh] flex flex-col rounded overflow-hidden relative">
+                    <div className="flex justify-between items-center border-b border-cyan-900/50 p-3 bg-slate-950">
+                      <h3 className="text-cyan-400 font-bold tracking-widest text-sm uppercase">SECURE DOCUMENT PREVIEW</h3>
+                      <button onClick={() => setVaultIframe(null)} className="text-red-400 hover:text-white px-3 py-1 border border-red-500/50 hover:bg-red-900/30 rounded text-xs transition-colors font-bold">&times; CLOSE</button>
+                    </div>
+                    <iframe src={vaultIframe} className="w-full h-full border-0 bg-white"></iframe>
+                  </div>
+                </div>
+              )}
               
               <footer className="mt-8 shrink-0 p-4 md:p-3 border border-slate-800 bg-slate-900/20 rounded flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-500 uppercase tracking-[0.2em] gap-3 shadow-inner">
                 <div className="flex gap-8"><span>Instance: IRO_Node_X1_bullmight_master</span><span>Uptime: Active Sync</span></div>
