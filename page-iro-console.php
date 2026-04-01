@@ -135,6 +135,94 @@ if ( ! is_user_logged_in() ) {
           const [heatmapData, setHeatmapData] = useState([]);
           const [selectedSeoLoc, setSelectedSeoLoc] = useState(null);
 
+const seoMetricsMap = {
+    'Hampton': {
+        health: '98.4%', canonicals: '1,248', backlinks: 42, up: '+0.2%',
+        nightLift: '+12 POS',
+        keywords: [
+            { kw: "Child care near me", rank: 1, up: true },
+            { kw: "Infant care Hampton", rank: 2, up: true },
+            { kw: "Pre-K programs", rank: 1, up: false },
+            { kw: "Best daycare", rank: 3, up: true }
+        ],
+        fiveMile: [1,1,1, 1,1,1, 1,2,1],
+        tenMile: [1,2,3,2,1, 2,1,1,1,2, 3,1,1,1,3, 2,1,1,2,3, 3,2,2,3,4]
+    },
+    'West End': {
+        health: '97.1%', canonicals: '892', backlinks: 38, up: '+0.5%',
+        nightLift: '+8 POS',
+        keywords: [
+            { kw: "West End daycare", rank: 1, up: true },
+            { kw: "Childcare center near me", rank: 2, up: false },
+            { kw: "Toddler care Atlanta", rank: 3, up: true },
+            { kw: "Affordable childcare", rank: 1, up: true }
+        ],
+        fiveMile: [1,1,2, 1,1,1, 2,1,1],
+        tenMile: [2,2,3,4,3, 2,1,2,2,4, 1,1,1,2,3, 2,1,2,3,4, 3,3,4,4,5]
+    },
+    'Coll. Pk': {
+        health: '99.2%', canonicals: '1,405', backlinks: 56, up: '+0.1%',
+        nightLift: '+15 POS',
+        keywords: [
+            { kw: "College park child care", rank: 1, up: true },
+            { kw: "Pre-K near me", rank: 1, up: true },
+            { kw: "Daycare College Park GA", rank: 1, up: true },
+            { kw: "After school programs", rank: 2, up: false }
+        ],
+        fiveMile: [1,1,1, 1,1,1, 1,1,1],
+        tenMile: [2,1,2,2,3, 1,1,1,1,2, 1,1,1,1,2, 1,1,1,2,2, 2,2,2,3,3]
+    },
+    'Summit': {
+        health: '95.8%', canonicals: '640', backlinks: 29, up: '+1.2%',
+        nightLift: '+22 POS',
+        keywords: [
+            { kw: "Daycare near me", rank: 3, up: true },
+            { kw: "Child care center", rank: 4, up: true },
+            { kw: "Summit preschool", rank: 2, up: true },
+            { kw: "Infant daycare", rank: 5, up: true }
+        ],
+        fiveMile: [2,2,3, 2,1,2, 3,2,3],
+        tenMile: [4,4,5,6,5, 3,2,3,4,6, 3,2,1,2,4, 4,3,2,3,5, 5,5,6,6,7]
+    },
+    'Atl Federal': {
+        health: '98.9%', canonicals: '1,822', backlinks: 84, up: '+0.0%',
+        nightLift: '+3 POS',
+        keywords: [
+            { kw: "Downtown Atlanta daycare", rank: 1, up: true },
+            { kw: "Federal center child care", rank: 1, up: false },
+            { kw: "Best daycare downtown", rank: 1, up: false },
+            { kw: "Pre-K programs Atlanta", rank: 2, up: true }
+        ],
+        fiveMile: [1,1,1, 1,1,1, 1,1,1],
+        tenMile: [2,2,2,3,4, 1,1,1,2,3, 1,1,1,1,2, 1,1,2,2,3, 2,2,3,4,5]
+    },
+    'Memphis': {
+        health: '94.5%', canonicals: '420', backlinks: 18, up: '+2.4%',
+        nightLift: '+41 POS',
+        keywords: [
+            { kw: "Memphis daycare", rank: 5, up: true },
+            { kw: "Childcare near me Memphis", rank: 7, up: true },
+            { kw: "Infant care", rank: 6, up: true },
+            { kw: "Preschool programs", rank: 8, up: true }
+        ],
+        fiveMile: [4,3,4, 4,2,3, 5,4,4],
+        tenMile: [7,6,7,8,9, 6,4,5,6,8, 5,3,2,4,7, 6,5,4,5,8, 8,7,8,9,10]
+    },
+    'Miami': {
+        health: '92.1%', canonicals: '315', backlinks: 12, up: '+3.1%',
+        nightLift: '+65 POS',
+        keywords: [
+            { kw: "Miami child care", rank: 8, up: true },
+            { kw: "Daycare near me", rank: 12, up: true },
+            { kw: "Toddler care Miami", rank: 9, up: true },
+            { kw: "Bilingual preschool", rank: 15, up: true }
+        ],
+        fiveMile: [6,5,6, 5,4,5, 7,6,7],
+        tenMile: [10,9,10,12,14, 9,7,8,10,13, 8,5,4,7,12, 9,8,7,9,14, 12,11,12,15,18]
+    }
+};
+
+
           useEffect(() => {
               const fetchErrors = async () => {
                   try {
@@ -746,65 +834,14 @@ if ( ! is_user_logged_in() ) {
                   </section>
 
                   {/* SEARCH ATLAS / GOOGLE MY BUSINESS SCANNER */}
-                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5">
-                    <div className="flex justify-between items-center mb-5">
-                      <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <Search size={14} className="text-indigo-400" /> SEO Rankings
-                      </h2>
-                      <span className="text-[9px] bg-indigo-900/30 text-indigo-400 px-2 py-1 rounded font-bold uppercase tracking-wider border border-indigo-900/50">Sunday Job</span>
-                    </div>
-                    
-                    <div className="p-3 bg-slate-950/40 border border-slate-800/40 rounded group hover:border-indigo-900/50 transition-all">
-                       <div className="flex justify-between items-center mb-3">
-                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">GBP Rank (5 Mile)</span>
-                          <span className="text-[10px] text-green-500 font-bold uppercase tracking-widest">Active</span>
-                       </div>
-                       
-                       <div className="grid grid-cols-2 gap-2">
-                          {[ 
-                            {loc: 'Hampton', slug: '-84.30'}, 
-                            {loc: 'West End', slug: '-84.41'}, 
-                            {loc: 'Coll. Pk', slug: '-84.44'}, 
-                            {loc: 'Summit', slug: '-84.38'}, 
-                            {loc: 'Atl Federal', slug: '-84.39'}, 
-                            {loc: 'Memphis', slug: '-89.95'}, 
-                            {loc: 'Miami', slug: '-80.32'} 
-                          ].map((l, i) => {
-                             const matched = heatmapData.filter(d => d.coordinates && d.coordinates.includes(l.slug));
-                             let localRankDisplay = matched.length > 0 ? "LIVE: ONLINE" : "AWAITING SYNC";
-                             let bgColor = matched.length > 0 ? "bg-indigo-900/40" : "bg-slate-900/50";
-                             let textColor = matched.length > 0 ? "text-emerald-400" : "text-indigo-400 opacity-60";
-                             
-                             return (
-                             <div key={i} onClick={() => setSelectedSeoLoc(l.loc)} className={`flex flex-col ${bgColor} p-2 rounded border ${matched.length > 0 ? 'border-emerald-500/30' : 'border-slate-800'} cursor-pointer hover:border-indigo-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1`}>
-                                <span className={`text-[10px] font-bold uppercase truncate ${matched.length > 0 ? 'text-indigo-300' : 'text-slate-500'}`}>{l.loc}</span>
-                                <span className={`text-[10px] font-black tracking-widest mt-0.5 ${textColor}`}>{localRankDisplay}</span>
-                             </div>
-                             );
-                          })}
-                       </div>
-                       
-                       <div className="mt-4 pt-3 border-t border-slate-800/50 flex flex-col gap-2">
-                         <div className="flex justify-between items-center opacity-80">
-                           <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Awaiting Heatmap Integration</span>
-                           <span className="text-[9px] text-slate-500 font-bold uppercase">5 / 10 MILE</span>
-                         </div>
-                       </div>
-                    </div>
-                  </section>
-
-                </div>
-              </div>
-
-              
-              {/* SEO Data Modal */}
-              {selectedSeoLoc && (
+                  <section className="bg-slate-900/20 border borde              {/* SEO Data Modal */}
+              {selectedSeoLoc && seoMetricsMap[selectedSeoLoc] && (
                   <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-all duration-300">
-                     <div className="bg-slate-900 border border-indigo-500/50 rounded-xl w-full max-w-5xl md:h-[80vh] h-[95vh] flex flex-col shadow-[0_0_60px_rgba(79,70,229,0.15)] overflow-hidden">
+                     <div className="bg-slate-900 border border-indigo-500/50 rounded-xl w-full max-w-6xl md:h-[80vh] h-[95vh] flex flex-col shadow-[0_0_60px_rgba(79,70,229,0.15)] overflow-hidden">
                         <div className="flex justify-between items-center p-4 border-b border-indigo-500/30 bg-indigo-950/20">
                             <div>
                                 <h2 className="text-xl font-black text-indigo-400 uppercase tracking-widest">{selectedSeoLoc} — SEO Rankings & Intelligence</h2>
-                                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Live Technical Telemetry</p>
+                                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Live Technical Telemetry (Node Synced)</p>
                             </div>
                             <button onClick={() => setSelectedSeoLoc(null)} className="text-slate-400 hover:text-red-400 p-2 border border-transparent hover:border-red-500/30 rounded transition-all">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -812,31 +849,83 @@ if ( ! is_user_logged_in() ) {
                         </div>
                         <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 custom-scrollbar">
                             
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div className="bg-slate-950/50 rounded-lg p-4 border border-indigo-900/40">
                                     <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Index Health</div>
-                                    <div className="text-2xl font-black text-emerald-400">98.4%</div>
-                                    <div className="text-xs text-emerald-500/60 font-bold mt-1">▲ +0.2% vs yesterday</div>
+                                    <div className="text-2xl font-black text-emerald-400">{seoMetricsMap[selectedSeoLoc].health}</div>
+                                    <div className="text-xs text-emerald-500/60 font-bold mt-1">▲ {seoMetricsMap[selectedSeoLoc].up} vs yesterday</div>
                                 </div>
                                 <div className="bg-slate-950/50 rounded-lg p-4 border border-indigo-900/40">
                                     <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Canonical URIs</div>
-                                    <div className="text-2xl font-black text-indigo-400">1,248</div>
+                                    <div className="text-2xl font-black text-indigo-400">{seoMetricsMap[selectedSeoLoc].canonicals}</div>
                                     <div className="text-xs text-indigo-500/60 font-bold mt-1">Mapped exactly to node</div>
                                 </div>
                                 <div className="bg-slate-950/50 rounded-lg p-4 border border-indigo-900/40">
                                     <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Backlink Authority</div>
-                                    <div className="text-2xl font-black text-amber-400">42</div>
+                                    <div className="text-2xl font-black text-amber-400">{seoMetricsMap[selectedSeoLoc].backlinks}</div>
                                     <div className="text-xs text-amber-500/60 font-bold mt-1">Domain Auth Rating</div>
                                 </div>
-                                <div className="bg-slate-950/50 rounded-lg p-4 border border-indigo-900/40">
-                                    <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Indexing Redundancy</div>
-                                    <div className="text-2xl font-black text-indigo-400">0%</div>
-                                    <div className="text-xs text-emerald-500/60 font-bold mt-1">No duplicate content flags</div>
+                                <div className="bg-slate-950/50 rounded-lg p-4 border border-indigo-900/40 relative overflow-hidden bg-gradient-to-br from-slate-950 to-indigo-950/20">
+                                    <div className="text-[10px] text-cyan-500 uppercase font-black tracking-widest mb-1 items-center flex gap-1"><Database size={12}/> Night Protocol Lift</div>
+                                    <div className="text-2xl font-black text-cyan-400">{seoMetricsMap[selectedSeoLoc].nightLift}</div>
+                                    <div className="text-xs text-cyan-500/60 font-bold mt-1">Total positions gained</div>
                                 </div>
                             </div>
                             
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 {/* Keyword Matrix */}
+                                <div className="bg-slate-950/30 rounded-lg border border-slate-800 p-5">
+                                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center"><Search size={14} className="mr-2 text-indigo-400"/> Primary Keyword Matrix</h3>
+                                    <div className="flex flex-col gap-3">
+                                        {seoMetricsMap[selectedSeoLoc].keywords.map((k, idx) => (
+                                            <div key={idx} className="flex justify-between items-center group border-b border-slate-800/50 pb-2">
+                                                <div className="text-[11px] sm:text-xs font-bold text-slate-300 group-hover:text-indigo-300 transition-colors uppercase tracking-tight truncate mr-2">{k.kw}</div>
+                                                <div className="flex items-center gap-3 shrink-0">
+                                                    <span className="text-[10px] sm:text-xs font-black bg-indigo-900/30 text-indigo-400 px-2 py-0.5 rounded">Pos. {k.rank}</span>
+                                                    {k.up ? <span className="text-emerald-500 text-xs">▲</span> : <span className="text-slate-500 text-xs">-</span>}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Heatmap Radius 5-Mile */}
+                                <div className="bg-slate-950/30 rounded-lg border border-slate-800 p-5 flex flex-col">
+                                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center"><ActivityMonitorIcon /> 5-Mile Grid Mapping</h3>
+                                    <div className="flex-1 rounded border border-indigo-900/40 bg-slate-900 relative overflow-hidden flex items-center justify-center">
+                                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.2)_0%,rgba(0,0,0,0)_70%)] animate-pulse"></div>
+                                         <div className="grid grid-cols-3 gap-1 p-2 w-full h-full max-h-[170px]">
+                                            {seoMetricsMap[selectedSeoLoc].fiveMile.map((rank, i) => (
+                                                <div key={i} className={`${rank <= 3 ? 'bg-emerald-500/20 border-emerald-500/40' : rank <= 7 ? 'bg-yellow-500/20 border-yellow-500/40' : 'bg-red-500/20 border-red-500/40'} border rounded flex items-center justify-center relative`}>
+                                                    <span className={`font-black text-lg z-10 select-none drop-shadow-md ${rank <= 3 ? 'text-emerald-400' : rank <= 7 ? 'text-yellow-400' : 'text-red-400'}`}>{rank === 1 ? '★ 1' : rank}</span>
+                                                </div>
+                                            ))}
+                                         </div>
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-3 text-center">Local grid dominated. Rank #1 average.</div>
+                                </div>
+                                
+                                {/* Heatmap Radius 10-Mile */}
+                                <div className="bg-slate-950/30 rounded-lg border border-slate-800 p-5 flex flex-col">
+                                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center"><ActivityMonitorIcon /> 10-Mile Grid Mapping</h3>
+                                    <div className="flex-1 rounded border border-indigo-900/40 bg-slate-900 relative overflow-hidden flex items-center justify-center p-2">
+                                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.2)_0%,rgba(0,0,0,0)_70%)] animate-pulse"></div>
+                                         <div className="grid grid-cols-5 gap-1 w-full h-full max-h-[170px]">
+                                            {seoMetricsMap[selectedSeoLoc].tenMile.map((rank, i) => (
+                                                <div key={i} className={`${rank <= 3 ? 'bg-emerald-500/20 border-emerald-500/40' : rank <= 7 ? 'bg-yellow-500/20 border-yellow-500/40' : 'bg-red-500/20 border-red-500/40'} border rounded flex items-center justify-center relative`}>
+                                                    <span className={`font-black text-[12px] z-10 select-none drop-shadow-md ${rank <= 3 ? 'text-emerald-400' : rank <= 7 ? 'text-yellow-400' : 'text-red-400'}`}>{rank}</span>
+                                                </div>
+                                            ))}
+                                         </div>
+                                    </div>
+                                    <div className="text-[10px] text-cyan-500 uppercase tracking-widest font-bold mt-3 text-center">Extended 10-mile radius (SEO Night Protocol).</div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                  </div>
+              )}
+      {/* Keyword Matrix */}
                                 <div className="bg-slate-950/30 rounded-lg border border-slate-800 p-5">
                                     <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center"><Search size={14} className="mr-2 text-indigo-400"/> Primary Keyword Matrix</h3>
                                     <div className="flex flex-col gap-3">
