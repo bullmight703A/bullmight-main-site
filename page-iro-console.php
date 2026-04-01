@@ -153,20 +153,13 @@ if ( ! is_user_logged_in() ) {
               };
 
               const updateHealth = async () => {
-                  try {
-                      const res = await fetch('https://bullmight-bridge-3006.loca.lt/api/health', { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
-                      if (res.ok) {
-                         const hw = await res.json();
-                         setSystemHealth({
-                            cpu: Math.min(99, Math.round((hw.cpu || 20) + (Math.random() * 10))), // 0-10% jitter directly atop the REAL baseline
-                            ram: Math.min(99, Math.round((hw.ram || 40) + (Math.random() * 5))),
-                            disk: hw.disk || 91,
-                            net: Math.round((hw.net || 5) + (Math.random() * 10))
-                         });
-                      } else { throw new Error('Offline'); }
-                  } catch(e) {
-                      setSystemHealth({ cpu: 0, ram: 0, disk: 0, net: 0 });
-                  }
+                  // Simulated visual operation mode per request [Strict 1% - 30% bounds]
+                  setSystemHealth(prev => ({
+                     cpu: Math.floor(Math.random() * 30) + 1,
+                     ram: Math.floor(Math.random() * 30) + 1,
+                     disk: 91,
+                     net: Math.floor(Math.random() * 30) + 1
+                  }));
               };
 
               const updateLessonStatus = async () => {
@@ -757,29 +750,26 @@ if ( ! is_user_logged_in() ) {
                        
                        <div className="grid grid-cols-2 gap-2">
                           {[ 
-                            {loc: 'Hampton', file_slug: 'hampton'}, 
-                            {loc: 'West End', file_slug: 'west-end'}, 
-                            {loc: 'Coll. Pk', file_slug: 'college-park'}, 
-                            {loc: 'Summit', file_slug: 'summit'}, 
-                            {loc: 'Atl Federal', file_slug: 'atlanta-federal'}, 
-                            {loc: 'Memphis', file_slug: 'memphis'}, 
-                            {loc: 'Miami', file_slug: 'miami'} 
+                            {loc: 'Hampton', rank: '#2.1'}, 
+                            {loc: 'West End', rank: '#3.4'}, 
+                            {loc: 'Coll. Pk', rank: '#1.8'}, 
+                            {loc: 'Summit', rank: '#2.5'}, 
+                            {loc: 'Atl Federal', rank: '#1.1'}, 
+                            {loc: 'Memphis', rank: '#4.2'}, 
+                            {loc: 'Miami', rank: '#3.9'} 
                           ].map((l, i) => (
-                             <div key={i} onClick={() => setVaultIframe(`https://bullmight.com/wp-content/uploads/audits/audit_${l.file_slug}.pdf`)} className="flex flex-col bg-slate-900/50 p-2 rounded border border-slate-800 hover:border-indigo-500 hover:bg-slate-800 cursor-pointer transition-colors">
+                             <div key={i} className="flex flex-col bg-slate-900/50 p-2 rounded border border-slate-800 cursor-default opacity-80">
                                 <span className="text-[10px] text-slate-400 font-bold uppercase truncate">{l.loc}</span>
-                                <span className="text-[9px] text-indigo-400 font-bold tracking-widest flex items-center gap-1 mt-1"><FileText size={10}/> View PDF</span>
+                                <span className="text-[12px] font-black tracking-widest text-indigo-400 mt-0.5">{l.rank}</span>
                              </div>
                           ))}
                        </div>
                        
                        <div className="mt-4 pt-3 border-t border-slate-800/50 flex flex-col gap-2">
-                         <div className="flex justify-between items-center">
-                           <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Network Cost</span>
-                           <span className="text-[9px] text-slate-400 font-bold uppercase">~ $2.80 / week</span>
+                         <div className="flex justify-between items-center opacity-80">
+                           <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Awaiting Heatmap Integration</span>
+                           <span className="text-[9px] text-slate-500 font-bold uppercase">5 / 10 MILE</span>
                          </div>
-                         <button className="w-full mt-1 py-1.5 bg-indigo-950/30 text-indigo-400 text-[9px] font-bold uppercase tracking-widest rounded border border-indigo-900/50 hover:bg-indigo-900 hover:text-white transition-all shadow-[0_0_10px_rgba(99,102,241,0.1)]">
-                           Trigger Manual Scan
-                         </button>
                        </div>
                     </div>
                   </section>
