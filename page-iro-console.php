@@ -774,7 +774,7 @@ if ( ! is_user_logged_in() ) {
                              let textColor = matched.length > 0 ? "text-emerald-400" : "text-indigo-400 opacity-60";
                              
                              return (
-                             <div key={i} className={`flex flex-col ${bgColor} p-2 rounded border ${matched.length > 0 ? 'border-emerald-500/30' : 'border-slate-800'} cursor-default transition-all duration-500`}>
+                             <div key={i} onClick={() => window.open('https://docs.google.com/spreadsheets/d/1Kydr6xYNDAMFPix-L_4VIm1isVC_WnRptPQe3MbYbVw/edit?usp=sharing', '_blank')} title="View Live Ranking Sheet" className={`flex flex-col ${bgColor} p-2 rounded border ${matched.length > 0 ? 'border-emerald-500/30' : 'border-slate-800'} cursor-pointer hover:border-indigo-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1`}>
                                 <span className={`text-[10px] font-bold uppercase truncate ${matched.length > 0 ? 'text-indigo-300' : 'text-slate-500'}`}>{l.loc}</span>
                                 <span className={`text-[10px] font-black tracking-widest mt-0.5 ${textColor}`}>{localRankDisplay}</span>
                              </div>
