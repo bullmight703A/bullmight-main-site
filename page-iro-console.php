@@ -131,6 +131,7 @@ if ( ! is_user_logged_in() ) {
 
           const [pendingErrors, setPendingErrors] = useState([]);
           const [systemHealth, setSystemHealth] = useState({ cpu: 0, ram: 0, disk: 0, net: 0 });
+          const [heatmapData, setHeatmapData] = useState([]);
 
           useEffect(() => {
               const fetchErrors = async () => {
@@ -218,12 +219,20 @@ if ( ! is_user_logged_in() ) {
                       .then(data => { if(data && Array.isArray(data) && data.length > 0) setLiveLessonPlans(data); })
                       .catch(() => {});
               };
+
+              const fetchHeatmapData = () => {
+                  fetch('https://bullmight-bridge-3006.loca.lt/api/heatmap', { headers: { 'Bypass-Tunnel-Reminder': 'true' } })
+                      .then(r => r.json())
+                      .then(data => { if(Array.isArray(data)) setHeatmapData(data); })
+                      .catch(() => {});
+              };
               
               const intv = setInterval(() => {
                   updateHealth();
                   pollWebhookEvents();
                   fetchErrors();
                   fetchLessonPlans();
+                  fetchHeatmapData();
               }, 5000);
               const keepAliveIntv = setInterval(pingAgents, 300000); 
               const healthIntv = setInterval(updateHealth, 5000);
@@ -232,6 +241,7 @@ if ( ! is_user_logged_in() ) {
               
               // Initial fetch
               fetchLessonPlans();
+              fetchHeatmapData();
               
               return () => { clearInterval(intv); clearInterval(keepAliveIntv); clearInterval(healthIntv); clearInterval(rotateIntv); clearInterval(lessonIntv); };
           }, []);
