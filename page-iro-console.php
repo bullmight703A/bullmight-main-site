@@ -5,7 +5,7 @@
 
 if (isset($_GET['iro_proxy'])) {
     $action = $_GET['iro_proxy'];
-    $url = "https://bullmight-console.loca.lt/api/" . $action;
+    $url = "https://iro.bullmight.com/api/" . $action;
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
