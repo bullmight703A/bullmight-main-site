@@ -389,7 +389,8 @@ const seoMetricsMap = {
             
             try {
                 // Connect straight back to the live terminal node
-                const res = await fetch('?iro_proxy=chat', { 
+                const proxyUrl = window.location.href.split('?')[0].replace(/\/$/, '') + '/?iro_proxy=chat';
+                const res = await fetch(proxyUrl, { 
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true' },
                     body: JSON.stringify({ message: msg })
@@ -986,8 +987,8 @@ const seoMetricsMap = {
                                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.2)_0%,rgba(0,0,0,0)_70%)] animate-pulse"></div>
                                          <div className="grid grid-cols-3 gap-1 p-2 w-full h-full max-h-[170px]">
                                             {seoMetricsMap[selectedSeoLoc].fiveMile.map((rank, i) => (
-                                                <div key={i} className={`${rank <= 3 ? 'bg-emerald-500/20 border-emerald-500/40' : rank <= 7 ? 'bg-yellow-500/20 border-yellow-500/40' : 'bg-red-500/20 border-red-500/40'} border rounded flex items-center justify-center relative`}>
-                                                    <span className={`font-black text-lg z-10 select-none drop-shadow-md ${rank <= 3 ? 'text-emerald-400' : rank <= 7 ? 'text-yellow-400' : 'text-red-400'}`}>{rank === 1 ? '★ 1' : rank}</span>
+                                                <div key={i} className={`${rank <= 3 ? 'bg-emerald-500/20 border-emerald-500/40' : 'bg-slate-800/30 border-slate-700/50'} border rounded flex items-center justify-center relative`}>
+                                                    <span className={`font-black text-lg z-10 select-none drop-shadow-md ${rank <= 3 ? 'text-emerald-400' : 'text-slate-500'}`}>{rank === 1 ? '★ 1' : rank}</span>
                                                 </div>
                                             ))}
                                          </div>
@@ -1002,8 +1003,8 @@ const seoMetricsMap = {
                                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.2)_0%,rgba(0,0,0,0)_70%)] animate-pulse"></div>
                                          <div className="grid grid-cols-5 gap-1 w-full h-full max-h-[170px]">
                                             {seoMetricsMap[selectedSeoLoc].tenMile.map((rank, i) => (
-                                                <div key={i} className={`${rank <= 3 ? 'bg-emerald-500/20 border-emerald-500/40' : rank <= 7 ? 'bg-yellow-500/20 border-yellow-500/40' : 'bg-red-500/20 border-red-500/40'} border rounded flex items-center justify-center relative`}>
-                                                    <span className={`font-black text-[12px] z-10 select-none drop-shadow-md ${rank <= 3 ? 'text-emerald-400' : rank <= 7 ? 'text-yellow-400' : 'text-red-400'}`}>{rank}</span>
+                                                <div key={i} className={`${rank <= 3 ? 'bg-emerald-500/20 border-emerald-500/40' : 'bg-slate-800/30 border-slate-700/50'} border rounded flex items-center justify-center relative`}>
+                                                    <span className={`font-black text-[12px] z-10 select-none drop-shadow-md ${rank <= 3 ? 'text-emerald-400' : 'text-slate-500'}`}>{rank}</span>
                                                 </div>
                                             ))}
                                          </div>
