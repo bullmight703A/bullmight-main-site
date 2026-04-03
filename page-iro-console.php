@@ -124,6 +124,44 @@ if (isset($_GET['iro_proxy'])) {
           const [isThinking, setIsThinking] = useState(false);
           const [contactedLeads, setContactedLeads] = useState([]);
           const [nightProtocolActive, setNightProtocolActive] = useState(true);
+          const [isListening, setIsListening] = useState(false);
+          const [isTTSActive, setIsTTSActive] = useState(true);
+
+          const speakReply = (text) => {
+              if (!isTTSActive || !window.speechSynthesis) return;
+              const cleanText = text.replace(/<[^>]+>/g, '').replace(/[#*_]/g, '');
+              const synth = window.speechSynthesis;
+              const utterance = new SpeechSynthesisUtterance(cleanText);
+              utterance.pitch = 0.95;
+              utterance.rate = 1.05;
+              
+              const voices = synth.getVoices();
+              const preferredVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Natural')) || voices[0];
+              if (preferredVoice) utterance.voice = preferredVoice;
+
+              synth.speak(utterance);
+          };
+
+          const handleDictation = () => {
+              if (isListening) return;
+              const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+              if (!SpeechRecognition) {
+                  alert('Speech recognition is not supported in this browser.');
+                  return;
+              }
+              const recognition = new SpeechRecognition();
+              recognition.continuous = false;
+              recognition.interimResults = false;
+              recognition.onstart = () => { setIsListening(true); };
+              recognition.onresult = (event) => {
+                  const transcript = event.results[0][0].transcript;
+                  setInputValue(prev => prev + (prev.trim() ? " " : "") + transcript);
+                  setIsListening(false);
+              };
+              recognition.onerror = () => { setIsListening(false); };
+              recognition.onend = () => { setIsListening(false); };
+              recognition.start();
+          };
 
           const toggleContacted = (leadName) => {
               setContactedLeads(prev => prev.includes(leadName) ? prev.filter(n => n !== leadName) : [...prev, leadName]);
@@ -422,6 +460,7 @@ const seoMetricsMap = {
                 const data = await res.json();
                 setIsThinking(false);
                 setChatMessages(prev => [...prev, { role: 'agent', text: data.reply, name: 'IRO Talking' }]);
+                speakReply(data.reply);
             } catch (err) {
                 setIsThinking(false);
                 setChatMessages(prev => [...prev, { role: 'agent', text: 'Could not connect to the Bridge. Terminal is offline. Please manually restart the OpenClaw Gateway.', name: 'SYSTEM RED' }]);
@@ -668,7 +707,10 @@ const seoMetricsMap = {
                             <div ref={chatEndRef} />
                           </div>
                           <form onSubmit={handleSendMessage} className="flex gap-3 bg-slate-950/40 p-2 rounded border border-slate-800 focus-within:border-cyan-500/50 transition-colors mt-auto shrink-0">
-                            <button type="button" onClick={() => alert('Microphone API initialized. Awaiting HTTPS secure context permissions.')} className="text-slate-500 p-3 hover:bg-slate-800 hover:text-cyan-400 rounded transition-all" title="Talk to Iro">
+                            <button type="button" onClick={() => setIsTTSActive(!isTTSActive)} className={`flex items-center gap-1 p-2 rounded transition-all border ${isTTSActive ? 'text-emerald-400 bg-emerald-900/20 border-emerald-500/30' : 'text-slate-500 border-transparent hover:bg-slate-800'}`} title={isTTSActive ? "TTS Auto-Speak ON" : "TTS Auto-Speak OFF"}>
+                                <Mic size={12} /> <span className="text-[9px] uppercase font-bold pr-1">VOICE</span>
+                            </button>
+                            <button type="button" onClick={handleDictation} className={`p-3 rounded transition-all outline-none flex items-center justify-center ${isListening ? 'text-red-500 bg-red-900/30 animate-pulse border border-red-500/50' : 'text-slate-500 border border-transparent hover:bg-slate-800 hover:text-cyan-400'}`} title="Dictate to Iro (Speech-to-Text)">
                                 <Mic size={16} />
                             </button>
                             <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Let's talk..." className="flex-1 bg-transparent p-2 text-sm focus:outline-none font-bold placeholder:text-slate-500" />
