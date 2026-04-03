@@ -5,7 +5,14 @@
 
 if (isset($_GET['iro_proxy'])) {
     $action = $_GET['iro_proxy'];
-    $url = "https://iro-bullmight-bridge14.loca.lt/api/" . $action;
+    
+    // Split tunnels: lesson plans to 3005, chat to 3006
+    if ($action === 'lesson-plans' || $action === 'lesson-plan-status') {
+        $url = "https://iro-bullmight-lesson15.loca.lt/api/" . $action;
+    } else {
+        $url = "https://iro-bullmight-bridge14.loca.lt/api/" . $action;
+    }
+    
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -910,9 +917,7 @@ const seoMetricsMap = {
                              );
                           })}
                        </div>
-                       
-                       </div>
-                    </div>
+                     </div>
                   </section>
 
                 </div>
