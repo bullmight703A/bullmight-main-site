@@ -1099,11 +1099,15 @@ const seoMetricsMap = {
                       <h3 className="text-indigo-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><Search size={16}/> GOOGLE MY BUSINESS / LOCAL AUDIT</h3>
                       <button onClick={() => setAtlasIframe(null)} className="text-red-400 hover:text-white px-3 py-1 border border-red-500/50 hover:bg-red-900/30 rounded text-xs transition-colors">&times; CLOSE</button>
                     </div>
-                    <div className="flex justify-between p-3 bg-slate-950 items-center border-b border-indigo-900/30">
-                       <span className="text-[10px] text-emerald-500 font-bold uppercase truncate pr-4">TARGET URL: {atlasIframe}</span>
-                       <div className="flex gap-4 items-center">
+                    <div className="flex flex-col sm:flex-row justify-between p-3 bg-slate-950 items-center border-b border-indigo-900/30 gap-4">
+                       <div className="flex flex-col text-left gap-1 truncate w-full sm:w-1/2">
+                          <span className="text-[10px] text-emerald-500 font-bold uppercase truncate pr-4">TARGET URL: {atlasIframe}</span>
+                          <input type="text" id="n8n-seo-kw-input" placeholder="Enter Target Keyword..." className="bg-slate-900 border border-slate-700 text-[10px] px-2 py-1 uppercase rounded text-indigo-300 focus:outline-none focus:border-indigo-500" />
+                       </div>
+                       <div className="flex gap-4 items-center shrink-0">
                           <button onClick={() => {
-                              handleToolClick(`Web SEO Advanced Sync Task: ${atlasIframe}`);
+                              const kw = document.getElementById('n8n-seo-kw-input').value || 'Unspecified';
+                              handleToolClick(`Web SEO Advanced Sync Task: ${atlasIframe} [KW: ${kw}]`);
                               setAtlasIframe(null);
                           }} className="bg-indigo-900 text-indigo-300 hover:bg-indigo-600 hover:text-white px-3 py-1 rounded text-[10px] uppercase font-bold transition-all border border-indigo-500/50">
                               PING N8N SEO API
