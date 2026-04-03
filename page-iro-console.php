@@ -114,6 +114,7 @@ if (isset($_GET['iro_proxy'])) {
         const FileBarChart = p => <Icon {...p} d='<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="M8 18v-3"/><path d="M16 18v-8"/>'/>;
         const ShieldCheck = p => <Icon {...p} d='<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>'/>;
         const CheckSquare = p => <Icon {...p} d='<polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>'/>;
+        const Paperclip = p => <Icon {...p} d='<path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>'/>;
 
         const ActivityMonitorIcon = () => <svg className="w-3.5 h-3.5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>;
         const App = () => {
@@ -214,6 +215,25 @@ if (isset($_GET['iro_proxy'])) {
           const [systemHealth, setSystemHealth] = useState({ cpu: 0, ram: 0, disk: 0, net: 0 });
           const [heatmapData, setHeatmapData] = useState([]);
           const [selectedSeoLoc, setSelectedSeoLoc] = useState(null);
+
+          const [attachment, setAttachment] = useState(null);
+          const fileInputRef = useRef(null);
+
+          const handleFileSelect = (e) => {
+              const file = e.target.files[0];
+              if (!file) return;
+              
+              const reader = new FileReader();
+              reader.onload = (event) => {
+                  setAttachment({
+                      name: file.name,
+                      type: file.type,
+                      data: event.target.result,
+                      preview: file.type.startsWith('image/') ? event.target.result : null
+                  });
+              };
+              reader.readAsDataURL(file);
+          };
 
 const seoMetricsMap = {
     'Hampton': {
@@ -450,24 +470,40 @@ const seoMetricsMap = {
 
           const handleSendMessage = async (e) => {
             e.preventDefault();
-            if (!inputValue.trim()) return;
+            if (!inputValue.trim() && !attachment) return;
             const msg = inputValue;
-            setChatMessages(prev => [...prev, { role: 'user', text: msg }]);
+            
+            const newMsg = { role: 'user', text: msg };
+            if (attachment) {
+                newMsg.attachment = attachment.preview;
+                newMsg.text = msg ? `${msg} [Attached File: ${attachment.name}]` : `[Attached File: ${attachment.name}]`;
+            }
+            
+            setChatMessages(prev => [...prev, newMsg]);
             setInputValue('');
+            setAttachment(null);
             setIsThinking(true);
             
             try {
                 // Connect straight back to the live terminal node
                 const proxyUrl = window.location.href.split('?')[0].replace(/\/$/, '') + '/?iro_proxy=chat';
+                
+                const payload = { message: msg };
+                if (attachment) {
+                    payload.file = attachment.data;
+                    payload.fileName = attachment.name;
+                    payload.fileType = attachment.type;
+                }
+
                 const res = await fetch(proxyUrl, { 
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true' },
-                    body: JSON.stringify({ message: msg })
+                    body: JSON.stringify(payload)
                 });
                 const data = await res.json();
                 setIsThinking(false);
-                setChatMessages(prev => [...prev, { role: 'agent', text: data.reply, name: 'IRO Talking' }]);
-                speakReply(data.reply);
+                setChatMessages(prev => [...prev, { role: 'agent', text: data.reply || 'System received structural payload successfully.', name: 'IRO Talking' }]);
+                if(data.reply) speakReply(data.reply);
             } catch (err) {
                 setIsThinking(false);
                 setChatMessages(prev => [...prev, { role: 'agent', text: 'Could not connect to the Bridge. Terminal is offline. Please manually restart the OpenClaw Gateway.', name: 'SYSTEM RED' }]);
@@ -695,7 +731,12 @@ const seoMetricsMap = {
                                     <span className={msg.role === 'user' ? "text-slate-400 font-bold block mb-1 text-xs" : "text-cyan-400 font-bold block mb-1 text-xs"}>
                                       {msg.role === 'user' ? 'You:' : `${msg.name} //`}
                                     </span>
-                                    <span className="text-slate-200 leading-relaxed font-medium tracking-wide">{msg.text}</span>
+                                    {msg.attachment && (
+                                        <div className="mb-2 block">
+                                            <img src={msg.attachment} alt="attachment" className={`max-w-[200px] rounded border border-slate-700 opacity-90 ${msg.role === 'user' ? 'ml-auto' : 'mr-auto'} inline-block`} />
+                                        </div>
+                                    )}
+                                    <span className="text-slate-200 leading-relaxed font-medium tracking-wide block">{msg.text}</span>
                                   </div>
                                 )}
                               </div>
@@ -713,14 +754,26 @@ const seoMetricsMap = {
                             )}
                             <div ref={chatEndRef} />
                           </div>
-                          <form onSubmit={handleSendMessage} className="flex gap-3 bg-slate-950/40 p-2 rounded border border-slate-800 focus-within:border-cyan-500/50 transition-colors mt-auto shrink-0">
+                          <form onSubmit={handleSendMessage} className="flex gap-3 bg-slate-950/40 p-2 rounded border border-slate-800 focus-within:border-cyan-500/50 transition-colors mt-auto shrink-0 relative">
+                            <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" accept="image/*,.pdf,.doc,.docx" />
                             <button type="button" onClick={() => setIsTTSActive(!isTTSActive)} className={`flex items-center gap-1 p-2 rounded transition-all border ${isTTSActive ? 'text-emerald-400 bg-emerald-900/20 border-emerald-500/30' : 'text-slate-500 border-transparent hover:bg-slate-800'}`} title={isTTSActive ? "TTS Auto-Speak ON" : "TTS Auto-Speak OFF"}>
                                 <Mic size={12} /> <span className="text-[9px] uppercase font-bold pr-1">VOICE</span>
+                            </button>
+                            <button type="button" onClick={() => fileInputRef.current && fileInputRef.current.click()} className={`p-3 rounded transition-all outline-none flex items-center justify-center ${attachment ? 'text-cyan-400 bg-cyan-900/30 border border-cyan-500/50' : 'text-slate-500 border border-transparent hover:bg-slate-800 hover:text-cyan-400'}`} title="Attach Screenshot / Upload File">
+                                <Paperclip size={16} />
                             </button>
                             <button type="button" onClick={handleDictation} className={`p-3 rounded transition-all outline-none flex items-center justify-center ${isListening ? 'text-red-500 bg-red-900/30 animate-pulse border border-red-500/50' : 'text-slate-500 border border-transparent hover:bg-slate-800 hover:text-cyan-400'}`} title="Dictate to Iro (Speech-to-Text)">
                                 <Mic size={16} />
                             </button>
-                            <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Let's talk..." className="flex-1 bg-transparent p-2 text-sm focus:outline-none font-bold placeholder:text-slate-500" />
+                            <div className="flex-1 flex flex-col relative justify-center">
+                                {attachment && (
+                                    <div className="absolute -top-12 left-0 bg-slate-900 border border-cyan-900 text-cyan-400 text-[10px] px-3 py-1.5 rounded-lg shadow-lg flex items-center gap-2 z-50">
+                                        <span className="truncate max-w-[200px] font-bold">{attachment.name}</span>
+                                        <button type="button" onClick={() => setAttachment(null)} className="text-red-400 hover:text-red-300 font-bold ml-2 text-sm">&times;</button>
+                                    </div>
+                                )}
+                                <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Let's talk..." className="w-full bg-transparent p-2 text-sm focus:outline-none font-bold placeholder:text-slate-500" />
+                            </div>
                             <button type="submit" className="text-cyan-500 p-3 hover:bg-cyan-500 hover:text-black rounded transition-all"><Send size={16} /></button>
                           </form>
                         </div>
