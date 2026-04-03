@@ -6,7 +6,7 @@ if (isset($_GET['iro_proxy'])) {
     $action = $_GET['iro_proxy'];
     $url = ($action === 'action') 
         ? "https://iro-bullmight-action16.loca.lt/api/" . $action 
-        : "https://iro-bullmight-bridge14.loca.lt/api/" . $action;
+        : "https://iro-bullmight-bridge15.loca.lt/api/" . $action;
     
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

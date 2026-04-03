@@ -19,7 +19,7 @@ if (isset($_GET['iro_proxy'])) {
     } elseif ($action === 'action') {
         $url = "https://iro-bullmight-action16.loca.lt/api/" . $action;
     } else {
-        $url = "https://iro-bullmight-bridge14.loca.lt/api/" . $action;
+        $url = "https://iro-bullmight-bridge15.loca.lt/api/" . $action;
     }
     
     $ch = curl_init($url);
