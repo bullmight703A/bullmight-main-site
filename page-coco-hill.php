@@ -44,62 +44,17 @@ if (isset($_GET['iro_proxy'])) {
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // Create standard react components for each lucide icon using the lucide API
-        const IconWrapper = ({ name, size = 24, className = '', fill = 'none' }) => {
-            const iconRef = useRef(null);
-            
-            useEffect(() => {
-                if (iconRef.current && window.lucide) {
-                    // Try to clear it first if React re-renders
-                    iconRef.current.innerHTML = '';
-                    // Convert CamelCase to lucide name like bell-ring
-                    const iconName = name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-                    const iconData = window.lucide.icons[iconName];
-                    
-                    if (iconData) {
-                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                        svg.setAttribute('width', size);
-                        svg.setAttribute('height', size);
-                        svg.setAttribute('viewBox', '0 0 24 24');
-                        svg.setAttribute('fill', fill);
-                        svg.setAttribute('stroke', fill === 'currentColor' ? 'none' : 'currentColor');
-                        svg.setAttribute('stroke-width', '2');
-                        svg.setAttribute('stroke-linecap', 'round');
-                        svg.setAttribute('stroke-linejoin', 'round');
-                        svg.setAttribute('class', className);
-                        
-                        iconData[2].forEach(([tag, attrs]) => {
-                            const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
-                            Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
-                            svg.appendChild(el);
-                        });
-                        iconRef.current.appendChild(svg);
-                    }
-                }
-            }, [name, size, className, fill]);
-            
-            return <i ref={iconRef} style={{ display: 'inline-block' }}></i>;
-        };
-
-        const Home = (props) => <IconWrapper name="Home" {...props} />;
-        const Palette = (props) => <IconWrapper name="Palette" {...props} />;
-        const ShoppingBag = (props) => <IconWrapper name="ShoppingBag" {...props} />;
-        const Users = (props) => <IconWrapper name="Users" {...props} />;
-        const Calendar = (props) => <IconWrapper name="Calendar" {...props} />;
-        const Camera = (props) => <IconWrapper name="Camera" {...props} />;
-        const Heart = (props) => <IconWrapper name="Heart" {...props} />;
-        const MessageCircle = (props) => <IconWrapper name="MessageCircle" {...props} />;
-        const Clock = (props) => <IconWrapper name="Clock" {...props} />;
-        const ChevronRight = (props) => <IconWrapper name="ChevronRight" {...props} />;
-        const MoreVertical = (props) => <IconWrapper name="MoreVertical" {...props} />;
-        const Layers = (props) => <IconWrapper name="Layers" {...props} />;
-        const Sparkles = (props) => <IconWrapper name="Sparkles" {...props} />;
-        const CreditCard = (props) => <IconWrapper name="CreditCard" {...props} />;
-        const CheckCircle2 = (props) => <IconWrapper name="CheckCircle2" {...props} />;
-        const FileText = (props) => <IconWrapper name="FileText" {...props} />;
-        const Mic = (props) => <IconWrapper name="Mic" {...props} />;
-        const Paperclip = (props) => <IconWrapper name="Paperclip" {...props} />;
-        const Send = (props) => <IconWrapper name="Send" {...props} />;
+        const Mic = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>;
+        const Paperclip = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>;
+        const Send = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>;
+        const FileText = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>;
+        const Camera = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>;
+        const Sparkles = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>;
+        const ChevronRight = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6"/></svg>;
+        const Palette = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.992 6.012 17.5 2 12 2z"/></svg>;
+        const ShoppingBag = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>;
+        const Calendar = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>;
+        const Layers = ({size=24, className=''}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>;
 
         
 
@@ -122,13 +77,15 @@ const CocoHill = () => {
   const [isThinking, setIsThinking] = useState(false);
   const [isTTSActive, setIsTTSActive] = useState(true);
   const [isListening, setIsListening] = useState(false);
+  const [activeTab, setActiveTab] = useState('chat');
+  const [notes, setNotes] = useState('');
   const chatEndRef = useRef(null);
 
   const [attachment, setAttachment] = useState(null);
   const fileInputRef = useRef(null);
 
   const initialMessages = [
-    { role: 'agent', text: 'Coco Hill Chat API online. How can I assist with your design queue?', name: 'COCO AI' }
+    { role: 'agent', text: 'Coco Hill Chat API online. Coi is at your service. How can I assist with your design queue?', name: 'COI' }
   ];
   const [chatMessages, setChatMessages] = useState(() => {
      try {
@@ -198,7 +155,7 @@ const CocoHill = () => {
       
       try {
           const proxyUrl = window.location.href.split('?')[0].replace(/\/$/, '') + '/?iro_proxy=chat';
-          const payload = { message: msg };
+          const payload = { message: msg, agentId: 'princess' };
           if (attachment) {
               payload.file = attachment.data;
               payload.fileName = attachment.name;
@@ -212,7 +169,7 @@ const CocoHill = () => {
           });
           const data = await res.json();
           setIsThinking(false);
-          setChatMessages(prev => [...prev, { role: 'agent', text: data.reply || 'Acknowledged.', name: 'COCO AI' }]);
+          setChatMessages(prev => [...prev, { role: 'agent', text: data.reply || 'Acknowledged.', name: 'COI' }]);
           if(data.reply) speakReply(data.reply);
       } catch (err) {
           setIsThinking(false);
@@ -298,169 +255,128 @@ const CocoHill = () => {
           </nav>
         </aside>
 
-        <main className="col-span-6 flex flex-col gap-6 overflow-hidden">
+        <main className="col-span-9 flex flex-col gap-6 overflow-hidden">
 
           <div className="flex-1 bg-white border border-[#EAE0D5] rounded-3xl overflow-hidden flex flex-col shadow-sm relative sticky h-[650px]" style={{ minHeight: '650px' }}>
-             <div className="shrink-0 flex justify-center py-4 border-b border-[#EAE0D5] bg-[#FAF7F2]">
-                <span className="text-[10px] bg-white px-4 py-1.5 rounded-full border border-[#EAE0D5] text-[#B4A7A0] uppercase tracking-[0.3em] font-bold">
-                  Design Studio Intelligence
-                </span>
-             </div>
-
-             <div className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col pt-4">
-                {chatMessages.map((msg, i) => (
-                    <div key={i} className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                       {msg.role !== 'user' && (
-                           <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#EAE0D5] flex-shrink-0 flex items-center justify-center">
-                              <Sparkles size={16} className="text-[#F4ACB7]" />
-                           </div>
-                       )}
-                       <div className={`space-y-1 max-w-[85%] ${msg.role === 'user' ? 'items-end flex flex-col' : ''}`}>
-                          <div className={`flex justify-between w-full ${msg.role === 'user' ? 'justify-end' : ''}`}>
-                             <span className="text-[11px] font-black uppercase tracking-tighter text-[#D4A373]">
-                               {msg.role === 'user' ? 'You' : msg.name}
-                             </span>
-                          </div>
-                          <div className={`text-sm leading-relaxed ${msg.role === 'user' ? 'bg-[#D4A373] text-white p-4 rounded-2xl rounded-tr-none shadow-sm' : 'bg-[#FAF7F2] text-[#5C524F] p-4 rounded-2xl rounded-tl-none border border-[#EAE0D5]'}`}>
-                             {msg.attachment && (
-                                <div className="mb-2">
-                                    <img src={msg.attachment} alt="attachment" className="max-w-[200px] rounded-lg border border-[#EAE0D5] shadow-sm inline-block" />
-                                </div>
-                             )}
-                             {msg.text}
-                          </div>
-                       </div>
-                    </div>
-                ))}
-                {isThinking && (
-                    <div className="flex gap-4">
-                       <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#EAE0D5] flex-shrink-0 flex items-center justify-center">
-                          <Sparkles size={16} className="text-[#F4ACB7] animate-pulse" />
-                       </div>
-                       <div className="bg-[#FAF7F2] text-[#5C524F] p-4 rounded-2xl rounded-tl-none border border-[#EAE0D5] flex items-center gap-1.5 h-12">
-                          <div className="w-1.5 h-1.5 bg-[#D4A373] rounded-full animate-bounce" style={{animationDelay:'0ms'}}></div>
-                          <div className="w-1.5 h-1.5 bg-[#D4A373] rounded-full animate-bounce" style={{animationDelay:'150ms'}}></div>
-                          <div className="w-1.5 h-1.5 bg-[#D4A373] rounded-full animate-bounce" style={{animationDelay:'300ms'}}></div>
-                       </div>
-                    </div>
-                )}
-                <div ref={chatEndRef} />
-             </div>
-
-             <form onSubmit={handleSendMessage} className="shrink-0 p-4 bg-white border-t border-[#EAE0D5] flex gap-3 items-center relative z-20">
-                <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" accept="image/*,.pdf,.doc,.docx" />
-                
-                <button type="button" onClick={() => setIsTTSActive(!isTTSActive)} className={`p-3 rounded-xl transition-all ${isTTSActive ? 'bg-[#F4ACB7]/20 text-[#F4ACB7]' : 'bg-[#FAF7F2] text-[#B4A7A0] hover:text-[#D4A373]'}`} title="Voice Output Toggle">
-                    <Mic size={16} />
-                </button>
-                <button type="button" onClick={() => fileInputRef.current && fileInputRef.current.click()} className={`p-3 rounded-xl transition-all ${attachment ? 'bg-[#D4A373]/20 text-[#D4A373]' : 'bg-[#FAF7F2] text-[#B4A7A0] hover:text-[#D4A373]'}`} title="Attach File/Screenshot">
-                    <Paperclip size={16} />
-                </button>
-                <button type="button" onClick={handleDictation} className={`p-3 rounded-xl transition-all ${isListening ? 'bg-red-100 text-red-500 animate-pulse' : 'bg-[#FAF7F2] text-[#B4A7A0] hover:text-[#D4A373]'}`} title="Dictate to Coco">
-                    <Mic size={16} />
-                </button>
-
-                <div className="flex-1 relative flex flex-col mt-0">
-                    {attachment && (
-                        <div className="absolute -top-14 left-0 bg-white border border-[#EAE0D5] text-[#4A423F] text-xs px-3 py-1.5 rounded-lg shadow flex items-center gap-2">
-                            <span className="truncate max-w-[200px] font-bold">{attachment.name}</span>
-                            <button type="button" onClick={() => setAttachment(null)} className="text-red-400 hover:text-red-500 font-bold ml-2 text-sm">&times;</button>
-                        </div>
-                    )}
-                    <input 
-                      value={inputValue} 
-                      onChange={(e) => setInputValue(e.target.value)} 
-                      placeholder="Discuss floor plans or review vendor specs..." 
-                      className="w-full bg-[#FAF7F2] p-3.5 text-sm outline-none rounded-xl text-[#4A423F] placeholder:text-[#B4A7A0] font-medium border border-transparent focus:border-[#EAE0D5]" 
-                    />
+             
+             {/* TABS FOR CHAT & NOTES */}
+             <div className="shrink-0 flex justify-center py-0 border-b border-[#EAE0D5] bg-[#FAF7F2]">
+                <div className="flex w-full px-6 pt-4 gap-8">
+                  <button 
+                    onClick={() => setActiveTab('chat')} 
+                    className={`pb-3 font-bold text-[10px] tracking-[0.2em] w-1/2 uppercase border-b-2 transition-all ${activeTab === 'chat' ? 'border-[#D4A373] text-[#D4A373]' : 'border-transparent text-[#B4A7A0] hover:text-[#D4A373]'}`}
+                  >
+                    Chat Console
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab('notes')} 
+                    className={`pb-3 font-bold text-[10px] tracking-[0.2em] w-1/2 uppercase border-b-2 transition-all ${activeTab === 'notes' ? 'border-[#D4A373] text-[#D4A373]' : 'border-transparent text-[#B4A7A0] hover:text-[#D4A373]'}`}
+                  >
+                    Workspace Notes
+                  </button>
                 </div>
-                
-                <button type="submit" className="bg-[#D4A373] text-white p-3.5 rounded-xl hover:bg-[#C28E5E] transition-all shadow-sm">
-                    <Send size={16} />
-                </button>
-             </form>
+             </div>
+
+             {activeTab === 'chat' ? (
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col pt-4">
+                  {chatMessages.map((msg, i) => (
+                      <div key={i} className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                         {msg.role !== 'user' && (
+                             <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#EAE0D5] flex-shrink-0 flex items-center justify-center">
+                                <Sparkles size={16} className="text-[#F4ACB7]" />
+                             </div>
+                         )}
+                         <div className={`space-y-1 max-w-[85%] ${msg.role === 'user' ? 'items-end flex flex-col' : ''}`}>
+                            <div className={`flex justify-between w-full ${msg.role === 'user' ? 'justify-end' : ''}`}>
+                               <span className="text-[11px] font-black uppercase tracking-tighter text-[#D4A373]">
+                                 {msg.role === 'user' ? 'You' : msg.name}
+                               </span>
+                            </div>
+                            <div className={`text-sm leading-relaxed ${msg.role === 'user' ? 'bg-[#D4A373] text-white p-4 rounded-2xl rounded-tr-none shadow-sm' : 'bg-[#FAF7F2] text-[#5C524F] p-4 rounded-2xl rounded-tl-none border border-[#EAE0D5]'}`}>
+                               {msg.attachment && (
+                                  <div className="mb-2">
+                                      <img src={msg.attachment} alt="attachment" className="max-w-[200px] rounded-lg border border-[#EAE0D5] shadow-sm inline-block" />
+                                  </div>
+                               )}
+                               {msg.text}
+                            </div>
+                         </div>
+                      </div>
+                  ))}
+                  {isThinking && (
+                      <div className="flex gap-4">
+                         <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#EAE0D5] flex-shrink-0 flex items-center justify-center">
+                            <Sparkles size={16} className="text-[#F4ACB7] animate-pulse" />
+                         </div>
+                         <div className="bg-[#FAF7F2] text-[#5C524F] p-4 rounded-2xl rounded-tl-none border border-[#EAE0D5] flex items-center gap-1.5 h-12">
+                            <div className="w-1.5 h-1.5 bg-[#D4A373] rounded-full animate-bounce" style={{animationDelay:'0ms'}}></div>
+                            <div className="w-1.5 h-1.5 bg-[#D4A373] rounded-full animate-bounce" style={{animationDelay:'150ms'}}></div>
+                            <div className="w-1.5 h-1.5 bg-[#D4A373] rounded-full animate-bounce" style={{animationDelay:'300ms'}}></div>
+                         </div>
+                      </div>
+                  )}
+                  <div ref={chatEndRef} />
+                </div>
+             ) : (
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col bg-[#FAF7F2] pt-4">
+                  <textarea 
+                    className="flex-1 w-full bg-transparent p-5 outline-none resize-none text-[15px] leading-loose text-[#5C524F] placeholder-[#B4A7A0]"
+                    placeholder="Jot down active GHL contacts, mood board thoughts, or daily tasks here... This notepad persists across your session."
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                  />
+                </div>
+             )}
+
+             {activeTab === 'chat' && (
+               <form onSubmit={handleSendMessage} className="shrink-0 p-4 bg-white border-t border-[#EAE0D5] flex gap-3 items-center relative z-20">
+                  <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" accept="image/*,.pdf,.doc,.docx" />
+                  
+                  <button type="button" onClick={() => setIsTTSActive(!isTTSActive)} className={`p-3 rounded-xl transition-all ${isTTSActive ? 'bg-[#F4ACB7]/20 text-[#F4ACB7]' : 'bg-[#FAF7F2] text-[#B4A7A0] hover:text-[#D4A373]'}`} title="Voice Output Toggle">
+                      <Mic size={16} />
+                  </button>
+                  <button type="button" onClick={() => fileInputRef.current && fileInputRef.current.click()} className={`p-3 rounded-xl transition-all ${attachment ? 'bg-[#D4A373]/20 text-[#D4A373]' : 'bg-[#FAF7F2] text-[#B4A7A0] hover:text-[#D4A373]'}`} title="Attach File/Screenshot">
+                      <Paperclip size={16} />
+                  </button>
+                  <button type="button" onClick={handleDictation} className={`p-3 rounded-xl transition-all ${isListening ? 'bg-red-100 text-red-500 animate-pulse' : 'bg-[#FAF7F2] text-[#B4A7A0] hover:text-[#D4A373]'}`} title="Dictate to Coco">
+                      <Mic size={16} />
+                  </button>
+
+                  <div className="flex-1 relative flex flex-col mt-0">
+                      {attachment && (
+                          <div className="absolute -top-14 left-0 bg-white border border-[#EAE0D5] text-[#4A423F] text-xs px-3 py-1.5 rounded-lg shadow flex items-center gap-2">
+                              <span className="truncate max-w-[200px] font-bold">{attachment.name}</span>
+                              <button type="button" onClick={() => setAttachment(null)} className="text-red-400 hover:text-red-500 font-bold ml-2 text-sm">&times;</button>
+                          </div>
+                      )}
+                      <input 
+                        value={inputValue} 
+                        onChange={(e) => setInputValue(e.target.value)} 
+                        placeholder="Discuss floor plans or review vendor specs..." 
+                        className="w-full bg-[#FAF7F2] p-3.5 text-sm outline-none rounded-xl text-[#4A423F] placeholder:text-[#B4A7A0] font-medium border border-transparent focus:border-[#EAE0D5]" 
+                      />
+                  </div>
+                  
+                  <button type="submit" className="bg-[#D4A373] text-white p-3.5 rounded-xl hover:bg-[#C28E5E] transition-all shadow-sm">
+                      <Send size={16} />
+                  </button>
+               </form>
+             )}
           </div>
         </main>
 
-        {/* RIGHT: PROCUREMENT & FINANCIALS */}
-        <aside className="col-span-3 flex flex-col gap-6 overflow-y-auto">
-          
-          {/* BUDGET MODULE */}
-          <div className="bg-white border border-[#EAE0D5] rounded-2xl p-5 shadow-sm">
-            <div className="flex justify-between items-center mb-5">
-              <h3 className="text-[10px] font-black tracking-widest uppercase text-[#B4A7A0] flex items-center gap-2">
-                <CreditCard size={14} className="text-[#D4A373]" /> Financials
-              </h3>
-              <span className="text-sm font-black text-[#D4A373]">$428.5k</span>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-[#8B7E74] font-bold">Retainers Collected</span>
-                  <span className="text-[#4A423F] font-black">$120k</span>
-                </div>
-                <div className="w-full h-1 bg-[#FAF7F2] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#D4A373] w-[75%]" />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-[#8B7E74] font-bold">Procurement Spend</span>
-                  <span className="text-[#4A423F] font-black">$280k</span>
-                </div>
-                <div className="w-full h-1 bg-[#FAF7F2] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#F4ACB7] w-[45%]" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* SOURCING TRACKER */}
-          <div className="bg-white border border-[#EAE0D5] rounded-2xl p-5 shadow-sm">
-            <h3 className="text-[10px] font-black tracking-widest uppercase text-[#B4A7A0] flex items-center gap-2 mb-5">
-              <ShoppingBag size={14} className="text-[#F4ACB7]" /> Procurement Tracking
-            </h3>
-            <div className="space-y-4">
-              {[
-                { item: "Vintage Chandelier", status: "In Transit", date: "Oct 12" },
-                { item: "Italian Marble Slab", status: "Delivered", date: "Oct 08" },
-                { item: "Custom Silk Rug", status: "In Production", date: "Nov 22" }
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#FAF7F2] border border-[#EAE0D5] flex items-center justify-center group-hover:bg-[#F4ACB7]/10 group-hover:border-[#F4ACB7]/30 transition-colors">
-                    <CheckCircle2 size={12} className={i === 1 ? "text-emerald-500" : "text-[#B4A7A0]"} />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-[11px] font-black text-[#4A423F]">{item.item}</div>
-                    <div className="text-[9px] text-[#B4A7A0] font-bold uppercase tracking-tighter">{item.status} <span className="mx-1">•</span> {item.date}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* RENDERING QUEUE (PICASSO INTEGRATION) */}
-          <div className="bg-[#4A423F] rounded-2xl p-5 shadow-xl">
+        {/* RIGHT: RENDER QUEUE ONLY */}
+        <aside className="col-span-12 xl:col-span-3 flex flex-col gap-6 overflow-y-auto">
+          <div className="bg-[#4A423F] rounded-2xl p-5 shadow-xl shrink-0">
              <div className="flex justify-between items-center mb-4">
                 <h3 className="text-[10px] font-black tracking-widest uppercase text-white/40 flex items-center gap-2">
-                  <Camera size={14} className="text-[#F4ACB7]" /> Picasso Render Engine
+                  <Camera size={14} className="text-[#F4ACB7]" /> Picasso Engine
                 </h3>
-                <span className="text-[8px] px-2 py-0.5 bg-[#F4ACB7]/20 text-[#F4ACB7] rounded-full font-bold">ACTIVE</span>
+                <span className="text-[8px] px-2 py-0.5 bg-[#F4ACB7]/20 text-[#F4ACB7] rounded-full font-bold">READY</span>
              </div>
-             <div className="space-y-3">
-                <div className="p-3 bg-white/5 border border-white/10 rounded-xl">
-                   <div className="flex justify-between items-center mb-2">
-                      <span className="text-[10px] text-white font-bold tracking-tight">Master Bedroom - View 2</span>
-                      <span className="text-[10px] text-[#F4ACB7] font-black">82%</span>
-                   </div>
-                   <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-[#F4ACB7] to-[#D4A373] w-[82%]" />
-                   </div>
-                </div>
-                <button className="w-full py-2 bg-white/10 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-white/20 transition-all">
-                   Submit New Scene
-                </button>
-             </div>
+             <button className="w-full py-3 bg-white/10 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-white/20 transition-all border border-white/20 hover:border-white/40 shadow-sm">
+                 Request Design Manifest
+             </button>
           </div>
 
         </aside>
