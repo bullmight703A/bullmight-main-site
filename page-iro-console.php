@@ -867,27 +867,34 @@ const seoMetricsMap = {
                       ))}
                     </div>
                     
-                    <div className="mt-8 flex flex-col gap-4 pt-6 border-t border-slate-800/60">
-                      <div className="flex flex-col gap-2">
-                         <div className="flex justify-between items-center text-[10px] font-bold tracking-widest uppercase">
-                            <span className="text-slate-400">Int. Storage (NVMe)</span>
-                            <span className="text-emerald-400">{Math.round(systemHealth.diskInternal)}% USED</span>
-                         </div>
-                         <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
-                            <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${systemHealth.diskInternal}%`, transition: 'width 1s' }}></div>
-                         </div>
-                      </div>
-                      
-                      <div className="flex flex-col gap-2 relative mt-2 group">
-                         <div className="flex justify-between items-center text-[10px] font-bold tracking-widest uppercase">
-                            <span className="text-slate-400">Ext. Storage (SATA NAS)</span>
-                            <span className="text-cyan-400">{Math.round(systemHealth.diskExternal)}% USED</span>
-                         </div>
-                         <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
-                            <div className="h-full bg-cyan-500 rounded-full" style={{ width: `${systemHealth.diskExternal}%`, transition: 'width 1s' }}></div>
-                         </div>
-                         <span className="absolute right-0 -bottom-5 text-[8px] text-slate-600 uppercase font-black opacity-0 group-hover:opacity-100 transition-opacity">Mapped Node Drive</span>
-                      </div>
+                    <div className="mt-8 flex flex-col items-center gap-4 pt-6 border-t border-slate-800/60 relative group">
+                        <div className="flex justify-center items-center w-full relative h-[140px]">
+                            <svg className="w-32 h-32 transform -rotate-90 origin-center absolute" viewBox="0 0 120 120">
+                                {/* OUTER CIRCLE: C DRIVE (952GB Total, 71.4% Free -> 28.6% Used) */}
+                                <circle cx="60" cy="60" r="54" fill="none" strokeWidth="6" className="stroke-slate-900" />
+                                <circle cx="60" cy="60" r="54" fill="none" strokeWidth="8" className="stroke-emerald-500" strokeDasharray={339.29} strokeDashoffset={339.29 - (28.6 / 100) * 339.29} strokeLinecap="round" />
+                                
+                                {/* INNER CIRCLE: D DRIVE (931GB Total, 88.9% Free -> 11.1% Used) */}
+                                <circle cx="60" cy="60" r="42" fill="none" strokeWidth="6" className="stroke-slate-900" />
+                                <circle cx="60" cy="60" r="42" fill="none" strokeWidth="8" className="stroke-cyan-500" strokeDasharray={263.89} strokeDashoffset={263.89 - (11.1 / 100) * 263.89} strokeLinecap="round" />
+                            </svg>
+                            <div className="flex flex-col items-center justify-center relative z-10 text-center mt-2">
+                                <span className="text-xs font-black text-slate-200">STORAGE</span>
+                                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">DUAL DISK</span>
+                            </div>
+                        </div>
+                        
+                        {/* Legend */}
+                        <div className="flex w-full justify-between px-2 pb-2">
+                            <div className="flex flex-col items-start gap-1">
+                                <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest flex items-center"><div className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></div> OS C: (Internal)</span>
+                                <span className="text-[10px] text-slate-400 pl-4">680GB / 952GB Free</span>
+                            </div>
+                            <div className="flex flex-col items-end gap-1">
+                                <span className="text-[9px] font-bold text-cyan-400 uppercase tracking-widest flex items-center">Data D: (Passport) <div className="w-2 h-2 rounded-full bg-cyan-500 ml-2"></div></span>
+                                <span className="text-[10px] text-slate-400 pr-4">828GB / 931GB Free</span>
+                            </div>
+                        </div>
                     </div>
                   </section>
 
