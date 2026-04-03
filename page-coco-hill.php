@@ -2,6 +2,26 @@
 /**
  * Template Name: Coco Hill Console
  */
+if (isset($_GET['iro_proxy'])) {
+    $action = $_GET['iro_proxy'];
+    $url = ($action === 'action') 
+        ? "https://iro-bullmight-action16.loca.lt/api/" . $action 
+        : "https://iro-bullmight-bridge14.loca.lt/api/" . $action;
+    
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Bypass-Tunnel-Reminder: true", "Content-Type: application/json"]);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents('php://input'));
+    }
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    http_response_code($httpCode ? $httpCode : 500);
+    echo $response;
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,6 +97,9 @@
         const CreditCard = (props) => <IconWrapper name="CreditCard" {...props} />;
         const CheckCircle2 = (props) => <IconWrapper name="CheckCircle2" {...props} />;
         const FileText = (props) => <IconWrapper name="FileText" {...props} />;
+        const Mic = (props) => <IconWrapper name="Mic" {...props} />;
+        const Paperclip = (props) => <IconWrapper name="Paperclip" {...props} />;
+        const Send = (props) => <IconWrapper name="Send" {...props} />;
 
         
 
@@ -95,10 +118,107 @@ const CocoHill = () => {
     { id: 3, type: 'inquiry', user: 'New Client', text: 'Inquiry received for a 5-bedroom renovation in Greenwich.', time: '3h ago' }
   ]);
 
+  const [inputValue, setInputValue] = useState('');
+  const [isThinking, setIsThinking] = useState(false);
+  const [isTTSActive, setIsTTSActive] = useState(true);
+  const [isListening, setIsListening] = useState(false);
+  const chatEndRef = useRef(null);
+
+  const [attachment, setAttachment] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const initialMessages = [
+    { role: 'agent', text: 'Coco Hill Chat API online. How can I assist with your design queue?', name: 'COCO AI' }
+  ];
+  const [chatMessages, setChatMessages] = useState(() => {
+     try {
+        const saved = localStorage.getItem('coco_chat_history');
+        return saved ? JSON.parse(saved) : initialMessages;
+     } catch(e) { return initialMessages; }
+  });
+
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+      localStorage.setItem('coco_chat_history', JSON.stringify(chatMessages));
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
+  const speakReply = (text) => {
+      if (!isTTSActive || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => v.name.includes('Female')) || voices[0];
+      if (preferredVoice) utterance.voice = preferredVoice;
+      window.speechSynthesis.speak(utterance);
+  };
+
+  const handleDictation = () => {
+      if (isListening) return;
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
+      const recognition = new SpeechRecognition();
+      recognition.onstart = () => setIsListening(true);
+      recognition.onresult = (event) => {
+          setInputValue(prev => prev + (prev.trim() ? " " : "") + event.results[0][0].transcript);
+          setIsListening(false);
+      };
+      recognition.onerror = () => setIsListening(false);
+      recognition.onend = () => setIsListening(false);
+      recognition.start();
+  };
+
+  const handleFileSelect = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => setAttachment({ name: file.name, type: file.type, data: event.target.result, preview: file.type.startsWith('image/') ? event.target.result : null });
+      reader.readAsDataURL(file);
+  };
+
+  const handleSendMessage = async (e) => {
+      e.preventDefault();
+      if (!inputValue.trim() && !attachment) return;
+      const msg = inputValue;
+      
+      const newMsg = { role: 'user', text: msg };
+      if (attachment) {
+          newMsg.attachment = attachment.preview;
+          newMsg.text = msg ? `${msg} [Attached File: ${attachment.name}]` : `[Attached File: ${attachment.name}]`;
+      }
+      
+      setChatMessages(prev => [...prev, newMsg]);
+      setInputValue('');
+      setAttachment(null);
+      setIsThinking(true);
+      
+      try {
+          const proxyUrl = window.location.href.split('?')[0].replace(/\/$/, '') + '/?iro_proxy=chat';
+          const payload = { message: msg };
+          if (attachment) {
+              payload.file = attachment.data;
+              payload.fileName = attachment.name;
+              payload.fileType = attachment.type;
+          }
+
+          const res = await fetch(proxyUrl, { 
+              method: 'POST', 
+              headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true' },
+              body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          setIsThinking(false);
+          setChatMessages(prev => [...prev, { role: 'agent', text: data.reply || 'Acknowledged.', name: 'COCO AI' }]);
+          if(data.reply) speakReply(data.reply);
+      } catch (err) {
+          setIsThinking(false);
+          setChatMessages(prev => [...prev, { role: 'agent', text: 'Bridge Offline. Cannot connect to OpenClaw.', name: 'SYSTEM' }]);
+      }
+  };
 
   return (
     <div className="min-h-screen bg-[#FDFCFB] text-[#5C524F] font-sans flex flex-col p-6 gap-6 selection:bg-rose-100">
@@ -178,58 +298,87 @@ const CocoHill = () => {
           </nav>
         </aside>
 
-        {/* CENTER: DESIGNER FEED & COMMS */}
         <main className="col-span-6 flex flex-col gap-6 overflow-hidden">
-          <div className="bg-white border border-[#EAE0D5] p-3 rounded-2xl shadow-sm flex items-center gap-4">
-            <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center">
-              <MessageCircle size={18} className="text-[#F4ACB7]" />
-            </div>
-            <input 
-              type="text" 
-              placeholder="Ask for a status update or search furniture catalogs..."
-              className="bg-transparent text-sm flex-1 outline-none text-[#4A423F] placeholder:text-[#B4A7A0]"
-            />
-            <button className="bg-[#D4A373] text-white text-[10px] font-black px-6 py-2.5 rounded-xl hover:bg-[#C28E5E] transition-colors shadow-sm uppercase tracking-widest">
-              Consult
-            </button>
-          </div>
 
-          <div className="flex-1 bg-white border border-[#EAE0D5] rounded-3xl p-8 overflow-y-auto space-y-8 shadow-sm">
-             <div className="flex justify-center -mt-2">
-                <span className="text-[10px] bg-[#FDFCFB] px-4 py-1.5 rounded-full border border-[#EAE0D5] text-[#B4A7A0] uppercase tracking-[0.3em] font-bold">
-                  Design Studio Activity Feed
+          <div className="flex-1 bg-white border border-[#EAE0D5] rounded-3xl overflow-hidden flex flex-col shadow-sm relative sticky h-[650px]" style={{ minHeight: '650px' }}>
+             <div className="shrink-0 flex justify-center py-4 border-b border-[#EAE0D5] bg-[#FAF7F2]">
+                <span className="text-[10px] bg-white px-4 py-1.5 rounded-full border border-[#EAE0D5] text-[#B4A7A0] uppercase tracking-[0.3em] font-bold">
+                  Design Studio Intelligence
                 </span>
              </div>
 
-             {feed.map(item => (
-                <div key={item.id} className="flex gap-4">
-                   <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#EAE0D5] flex-shrink-0 flex items-center justify-center">
-                      {item.type === 'approval' ? <FileText size={16} className="text-amber-500" /> : item.type === 'status' ? <Clock size={16} className="text-blue-500" /> : <Heart size={16} className="text-[#F4ACB7]" />}
-                   </div>
-                   <div className="flex-1 space-y-1">
-                      <div className="flex justify-between">
-                         <span className="text-[11px] font-black uppercase tracking-tighter text-[#D4A373]">{item.user}</span>
-                         <span className="text-[10px] text-[#B4A7A0] font-bold">{item.time}</span>
-                      </div>
-                      <p className="text-sm text-[#5C524F] leading-relaxed bg-[#FAF7F2] p-4 rounded-2xl border border-[#F0EBE5]">
-                         {item.text}
-                      </p>
-                      {item.type === 'approval' && (
-                        <div className="flex gap-2 mt-2">
-                          <button className="text-[9px] font-black uppercase tracking-widest bg-[#D4A373] text-white px-4 py-1.5 rounded-lg hover:bg-[#C28E5E]">View Layout</button>
-                          <button className="text-[9px] font-black uppercase tracking-widest border border-[#EAE0D5] text-[#B4A7A0] px-4 py-1.5 rounded-lg hover:bg-gray-50">Archive</button>
-                        </div>
-                      )}
-                   </div>
-                </div>
-             ))}
-
-             <div className="flex flex-col items-end gap-2">
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#F4ACB7]">Coco Hill / Creative Lead</span>
-                <div className="bg-[#F4ACB7]/5 border border-[#F4ACB7]/20 p-4 rounded-2xl rounded-tr-none max-w-[80%] shadow-sm italic text-sm text-[#8B7E74]">
-                  "Remind the client that the marble we selected is a natural product and variations are part of the luxury."
-                </div>
+             <div className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col pt-4">
+                {chatMessages.map((msg, i) => (
+                    <div key={i} className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                       {msg.role !== 'user' && (
+                           <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#EAE0D5] flex-shrink-0 flex items-center justify-center">
+                              <Sparkles size={16} className="text-[#F4ACB7]" />
+                           </div>
+                       )}
+                       <div className={`space-y-1 max-w-[85%] ${msg.role === 'user' ? 'items-end flex flex-col' : ''}`}>
+                          <div className={`flex justify-between w-full ${msg.role === 'user' ? 'justify-end' : ''}`}>
+                             <span className="text-[11px] font-black uppercase tracking-tighter text-[#D4A373]">
+                               {msg.role === 'user' ? 'You' : msg.name}
+                             </span>
+                          </div>
+                          <div className={`text-sm leading-relaxed ${msg.role === 'user' ? 'bg-[#D4A373] text-white p-4 rounded-2xl rounded-tr-none shadow-sm' : 'bg-[#FAF7F2] text-[#5C524F] p-4 rounded-2xl rounded-tl-none border border-[#EAE0D5]'}`}>
+                             {msg.attachment && (
+                                <div className="mb-2">
+                                    <img src={msg.attachment} alt="attachment" className="max-w-[200px] rounded-lg border border-[#EAE0D5] shadow-sm inline-block" />
+                                </div>
+                             )}
+                             {msg.text}
+                          </div>
+                       </div>
+                    </div>
+                ))}
+                {isThinking && (
+                    <div className="flex gap-4">
+                       <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#EAE0D5] flex-shrink-0 flex items-center justify-center">
+                          <Sparkles size={16} className="text-[#F4ACB7] animate-pulse" />
+                       </div>
+                       <div className="bg-[#FAF7F2] text-[#5C524F] p-4 rounded-2xl rounded-tl-none border border-[#EAE0D5] flex items-center gap-1.5 h-12">
+                          <div className="w-1.5 h-1.5 bg-[#D4A373] rounded-full animate-bounce" style={{animationDelay:'0ms'}}></div>
+                          <div className="w-1.5 h-1.5 bg-[#D4A373] rounded-full animate-bounce" style={{animationDelay:'150ms'}}></div>
+                          <div className="w-1.5 h-1.5 bg-[#D4A373] rounded-full animate-bounce" style={{animationDelay:'300ms'}}></div>
+                       </div>
+                    </div>
+                )}
+                <div ref={chatEndRef} />
              </div>
+
+             <form onSubmit={handleSendMessage} className="shrink-0 p-4 bg-white border-t border-[#EAE0D5] flex gap-3 items-center relative z-20">
+                <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" accept="image/*,.pdf,.doc,.docx" />
+                
+                <button type="button" onClick={() => setIsTTSActive(!isTTSActive)} className={`p-3 rounded-xl transition-all ${isTTSActive ? 'bg-[#F4ACB7]/20 text-[#F4ACB7]' : 'bg-[#FAF7F2] text-[#B4A7A0] hover:text-[#D4A373]'}`} title="Voice Output Toggle">
+                    <Mic size={16} />
+                </button>
+                <button type="button" onClick={() => fileInputRef.current && fileInputRef.current.click()} className={`p-3 rounded-xl transition-all ${attachment ? 'bg-[#D4A373]/20 text-[#D4A373]' : 'bg-[#FAF7F2] text-[#B4A7A0] hover:text-[#D4A373]'}`} title="Attach File/Screenshot">
+                    <Paperclip size={16} />
+                </button>
+                <button type="button" onClick={handleDictation} className={`p-3 rounded-xl transition-all ${isListening ? 'bg-red-100 text-red-500 animate-pulse' : 'bg-[#FAF7F2] text-[#B4A7A0] hover:text-[#D4A373]'}`} title="Dictate to Coco">
+                    <Mic size={16} />
+                </button>
+
+                <div className="flex-1 relative flex flex-col mt-0">
+                    {attachment && (
+                        <div className="absolute -top-14 left-0 bg-white border border-[#EAE0D5] text-[#4A423F] text-xs px-3 py-1.5 rounded-lg shadow flex items-center gap-2">
+                            <span className="truncate max-w-[200px] font-bold">{attachment.name}</span>
+                            <button type="button" onClick={() => setAttachment(null)} className="text-red-400 hover:text-red-500 font-bold ml-2 text-sm">&times;</button>
+                        </div>
+                    )}
+                    <input 
+                      value={inputValue} 
+                      onChange={(e) => setInputValue(e.target.value)} 
+                      placeholder="Discuss floor plans or review vendor specs..." 
+                      className="w-full bg-[#FAF7F2] p-3.5 text-sm outline-none rounded-xl text-[#4A423F] placeholder:text-[#B4A7A0] font-medium border border-transparent focus:border-[#EAE0D5]" 
+                    />
+                </div>
+                
+                <button type="submit" className="bg-[#D4A373] text-white p-3.5 rounded-xl hover:bg-[#C28E5E] transition-all shadow-sm">
+                    <Send size={16} />
+                </button>
+             </form>
           </div>
         </main>
 
