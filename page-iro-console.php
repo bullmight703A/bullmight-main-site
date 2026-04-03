@@ -279,7 +279,8 @@ const seoMetricsMap = {
                   setSystemHealth(prev => ({
                      cpu: Math.floor(Math.random() * 30) + 1,
                      ram: Math.floor(Math.random() * 30) + 1,
-                     disk: 91,
+                     diskInternal: 78,
+                     diskExternal: 42,
                      net: Math.floor(Math.random() * 30) + 1
                   }));
               };
@@ -563,8 +564,8 @@ const seoMetricsMap = {
                           </div>
                           <div className="flex gap-2 w-full sm:w-auto sm:border-l sm:border-slate-800 sm:pl-3 justify-end items-center">
                             {doc.type === 'iframe' && (
-                              <button onClick={() => setVaultIframe(doc.url)} className="text-[10px] font-bold bg-cyan-900/30 text-cyan-400 hover:bg-cyan-900/60 px-2 py-1 rounded transition-colors uppercase">
-                                View
+                              <button onClick={() => window.open(doc.url, '_blank')} className="text-[10px] font-bold bg-cyan-900/30 text-cyan-400 hover:bg-cyan-900/60 px-2 py-1 rounded transition-colors uppercase cursor-pointer">
+                                Open Native
                               </button>
                             )}
                             <a href={doc.url} download={doc.type === 'download' ? doc.name : undefined} target="_blank" rel="noreferrer" className="text-[10px] bg-slate-800 text-slate-400 hover:text-white px-2 py-1 rounded transition-colors uppercase flex items-center gap-1">
@@ -669,14 +670,18 @@ const seoMetricsMap = {
                               <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">N8N Pipe: Validated</p>
                             </div>
                           </div>
+                          <div className="flex justify-center"><span className="text-[9px] text-slate-500 font-black tracking-widest uppercase bg-slate-900 px-3 py-1 rounded-full">Displaying Fallback Mock Data</span></div>
 
                           {/* SEO NIGHT PROTOCOL */}
                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shadow-inner">
                             <div className="flex justify-between items-center mb-4">
                               <h3 className="text-xs text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><Database size={14} className="text-indigo-400"/> Night Protocol SEO</h3>
-                              <button onClick={() => setNightProtocolActive(!nightProtocolActive)} className={`text-[9px] px-2 py-1 rounded font-bold uppercase tracking-wider border transition-colors cursor-pointer ${nightProtocolActive ? 'bg-indigo-900/30 text-indigo-400 border-indigo-900/50 hover:bg-indigo-900/60' : 'bg-slate-900 text-slate-500 border-slate-800 hover:text-slate-300'}`}>
-                                {nightProtocolActive ? 'Status: Scheduled' : 'Status: Paused'}
-                              </button>
+                              <div className="flex gap-2">
+                                <span className="text-[9px] text-slate-500 bg-slate-950 font-black tracking-widest uppercase px-2 py-1 rounded">Awaiting Sync</span>
+                                <button onClick={() => setNightProtocolActive(!nightProtocolActive)} className={`text-[9px] px-2 py-1 rounded font-bold uppercase tracking-wider border transition-colors cursor-pointer ${nightProtocolActive ? 'bg-indigo-900/30 text-indigo-400 border-indigo-900/50 hover:bg-indigo-900/60' : 'bg-slate-900 text-slate-500 border-slate-800 hover:text-slate-300'}`}>
+                                  {nightProtocolActive ? 'Scheduled' : 'Paused'}
+                                </button>
+                              </div>
                             </div>
                             <div className="flex flex-col sm:flex-row gap-4">
                                <div className="flex-1 bg-slate-950/40 border border-slate-800/60 p-3 rounded">
@@ -844,10 +849,8 @@ const seoMetricsMap = {
                     <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 font-bold flex items-center"><ActivityMonitorIcon /> Live Health Dashboard</h2>
                     <div className="grid grid-cols-2 gap-y-10 gap-x-4 pb-2">
                       {[
-                        { label: 'CPU', val: Math.round(systemHealth.cpu), color: 'stroke-cyan-500' },
-                        { label: 'RAM', val: Math.round(systemHealth.ram), color: 'stroke-green-500' },
-                        { label: 'DISK', val: Math.round(systemHealth.disk), color: 'stroke-red-500' },
-                        { label: 'NET', val: Math.round(systemHealth.net), color: 'stroke-cyan-400' }
+                        { label: 'CPU CORE', val: Math.round(systemHealth.cpu), color: 'stroke-cyan-500' },
+                        { label: 'RAM UTIL', val: Math.round(systemHealth.ram), color: 'stroke-green-500' }
                       ].map(gauge => (
                         <div key={gauge.label} className="flex flex-col items-center gap-3">
                           <div className="relative w-24 h-24 transition-all duration-1000">
@@ -862,6 +865,29 @@ const seoMetricsMap = {
                           </div>
                         </div>
                       ))}
+                    </div>
+                    
+                    <div className="mt-8 flex flex-col gap-4 pt-6 border-t border-slate-800/60">
+                      <div className="flex flex-col gap-2">
+                         <div className="flex justify-between items-center text-[10px] font-bold tracking-widest uppercase">
+                            <span className="text-slate-400">Int. Storage (NVMe)</span>
+                            <span className="text-emerald-400">{Math.round(systemHealth.diskInternal)}% USED</span>
+                         </div>
+                         <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                            <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${systemHealth.diskInternal}%`, transition: 'width 1s' }}></div>
+                         </div>
+                      </div>
+                      
+                      <div className="flex flex-col gap-2 relative mt-2 group">
+                         <div className="flex justify-between items-center text-[10px] font-bold tracking-widest uppercase">
+                            <span className="text-slate-400">Ext. Storage (SATA NAS)</span>
+                            <span className="text-cyan-400">{Math.round(systemHealth.diskExternal)}% USED</span>
+                         </div>
+                         <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                            <div className="h-full bg-cyan-500 rounded-full" style={{ width: `${systemHealth.diskExternal}%`, transition: 'width 1s' }}></div>
+                         </div>
+                         <span className="absolute right-0 -bottom-5 text-[8px] text-slate-600 uppercase font-black opacity-0 group-hover:opacity-100 transition-opacity">Mapped Node Drive</span>
+                      </div>
                     </div>
                   </section>
 
