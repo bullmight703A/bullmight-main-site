@@ -349,11 +349,18 @@ const CocoHill = () => {
                               <button type="button" onClick={() => setAttachment(null)} className="text-red-400 hover:text-red-500 font-bold ml-2 text-sm">&times;</button>
                           </div>
                       )}
-                      <input 
+                      <textarea 
                         value={inputValue} 
                         onChange={(e) => setInputValue(e.target.value)} 
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault();
+                                handleSendMessage(e);
+                            }
+                        }}
                         placeholder="Discuss floor plans or review vendor specs..." 
-                        className="w-full bg-[#FAF7F2] p-3.5 text-sm outline-none rounded-xl text-[#4A423F] placeholder:text-[#B4A7A0] font-medium border border-transparent focus:border-[#EAE0D5]" 
+                        rows={2}
+                        className="w-full bg-[#FAF7F2] p-3.5 text-sm outline-none rounded-xl text-[#4A423F] placeholder:text-[#B4A7A0] font-medium border border-transparent focus:border-[#EAE0D5] resize-none" 
                       />
                   </div>
                   
