@@ -9,6 +9,8 @@ if (isset($_GET['iro_proxy'])) {
     // Split tunnels: lesson plans to 3005, chat to 3006
     if ($action === 'lesson-plans' || $action === 'lesson-plan-status') {
         $url = "https://iro-bullmight-lesson15.loca.lt/api/" . $action;
+    } elseif ($action === 'action') {
+        $url = "https://iro-bullmight-action16.loca.lt/api/" . $action;
     } else {
         $url = "https://iro-bullmight-bridge14.loca.lt/api/" . $action;
     }
@@ -252,6 +254,18 @@ const seoMetricsMap = {
         ],
         fiveMile: [6,5,6, 5,4,5, 7,6,7],
         tenMile: [10,9,10,12,14, 9,7,8,10,13, 8,5,4,7,12, 9,8,7,9,14, 12,11,12,15,18]
+    },
+    'Corporate': {
+        health: '99.5%', canonicals: '312', backlinks: 61, up: '+0.5%',
+        nightLift: '+5 POS',
+        keywords: [
+            { kw: "Kidazzle Corporate", rank: 1, up: true },
+            { kw: "HQ Childcare", rank: 2, up: true },
+            { kw: "Atlanta Kidazzle HQ", rank: 1, up: false },
+            { kw: "Premium Daycare GA", rank: 3, up: true }
+        ],
+        fiveMile: [1,1,2, 1,2,1, 1,1,1],
+        tenMile: [1,2,3,2,1, 2,1,1,1,2, 1,1,1,2,2, 2,1,1,2,3, 3,2,2,3,4]
     }
 };
 
@@ -958,7 +972,8 @@ const seoMetricsMap = {
                             {loc: 'Summit', slug: '-84.38'}, 
                             {loc: 'Atl Federal', slug: '-84.39'}, 
                             {loc: 'Memphis', slug: '-89.95'}, 
-                            {loc: 'Miami', slug: '-80.32'} 
+                            {loc: 'Miami', slug: '-80.32'},
+                            {loc: 'Corporate', slug: 'corporate-link'} 
                           ].map((l, i) => {
                              const matched = heatmapData.filter(d => d.coordinates && d.coordinates.includes(l.slug));
                              let localRankDisplay = matched.length > 0 ? "LIVE: ONLINE" : "AWAITING SYNC";
@@ -1122,7 +1137,23 @@ const seoMetricsMap = {
                        <div className="flex gap-4 items-center shrink-0">
                           <button onClick={() => {
                               const kw = document.getElementById('n8n-seo-kw-input').value || 'Unspecified';
-                              handleToolClick(`Web SEO Advanced Sync Task: ${atlasIframe} [KW: ${kw}]`);
+                              setChatMessages(prev => [...prev, { role: 'user', text: `Initiate External Task: ${atlasIframe} [KW: ${kw}] via Dedicated Action Port 3007` }]);
+                              
+                              // Native fetch to the dedicated 3007 action tunnel
+                              fetch('?iro_proxy=action', { 
+                                  method: 'POST', 
+                                  headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true' },
+                                  body: JSON.stringify({ type: 'seo_audit', url: atlasIframe, kw: kw })
+                              })
+                              .then(r => r.json())
+                              .then(res => {
+                                  setTimeout(() => {
+                                      setChatMessages(prev => [...prev, { role: 'agent', text: res.message || 'Action executed successfully.', name: 'MASTERCHEF' }]);
+                                  }, 800);
+                              }).catch(err => {
+                                  setChatMessages(prev => [...prev, { role: 'agent', text: 'Action Port 3007 Offline or Unreachable.', name: 'SYSTEM PURPLE' }]);
+                              });
+                              
                               setAtlasIframe(null);
                           }} className="bg-indigo-900 text-indigo-300 hover:bg-indigo-600 hover:text-white px-3 py-1 rounded text-[10px] uppercase font-bold transition-all border border-indigo-500/50">
                               PING N8N SEO API
