@@ -136,7 +136,7 @@ if (isset($_GET['iro_proxy'])) {
               utterance.rate = 1.05;
               
               const voices = synth.getVoices();
-              const preferredVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Natural')) || voices[0];
+              const preferredVoice = voices.find(v => v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female')) || voices[0];
               if (preferredVoice) utterance.voice = preferredVoice;
 
               synth.speak(utterance);
