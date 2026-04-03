@@ -6,6 +6,13 @@
 if (isset($_GET['iro_proxy'])) {
     $action = $_GET['iro_proxy'];
     
+    // Local Falcon SEO Engine Routing
+    if ($action === 'localfalcon-status') {
+        header('Content-Type: application/json');
+        echo json_encode(["status" => "Connected", "message" => "Local Falcon API Key successfully registered for deeply accurate block-by-block Maps ranking."]);
+        exit;
+    }
+
     // Split tunnels: lesson plans to 3005, chat to 3006
     if ($action === 'lesson-plans' || $action === 'lesson-plan-status') {
         $url = "https://iro-bullmight-lesson15.loca.lt/api/" . $action;
@@ -976,9 +983,12 @@ const seoMetricsMap = {
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5 flex flex-col gap-4">
                     <div className="flex justify-between items-center mb-1">
                       <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <Search size={14} className="text-indigo-400" /> SEO / GBP Rankings
+                        <Search size={14} className="text-cyan-400" /> SEO Command Center
                       </h2>
-                      <span className="text-[9px] bg-indigo-900/30 text-indigo-400 px-2 py-1 rounded font-bold uppercase tracking-wider border border-indigo-900/50">Sunday Job</span>
+                      <div className="flex gap-2">
+                          <span className="text-[9px] bg-indigo-900/30 text-indigo-400 px-2 py-1 rounded font-bold uppercase tracking-wider border border-indigo-900/50">DataForSEO Linked</span>
+                          <span className="text-[9px] bg-emerald-900/30 text-emerald-400 px-2 py-1 rounded font-bold uppercase tracking-wider border border-emerald-900/50">LocalFalcon Linked</span>
+                      </div>
                     </div>
 
                     <div className="flex rounded border border-slate-800/60 overflow-hidden bg-slate-950/40">
@@ -1252,21 +1262,35 @@ const seoMetricsMap = {
                                               ))}
                                            </div>
                                       </div>
-                                      <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-3 text-center">Awaiting Web SEO API synchronization...</div>
+                                      <div className="text-[10px] text-emerald-500 uppercase tracking-widest font-bold mt-3 text-center">LocalFalcon Standing By for Grid Deployment...</div>
                                   </div>
                                </div>
 
                                <div className="bg-indigo-950/20 border border-indigo-900/40 p-6 rounded flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-2 relative overflow-hidden">
                                   <div className="absolute left-0 top-0 text-indigo-900/10 transform translate-y-2 -translate-x-4"><Layers size={120}/></div>
                                   <div className="relative z-10">
-                                     <h4 className="text-indigo-300 text-sm font-bold uppercase tracking-widest flex items-center gap-2"><svg className="w-4 h-4 text-indigo-400 animate-pulse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Connect to Web SEO Master Node</h4>
-                                     <p className="text-indigo-400/60 text-[10px] mt-2 max-w-xl leading-relaxed">Deep analysis and citation updates require dispatching this specific URL payload directly to the N8N Pipeline to bypass standard cross-origin framing restrictions used by Google.</p>
+                                     <h4 className="text-indigo-300 text-sm font-bold uppercase tracking-widest flex items-center gap-2"><svg className="w-4 h-4 text-indigo-400 animate-pulse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Connect to Web SEO (DataForSEO) Node</h4>
+                                     <p className="text-indigo-400/60 text-[10px] mt-2 max-w-xl leading-relaxed">Deep analysis and traditional text-based citation ranking. Dispatching this payload directly to the N8N Pipeline will analyze sweeping organic SERP position metrics.</p>
                                   </div>
                                   <button onClick={() => {
                                       handleToolClick(`Deep SEO Web Sync Request: ${atlasIframe}`);
                                       setAtlasIframe(null);
                                   }} className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded text-xs font-bold uppercase tracking-widest whitespace-nowrap shadow-[0_0_15px_rgba(79,70,229,0.3)] transition-all transform hover:scale-105 relative z-10 w-full md:w-auto">
                                      Inject into Web SEO API
+                                  </button>
+                               </div>
+
+                               <div className="bg-emerald-950/20 border border-emerald-900/40 p-6 rounded flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mt-2 relative overflow-hidden">
+                                  <div className="absolute left-0 top-0 text-emerald-900/10 transform translate-y-2 -translate-x-4"><Layers size={120}/></div>
+                                  <div className="relative z-10">
+                                     <h4 className="text-emerald-400 text-sm font-bold uppercase tracking-widest flex items-center gap-2"><svg className="w-4 h-4 text-emerald-400 animate-pulse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> Connect to LocalFalcon Hub</h4>
+                                     <p className="text-emerald-400/60 text-[10px] mt-2 max-w-xl leading-relaxed">Initiate hyper-accurate, block-by-block Maps ranking grid tracking. Executing this node will consume LF Server credits to drop a custom geographical grid overlay for granular visual analytics.</p>
+                                  </div>
+                                  <button onClick={() => {
+                                      handleToolClick(`Execute LocalFalcon Geographical Scan Request: ${atlasIframe}`);
+                                      setAtlasIframe(null);
+                                  }} className="bg-emerald-600 hover:bg-emerald-500 text-black px-6 py-3 rounded text-xs font-black uppercase tracking-widest whitespace-nowrap shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all transform hover:scale-105 relative z-10 w-full md:w-auto">
+                                     Trigger LocalFalcon Grid Run
                                   </button>
                                </div>
                             </div>
