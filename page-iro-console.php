@@ -1084,16 +1084,6 @@ const seoMetricsMap = {
               {/* Modals for iFrame Vault & SEO Rankings */}
               {atlasIframe && (
                 <div className="fixed inset-0 z-[99] flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm">
-                  <div className="bg-[#0b0c10] border border-indigo-500 w-full max-w-6xl h-full max-h-[85vh] flex flex-col rounded overflow-hidden">
-                    <div className="flex justify-between items-center border-b border-indigo-900/50 p-4 bg-slate-900">
-                      <h3 className="text-indigo-400 font-bold uppercase tracking-widest text-sm">GOOGLE MY BUSINESS / LOCAL AUDIT</h3>
-                      <button onClick={() => setAtlasIframe(null)} className="text-red-400 hover:text-white px-3 py-1 border border-red-500/50 hover:bg-red-900/30 rounded text-xs transition-colors">&times; CLOSE</button>
-                    </div>
-                    <div className="flex justify-between p-3 bg-slate-950 items-center border-b border-indigo-900/30">
-                       <span className="text-[10px] text-emerald-500 font-bold uppercase truncate pr-4">AUDITING: {atlasIframe}</span>
-                       <a href={atlasIframe} target="_blank" rel="noreferrer" className="text-[10px] text-indigo-400 underline uppercase hover:text-white whitespace-nowrap">Open Native Window</a>
-              {atlasIframe && (
-                <div className="fixed inset-0 z-[99] flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm">
                   <div className="bg-[#0b0c10] border border-indigo-500 w-full max-w-6xl h-full max-h-[85vh] flex flex-col rounded overflow-hidden shadow-[0_0_80px_rgba(79,70,229,0.2)]">
                     <div className="flex justify-between items-center border-b border-indigo-900/50 p-4 bg-slate-900">
                       <h3 className="text-indigo-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2"><Search size={16}/> GOOGLE MY BUSINESS / LOCAL AUDIT</h3>
