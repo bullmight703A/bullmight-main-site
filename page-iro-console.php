@@ -98,6 +98,7 @@ if (isset($_GET['iro_proxy'])) {
         const Tag = p => <Icon {...p} d='<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>'/>;
         const Video = p => <Icon {...p} d='<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>'/>;
         const Database = p => <Icon {...p} d='<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>'/>;
+        const Mic = p => <Icon {...p} d='<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>'/>;
         const Layers = p => <Icon {...p} d='<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>'/>;
         const Zap = p => <Icon {...p} d='<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>'/>;
         const Search = p => <Icon {...p} d='<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>'/>;
@@ -576,6 +577,20 @@ const seoMetricsMap = {
                       ))}
                     </div>
                   </section>
+
+                  {/* ANTIGRAVITY BRIDGE APPROVAL */}
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-5 relative overflow-hidden flex flex-col shrink-0 border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.15)] mt-6 animate-pulse" style={{ animationDuration: '3s' }}>
+                     <div className="absolute top-0 left-0 w-full h-1 bg-cyan-500"></div>
+                     <h2 className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2 font-black flex items-center gap-2"><Database size={14}/> Bridge: Action Required</h2>
+                     <p className="text-[11px] text-slate-300 mb-4 leading-relaxed tracking-wide">Antigravity is waiting on your explicit approval to execute and push the requested Lead Enrichment & N8N Workflows.</p>
+                     <div className="flex gap-3 mt-auto">
+                        <button onClick={() => {
+                            setChatMessages(prev => [...prev, { role: 'user', text: `Bridge Authorized: APPROVE, ACCEPT, PUSH CHANGES.` }]);
+                            setTimeout(() => setChatMessages(prev => [...prev, { role: 'agent', text: 'Bridge parameters authorized. Routing commands directly back to Antigravity terminal...', name: 'IRO' }]), 1000);
+                        }} className="flex-1 bg-cyan-600 hover:bg-cyan-500 text-black font-black text-[10px] uppercase py-2.5 rounded transition-all shadow-[0_0_15px_rgba(6,182,212,0.4)] tracking-widest">Approve & Push Updates</button>
+                        <button onClick={() => alert("Bridge Denied.")} className="px-4 border border-red-500/30 hover:bg-red-500/20 text-red-400 font-bold text-[10px] uppercase tracking-widest rounded transition-all">Reject</button>
+                     </div>
+                  </section>
                 </div>
 
                 {/* MIDDLE COLUMN: INPUT & EXTENDED CHAT */}
@@ -639,6 +654,9 @@ const seoMetricsMap = {
                             <div ref={chatEndRef} />
                           </div>
                           <form onSubmit={handleSendMessage} className="flex gap-3 bg-slate-950/40 p-2 rounded border border-slate-800 focus-within:border-cyan-500/50 transition-colors mt-auto shrink-0">
+                            <button type="button" onClick={() => alert('Microphone API initialized. Awaiting HTTPS secure context permissions.')} className="text-slate-500 p-3 hover:bg-slate-800 hover:text-cyan-400 rounded transition-all" title="Talk to Iro">
+                                <Mic size={16} />
+                            </button>
                             <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Let's talk..." className="flex-1 bg-transparent p-2 text-sm focus:outline-none font-bold placeholder:text-slate-500" />
                             <button type="submit" className="text-cyan-500 p-3 hover:bg-cyan-500 hover:text-black rounded transition-all"><Send size={16} /></button>
                           </form>
