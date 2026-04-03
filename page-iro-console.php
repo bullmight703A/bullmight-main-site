@@ -1027,10 +1027,12 @@ const seoMetricsMap = {
                                     <div className="absolute top-0 right-0 text-[9px] text-slate-600 font-bold -mt-2">Pos. 20 (Poor)</div>
                                     <div className="absolute bottom-0 right-0 text-[10px] text-emerald-500 font-bold -mb-4">Pos. 1 (Dominated)</div>
                                     
-                                    {[18, 17, 16, 17, 14, 12, 10, 11, 8, 8, 6, 4, 3, 2, 1].map((rank, i) => {
-                                        const locHealth = parseFloat(seoMetricsMap[selectedSeoLoc].health);
-                                        const offset = locHealth < 95 ? Math.floor(Math.random() * 3) + 1 : 0;
-                                        const finalRank = Math.max(1, Math.min(20, rank + offset));
+                                    {Array.from({length: 15}).map((_, i) => {
+                                        const tenMileAvg = seoMetricsMap[selectedSeoLoc].tenMile.reduce((a,b)=>a+b, 0) / seoMetricsMap[selectedSeoLoc].tenMile.length;
+                                        const baseRank = Math.max(1, Math.floor(tenMileAvg));
+                                        let finalRank = baseRank + Math.floor((14 - i) * 1.2) - (i % 3 === 0 ? 1 : 0);
+                                        finalRank = Math.max(1, Math.min(20, finalRank));
+                                        
                                         const heightPercent = 100 - ((finalRank - 1) / 19 * 100);
                                         const isLast = i === 14;
                                         
@@ -1100,18 +1102,39 @@ const seoMetricsMap = {
                                   </div>
                                </div>
                                
-                               <div className="grid grid-cols-2 gap-4">
-                                  <div className="bg-slate-900/50 border border-slate-800 p-6 rounded relative overflow-hidden group hover:border-indigo-900 transition-colors">
-                                     <div className="absolute right-0 top-0 text-slate-800 opacity-20 transform -translate-y-4 translate-x-4"><Database size={80} /></div>
-                                     <h4 className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Citations & Consistency</h4>
-                                     <p className="text-emerald-400 text-xl font-black relative z-10 flex items-center gap-2"><CheckSquare size={16}/> Valid Status</p>
-                                     <p className="text-slate-500 text-[10px] mt-2 relative z-10 leading-relaxed">Name, Address, Phone (NAP) data matches the canonical records in the isolated database architecture perfectly.</p>
+                               <div className="p-4 bg-yellow-950/30 border border-yellow-900/50 rounded flex items-center gap-3 text-yellow-500 mb-2">
+                                     <AlertCircle size={16} />
+                                     <span className="text-xs font-bold uppercase tracking-widest">Note: Data below is a UI Layout Placeholder. Real API metrics pending payload from N8N Web SEO Node.</span>
+                               </div>
+                               
+                               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                  <div className="bg-slate-950/30 rounded-lg border border-slate-800 p-5">
+                                      <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center"><Search size={14} className="mr-2 text-indigo-400"/> Pending Keyword Matrix</h3>
+                                      <div className="flex flex-col gap-3 opacity-60">
+                                          {[ { kw: "Child care center", rank: 8 }, { kw: "Daycare near me", rank: 11 }, { kw: "Best preschool", rank: 14 }].map((k, idx) => (
+                                              <div key={idx} className="flex justify-between items-center group border-b border-slate-800/50 pb-2">
+                                                  <div className="text-[11px] sm:text-xs font-bold text-slate-300 group-hover:text-indigo-300 transition-colors uppercase tracking-tight truncate mr-2">{k.kw}</div>
+                                                  <div className="flex items-center gap-3 shrink-0">
+                                                      <span className="text-[10px] sm:text-xs font-black bg-indigo-900/30 text-indigo-400 px-2 py-0.5 rounded">Pos. {k.rank}</span>
+                                                      <span className="text-slate-500 text-xs">-</span>
+                                                  </div>
+                                              </div>
+                                          ))}
+                                      </div>
                                   </div>
-                                  <div className="bg-slate-900/50 border border-slate-800 p-6 rounded relative overflow-hidden group hover:border-indigo-900 transition-colors">
-                                     <div className="absolute right-0 top-0 text-slate-800 opacity-20 transform -translate-y-2 translate-x-4"><ActivityMonitorIcon /></div>
-                                     <h4 className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10">Grid Saturation</h4>
-                                     <p className="text-emerald-400 text-xl font-black relative z-10 flex items-center gap-2"><span className="text-emerald-500">▲</span> +14% Lift</p>
-                                     <p className="text-slate-500 text-[10px] mt-2 relative z-10 leading-relaxed">Primary keyword arrays continue to dominate within the targeted 5-mile local service geographic radius.</p>
+
+                                  <div className="bg-slate-950/30 rounded-lg border border-slate-800 p-5 flex flex-col">
+                                      <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center"><ActivityMonitorIcon /> 5-Mile Grid Mapping Array</h3>
+                                      <div className="flex-1 rounded border border-indigo-900/40 bg-slate-900 relative overflow-hidden flex items-center justify-center min-h-[140px] opacity-60">
+                                           <div className="grid grid-cols-3 gap-1 p-2 w-full h-full max-h-[170px]">
+                                              {[8,7,9, 6,5,7, 9,8,10].map((rank, i) => (
+                                                  <div key={i} className={'bg-slate-800/30 border-slate-700/50 border rounded flex items-center justify-center relative'}>
+                                                      <span className={'font-black text-lg z-10 select-none drop-shadow-md text-slate-500'}>{rank}</span>
+                                                  </div>
+                                              ))}
+                                           </div>
+                                      </div>
+                                      <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-3 text-center">Awaiting Web SEO API synchronization...</div>
                                   </div>
                                </div>
 
