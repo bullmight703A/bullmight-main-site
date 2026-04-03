@@ -475,7 +475,7 @@ const seoMetricsMap = {
               <header className="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/30 pb-4 mb-6 gap-4">
                 <div className="flex items-center gap-3 w-full md:w-auto">
                   <div className="w-3 h-3 rounded-full border border-cyan-400 animate-pulse shadow-[0_0_8px_cyan]" />
-                  <h1 className="text-xl md:text-2xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center v5.5.1</h1>
+                  <h1 className="text-xl md:text-2xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center v5.6</h1>
                 </div>
                 <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6 text-xs tracking-widest w-full md:w-auto">
                   <div className="flex items-center gap-3 px-4 py-1.5 rounded bg-cyan-950/20 border border-cyan-400/20 text-cyan-400 font-bold uppercase whitespace-nowrap">
@@ -911,27 +911,6 @@ const seoMetricsMap = {
                           })}
                        </div>
                        
-                       <div className="mt-4 pt-3 border-t border-slate-800/50 flex flex-col gap-3">
-                         <div className="bg-slate-950/60 p-3 rounded border border-indigo-900/30">
-                            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-between mb-2">
-                               <span>Overall Network Search Rank</span>
-                               <span className="text-emerald-400">#4.2 AVG</span>
-                            </h4>
-                            <div className="grid grid-cols-3 gap-2 text-center text-[10px] font-bold uppercase">
-                               <div className="bg-slate-900 p-1.5 rounded text-slate-500">Last Week: <span className="text-slate-300">#6.1</span></div>
-                               <div className="bg-slate-900 p-1.5 rounded text-slate-400">Yesterday: <span className="text-slate-300">#4.8</span></div>
-                               <div className="bg-indigo-900/30 border border-indigo-500/20 p-1.5 rounded text-indigo-300">Today: <span className="text-indigo-100">#4.2</span></div>
-                            </div>
-                         </div>
-
-                         <div className="flex justify-between items-center opacity-90 gap-2">
-                           <button onClick={() => handleToolClick('Automated Night Protocol SEO Job')} className="flex-1 bg-indigo-600/20 hover:bg-indigo-600 border border-indigo-500/40 text-indigo-300 hover:text-white px-2 py-1.5 rounded text-[10px] font-bold uppercase transition-all shadow-[0_0_10px_rgba(79,70,229,0.1)] flex items-center justify-center gap-1">
-                              <RefreshCw size={10} /> Execute Daily SEO Cron
-                           </button>
-                           <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest whitespace-nowrap bg-slate-950 px-2 py-1.5 rounded border border-slate-800">
-                               Next Auto-Run: 03:00 AM
-                           </span>
-                         </div>
                        </div>
                     </div>
                   </section>
@@ -1097,7 +1076,7 @@ const seoMetricsMap = {
                 <div className="flex gap-8"><span>Instance: IRO_Node_X1_bullmight_master</span><span>Uptime: Active Sync</span></div>
                 <div className="flex gap-5 items-center font-bold tracking-tighter">
                   <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_green] animate-pulse"></span> All Nodes OK</span>
-                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-5 uppercase">Ver 5.5.1_Final</span>
+                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-5 uppercase">Ver 5.6_Final</span>
                 </div>
               </footer>
             </div>
