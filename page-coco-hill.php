@@ -278,7 +278,7 @@ const CocoHill = () => {
              </div>
 
              {activeTab === 'chat' ? (
-                <div className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col pt-4">
+                <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 flex flex-col pt-4">
                   {chatMessages.map((msg, i) => (
                       <div key={i} className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                          {msg.role !== 'user' && (
@@ -318,7 +318,7 @@ const CocoHill = () => {
                   <div ref={chatEndRef} />
                 </div>
              ) : (
-                <div className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col bg-[#FAF7F2] pt-4">
+                <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 flex flex-col bg-[#FAF7F2] pt-4">
                   <textarea 
                     className="flex-1 w-full bg-transparent p-5 outline-none resize-none text-[15px] leading-loose text-[#5C524F] placeholder-[#B4A7A0]"
                     placeholder="Jot down active GHL contacts, mood board thoughts, or daily tasks here... This notepad persists across your session."
