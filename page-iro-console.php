@@ -237,100 +237,76 @@ if (isset($_GET['iro_proxy'])) {
 
 const seoMetricsMap = {
     'Hampton': {
-        health: '98.4%', canonicals: '1,248', backlinks: 42, up: '+0.2%',
-        nightLift: '+12 POS',
+        health: '-', canonicals: '-', backlinks: '-', up: '-',
+        nightLift: 'AWAITING SYNC',
         keywords: [
-            { kw: "Child care near me", rank: 1, up: true },
-            { kw: "Infant care Hampton", rank: 2, up: true },
-            { kw: "Pre-K programs", rank: 1, up: false },
-            { kw: "Best daycare", rank: 3, up: true }
+            { kw: "Awaiting local falcon telemetry...", rank: '-', up: false }
         ],
-        fiveMile: [1,1,1, 1,1,1, 1,2,1],
-        tenMile: [1,2,3,2,1, 2,1,1,1,2, 3,1,1,1,3, 2,1,1,2,3, 3,2,2,3,4]
+        fiveMile: [],
+        tenMile: []
     },
     'West End': {
-        health: '97.1%', canonicals: '892', backlinks: 38, up: '+0.5%',
-        nightLift: '+8 POS',
+        health: '-', canonicals: '-', backlinks: '-', up: '-',
+        nightLift: 'AWAITING SYNC',
         keywords: [
-            { kw: "West End daycare", rank: 1, up: true },
-            { kw: "Childcare center near me", rank: 2, up: false },
-            { kw: "Toddler care Atlanta", rank: 3, up: true },
-            { kw: "Affordable childcare", rank: 1, up: true }
+            { kw: "Awaiting local falcon telemetry...", rank: '-', up: false }
         ],
-        fiveMile: [1,1,2, 1,1,1, 2,1,1],
-        tenMile: [2,2,3,4,3, 2,1,2,2,4, 1,1,1,2,3, 2,1,2,3,4, 3,3,4,4,5]
+        fiveMile: [],
+        tenMile: []
     },
     'Coll. Pk': {
-        health: '99.2%', canonicals: '1,405', backlinks: 56, up: '+0.1%',
-        nightLift: '+15 POS',
+        health: '-', canonicals: '-', backlinks: '-', up: '-',
+        nightLift: 'AWAITING SYNC',
         keywords: [
-            { kw: "College park child care", rank: 1, up: true },
-            { kw: "Pre-K near me", rank: 1, up: true },
-            { kw: "Daycare College Park GA", rank: 1, up: true },
-            { kw: "After school programs", rank: 2, up: false }
+            { kw: "Awaiting local falcon telemetry...", rank: '-', up: false }
         ],
-        fiveMile: [1,1,1, 1,1,1, 1,1,1],
-        tenMile: [2,1,2,2,3, 1,1,1,1,2, 1,1,1,1,2, 1,1,1,2,2, 2,2,2,3,3]
+        fiveMile: [],
+        tenMile: []
     },
     'Summit': {
-        health: '95.8%', canonicals: '640', backlinks: 29, up: '+1.2%',
-        nightLift: '+22 POS',
+        health: '-', canonicals: '-', backlinks: '-', up: '-',
+        nightLift: 'AWAITING SYNC',
         keywords: [
-            { kw: "Daycare near me", rank: 3, up: true },
-            { kw: "Child care center", rank: 4, up: true },
-            { kw: "Summit preschool", rank: 2, up: true },
-            { kw: "Infant daycare", rank: 5, up: true }
+            { kw: "Awaiting local falcon telemetry...", rank: '-', up: false }
         ],
-        fiveMile: [2,2,3, 2,1,2, 3,2,3],
-        tenMile: [4,4,5,6,5, 3,2,3,4,6, 3,2,1,2,4, 4,3,2,3,5, 5,5,6,6,7]
+        fiveMile: [],
+        tenMile: []
     },
     'Atl Federal': {
-        health: '98.9%', canonicals: '1,822', backlinks: 84, up: '+0.0%',
-        nightLift: '+3 POS',
+        health: '-', canonicals: '-', backlinks: '-', up: '-',
+        nightLift: 'AWAITING SYNC',
         keywords: [
-            { kw: "Downtown Atlanta daycare", rank: 1, up: true },
-            { kw: "Federal center child care", rank: 1, up: false },
-            { kw: "Best daycare downtown", rank: 1, up: false },
-            { kw: "Pre-K programs Atlanta", rank: 2, up: true }
+            { kw: "Awaiting local falcon telemetry...", rank: '-', up: false }
         ],
-        fiveMile: [1,1,1, 1,1,1, 1,1,1],
-        tenMile: [2,2,2,3,4, 1,1,1,2,3, 1,1,1,1,2, 1,1,2,2,3, 2,2,3,4,5]
+        fiveMile: [],
+        tenMile: []
     },
     'Memphis': {
-        health: '94.5%', canonicals: '420', backlinks: 18, up: '+2.4%',
-        nightLift: '+41 POS',
+        health: '-', canonicals: '-', backlinks: '-', up: '-',
+        nightLift: 'AWAITING SYNC',
         keywords: [
-            { kw: "Memphis daycare", rank: 5, up: true },
-            { kw: "Childcare near me Memphis", rank: 7, up: true },
-            { kw: "Infant care", rank: 6, up: true },
-            { kw: "Preschool programs", rank: 8, up: true }
+            { kw: "Awaiting local falcon telemetry...", rank: '-', up: false }
         ],
-        fiveMile: [4,3,4, 4,2,3, 5,4,4],
-        tenMile: [7,6,7,8,9, 6,4,5,6,8, 5,3,2,4,7, 6,5,4,5,8, 8,7,8,9,10]
+        fiveMile: [],
+        tenMile: []
     },
     'Miami': {
-        health: '92.1%', canonicals: '315', backlinks: 12, up: '+3.1%',
-        nightLift: '+65 POS',
+        health: '-', canonicals: '-', backlinks: '-', up: '-',
+        nightLift: 'AWAITING SYNC',
         keywords: [
-            { kw: "Miami child care", rank: 8, up: true },
-            { kw: "Daycare near me", rank: 12, up: true },
-            { kw: "Toddler care Miami", rank: 9, up: true },
-            { kw: "Bilingual preschool", rank: 15, up: true }
+            { kw: "Awaiting local falcon telemetry...", rank: '-', up: false }
         ],
-        fiveMile: [6,5,6, 5,4,5, 7,6,7],
-        tenMile: [10,9,10,12,14, 9,7,8,10,13, 8,5,4,7,12, 9,8,7,9,14, 12,11,12,15,18]
+        fiveMile: [],
+        tenMile: []
     },
     'Corporate': {
-        health: '99.5%', canonicals: '312', backlinks: 61, up: '+0.5%',
-        nightLift: '+5 POS',
+        health: '-', canonicals: '-', backlinks: '-', up: '-',
+        nightLift: 'AWAITING SYNC',
         keywords: [
-            { kw: "Kidazzle Corporate", rank: 1, up: true },
-            { kw: "HQ Childcare", rank: 2, up: true },
-            { kw: "Atlanta Kidazzle HQ", rank: 1, up: false },
-            { kw: "Premium Daycare GA", rank: 3, up: true }
+            { kw: "Awaiting local falcon telemetry...", rank: '-', up: false }
         ],
-        fiveMile: [1,1,2, 1,2,1, 1,1,1],
-        tenMile: [1,2,3,2,1, 2,1,1,1,2, 1,1,1,2,2, 2,1,1,2,3, 3,2,2,3,4]
+        fiveMile: [],
+        tenMile: []
     }
 };
 
