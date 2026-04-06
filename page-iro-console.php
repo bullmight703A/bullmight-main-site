@@ -552,28 +552,14 @@ const seoMetricsMap = {
           };
 
           // KIDAZZLE MISSED OPPORTUNITIES & LESSON PLANS
-          const missedOpportunities = [
-            { name: 'Dr. John Carter', phone: '+1 (555) 012-3456', email: 'jcarter@pediatric.io', issue: 'Phone Pick-up Gap', time: '14 mins ago', urgency: 'High' },
-            { name: 'Sarah Deckard', phone: '+1 (555) 987-6543', email: 'sdeckard@blade.run', issue: 'Unanswered Text / SMS Blocked', time: '1 hr ago', urgency: 'Medium' }
-          ];
+          const missedOpportunities = [];
 
-          const lessonPlansProcessed = liveLessonPlans.length > 0 ? liveLessonPlans : [
-            { location: 'College Park', room: 'Toddler Room A', time: 'Awaiting webhook', status: 'Pending N8N Sync' },
-            { location: 'Atlanta Federal Center', room: 'Pre-K Core', time: 'Awaiting webhook', status: 'Pending N8N Sync' },
-            { location: 'Hampton', room: 'Infant Suite', time: 'Awaiting webhook', status: 'Pending N8N Sync' }
-          ];
+          const lessonPlansProcessed = liveLessonPlans.length > 0 ? liveLessonPlans : [];
 
           // WIMPER LEADS DORMANT > 12H
-          const wimperDormantLeads = [
-            { name: 'Emily Thorne', phone: '+1 (555) 765-4321', email: 'ethorne@grayson.io', status: 'Awaiting Demo', time: '14 hrs ago' },
-            { name: 'Ian Malcolm', phone: '+1 (555) 123-9876', email: 'imalcolm@chaos.org', status: 'Lead In', time: '18 hrs ago' },
-            { name: 'Arthur Dent', phone: '+1 (555) 442-9988', email: 'adent@galaxy.corp', status: 'Initial Contact', time: '21 hrs ago' }
-          ];
+          const wimperDormantLeads = [];
 
-          const emailDomains = [
-            { domain: 'outreach.iro-control.com', sent: 1240, responses: 42, health: '98%', status: 'Healthy' },
-            { domain: 'leads.iro-ops.net', sent: 890, responses: 12, health: '82%', status: 'Warm' },
-          ];
+          const emailDomains = [];
 
           return (
             <div className="min-h-screen h-full w-full overflow-x-hidden bg-[#0a0f14] text-slate-200 font-mono p-4 md:p-6 selection:bg-cyan-500/30 flex flex-col pb-10">
@@ -786,25 +772,21 @@ const seoMetricsMap = {
                           {/* KIDAZZLE ACQUISITION METRICS */}
                           <div className="grid grid-cols-3 gap-4">
                             <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-cyan-900/50 transition-colors relative">
-                              <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
                               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Inbound Leads</p>
-                              <p className="text-2xl font-black text-cyan-400">12</p>
-                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">GHL Webhook: OK</p>
+                              <p className="text-2xl font-black text-cyan-400">-</p>
+                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">Awaiting Telemetry</p>
                             </div>
                             <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-yellow-900/50 transition-colors relative">
-                              <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse"></div>
                               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Tours Booked</p>
-                              <p className="text-2xl font-black text-yellow-400">3</p>
-                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">Pending GHL Cal Sync</p>
+                              <p className="text-2xl font-black text-yellow-400">-</p>
+                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">Awaiting Telemetry</p>
                             </div>
                             <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center flex flex-col justify-center gap-1 shadow-inner group hover:border-green-900/50 transition-colors relative">
-                              <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></div>
                               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Enrollments</p>
-                              <p className="text-2xl font-black text-green-500">4</p>
-                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">N8N Pipe: Validated</p>
+                              <p className="text-2xl font-black text-green-500">-</p>
+                              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">Awaiting Telemetry</p>
                             </div>
                           </div>
-                          <div className="flex justify-center"><span className="text-[9px] text-slate-500 font-black tracking-widest uppercase bg-slate-900 px-3 py-1 rounded-full">Displaying Fallback Mock Data</span></div>
 
                           {/* SEO NIGHT PROTOCOL */}
                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shadow-inner">
@@ -821,15 +803,15 @@ const seoMetricsMap = {
                                <div className="flex-1 bg-slate-950/40 border border-slate-800/60 p-3 rounded">
                                   <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1">GBP Ranking Atlas</p>
                                   <div className="flex items-center justify-between">
-                                     <span className="text-sm font-black text-indigo-300">Position #2</span>
-                                     <span className="text-[9px] text-green-500 font-bold">+1 from yesterday</span>
+                                     <span className="text-sm font-black text-indigo-300">-</span>
+                                     <span className="text-[9px] text-slate-500 font-bold">Awaiting Sync</span>
                                   </div>
                                </div>
                                <div className="flex-1 bg-slate-950/40 border border-slate-800/60 p-3 rounded">
                                   <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1">New Pages Indexed</p>
                                   <div className="flex items-center justify-between">
-                                     <span className="text-sm font-black text-indigo-300">14 Pages</span>
-                                     <span className="text-[9px] text-green-500 font-bold flex items-center gap-1"><CheckSquare size={10}/> Completed 03:00 AM</span>
+                                     <span className="text-sm font-black text-indigo-300">-</span>
+                                     <span className="text-[9px] text-slate-500 font-bold flex items-center gap-1"><CheckSquare size={10}/> Awaiting Sync</span>
                                   </div>
                                </div>
                             </div>
@@ -847,7 +829,7 @@ const seoMetricsMap = {
                                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">7-Day Rotation (Since Thursday)</span>
                                </div>
                                <div className="flex gap-2 justify-between">
-                                 {[ { id:'H', c:4 }, { id:'WE', c:3 }, { id:'CP', c:4 }, { id:'AFC', c:0 }, { id:'SUM', c:4 }, { id:'MIA', c:0 }, { id:'MEM', c:1 } ].map(loc => (
+                                 {[ { id:'H', c:'-' }, { id:'WE', c:'-' }, { id:'CP', c:'-' }, { id:'AFC', c:'-' }, { id:'SUM', c:'-' }, { id:'MIA', c:'-' }, { id:'MEM', c:'-' } ].map(loc => (
                                    <div key={loc.id} className={`flex-1 ${loc.c === 0 ? 'bg-red-950/40 border-red-500/50' : 'bg-slate-900/50 border-slate-800/50'} border rounded flex flex-col items-center p-1.5 transition-colors`}>
                                      <span className="text-[10px] text-slate-400 font-bold">{loc.id}</span>
                                      <span className={`text-[11px] font-bold ${loc.c === 0 ? 'text-red-400' : 'text-cyan-400'}`}>{loc.c}</span>
