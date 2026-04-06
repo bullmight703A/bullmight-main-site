@@ -15,11 +15,11 @@ if (isset($_GET['iro_proxy'])) {
 
     // Split tunnels: lesson plans to 3005, chat to 3006
     if ($action === 'lesson-plans' || $action === 'lesson-plan-status') {
-        $url = "https://iro-bullmight-lesson15.loca.lt/api/" . $action;
+        $url = "https://tasty-deer-64.loca.lt/api/" . $action;
     } elseif ($action === 'action') {
-        $url = "https://iro-bullmight-action16.loca.lt/api/" . $action;
+        $url = "https://tasty-deer-64.loca.lt/api/" . $action;
     } else {
-        $url = "https://iro-bullmight-bridge15.loca.lt/api/" . $action;
+        $url = "https://tasty-deer-64.loca.lt/api/" . $action;
     }
     
     $ch = curl_init($url);
