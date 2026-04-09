@@ -135,7 +135,7 @@
           useEffect(() => {
               const fetchHealth = async () => {
                   try {
-                      const res = await fetch(`${API_BASE}/api/system-health`);
+                      const res = await fetch(`${TUNNELS.SYSTEM}/api/system-health`);
                       const data = await res.json();
                       if(!data.error) setSystemHealth(data);
                   } catch(e) {}
@@ -144,6 +144,22 @@
               const interval = setInterval(fetchHealth, 5000);
               return () => clearInterval(interval);
           }, []);
+
+          const [brainLogs, setBrainLogs] = useState({ memory: 'Loading core traits...', thoughts: 'Connecting to neural net...' });
+          useEffect(() => {
+              const fetchBrain = async () => {
+                  try {
+                      const res = await fetch(`${TUNNELS.SYSTEM}/api/brain-logs`);
+                      const data = await res.json();
+                      if(!data.error) setBrainLogs(data);
+                  } catch(e) {}
+              };
+              if (activeTab === 'BRAIN') {
+                  fetchBrain();
+                  const i2 = setInterval(fetchBrain, 5000);
+                  return () => clearInterval(i2);
+              }
+          }, [activeTab]);
 
           const restartAgent = async (id) => {
             const agName = agents.find(a => a.id === id).name;
@@ -299,7 +315,7 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
+                      {['CHAT', 'BRAIN', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -342,6 +358,24 @@
                             <button type="button" className="text-slate-500 p-2 hover:text-cyan-400 transition-all focus:outline-none" title="British Auto-Talking (Standby)"><Mic size={14} /></button>
                             <button type="submit" className="text-cyan-500 p-2 hover:bg-cyan-500 hover:text-black rounded transition-all"><Send size={14} /></button>
                           </form>
+                        </div>
+                      )}
+
+                      {/* BRAIN LOGS TAB */}
+                      {activeTab === 'BRAIN' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide flex flex-col">
+                           <div className="bg-slate-900/40 border border-slate-800 p-3 rounded shrink-0">
+                               <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Core OpenClaw Memory (The Brain)</p>
+                               <div className="bg-slate-950/50 p-2 rounded text-[10px] text-slate-400 border border-slate-800/40 font-mono whitespace-pre-wrap max-h-40 overflow-y-auto">
+                                   {brainLogs.memory}
+                               </div>
+                           </div>
+                           <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex-1 flex flex-col min-h-0">
+                               <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Live Neural Stream (Inner Monologue)</p>
+                               <div className="bg-slate-950/50 p-2 border-l-2 border-cyan-800 rounded text-[10px] text-slate-300 font-mono whitespace-pre-wrap flex-1 overflow-y-auto shadow-inner">
+                                   {brainLogs.thoughts || 'Waiting for thought intercept...'}
+                               </div>
+                           </div>
                         </div>
                       )}
 
