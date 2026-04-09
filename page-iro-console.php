@@ -364,6 +364,32 @@
                       {/* BRAIN LOGS TAB */}
                       {activeTab === 'BRAIN' && (
                         <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide flex flex-col">
+                           {/* Growth Dashboard Row */}
+                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 shrink-0">
+                               <div className="bg-slate-900/40 p-3 rounded border border-slate-800 text-center">
+                                   <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold mb-1">Topics Indexed</p>
+                                   <p className="text-xl text-cyan-400 font-mono">{brainLogs.growth?.topics_indexed || 0}</p>
+                               </div>
+                               <div className="bg-slate-900/40 p-3 rounded border border-slate-800 text-center">
+                                   <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold mb-1">Synaptic Thoughts</p>
+                                   <p className="text-xl text-yellow-500 font-mono">{brainLogs.growth?.synapses || 0}</p>
+                               </div>
+                               <div className="bg-slate-900/40 p-3 rounded border border-slate-800 text-center">
+                                   <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold mb-1">Volatile Core Memory</p>
+                                   <p className="text-xl text-green-400 font-mono">{brainLogs.growth?.core_memory_kb || 0} KB</p>
+                               </div>
+                           </div>
+
+                           {/* Recalled Neural Clusters */}
+                           <div className="bg-slate-900/40 border border-slate-800 p-3 rounded shrink-0">
+                               <p className="text-[10px] text-green-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Eye size={14}/> Recent Memory Injections</p>
+                               <div className="flex flex-wrap gap-2">
+                                  {(brainLogs.growth?.recent_topics || []).map((t, idx) => (
+                                     <span key={idx} className="bg-slate-800/80 border border-slate-700 text-slate-300 text-[10px] px-2 py-1 rounded shadow-inner uppercase tracking-wider">{t}</span>
+                                  ))}
+                               </div>
+                           </div>
+
                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded shrink-0">
                                <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Core OpenClaw Memory (The Brain)</p>
                                <div className="bg-slate-950/50 p-2 rounded text-[10px] text-slate-400 border border-slate-800/40 font-mono whitespace-pre-wrap max-h-40 overflow-y-auto">
