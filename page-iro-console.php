@@ -58,6 +58,8 @@
         const ExternalLink = (p) => <IconBase {...p}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></IconBase>;
         const Download = (p) => <IconBase {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></IconBase>;
         const Eye = (p) => <IconBase {...p}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></IconBase>;
+        const Paperclip = (p) => <IconBase {...p}><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></IconBase>;
+        const Mic = (p) => <IconBase {...p}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></IconBase>;
         const TrendingUp = (p) => <IconBase {...p}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></IconBase>;
         const Users = (p) => <IconBase {...p}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></IconBase>;
         const Clock = (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></IconBase>;
@@ -169,7 +171,7 @@
                 // Add reply, filter out temp
                 setChatMessages(prev => {
                     const newArr = prev.filter(m => !m.temp);
-                    return [...newArr, { role: 'agent', name: 'IRO', text: data.reply || '[Network Error]' }];
+                    return [...newArr, { role: 'agent', name: 'IRO', text: data.reply || '[Network Error]', thought: data.thought || null }];
                 });
             } catch(err) {
                 setChatMessages(prev => prev.filter(m => !m.temp));
@@ -249,13 +251,13 @@
                   </section>
 
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 overflow-hidden flex flex-col min-h-0">
-                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 flex-none">G-Drive & Docs Interlink</h2>
+                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 flex-none">Bridge Active Files</h2>
                     <div className="space-y-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
                       {[
-                        { name: 'IRO_Master_Logic.gdoc', type: 'PDF' },
-                        { name: 'Kidazzle_Rules_Export.gsheet', type: 'CSV' },
-                        { name: 'Architecture_Mapping.png', type: 'IMG' },
-                        { name: 'Manifest_Sync_Err.txt', type: 'TXT', error: true }
+                        { name: 'Architecture_Mapping.png', type: 'IMG', url: '/deliverables/Architecture_Mapping.png' },
+                        { name: 'telemetry.json', type: 'JSON', url: '/deliverables/telemetry.json' },
+                        { name: 'real_health.json', type: 'JSON', url: '/deliverables/real_health.json' },
+                        { name: 'n8n_errors.json', type: 'JSON', url: '/deliverables/n8n_errors.json' }
                       ].map((doc, i) => (
                         <div key={i} className="flex items-center justify-between p-2 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group">
                           <div className="flex items-center gap-2 overflow-hidden flex-1">
@@ -263,8 +265,7 @@
                             <span className="text-[10px] truncate text-slate-400 group-hover:text-slate-200">{doc.name}</span>
                           </div>
                           <div className="flex gap-2">
-                            <button className="text-slate-600 hover:text-green-500" title="Sync to G-Drive"><RefreshCw size={10}/></button>
-                            <button className="text-slate-600 hover:text-cyan-400" title="Open Google Docs"><ExternalLink size={10}/></button>
+                            <a href={`${API_BASE}${doc.url}`} target="_blank" className="text-slate-600 hover:text-cyan-400" title="View Document"><Eye size={10}/></a>
                           </div>
                         </div>
                       ))}
@@ -306,69 +307,67 @@
                                 {msg.role === 'system' ? (
                                   <span className="text-slate-600 italic">[{new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}] {msg.text}</span>
                                 ) : (
-                                  <div className={`p-2 rounded ${msg.role === 'user' ? 'bg-slate-800/30' : 'bg-cyan-950/10 border-l border-cyan-800/40'}`}>
-                                    <span className={msg.role === 'user' ? "text-cyan-600 font-bold" : "text-cyan-400 font-bold"}>
-                                      {msg.role === 'user' ? 'User:' : `${msg.name} //`}
-                                    </span>
-                                    <span className="text-slate-300 ml-2 leading-relaxed">{msg.text}</span>
+                                  <div className={`p-2 rounded flex flex-col ${msg.role === 'user' ? 'bg-slate-800/30' : 'bg-cyan-950/10 border-l border-cyan-800/40'}`}>
+                                    <div>
+                                      <span className={msg.role === 'user' ? "text-cyan-600 font-bold" : "text-cyan-400 font-bold"}>
+                                        {msg.role === 'user' ? 'User:' : `${msg.name} //`}
+                                      </span>
+                                      <span className="text-slate-300 ml-2 leading-relaxed">{msg.text}</span>
+                                    </div>
+                                    {msg.thought && (
+                                       <div className="mt-2 p-2 bg-slate-900 border border-slate-700/50 rounded text-[9px] text-slate-400 font-mono whitespace-pre-wrap leading-relaxed shadow-inner">
+                                          <span className="text-yellow-600 font-bold tracking-widest uppercase mb-1 block">{'<inner_monologue>'}</span>
+                                          <span className="italic">{msg.thought}</span>
+                                       </div>
+                                    )}
                                   </div>
                                 )}
                               </div>
                             ))}
                             <div ref={messagesEndRef} />
                           </div>
-                          <form onSubmit={handleSendMessage} className="flex gap-2 bg-slate-950/40 p-1 rounded border border-slate-800 flex-none">
-                            <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Send mission instructions..." className="flex-1 bg-transparent p-2 text-xs focus:outline-none font-bold text-white placeholder-slate-600" />
+                          <form onSubmit={handleSendMessage} className="flex gap-2 bg-slate-950/40 p-1 rounded border border-slate-800 flex-none items-center">
+                            <button type="button" className="text-slate-500 p-2 hover:text-cyan-400 transition-all focus:outline-none"><Paperclip size={14} /></button>
+                            <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Wait for prompt or type query..." className="flex-1 bg-transparent p-2 text-xs focus:outline-none font-bold text-white placeholder-slate-600" />
+                            <button type="button" className="text-slate-500 p-2 hover:text-cyan-400 transition-all focus:outline-none" title="British Auto-Talking (Standby)"><Mic size={14} /></button>
                             <button type="submit" className="text-cyan-500 p-2 hover:bg-cyan-500 hover:text-black rounded transition-all"><Send size={14} /></button>
                           </form>
                         </div>
                       )}
 
-                      {/* KIDAZZLE TAB (Redesigned per audio) */}
+                      {/* KIDAZZLE TAB */}
                       {activeTab === 'KIDAZZLE' && (
                         <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
-                              <p className="text-[9px] text-slate-500 uppercase font-bold mb-1">DA Tags Metric Pipeline</p>
-                              <p className="text-xl font-bold text-cyan-400">14 Active DA Hooks</p>
+                              <p className="text-[9px] text-slate-500 uppercase font-bold mb-1">GHL Pipeline Opportunities</p>
+                              <p className="text-xl font-bold text-cyan-400">Active Syncing...</p>
                               <div className="mt-2 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-cyan-500 w-[82%]" />
+                                <div className="h-full bg-cyan-500 w-[100%] animate-pulse" />
                               </div>
                             </div>
                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex flex-col justify-center">
-                              <button className="w-full py-2 bg-yellow-600/10 border border-yellow-600/40 text-yellow-500 rounded text-[10px] hover:bg-yellow-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
-                                 <Clock size={12} /> Force Weekly Calculation
-                              </button>
+                              <a href="https://app.bullmight.com/v2/location/ZR2UvxPL2wlZNSvHjmJD/opportunities/list" target="_blank" className="w-full py-2 bg-cyan-600/10 border border-cyan-600/40 text-cyan-500 rounded text-[10px] hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
+                                 <ExternalLink size={12} /> Launch GHL Portal
+                              </a>
                             </div>
                           </div>
 
                           <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
                             <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
-                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> DA Pipeline (Sunday Sync)</h3>
-                              <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Data</span>
+                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Opportunity Pipeline Status</h3>
+                              <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Tracking</span>
                             </div>
                             <div className="p-2 space-y-2">
                               {[
-                                { weekEnd: 'Sun, Apr 12', tag: 'DA-SPRING', leads: 42, tours: 15, enrollments: 8, status: 'Active' },
-                                { weekEnd: 'Sun, Apr 05', tag: 'DA-Q1FIN', leads: 38, tours: 12, enrollments: 5, status: 'Closed' },
-                                { weekEnd: 'Sun, Mar 29', tag: 'DA-VANT', leads: 27, tours: 9, enrollments: 4, status: 'Closed' }
-                              ].map((week, i) => (
-                                <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-start sm:items-center">
-                                  <div className="flex-1 w-full">
-                                    <div className="flex justify-between items-center w-full">
-                                       <p className="text-xs font-bold text-slate-100 uppercase">{week.weekEnd}</p>
-                                       <span className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded ${week.status==='Active'?'bg-green-900/30 text-green-400 border border-green-800/50':'bg-slate-800/50 text-slate-500'}`}>{week.status}</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 mt-1 mb-2">
-                                      <span className="text-[9px] bg-slate-900 text-cyan-600 border border-cyan-900/30 px-1.5 py-0.5 rounded uppercase font-bold">{week.tag}</span>
-                                      <span className="text-[9px] text-slate-600 italic">Tracking Tag</span>
-                                    </div>
-                                    
-                                    <div className="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-800/50 text-[10px] text-slate-400">
-                                       <div className="flex flex-col"><span className="uppercase text-[8px] text-slate-600 tracking-wider">Leads In</span><span className="font-bold text-white text-sm">{week.leads}</span></div>
-                                       <div className="flex flex-col"><span className="uppercase text-[8px] text-slate-600 tracking-wider">Tours Booked</span><span className="font-bold text-white text-sm">{week.tours}</span></div>
-                                       <div className="flex flex-col"><span className="uppercase text-[8px] text-slate-600 tracking-wider">Enrollments</span><span className="font-bold text-cyan-400 text-sm">{week.enrollments}</span></div>
-                                    </div>
+                                { group: 'Intake Leads (New)', value: 177 },
+                                { group: 'Tours Scheduled & Completed', value: 23 },
+                                { group: 'Confirmed Enrollments (Won)', value: 0 }
+                              ].map((metric, i) => (
+                                <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-center">
+                                  <div className="flex-1 w-full flex justify-between items-center">
+                                     <span className="text-xs font-bold text-slate-200 uppercase">{metric.group}</span>
+                                     <span className="font-bold text-cyan-400 text-lg">{metric.value}</span>
                                   </div>
                                 </div>
                               ))}
@@ -396,21 +395,29 @@
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
                               <div className="flex items-center gap-2 mb-3 text-cyan-400 font-bold uppercase text-[10px]">
-                                <Mail size={14} /> Cold Email Delivery
+                                <Mail size={14} /> Global Email Status
                               </div>
-                              <div className="space-y-2">
-                                {emailDomains.map(d => (
-                                  <div key={d.domain} className="p-2 bg-slate-950/40 border border-slate-800/60 rounded">
-                                    <div className="flex justify-between text-[10px] mb-1">
-                                      <span className="text-slate-100 font-bold">{d.domain}</span>
-                                      <span className={d.status === 'Healthy' ? 'text-green-500' : 'text-yellow-500'}>{d.status}</span>
-                                    </div>
-                                    <div className="flex justify-between text-[9px] text-slate-500 uppercase font-bold">
-                                      <span>Sent: {d.sent}</span>
-                                      <span>Resp: {d.responses} ({Math.round((d.responses/d.sent)*100)}%)</span>
-                                    </div>
+                              <div className="space-y-4">
+                                <div>
+                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Total Dispatched</span><span>14,000+</span></div>
+                                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                    <div className="h-full bg-cyan-500 w-[100%]" />
                                   </div>
-                                ))}
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 text-center text-xs">
+                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
+                                     <p className="text-[8px] uppercase tracking-wider text-slate-500">Open Rate</p>
+                                     <p className="font-bold text-white mt-1">Pending Sync</p>
+                                  </div>
+                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
+                                     <p className="text-[8px] uppercase tracking-wider text-slate-500">Response Rate</p>
+                                     <p className="font-bold text-cyan-400 mt-1">Pending Sync</p>
+                                  </div>
+                                </div>
+                                <div className="p-2 border border-green-900/40 bg-green-950/20 rounded">
+                                  <p className="text-[8px] uppercase tracking-wider text-green-500 font-bold">Deliverability Health</p>
+                                  <p className="font-bold text-green-300 text-xs mt-1">99.8% - No Spam Bounding</p>
+                                </div>
                               </div>
                             </div>
 
