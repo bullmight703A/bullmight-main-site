@@ -316,7 +316,7 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'BRAIN', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
+                      {['CHAT', 'BRAIN', 'SEO', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -401,6 +401,81 @@
                                <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Live Neural Stream (Inner Monologue)</p>
                                <div className="bg-slate-950/50 p-2 border-l-2 border-cyan-800 rounded text-[10px] text-slate-300 font-mono whitespace-pre-wrap flex-1 overflow-y-auto shadow-inner">
                                    {brainLogs.thoughts || 'Waiting for thought intercept...'}
+                               </div>
+                           </div>
+                        </div>
+                      )}
+
+                      {/* SEO PROTOCOL TAB */}
+                      {activeTab === 'SEO' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-6 scrollbar-hide flex flex-col">
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0">
+                               <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                                  <span><Eye size={12} className="inline mr-2"/> Top Industry Keywords Radius</span>
+                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Local Falcon Grid</span>
+                               </p>
+                               <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden">
+                                   <table className="w-full text-left text-[10px]">
+                                      <thead className="bg-slate-900/80 text-slate-500 uppercase">
+                                          <tr>
+                                              <th className="p-2 font-bold pl-4">Target Keyword</th>
+                                              <th className="p-2 font-bold text-center">1 Mile Avg</th>
+                                              <th className="p-2 font-bold text-center">5 Mile Avg</th>
+                                              <th className="p-2 font-bold text-center">10 Mile Avg</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
+                                          <tr className="hover:bg-slate-800/30">
+                                              <td className="p-2 pl-4">childcare near me</td>
+                                              <td className="p-2 text-center text-green-400 font-bold">1.2</td>
+                                              <td className="p-2 text-center text-green-400">2.6</td>
+                                              <td className="p-2 text-center text-yellow-500">4.8</td>
+                                          </tr>
+                                          <tr className="hover:bg-slate-800/30">
+                                              <td className="p-2 pl-4">daycare decatur</td>
+                                              <td className="p-2 text-center text-green-400 font-bold">1.0</td>
+                                              <td className="p-2 text-center text-green-400">1.8</td>
+                                              <td className="p-2 text-center text-cyan-400">3.1</td>
+                                          </tr>
+                                          <tr className="hover:bg-slate-800/30">
+                                              <td className="p-2 pl-4">section 125 plan wimper</td>
+                                              <td className="p-2 text-center text-cyan-400 font-bold">--</td>
+                                              <td className="p-2 text-center text-cyan-400 font-bold">--</td>
+                                              <td className="p-2 text-center text-cyan-400 font-bold justify-center"><span className="bg-cyan-900/30 px-2 py-0.5 text-[9px] rounded">National Scale</span></td>
+                                          </tr>
+                                          <tr className="hover:bg-slate-800/30">
+                                              <td className="p-2 pl-4">financial literacy app</td>
+                                              <td className="p-2 text-center text-cyan-400 font-bold">--</td>
+                                              <td className="p-2 text-center text-cyan-400 font-bold">--</td>
+                                              <td className="p-2 text-center text-cyan-400 font-bold justify-center"><span className="bg-cyan-900/30 px-2 py-0.5 text-[9px] rounded">National Scale</span></td>
+                                          </tr>
+                                      </tbody>
+                                   </table>
+                               </div>
+                           </div>
+
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex-1 flex flex-col min-h-0">
+                               <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                                  <span><Zap size={12} className="inline mr-2"/> Night Protocol Tracker</span>
+                                  <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Pages Created & Indexed</span>
+                               </p>
+                               <div className="bg-slate-950/50 p-3 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-3 font-mono text-[10px]">
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/daycare-roswell-toddlers (Kidazzle)</span>
+                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/childcare-hampton-infants (Kidazzle)</span>
+                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/wimper-employer-tax-advantage (Wimper)</span>
+                                       <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded">CRAWLED_WAITING</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/section-125-calculators (Wimper)</span>
+                                       <span className="text-cyan-500 whitespace-nowrap bg-cyan-900/20 px-2 rounded">DISPATCHED</span>
+                                   </div>
                                </div>
                            </div>
                         </div>
