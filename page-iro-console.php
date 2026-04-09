@@ -80,6 +80,8 @@
           const [inputValue, setInputValue] = useState('');
           const [activeIframe, setActiveIframe] = useState(null);
           
+          const [systemHealth, setSystemHealth] = useState({ cpu: 0, ram: 0, diskC: 0, diskD: 0, network: 0 });
+
           const [localNotes, setLocalNotes] = useState(() => {
               try { return localStorage.getItem('iro_notes_save') || ''; } catch(e) { return ''; }
           });
@@ -117,6 +119,19 @@
           useEffect(() => {
               messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
           }, [chatMessages]);
+
+          useEffect(() => {
+              const fetchHealth = async () => {
+                  try {
+                      const res = await fetch(`${API_BASE}/api/system-health`);
+                      const data = await res.json();
+                      if(!data.error) setSystemHealth(data);
+                  } catch(e) {}
+              };
+              fetchHealth();
+              const interval = setInterval(fetchHealth, 5000);
+              return () => clearInterval(interval);
+          }, []);
 
           const restartAgent = async (id) => {
             const agName = agents.find(a => a.id === id).name;
@@ -447,16 +462,22 @@
                     <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6 font-bold">Health Dashboard</h2>
                     <div className="grid grid-cols-2 gap-y-10 gap-x-4 pb-4">
                       {[
-                        { label: 'CPU', val: 78, color: 'stroke-cyan-500' },
-                        { label: 'RAM', val: 42, color: 'stroke-green-500' },
-                        { label: 'DISK', val: 91, color: 'stroke-red-500' },
-                        { label: 'NET', val: 12, color: 'stroke-cyan-400' }
+                        { label: 'CPU', val: systemHealth.cpu, color: 'stroke-cyan-500' },
+                        { label: 'RAM', val: systemHealth.ram, color: 'stroke-green-500' },
+                        { label: 'DISK', val: systemHealth.diskC, val2: systemHealth.diskD, color: 'stroke-yellow-500', color2: 'stroke-red-500' },
+                        { label: 'NET', val: systemHealth.network, color: 'stroke-purple-500' }
                       ].map(gauge => (
                         <div key={gauge.label} className="flex flex-col items-center gap-2">
                           <div className="relative w-16 h-16 xl:w-20 xl:h-20">
                             <svg className="w-full h-full transform -rotate-90">
                               <circle cx="50%" cy="50%" r="36%" fill="none" stroke="currentColor" strokeWidth="3" className="text-slate-900" />
-                              <circle cx="50%" cy="50%" r="36%" fill="none" stroke="currentColor" strokeWidth="4" className={gauge.color} strokeDasharray={226.2} strokeDashoffset={226.2 - (gauge.val / 100) * 226.2} strokeLinecap="round" />
+                              <circle cx="50%" cy="50%" r="36%" fill="none" stroke="currentColor" strokeWidth="4" className={gauge.color} strokeDasharray={226.2} strokeDashoffset={226.2 - ((gauge.val || 0) / 100) * 226.2} strokeLinecap="round" />
+                              {gauge.val2 !== undefined && (
+                                <>
+                                  <circle cx="50%" cy="50%" r="24%" fill="none" stroke="currentColor" strokeWidth="3" className="text-slate-900" />
+                                  <circle cx="50%" cy="50%" r="24%" fill="none" stroke="currentColor" strokeWidth="3" className={gauge.color2} strokeDasharray={150.8} strokeDashoffset={150.8 - ((gauge.val2 || 0) / 100) * 150.8} strokeLinecap="round" />
+                                </>
+                              )}
                             </svg>
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
                               <span className="text-[11px] font-bold text-slate-100">{gauge.val}%</span>
