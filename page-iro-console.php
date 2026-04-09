@@ -8,371 +8,519 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRO Console - Bullmight</title>
+    <title>IRO Control Center</title>
+    <!-- Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            colors: {
-              cyber: {
-                dark: '#07090F',
-                panel: '#11131C',
-                subpanel: '#0B0D13',
-                highlight: '#1C1F2E',
-                border: '#2D3142',
-                cyan: '#00F0FF',
-                green: '#00FFA3',
-                pink: '#FF007A',
-                gray: '#8E8E93',
-                orange: '#F59E0B'
-              }
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
             }
           }
         }
       }
     </script>
+    <!-- React & ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        body { margin: 0; background-color: #07090F; color: #E2E8F0; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #2D3142; border-radius: 20px; }
+        body { 
+            margin: 0; 
+            background-color: #0a0f14; 
+            color: #E6EDF3; 
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body>
-    <div id="iro-root"></div>
+    <div id="root"></div>
+
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
+        const API_BASE = 'https://michigan-reader-clearing-ethernet.trycloudflare.com';
 
-        const icons = {
-            Terminal: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>,
-            Cpu: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>,
-            Refresh: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>,
-            Target: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>,
-            Users: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>,
-            BarChart: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>,
-            FileText: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>,
-            Image: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>,
-            Link: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>,
-            Send: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>,
-            Mic: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>,
-            Github: ({className}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-        };
+        // Custom Light SVG Icons based on Lucide
+        const IconBase = ({children, className="", size=18}) => (
+          <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
+        );
+        const RefreshCw = (p) => <IconBase {...p}><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></IconBase>;
+        const FileText = (p) => <IconBase {...p}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></IconBase>;
+        const Github = (p) => <IconBase {...p}><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></IconBase>;
+        const Send = (p) => <IconBase {...p}><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></IconBase>;
+        const ExternalLink = (p) => <IconBase {...p}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></IconBase>;
+        const Download = (p) => <IconBase {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></IconBase>;
+        const Eye = (p) => <IconBase {...p}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></IconBase>;
+        const TrendingUp = (p) => <IconBase {...p}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></IconBase>;
+        const Users = (p) => <IconBase {...p}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></IconBase>;
+        const Clock = (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></IconBase>;
+        const AlertCircle = (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></IconBase>;
+        const Phone = (p) => <IconBase {...p}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></IconBase>;
+        const Mail = (p) => <IconBase {...p}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></IconBase>;
+        const Tag = (p) => <IconBase {...p}><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></IconBase>;
+        const Video = (p) => <IconBase {...p}><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></IconBase>;
+        const Database = (p) => <IconBase {...p}><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></IconBase>;
+        const Layers = (p) => <IconBase {...p}><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 12 12 17 22 12"></polyline><polyline points="2 17 12 22 22 17"></polyline></IconBase>;
+        const Zap = (p) => <IconBase {...p}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></IconBase>;
+        const Search = (p) => <IconBase {...p}><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></IconBase>;
+        const FileBarChart = (p) => <IconBase {...p}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"></path><path d="M14 3v5h5M10 18v-4M14 18v-8M6 18v-6"></path></IconBase>;
+        const ShieldCheck = (p) => <IconBase {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></IconBase>;
+        const Crosshair = (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></IconBase>;
+        const X = (p) => <IconBase {...p}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></IconBase>;
 
-        const IROConsole = () => {
-          const [activeTab, setActiveTab] = useState('chat');
-          const [githubUrl, setGithubUrl] = useState('');
-          const [chatInput, setChatInput] = useState('');
-          const [docLink, setDocLink] = useState('');
-          const [isListening, setIsListening] = useState(false);
-          const [chatHistory, setChatHistory] = useState([
-            { sender: 'IRO', msg: 'Console initialized online. Agent fleet active and awaiting dispatch.' }
+        const App = () => {
+          const [activeTab, setActiveTab] = useState('CHAT');
+          const [inputValue, setInputValue] = useState('');
+          const [activeIframe, setActiveIframe] = useState(null);
+          
+          const [localNotes, setLocalNotes] = useState(() => {
+              try { return localStorage.getItem('iro_notes_save') || ''; } catch(e) { return ''; }
+          });
+          const handleNotesChange = (e) => {
+              setLocalNotes(e.target.value);
+              try { localStorage.setItem('iro_notes_save', e.target.value); } catch(e) {}
+          };
+
+          const [chatMessages, setChatMessages] = useState([
+            { role: 'system', text: 'Secure connection re-established via Cloudflare.' },
+            { role: 'user', text: '@IRO, check the GHL pipeline for the new tech leads.' },
+            { role: 'agent', text: 'Accessing GoHighLevel API... 14 new opportunities found.', name: 'IRO' },
           ]);
-          const [lessonStatus, setLessonStatus] = useState(null);
-          const [pendingErrors, setPendingErrors] = useState([]);
-          const [antiGravityCmds, setAntiGravityCmds] = useState([]);
-          const [seoData, setSeoData] = useState(null);
-          const [atlasIframe, setAtlasIframe] = useState(null);
-          const [auditInput, setAuditInput] = useState('');
+
+          const [agents, setAgents] = useState([
+            { id: 'iro', name: 'IRO', status: 'ONLINE & LISTENING', color: 'text-cyan-400', isRestarting: false },
+            { id: 'masterchef', name: 'MASTERCHEF', status: 'AWAITING TASK', color: 'text-yellow-400', isRestarting: false },
+            { id: 'volt', name: 'VOLT', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false },
+            { id: 'picasso', name: 'PICASSO', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false }
+          ]);
+
+          const seoLocations = [
+            { id: 1, name: 'Hampton', url: 'https://searchatlas.com/local-audit/custom?q=Hampton+Kidazzle' },
+            { id: 2, name: 'College Pk', url: 'https://searchatlas.com/local-audit/custom?q=College+Park+Kidazzle' },
+            { id: 3, name: 'West End', url: 'https://searchatlas.com/local-audit/custom?q=West+End+Kidazzle' },
+            { id: 4, name: 'Midtown', url: 'https://searchatlas.com/local-audit/custom?q=Midtown+Kidazzle' },
+            { id: 5, name: 'Decatur', url: 'https://searchatlas.com/local-audit/custom?q=Decatur+Kidazzle' },
+            { id: 6, name: 'Buckhead', url: 'https://searchatlas.com/local-audit/custom?q=Buckhead+Kidazzle' },
+            { id: 7, name: 'Roswell', url: 'https://searchatlas.com/local-audit/custom?q=Roswell+Kidazzle' },
+            { id: 8, name: 'Sandy Spr', url: 'https://searchatlas.com/local-audit/custom?q=Sandy+Springs+Kidazzle' },
+          ];
+
           const messagesEndRef = useRef(null);
 
           useEffect(() => {
               messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-          }, [chatHistory]);
+          }, [chatMessages]);
 
-          useEffect(() => {
-              const fetchData = async () => {
-                  try {
-                      // Fetch Telemetry from N8N webhook
-                      const res = await fetch('https://michigan-reader-clearing-ethernet.trycloudflare.com/api/lesson-plan-status').catch(() => null);
-                      if (res && res.ok) {
-                         const data = await res.json();
-                         setLessonStatus(data);
-                      }
-                      
-                      const errRes = await fetch('https://michigan-reader-clearing-ethernet.trycloudflare.com/api/errors').catch(() => null);
-                      if (errRes && errRes.ok) {
-                          const data = await errRes.json();
-                          setPendingErrors(Array.isArray(data) ? data : []);
-                      }
+          const restartAgent = async (id) => {
+            const agName = agents.find(a => a.id === id).name;
+            setAgents(prev => prev.map(a => a.id === id ? { ...a, isRestarting: true, status: 'REBOOTING...' } : a));
+            try {
+                await fetch(`${API_BASE}/api/restart-agent`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ agent: agName })
+                });
+            } catch(e) {}
+            setTimeout(() => {
+              setAgents(prev => prev.map(a => a.id === id ? { ...a, isRestarting: false, status: 'ONLINE & READY' } : a));
+            }, 2000);
+          };
 
-                      const agRes = await fetch('https://michigan-reader-clearing-ethernet.trycloudflare.com/api/ag-status').catch(() => null);
-                      if (agRes && agRes.ok) {
-                          const data = await agRes.json();
-                          setAntiGravityCmds(data.commands || []);
-                      }
-                  } catch(e) {}
-              };
+          const handleSendMessage = async (e) => {
+            e.preventDefault();
+            if (!inputValue.trim()) return;
+            const txt = inputValue;
+            setChatMessages(prev => [...prev, { role: 'user', text: txt }]);
+            setInputValue('');
+            
+            // Temporary indicator
+            setChatMessages(prev => [...prev, { role: 'system', text: 'Executing query on internal vectors...', temp: true }]);
 
-              fetchData();
-              const intv = setInterval(fetchData, 5000);
-              return () => clearInterval(intv);
-          }, []);
-
-          const handleSendChat = async () => {
-             const txt = chatInput;
-             if (!txt.trim()) return;
-             setChatHistory(prev => [...prev, { sender: 'You', msg: txt }]);
-             setChatInput('');
-             
-             try {
-                const res = await fetch('https://michigan-reader-clearing-ethernet.trycloudflare.com/api/chat', {
+            try {
+                const res = await fetch(`${API_BASE}/api/chat`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ message: txt })
                 });
                 const data = await res.json();
-                setChatHistory(prev => [...prev, { sender: 'IRO', msg: data.reply || '[Network Error]' }]);
                 
-                if ('speechSynthesis' in window) {
-                   const utterance = new SpeechSynthesisUtterance(data.reply);
-                   utterance.pitch = 0.9;
-                   utterance.rate = 1.05;
-                   window.speechSynthesis.speak(utterance);
-                }
-             } catch (e) {
-                setChatHistory(prev => [...prev, { sender: 'IRO', msg: '[System offline or Cloudflare tunnel broken]' }]);
-             }
+                // Add reply, filter out temp
+                setChatMessages(prev => {
+                    const newArr = prev.filter(m => !m.temp);
+                    return [...newArr, { role: 'agent', name: 'IRO', text: data.reply || '[Network Error]' }];
+                });
+            } catch(err) {
+                setChatMessages(prev => prev.filter(m => !m.temp));
+                setChatMessages(prev => [...prev, { role: 'system', text: '[System error connecting to deep brain]' }]);
+            }
           };
 
-          const handleRunAudit = () => {
-             if(!auditInput.trim()) return;
-             setAtlasIframe(`https://searchatlas.com/local-audit/custom?q=${encodeURIComponent(auditInput)}`);
-             setAuditInput('');
-          };
+          const recoveredLeads = [
+            { name: 'Sarah Connor', phone: '+1 (555) 012-3456', email: 's.connor@cyberdyne.io', tags: ['Hot Lead', 'Enterprise'], status: 'Follow-up' },
+            { name: 'Rick Deckard', phone: '+1 (555) 987-6543', email: 'deckard@blade.run', tags: ['Tech', 'Inquiry'], status: 'Nurture' }
+          ];
+
+          const emailDomains = [
+            { domain: 'outreach.iro-control.com', sent: 1240, responses: 42, health: '98%', status: 'Healthy' },
+            { domain: 'leads.iro-ops.net', sent: 890, responses: 12, health: '82%', status: 'Warm' },
+          ];
 
           return (
-            <div className="min-h-screen bg-cyber-dark text-[#E2E8F0] p-6 font-mono tracking-tight selection:bg-cyber-cyan/30">
-              
-              {/* Header */}
-              <header className="flex items-center justify-between border-b border-cyber-cyan/20 pb-4 mb-6">
-                <div className="flex items-center space-x-3">
-                  <icons.Terminal className="text-cyber-cyan w-6 h-6 animate-pulse" />
-                  <h1 className="text-2xl font-bold tracking-widest text-cyber-cyan">IRO_CONSOLE 5.7</h1>
+            <div className="min-h-screen bg-[#0a0f14] text-slate-300 font-mono p-2 md:p-4 selection:bg-cyan-500/30 flex flex-col max-h-screen overflow-hidden">
+              {/* HEADER */}
+              <header className="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/30 pb-4 mb-4 gap-4 flex-none">
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                  <div className="w-3 h-3 rounded-full border border-cyan-400 animate-pulse shadow-[0_0_8px_cyan]" />
+                  <h1 className="text-lg md:text-xl font-bold tracking-[0.2em] md:tracking-[0.3em] text-cyan-400 uppercase truncate">IRO Control Center</h1>
                 </div>
-                
-                {/* Embedded GitHub Repo Linker */}
-                <div className="flex-grow max-w-xl mx-8 hidden lg:flex space-x-2">
-                    <div className="flex-grow bg-cyber-panel border border-cyber-border rounded flex items-center px-3">
-                      <icons.Github className="w-4 h-4 text-cyber-gray mr-2" />
-                      <input 
-                        type="text" 
-                        value={githubUrl}
-                        onChange={(e) => setGithubUrl(e.target.value)}
-                        placeholder="Paste Repo URL to Tie Directly Into IRO Chat..." 
-                        className="bg-transparent border-none outline-none w-full text-sm py-2 text-[#E2E8F0] placeholder-cyber-gray"
-                      />
-                    </div>
-                    <button className="bg-cyber-cyan text-cyber-subpanel font-bold px-4 rounded hover:bg-white text-xs">SYNC AGENT</button>
-                </div>
-
-                <div className="flex items-center space-x-2 bg-[#052E20] text-cyber-green px-3 py-1 rounded-sm border border-cyber-green/30 text-xs">
-                  <span className="w-2 h-2 rounded-full bg-cyber-green animate-pulse"></span>
-                  <span>SYSTEM SECURE</span>
+                <div className="flex items-center justify-between md:justify-end gap-4 md:gap-6 text-[10px] tracking-widest w-full md:w-auto">
+                  <div className="flex items-center gap-2 px-3 py-1 rounded bg-cyan-950/20 border border-cyan-400/20 text-cyan-400 font-bold uppercase whitespace-nowrap">
+                    System: Secure
+                  </div>
+                  <button className="text-slate-500 hover:text-white transition-colors uppercase font-bold">Exit_Cmd</button>
                 </div>
               </header>
 
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="grid grid-cols-12 gap-4 md:gap-6 flex-1 min-h-0">
                 
-                {/* Left Column (Agents & Errors) */}
-                <div className="lg:col-span-3 space-y-6">
-                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg">
-                    <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
-                      <icons.Cpu className="w-4 h-4 mr-2" /> AGENTS
-                    </h2>
-                    <div className="space-y-4">
-                      {[
-                        { name: 'IRO', status: 'ONLINE & LISTENING', color: 'text-cyber-green' },
-                        { name: 'MASTERCHEF', status: 'AWAITING TASK', color: 'text-cyber-orange' },
-                        { name: 'VOLT', status: 'WHATSAPP SYNCED', color: 'text-cyber-gray' },
-                        { name: 'PICASSO', status: 'STNDBY_MODE', color: 'text-cyber-gray' }
-                      ].map(agent => (
-                        <div key={agent.name} className="flex justify-between items-center p-3 bg-cyber-subpanel rounded border border-cyber-border hover:border-cyber-cyan/30 transition-colors cursor-pointer">
-                          <span className="font-bold text-sm">{agent.name}</span>
-                          <span className={`text-[10px] ${agent.color} flex items-center`}><icons.Refresh className="w-3 h-3 mr-1"/> {agent.status}</span>
+                {/* LEFT COLUMN: AGENTS & DOCUMENTS */}
+                <div className="col-span-12 lg:col-span-3 flex flex-col gap-4 order-2 lg:order-1 h-full min-h-0 overflow-hidden">
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-none">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Agent Fleet</h2>
+                      <button className="text-[9px] bg-cyan-600/20 border border-cyan-500/40 text-cyan-400 px-2 py-1 rounded hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase">Restart All</button>
+                    </div>
+                    <div className="space-y-2">
+                      {agents.map(agent => (
+                        <div key={agent.id} className="flex justify-between items-center py-2 px-3 bg-slate-950/40 border border-slate-800/40 rounded">
+                          <span className="text-xs font-bold tracking-wider">{agent.name}</span>
+                          <div className="flex items-center gap-3">
+                            <button onClick={() => restartAgent(agent.id)} className={`p-1 text-slate-500 hover:text-cyan-400 transition-colors ${agent.isRestarting ? 'animate-spin text-cyan-400' : ''}`}><RefreshCw size={12} /></button>
+                            <span className={`text-[9px] font-bold ${agent.color} uppercase tracking-tighter`}>{agent.status}</span>
+                          </div>
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </section>
 
-                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg mt-6">
-                    <h2 className="text-sm font-bold text-cyber-gray mb-4 flex items-center">
-                      <icons.FileText className="w-4 h-4 mr-2" /> DOCS & EXPORTS (VAULT)
-                    </h2>
-                    <div className="space-y-2">
-                       <div className="flex justify-between items-center p-2 bg-cyber-subpanel border border-cyber-border rounded">
-                          <span className="text-xs text-cyber-cyan flex items-center"><icons.Link className="w-3 h-3 mr-1"/> Kidazzle_Brand_Guide.pdf</span>
-                          <button className="text-[10px] bg-cyber-highlight px-2 py-1 rounded hover:text-white">DL</button>
-                       </div>
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-none">
+                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Activity Monitor</h2>
+                    <div className="space-y-3">
+                      <div className="p-2 rounded border border-slate-800 bg-slate-950/40">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-2 h-2 rounded-full bg-cyan-400" />
+                          <span className="text-[11px] font-bold uppercase text-white">IRO: Deep Brain</span>
+                        </div>
+                        <p className="text-[9px] text-slate-500">Processing TN/FL regulation ruleset...</p>
+                      </div>
+                      <div className="p-2 rounded border border-red-900/50 bg-red-950/10 relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-red-600/10 animate-pulse pointer-events-none" />
+                        <div className="relative z-10">
+                          <div className="flex items-center gap-2 mb-1">
+                            <AlertCircle size={10} className="text-red-500 animate-bounce" />
+                            <span className="text-[11px] text-red-200 uppercase font-bold">Volt: Loop Warning</span>
+                          </div>
+                          <p className="text-[9px] text-red-400/80 uppercase font-bold tracking-tighter">Execution: 08:42s - Bottleneck</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </section>
+
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 overflow-hidden flex flex-col min-h-0">
+                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 flex-none">G-Drive & Docs Interlink</h2>
+                    <div className="space-y-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
+                      {[
+                        { name: 'IRO_Master_Logic.gdoc', type: 'PDF' },
+                        { name: 'Kidazzle_Rules_Export.gsheet', type: 'CSV' },
+                        { name: 'Architecture_Mapping.png', type: 'IMG' },
+                        { name: 'Manifest_Sync_Err.txt', type: 'TXT', error: true }
+                      ].map((doc, i) => (
+                        <div key={i} className="flex items-center justify-between p-2 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group">
+                          <div className="flex items-center gap-2 overflow-hidden flex-1">
+                            <FileText size={12} className={doc.error ? "text-red-500" : "text-cyan-600"} />
+                            <span className="text-[10px] truncate text-slate-400 group-hover:text-slate-200">{doc.name}</span>
+                          </div>
+                          <div className="flex gap-2">
+                            <button className="text-slate-600 hover:text-green-500" title="Sync to G-Drive"><RefreshCw size={10}/></button>
+                            <button className="text-slate-600 hover:text-cyan-400" title="Open Google Docs"><ExternalLink size={10}/></button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
                 </div>
 
-                {/* Center Column (Chat & Dashboards) */}
-                <div className="lg:col-span-6 flex flex-col space-y-6">
-                  
-                  {/* Chat Top Nav Tabs */}
-                  <div className="flex space-x-1 border-b border-cyber-border">
-                      <button onClick={() => setActiveTab('chat')} className={`px-4 py-2 text-xs font-bold ${activeTab === 'chat' ? 'text-cyber-cyan border-b-2 border-cyber-cyan' : 'text-cyber-gray'}`}>INTERACTIVE CONVERSATION</button>
-                      <button onClick={() => setActiveTab('kidazzle')} className={`px-4 py-2 text-xs font-bold ${activeTab === 'kidazzle' ? 'text-cyber-cyan border-b-2 border-cyber-cyan' : 'text-cyber-gray'}`}>KIDAZZLE DA PIPELINE</button>
-                      <button onClick={() => setActiveTab('wimper')} className={`px-4 py-2 text-xs font-bold ${activeTab === 'wimper' ? 'text-cyber-cyan border-b-2 border-cyber-cyan' : 'text-cyber-gray'}`}>WIMPER B2B</button>
-                      <button onClick={() => setActiveTab('notes')} className={`px-4 py-2 text-xs font-bold ${activeTab === 'notes' ? 'text-cyber-cyan border-b-2 border-cyber-cyan' : 'text-cyber-gray'}`}>NOTES & GITHUB</button>
-                  </div>
+                {/* MIDDLE COLUMN: INPUT & EXTENDED CHAT */}
+                <div className="col-span-12 lg:col-span-6 flex flex-col gap-4 order-1 lg:order-2 h-full min-h-0 overflow-hidden">
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-3 flex-none">
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
+                      <label className="text-[9px] font-bold text-slate-500 uppercase whitespace-nowrap self-start sm:self-center">GitHub Repo:</label>
+                      <div className="relative flex-1 w-full">
+                        <Github size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
+                        <input type="text" placeholder="Paste URL..." className="w-full bg-slate-950/60 border border-slate-800 rounded py-1.5 pl-9 text-[11px] focus:outline-none focus:border-cyan-500 text-slate-100" />
+                      </div>
+                      <button className="w-full sm:w-auto bg-cyan-600 hover:bg-cyan-500 text-black font-bold py-1.5 px-4 rounded text-[10px] uppercase transition-all shadow-[0_0_10px_rgba(34,211,238,0.2)] active:scale-95">Sync</button>
+                    </div>
+                  </section>
 
-                  <div className="bg-cyber-panel border border-cyber-border flex-grow rounded-md shadow-lg flex flex-col min-h-[400px]">
+                  {/* Dynamic Middle Area Box */}
+                  <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
+                    <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
+                      {['CHAT', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
+                        <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
+                          {tab}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="flex-1 relative bg-slate-950/10 overflow-hidden min-h-0">
                       
                       {/* CHAT TAB */}
-                      {activeTab === 'chat' && (
-                        <div className="flex flex-col flex-grow p-4 bg-cyber-subpanel">
-                          <div className="flex-1 min-h-0 overflow-y-auto space-y-4 mb-4 custom-scrollbar pr-2">
-                            {chatHistory.map((chat, idx) => (
-                              <div key={idx} className={`flex ${chat.sender === 'You' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`p-3 rounded-lg max-w-[80%] ${chat.sender === 'You' ? 'bg-cyber-highlight border border-cyber-border' : 'bg-cyber-cyan/10 border border-cyber-cyan/30'}`}>
-                                  <span className="text-xs font-bold block mb-1" style={{ color: chat.sender === 'You' ? '#8E8E93' : '#00F0FF' }}>{chat.sender}</span>
-                                  <p className="text-sm break-words">{chat.msg}</p>
-                                </div>
+                      {activeTab === 'CHAT' && (
+                        <div className="h-full flex flex-col p-4">
+                          <div className="flex-1 overflow-y-auto space-y-4 mb-4 scrollbar-hide pr-2">
+                            {chatMessages.map((msg, i) => (
+                              <div key={i} className="text-[11px] animate-in fade-in slide-in-from-bottom-1 duration-300">
+                                {msg.role === 'system' ? (
+                                  <span className="text-slate-600 italic">[{new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}] {msg.text}</span>
+                                ) : (
+                                  <div className={`p-2 rounded ${msg.role === 'user' ? 'bg-slate-800/30' : 'bg-cyan-950/10 border-l border-cyan-800/40'}`}>
+                                    <span className={msg.role === 'user' ? "text-cyan-600 font-bold" : "text-cyan-400 font-bold"}>
+                                      {msg.role === 'user' ? 'User:' : `${msg.name} //`}
+                                    </span>
+                                    <span className="text-slate-300 ml-2 leading-relaxed">{msg.text}</span>
+                                  </div>
+                                )}
                               </div>
                             ))}
                             <div ref={messagesEndRef} />
                           </div>
-                          <div className="pt-3 border-t border-cyber-border space-y-3">
-                            <div className="flex space-x-2">
-                                <button className="bg-cyber-highlight border border-cyber-border px-3 rounded text-cyber-gray hover:text-white"><icons.FileText className="w-4 h-4" /></button>
-                                <input 
-                                  type="text" 
-                                  value={chatInput}
-                                  onChange={(e) => setChatInput(e.target.value)}
-                                  onKeyDown={(e) => e.key === 'Enter' && handleSendChat()}
-                                  placeholder="Talk to IRO..." 
-                                  className="flex-grow bg-cyber-panel border border-cyber-border rounded px-4 py-3 text-sm focus:outline-none focus:border-cyber-cyan/50"
-                                />
-                                <button className="bg-cyber-pink px-4 py-2 rounded text-white flex items-center justify-center"><icons.Mic className="w-4 h-4" /></button>
-                                <button onClick={handleSendChat} className="bg-cyber-cyan text-cyber-subpanel font-bold px-6 rounded hover:bg-white text-sm">EXECUTE</button>
+                          <form onSubmit={handleSendMessage} className="flex gap-2 bg-slate-950/40 p-1 rounded border border-slate-800 flex-none">
+                            <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Send mission instructions..." className="flex-1 bg-transparent p-2 text-xs focus:outline-none font-bold text-white placeholder-slate-600" />
+                            <button type="submit" className="text-cyan-500 p-2 hover:bg-cyan-500 hover:text-black rounded transition-all"><Send size={14} /></button>
+                          </form>
+                        </div>
+                      )}
+
+                      {/* KIDAZZLE TAB (Redesigned per audio) */}
+                      {activeTab === 'KIDAZZLE' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
+                              <p className="text-[9px] text-slate-500 uppercase font-bold mb-1">DA Tags Metric Pipeline</p>
+                              <p className="text-xl font-bold text-cyan-400">14 Active DA Hooks</p>
+                              <div className="mt-2 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-cyan-500 w-[82%]" />
+                              </div>
+                            </div>
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex flex-col justify-center">
+                              <button className="w-full py-2 bg-yellow-600/10 border border-yellow-600/40 text-yellow-500 rounded text-[10px] hover:bg-yellow-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
+                                 <Clock size={12} /> Force Weekly Calculation
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
+                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
+                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> DA Pipeline (Sunday Sync)</h3>
+                              <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Data</span>
+                            </div>
+                            <div className="p-2 space-y-2">
+                              {[
+                                { weekEnd: 'Sun, Apr 12', tag: 'DA-SPRING', leads: 42, tours: 15, enrollments: 8, status: 'Active' },
+                                { weekEnd: 'Sun, Apr 05', tag: 'DA-Q1FIN', leads: 38, tours: 12, enrollments: 5, status: 'Closed' },
+                                { weekEnd: 'Sun, Mar 29', tag: 'DA-VANT', leads: 27, tours: 9, enrollments: 4, status: 'Closed' }
+                              ].map((week, i) => (
+                                <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-start sm:items-center">
+                                  <div className="flex-1 w-full">
+                                    <div className="flex justify-between items-center w-full">
+                                       <p className="text-xs font-bold text-slate-100 uppercase">{week.weekEnd}</p>
+                                       <span className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded ${week.status==='Active'?'bg-green-900/30 text-green-400 border border-green-800/50':'bg-slate-800/50 text-slate-500'}`}>{week.status}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-1 mb-2">
+                                      <span className="text-[9px] bg-slate-900 text-cyan-600 border border-cyan-900/30 px-1.5 py-0.5 rounded uppercase font-bold">{week.tag}</span>
+                                      <span className="text-[9px] text-slate-600 italic">Tracking Tag</span>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-slate-800/50 text-[10px] text-slate-400">
+                                       <div className="flex flex-col"><span className="uppercase text-[8px] text-slate-600 tracking-wider">Leads In</span><span className="font-bold text-white text-sm">{week.leads}</span></div>
+                                       <div className="flex flex-col"><span className="uppercase text-[8px] text-slate-600 tracking-wider">Tours Booked</span><span className="font-bold text-white text-sm">{week.tours}</span></div>
+                                       <div className="flex flex-col"><span className="uppercase text-[8px] text-slate-600 tracking-wider">Enrollments</span><span className="font-bold text-cyan-400 text-sm">{week.enrollments}</span></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
                         </div>
                       )}
 
-                      {/* KIDAZZLE DA TAB */}
-                      {activeTab === 'kidazzle' && (
-                        <div className="p-4 bg-cyber-subpanel flex-grow space-y-4">
-                           <h3 className="text-sm font-bold text-cyber-cyan mb-4">DA TAG PIPELINE & N8N AUTOMATION</h3>
-                           <div className="grid grid-cols-4 gap-2">
-                               {['Hampton', 'West End', 'College Park', 'Summit', 'Memphis', 'Miami', 'AFC', 'CP Infant'].map(loc => (
-                                 <div key={loc} className="p-3 bg-cyber-highlight border border-cyber-border rounded text-center">
-                                    <span className="text-xs text-white block truncate">{loc}</span>
-                                    <span className="text-[10px] text-cyber-gray mt-1 block">Awaiting DA Tag</span>
-                                 </div>
-                               ))}
-                           </div>
-                           
-                           {/* Lesson Plan Automation Feed updated! */}
-                           <div className="mt-8 border-t border-cyber-border pt-4">
-                              <h3 className="text-sm font-bold text-cyber-gray mb-3 flex items-center"><icons.FileText className="w-4 h-4 mr-2" /> PROCESSED LESSON PLANS (N8N FEED)</h3>
-                              {lessonStatus ? (
-                                  <div className="flex justify-between items-center bg-[#052E20] border border-cyber-green p-3 rounded">
-                                     <span className="text-sm font-bold text-white">{lessonStatus.location || 'Routing...'}</span>
-                                     <span className="text-xs text-cyber-green">{lessonStatus.status || 'Active'} - Week: {lessonStatus.week || 'N/A'}</span>
-                                  </div>
-                              ) : (
-                                  <div className="text-xs text-cyber-pink bg-cyber-pink/10 border border-cyber-pink p-3 rounded">
-                                     AWAITING PAYLOAD FROM N8N WEBHOOK
-                                  </div>
-                              )}
-                           </div>
-                        </div>
-                      )}
+                      {/* WIMPER TAB */}
+                      {activeTab === 'WIMPER' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
+                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row justify-between items-center gap-4">
+                            <div className="flex items-center gap-3">
+                              <FileBarChart size={24} className="text-cyan-500" />
+                              <div>
+                                <h3 className="text-xs font-bold text-slate-200 uppercase">Wimper Tech EOD Summary</h3>
+                                <p className="text-[9px] text-slate-500 uppercase">Status: Awaiting Final Validation</p>
+                              </div>
+                            </div>
+                            <button className="w-full sm:w-auto text-[9px] bg-cyan-600/10 border border-cyan-600/40 text-cyan-400 px-4 py-2 rounded hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
+                               <Clock size={12} /> Generate Tech EOD
+                            </button>
+                          </div>
 
-                      {/* WIMPER B2B TAB */}
-                      {activeTab === 'wimper' && (
-                        <div className="p-4 bg-cyber-subpanel flex-grow space-y-4">
-                           <h3 className="text-sm font-bold text-cyber-cyan mb-4">WIMPER PIPELINE</h3>
-                           <div className="p-4 border border-cyber-border rounded bg-cyber-highlight">
-                              <span className="text-xs text-cyber-gray block mb-1">Cold Email Campaign</span>
-                              <span className="text-lg font-bold text-white">Active</span>
-                           </div>
-                        </div>
-                      )}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
+                              <div className="flex items-center gap-2 mb-3 text-cyan-400 font-bold uppercase text-[10px]">
+                                <Mail size={14} /> Cold Email Delivery
+                              </div>
+                              <div className="space-y-2">
+                                {emailDomains.map(d => (
+                                  <div key={d.domain} className="p-2 bg-slate-950/40 border border-slate-800/60 rounded">
+                                    <div className="flex justify-between text-[10px] mb-1">
+                                      <span className="text-slate-100 font-bold">{d.domain}</span>
+                                      <span className={d.status === 'Healthy' ? 'text-green-500' : 'text-yellow-500'}>{d.status}</span>
+                                    </div>
+                                    <div className="flex justify-between text-[9px] text-slate-500 uppercase font-bold">
+                                      <span>Sent: {d.sent}</span>
+                                      <span>Resp: {d.responses} ({Math.round((d.responses/d.sent)*100)}%)</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
 
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
+                              <div className="flex items-center gap-2 mb-3 text-yellow-500 font-bold uppercase text-[10px]">
+                                <Search size={14} /> Scraper Intelligence
+                              </div>
+                              <div className="space-y-3">
+                                <div>
+                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Active Progress</span><span>72%</span></div>
+                                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                    <div className="h-full bg-yellow-500 w-[72%] shadow-[0_0_8px_orange]" />
+                                  </div>
+                                </div>
+                                <div className="bg-slate-950/60 p-2 rounded text-[9px] text-slate-500 border-l-2 border-yellow-600">
+                                   [INF] Extraction: LinkedIn-Lead-Pool-B
+                                   <br />[RES] 4,201 records indexed
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       {/* NOTES TAB */}
-                      {activeTab === 'notes' && (
-                        <div className="p-4 bg-cyber-subpanel flex-grow space-y-4">
-                           <h3 className="text-sm font-bold text-cyber-cyan mb-4">SYSTEM NOTES & REPOSITORIES</h3>
-                           <div className="text-xs text-cyber-gray">Ready to document next sprint updates...</div>
+                      {activeTab === 'NOTES' && (
+                        <div className="p-4 h-full flex flex-col">
+                          <div className="bg-slate-900/40 p-3 border border-slate-800 flex flex-col flex-1 rounded overflow-hidden">
+                             <div className="flex justify-between items-center mb-3">
+                               <h3 className="text-[10px] text-cyan-500 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Local Scratchpad</h3>
+                               <span className="text-[8px] text-slate-500 uppercase">Auto-Saves to Browser</span>
+                             </div>
+                             <textarea 
+                               className="w-full flex-grow bg-slate-950/50 border border-slate-800/60 rounded p-4 text-slate-300 text-[11px] focus:outline-none focus:border-cyan-800 scrollbar-hide font-mono leading-loose tracking-wide resize-none" 
+                               placeholder="Jot down pipeline shifts, active hook thoughts, or Wimper tech ops here..."
+                               value={localNotes}
+                               onChange={handleNotesChange}
+                             />
+                          </div>
                         </div>
                       )}
-                  </div>
+                    </div>
+                  </section>
                 </div>
 
-                {/* Right Column (CPU, Dynamic Search Atlas) */}
-                <div className="lg:col-span-3 space-y-6">
-                  
-                  {/* CPU/RAM Block */}
-                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg items-center justify-center">
-                     <span className="text-xs font-bold text-cyber-gray mb-4 self-start">SYSTEM VITALS</span>
-                     <div className="w-32 h-32 rounded-full border-4 border-cyber-cyan/20 flex flex-col items-center justify-center relative">
-                        <div className="absolute inset-0 border-4 border-cyber-cyan rounded-full" style={{clipPath: 'polygon(0 0, 100% 0, 100% 15%, 0 15%)'}}></div>
-                        <span className="text-2xl font-bold text-white">14%</span>
-                        <span className="text-[10px] text-cyber-gray">CPU CORE</span>
-                     </div>
-                     <div className="w-full flex justify-between mt-6 text-xs border-t border-cyber-border pt-4">
-                        <span className="text-cyber-green flex items-center"><span className="w-2 h-2 rounded-full bg-cyber-green mr-2"></span>OS C: (INTERNAL)</span>
-                        <span className="text-cyber-cyan flex items-center"><span className="w-2 h-2 rounded-full bg-cyber-cyan mr-2"></span>DATA D: (PASSPORT)</span>
-                     </div>
-                  </div>
-
-                  {/* Dynamic GMB Audit */}
-                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 flex flex-col shadow-lg">
-                    <h2 className="text-sm font-bold text-cyber-gray mb-4">SEO COMMAND CENTER</h2>
-                    <div className="flex flex-col space-y-3">
-                      <input 
-                         type="text" 
-                         value={auditInput}
-                         onChange={(e) => setAuditInput(e.target.value)}
-                         placeholder="Paste GMB URL or Name..." 
-                         className="bg-cyber-subpanel border border-cyber-border rounded px-3 py-2 text-xs text-white outline-none"
-                      />
-                      <button onClick={handleRunAudit} className="bg-cyber-cyan text-cyber-subpanel font-bold py-2 rounded text-xs">AUDIT GBP</button>
-                    </div>
-
-                    <div className="mt-4 border-t border-cyber-border pt-4">
-                        <span className="text-[10px] text-cyber-gray block mb-2">GBP RANK (5 MILE)</span>
-                        <div className="grid grid-cols-2 gap-2">
-                           {['Hampton', 'West End', 'Coll. PK', 'Summit', 'ATL Federal', 'Memphis', 'Miami', 'Corporate'].map(loc => (
-                             <div key={loc} className="p-2 bg-cyber-subpanel border border-cyber-border rounded">
-                                <span className="text-[10px] text-[#E2E8F0] block truncate">{loc}</span>
-                                <span className={loc === 'Corporate' ? "text-[8px] text-cyber-orange" : "text-[8px] text-cyber-green"}>
-                                   {loc === 'Corporate' ? 'AWAITING' : 'LIVE: ONLINE'}
-                                </span>
-                             </div>
-                           ))}
+                {/* RIGHT COLUMN: SYSTEM HEALTH (CIRCLES) & SEO MATRIX */}
+                <div className="col-span-12 lg:col-span-3 flex flex-col gap-4 order-3 h-full min-h-0 overflow-hidden">
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-none">
+                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6 font-bold">Health Dashboard</h2>
+                    <div className="grid grid-cols-2 gap-y-10 gap-x-4 pb-4">
+                      {[
+                        { label: 'CPU', val: 78, color: 'stroke-cyan-500' },
+                        { label: 'RAM', val: 42, color: 'stroke-green-500' },
+                        { label: 'DISK', val: 91, color: 'stroke-red-500' },
+                        { label: 'NET', val: 12, color: 'stroke-cyan-400' }
+                      ].map(gauge => (
+                        <div key={gauge.label} className="flex flex-col items-center gap-2">
+                          <div className="relative w-16 h-16 xl:w-20 xl:h-20">
+                            <svg className="w-full h-full transform -rotate-90">
+                              <circle cx="50%" cy="50%" r="36%" fill="none" stroke="currentColor" strokeWidth="3" className="text-slate-900" />
+                              <circle cx="50%" cy="50%" r="36%" fill="none" stroke="currentColor" strokeWidth="4" className={gauge.color} strokeDasharray={226.2} strokeDashoffset={226.2 - (gauge.val / 100) * 226.2} strokeLinecap="round" />
+                            </svg>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                              <span className="text-[11px] font-bold text-slate-100">{gauge.val}%</span>
+                              <span className="text-[8px] text-slate-600 font-bold uppercase tracking-tighter">{gauge.label}</span>
+                            </div>
+                          </div>
                         </div>
+                      ))}
                     </div>
-                  </div>
+                  </section>
 
-                  {/* Anti-Gravity Terminal Relay */}
-                  <div className="bg-cyber-panel border border-cyber-border rounded-md p-5 shadow-lg">
-                    <h2 className="text-sm font-bold text-cyber-cyan mb-3 flex items-center">
-                      <icons.Terminal className="w-4 h-4 mr-2" /> ANTI-GRAVITY BRIDGE
-                    </h2>
-                    <div className="text-xs text-cyber-gray p-3 border border-cyber-border border-dashed rounded bg-cyber-subpanel">
-                       Awaiting your explicit approval to execute commands.
-                    </div>
-                  </div>
-
+                  {/* SEO LOCATION MATRIX REPLACING QUICK TOOLS */}
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 flex flex-col overflow-hidden">
+                     <div className="flex justify-between items-center mb-4">
+                       <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">SEO Location Matrix</h2>
+                       <Search size={10} className="text-cyan-600" />
+                     </div>
+                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
+                       {seoLocations.map(loc => (
+                         <button key={loc.id} onClick={() => setActiveIframe(loc)} className="flex items-center justify-between p-2 text-[9px] font-bold uppercase bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 hover:text-cyan-400 hover:bg-cyan-900/20 tracking-tighter text-slate-400 transition-all group">
+                           <span className="truncate">{loc.name}</span>
+                           <Crosshair size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                         </button>
+                       ))}
+                     </div>
+                  </section>
                 </div>
               </div>
               
-              {/* iFrame Logic */}
-              {atlasIframe && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-                   <div className="bg-cyber-panel border border-cyber-cyan w-full max-w-5xl h-[80vh] flex flex-col p-4 relative">
-                      <button onClick={() => setAtlasIframe(null)} className="absolute top-4 right-4 text-cyber-pink font-bold border border-cyber-pink px-3 py-1 rounded text-xs">&times; CLOSE</button>
-                      <iframe src={atlasIframe} className="w-full h-full border-none"></iframe>
-                   </div>
+              <footer className="mt-4 p-3 md:p-2 border border-slate-800 bg-slate-900/20 rounded flex flex-col md:flex-row justify-between items-center text-[8px] text-slate-600 uppercase tracking-[0.2em] gap-2 flex-none">
+                <div className="flex gap-6"><span>Instance: IRO_Node_X1</span><span>Uptime: 01:42:04</span></div>
+                <div className="flex gap-4 items-center font-bold tracking-tighter">
+                  <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_green]"></span> All Nodes OK</span>
+                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-4 uppercase">Ver 2.5.4_Mobile_Refined</span>
+                </div>
+              </footer>
+
+              {/* IFrame Modal Overlay */}
+              {activeIframe && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0f14]/95 p-4 sm:p-6 backdrop-blur-sm animate-in fade-in duration-300">
+                  <div className="bg-slate-900/90 border border-cyan-900/50 w-full max-w-6xl h-full max-h-[90vh] flex flex-col rounded-lg shadow-[0_0_50px_rgba(34,211,238,0.15)] relative overflow-hidden">
+                    
+                    <div className="flex justify-between items-center border-b border-slate-800 p-4 bg-slate-950">
+                      <h3 className="text-cyan-500 font-bold flex items-center uppercase tracking-widest text-xs">
+                        <Crosshair size={14} className="mr-3" /> SEO VECTOR STREAM: <span className="text-white ml-2">{activeIframe.name}</span>
+                      </h3>
+                      <button onClick={() => setActiveIframe(null)} className="text-slate-500 hover:text-red-400 font-bold px-3 py-1.5 bg-slate-900 rounded border border-slate-800 hover:border-red-500/50 hover:bg-red-950/30 uppercase tracking-widest text-[9px] flex items-center transition-all">
+                          <X size={10} className="mr-1.5" /> CLOSE STREAM
+                      </button>
+                    </div>
+                    
+                    <div className="flex-grow p-4 bg-black/40 flex flex-col relative w-full h-full">
+                       <div className="flex-grow rounded border border-slate-800 relative bg-[#0a0f14] overflow-hidden group">
+                         <div className="absolute inset-0 flex flex-col items-center justify-center opacity-40 z-0">
+                            <Search size={40} className="text-cyan-600 animate-pulse mb-4" />
+                            <p className="text-slate-400 text-xs font-mono text-center px-4">Initializing Secure Map Frame for <strong className="text-white">{activeIframe.name}</strong>...<br/><span className="text-[10px] text-slate-600 mt-2 block">Search Atlas architecture may prevent embedded loading (X-Frame-Options).<br/>Use the external portal launch link below if frame refuses to connect.</span></p>
+                         </div>
+                         <iframe src={activeIframe.url} className="w-full h-full border-0 absolute inset-0 z-10 bg-transparent" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" />
+                       </div>
+                       <div className="mt-4 flex justify-end">
+                         <a href={activeIframe.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-700 hover:border-cyan-500 text-[10px] text-cyan-600 hover:text-cyan-400 uppercase tracking-widest font-mono rounded transition-colors group">
+                             Launch Dedicated Portal <ExternalLink size={10} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                         </a>
+                       </div>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -380,8 +528,8 @@
           );
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('iro-root'));
-        root.render(<IROConsole />);
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
