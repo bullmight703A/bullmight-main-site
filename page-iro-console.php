@@ -522,19 +522,22 @@
                             </div>
                           </div>
 
-                          <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
+                           <div className="bg-slate-900/40 border border-slate-800/60 shadow-lg rounded overflow-hidden mt-4">
                             <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
-                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Lesson Plan Assembly Engine</h3>
+                              <h3 className="text-[10px] text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Lesson Plan Assembly Engine</h3>
                               <span className="text-[8px] bg-yellow-900/40 text-yellow-500 px-2 rounded border border-yellow-800/40">Weekly PDF Pipeline</span>
                             </div>
-                            <div className="p-3 grid grid-cols-2 md:grid-cols-4 gap-2">
+                            <div className="p-4 grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-900/20">
                                {Array.isArray(telemetryData?.kidazzle?.lessonPlans) && telemetryData.kidazzle.lessonPlans.length > 0 ? telemetryData.kidazzle.lessonPlans.map((loc, i) => (
-                                  <div key={i} className={`p-2 rounded border text-center flex flex-col items-center justify-center ${loc.code === 'CRAWLED' ? 'bg-cyan-900/20 border-cyan-800/50' : loc.code === 'ERROR' ? 'bg-red-900/20 border-red-800/50' : 'bg-slate-800/20 border-slate-700/50'}`}>
-                                      <span className="text-[9px] uppercase font-bold text-slate-300">{loc.name}</span>
-                                      <span className={`text-[8px] mt-1 uppercase tracking-wider ${loc.code === 'CRAWLED' ? 'text-cyan-400' : loc.code === 'ERROR' ? 'text-red-400' : 'text-slate-500'}`}>{loc.status}</span>
+                                  <div key={i} className={`p-3 rounded border text-center flex flex-col items-center justify-center transition-all bg-opacity-30 backdrop-blur-sm shadow-inner ${loc.code === 'CRAWLED' ? 'bg-cyan-900/40 border-cyan-700/60' : loc.code === 'ERROR' ? 'bg-red-900/40 border-red-700/60' : 'bg-yellow-900/40 border-yellow-700/60'}`}>
+                                      <span className="text-[10px] uppercase font-bold text-slate-100">{loc.name}</span>
+                                      <span className={`text-[8px] mt-1.5 uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-black/40 ${loc.code === 'CRAWLED' ? 'text-cyan-400 border border-cyan-900/50' : loc.code === 'ERROR' ? 'text-red-400 border border-red-900/50' : 'text-yellow-400 border border-yellow-900/50'}`}>{loc.status}</span>
                                   </div>
                                )) : (
-                                  <div className="text-center text-xs text-slate-500 col-span-4 p-4 font-mono animate-pulse">AWAITING LIVE METRICS FROM IRO BRIDGE...</div>
+                                  <div className="text-center text-[10px] text-slate-400 col-span-4 p-8 font-mono animate-pulse bg-slate-900/30 border border-slate-800 rounded">
+                                      <Zap size={14} className="mx-auto mb-2 opacity-50" />
+                                      AWAITING LIVE METRICS FROM IRO BRIDGE...
+                                  </div>
                                )}
                             </div>
                           </div>
