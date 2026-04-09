@@ -141,8 +141,28 @@
                       if(!data.error) setSystemHealth(data);
                   } catch(e) {}
               };
+              
+              const fetchTelemetry = async () => {
+                  try {
+                      // Kidazzle array
+                      const resK = await fetch(`${TUNNELS.SYSTEM}/api/kidazzle-matrix`);
+                      const dataK = await resK.json();
+                      
+                      // SEO array
+                      const resS = await fetch(`${TUNNELS.SYSTEM}/api/seo-matrix`);
+                      const dataS = await resS.json();
+                      
+                      setTelemetryData(prev => ({
+                          ...prev, 
+                          kidazzle: { ...prev.kidazzle, lessonPlans: dataK },
+                          seo: { ...prev.seo, matrix: dataS }
+                      }));
+                  } catch(e) {}
+              };
+              
               fetchHealth();
-              const interval = setInterval(fetchHealth, 5000);
+              fetchTelemetry();
+              const interval = setInterval(() => { fetchHealth(); fetchTelemetry(); }, 5000);
               return () => clearInterval(interval);
           }, []);
 
@@ -420,30 +440,16 @@
                                           </tr>
                                       </thead>
                                       <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
-                                          <tr className="hover:bg-slate-800/30">
-                                              <td className="p-2 pl-4">childcare near me</td>
-                                              <td className="p-2 text-center text-green-400 font-bold">1.2</td>
-                                              <td className="p-2 text-center text-green-400">2.6</td>
-                                              <td className="p-2 text-center text-yellow-500">4.8</td>
-                                          </tr>
-                                          <tr className="hover:bg-slate-800/30">
-                                              <td className="p-2 pl-4">daycare decatur</td>
-                                              <td className="p-2 text-center text-green-400 font-bold">1.0</td>
-                                              <td className="p-2 text-center text-green-400">1.8</td>
-                                              <td className="p-2 text-center text-cyan-400">3.1</td>
-                                          </tr>
-                                          <tr className="hover:bg-slate-800/30">
-                                              <td className="p-2 pl-4">section 125 plan wimper</td>
-                                              <td className="p-2 text-center text-cyan-400 font-bold">--</td>
-                                              <td className="p-2 text-center text-cyan-400 font-bold">--</td>
-                                              <td className="p-2 text-center text-cyan-400 font-bold justify-center"><span className="bg-cyan-900/30 px-2 py-0.5 text-[9px] rounded">National Scale</span></td>
-                                          </tr>
-                                          <tr className="hover:bg-slate-800/30">
-                                              <td className="p-2 pl-4">financial literacy app</td>
-                                              <td className="p-2 text-center text-cyan-400 font-bold">--</td>
-                                              <td className="p-2 text-center text-cyan-400 font-bold">--</td>
-                                              <td className="p-2 text-center text-cyan-400 font-bold justify-center"><span className="bg-cyan-900/30 px-2 py-0.5 text-[9px] rounded">National Scale</span></td>
-                                          </tr>
+                                          {Array.isArray(telemetryData?.seo?.matrix) && telemetryData.seo.matrix.length > 0 ? telemetryData.seo.matrix.map((row, i) => (
+                                              <tr key={i} className="hover:bg-slate-800/30">
+                                                  <td className="p-2 pl-4">{row.keyword}</td>
+                                                  <td className="p-2 text-center font-bold text-green-400">{row.m1}</td>
+                                                  <td className="p-2 text-center text-green-400">{row.m5}</td>
+                                                  <td className="p-2 text-center text-yellow-500">{row.m10}</td>
+                                              </tr>
+                                          )) : (
+                                              <tr><td colSpan="4" className="p-4 text-center text-xs text-slate-500 animate-pulse">AWAITING LIVE METRICS FROM IRO BRIDGE...</td></tr> 
+                                          )}
                                       </tbody>
                                    </table>
                                </div>
@@ -521,21 +527,14 @@
                               <span className="text-[8px] bg-yellow-900/40 text-yellow-500 px-2 rounded border border-yellow-800/40">Weekly PDF Pipeline</span>
                             </div>
                             <div className="p-3 grid grid-cols-2 md:grid-cols-4 gap-2">
-                               {[
-                                 { name: 'Hampton', status: 'Generated', code: 'CRAWLED' },
-                                 { name: 'College Pk', status: 'Pending', code: 'QUEUE' },
-                                 { name: 'West End', status: 'Generated', code: 'CRAWLED' },
-                                 { name: 'Midtown', status: 'Pending', code: 'QUEUE' },
-                                 { name: 'Decatur', status: 'Generated', code: 'CRAWLED' },
-                                 { name: 'Buckhead', status: 'Missing', code: 'ERROR' },
-                                 { name: 'Roswell', status: 'Missing', code: 'ERROR' },
-                                 { name: 'Sandy Spr', status: 'Missing', code: 'ERROR' }
-                               ].map((loc, i) => (
+                               {Array.isArray(telemetryData?.kidazzle?.lessonPlans) && telemetryData.kidazzle.lessonPlans.length > 0 ? telemetryData.kidazzle.lessonPlans.map((loc, i) => (
                                   <div key={i} className={`p-2 rounded border text-center flex flex-col items-center justify-center ${loc.code === 'CRAWLED' ? 'bg-cyan-900/20 border-cyan-800/50' : loc.code === 'ERROR' ? 'bg-red-900/20 border-red-800/50' : 'bg-slate-800/20 border-slate-700/50'}`}>
                                       <span className="text-[9px] uppercase font-bold text-slate-300">{loc.name}</span>
                                       <span className={`text-[8px] mt-1 uppercase tracking-wider ${loc.code === 'CRAWLED' ? 'text-cyan-400' : loc.code === 'ERROR' ? 'text-red-400' : 'text-slate-500'}`}>{loc.status}</span>
                                   </div>
-                               ))}
+                               )) : (
+                                  <div className="text-center text-xs text-slate-500 col-span-4 p-4 font-mono animate-pulse">AWAITING LIVE METRICS FROM IRO BRIDGE...</div>
+                               )}
                             </div>
                           </div>
                         </div>
