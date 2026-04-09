@@ -127,6 +127,7 @@
             { id: 8, name: 'Sandy Spr', url: 'https://localfalcon.com/scans?q=Sandy+Springs+Kidazzle' },
           ];
 
+          const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
           const messagesEndRef = useRef(null);
 
           useEffect(() => {
