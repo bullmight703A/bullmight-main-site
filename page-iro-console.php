@@ -46,6 +46,16 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
         const API_BASE = 'https://michigan-reader-clearing-ethernet.trycloudflare.com';
+        
+        // Hardcore Dedicated Tunnels
+        const TUNNELS = {
+            CHAT: 'http://localhost:3012',
+            SEO: 'http://localhost:3013',
+            KIDAZZLE: 'http://localhost:3014',
+            WIMPER: 'http://localhost:3015',
+            PICASSO: 'http://localhost:3016',
+            GLOBAL: API_BASE
+        };
 
         // Custom Light SVG Icons based on Lucide
         const IconBase = ({children, className="", size=18}) => (
@@ -105,15 +115,15 @@
             { id: 'picasso', name: 'PICASSO', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false }
           ]);
 
-          const seoLocations = [
-            { id: 1, name: 'Hampton', url: 'https://searchatlas.com/local-audit/custom?q=Hampton+Kidazzle' },
-            { id: 2, name: 'College Pk', url: 'https://searchatlas.com/local-audit/custom?q=College+Park+Kidazzle' },
-            { id: 3, name: 'West End', url: 'https://searchatlas.com/local-audit/custom?q=West+End+Kidazzle' },
-            { id: 4, name: 'Midtown', url: 'https://searchatlas.com/local-audit/custom?q=Midtown+Kidazzle' },
-            { id: 5, name: 'Decatur', url: 'https://searchatlas.com/local-audit/custom?q=Decatur+Kidazzle' },
-            { id: 6, name: 'Buckhead', url: 'https://searchatlas.com/local-audit/custom?q=Buckhead+Kidazzle' },
-            { id: 7, name: 'Roswell', url: 'https://searchatlas.com/local-audit/custom?q=Roswell+Kidazzle' },
-            { id: 8, name: 'Sandy Spr', url: 'https://searchatlas.com/local-audit/custom?q=Sandy+Springs+Kidazzle' },
+          const localFalconLocations = [
+            { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
+            { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
+            { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
+            { id: 4, name: 'Midtown', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' },
+            { id: 5, name: 'Decatur', url: 'https://localfalcon.com/scans?q=Decatur+Kidazzle' },
+            { id: 6, name: 'Buckhead', url: 'https://localfalcon.com/scans?q=Buckhead+Kidazzle' },
+            { id: 7, name: 'Roswell', url: 'https://localfalcon.com/scans?q=Roswell+Kidazzle' },
+            { id: 8, name: 'Sandy Spr', url: 'https://localfalcon.com/scans?q=Sandy+Springs+Kidazzle' },
           ];
 
           const messagesEndRef = useRef(null);
@@ -161,7 +171,7 @@
             setChatMessages(prev => [...prev, { role: 'system', text: 'Executing query on internal vectors...', temp: true }]);
 
             try {
-                const res = await fetch(`${API_BASE}/api/chat`, {
+                const res = await fetch(`${TUNNELS.CHAT}/api/chat`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ message: txt })
@@ -496,14 +506,14 @@
                     </div>
                   </section>
 
-                  {/* SEO LOCATION MATRIX REPLACING QUICK TOOLS */}
-                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 flex flex-col overflow-hidden">
-                     <div className="flex justify-between items-center mb-4">
-                       <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">SEO Location Matrix</h2>
-                       <Search size={10} className="text-cyan-600" />
-                     </div>
-                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
-                       {seoLocations.map(loc => (
+                   {/* SEO LOCATION MATRIX REPLACING QUICK TOOLS */}
+                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 flex flex-col overflow-hidden">
+                      <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">Local Falcon Matrix</h2>
+                        <Search size={10} className="text-cyan-600" />
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
+                        {localFalconLocations.map(loc => (
                          <button key={loc.id} onClick={() => setActiveIframe(loc)} className="flex items-center justify-between p-2 text-[9px] font-bold uppercase bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 hover:text-cyan-400 hover:bg-cyan-900/20 tracking-tighter text-slate-400 transition-all group">
                            <span className="truncate">{loc.name}</span>
                            <Crosshair size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -540,8 +550,8 @@
                        <div className="flex-grow rounded border border-slate-800 relative bg-[#0a0f14] overflow-hidden group">
                          <div className="absolute inset-0 flex flex-col items-center justify-center opacity-40 z-0">
                             <Search size={40} className="text-cyan-600 animate-pulse mb-4" />
-                            <p className="text-slate-400 text-xs font-mono text-center px-4">Initializing Secure Map Frame for <strong className="text-white">{activeIframe.name}</strong>...<br/><span className="text-[10px] text-slate-600 mt-2 block">Search Atlas architecture may prevent embedded loading (X-Frame-Options).<br/>Use the external portal launch link below if frame refuses to connect.</span></p>
-                         </div>
+                            <p className="text-slate-400 text-xs font-mono text-center px-4">Initializing Secure Map Frame for <strong className="text-white">{activeIframe.name}</strong>...<br/><span className="text-[10px] text-slate-600 mt-2 block">Local Falcon architecture may prevent embedded loading (X-Frame-Options).<br/>Use the external portal launch link below if frame refuses to connect.</span></p>
+                          <a href={activeIframe.url} target="_blank" className="mt-6 px-4 py-2 border border-slate-700 rounded text-xs hover:bg-slate-800 transition-colors uppercase font-bold text-slate-300">Launch Local Falcon</a></div>
                          <iframe src={activeIframe.url} className="w-full h-full border-0 absolute inset-0 z-10 bg-transparent" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" />
                        </div>
                        <div className="mt-4 flex justify-end">
