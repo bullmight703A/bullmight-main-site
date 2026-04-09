@@ -341,12 +341,7 @@
                                       </span>
                                       <span className="text-slate-300 ml-2 leading-relaxed">{msg.text}</span>
                                     </div>
-                                    {msg.thought && (
-                                       <div className="mt-2 p-2 bg-slate-900 border border-slate-700/50 rounded text-[9px] text-slate-400 font-mono whitespace-pre-wrap leading-relaxed shadow-inner">
-                                          <span className="text-yellow-600 font-bold tracking-widest uppercase mb-1 block">{'<inner_monologue>'}</span>
-                                          <span className="italic">{msg.thought}</span>
-                                       </div>
-                                    )}
+                                      {/* Thought block removed - Native to BRAIN tab only */}
                                   </div>
                                 )}
                               </div>
