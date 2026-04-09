@@ -47,14 +47,15 @@
         const { useState, useEffect, useRef } = React;
         const API_BASE = 'https://michigan-reader-clearing-ethernet.trycloudflare.com';
         
-        // Hardcore Dedicated Tunnels
+        // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
-            CHAT: 'http://localhost:3012',
-            SEO: 'http://localhost:3013',
-            KIDAZZLE: 'http://localhost:3014',
-            WIMPER: 'http://localhost:3015',
-            PICASSO: 'http://localhost:3016',
-            GLOBAL: API_BASE
+            CHAT: API_BASE,        // Architecture Target: http://localhost:3012
+            SEO: API_BASE,         // Architecture Target: http://localhost:3013
+            KIDAZZLE: API_BASE,    // Architecture Target: http://localhost:3014
+            WIMPER: API_BASE,      // Architecture Target: http://localhost:3015
+            PICASSO: API_BASE,     // Architecture Target: http://localhost:3016
+            GLOBAL: API_BASE,
+            SYSTEM: API_BASE       // Architecture Target: http://localhost:3006
         };
 
         // Custom Light SVG Icons based on Lucide
