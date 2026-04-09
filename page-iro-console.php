@@ -519,6 +519,30 @@
                               ))}
                             </div>
                           </div>
+
+                          <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
+                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
+                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Lesson Plan Assembly Engine</h3>
+                              <span className="text-[8px] bg-yellow-900/40 text-yellow-500 px-2 rounded border border-yellow-800/40">Weekly PDF Pipeline</span>
+                            </div>
+                            <div className="p-3 grid grid-cols-2 md:grid-cols-4 gap-2">
+                               {[
+                                 { name: 'Hampton', status: 'Generated', code: 'CRAWLED' },
+                                 { name: 'College Pk', status: 'Pending', code: 'QUEUE' },
+                                 { name: 'West End', status: 'Generated', code: 'CRAWLED' },
+                                 { name: 'Midtown', status: 'Pending', code: 'QUEUE' },
+                                 { name: 'Decatur', status: 'Generated', code: 'CRAWLED' },
+                                 { name: 'Buckhead', status: 'Missing', code: 'ERROR' },
+                                 { name: 'Roswell', status: 'Missing', code: 'ERROR' },
+                                 { name: 'Sandy Spr', status: 'Missing', code: 'ERROR' }
+                               ].map((loc, i) => (
+                                  <div key={i} className={`p-2 rounded border text-center flex flex-col items-center justify-center ${loc.code === 'CRAWLED' ? 'bg-cyan-900/20 border-cyan-800/50' : loc.code === 'ERROR' ? 'bg-red-900/20 border-red-800/50' : 'bg-slate-800/20 border-slate-700/50'}`}>
+                                      <span className="text-[9px] uppercase font-bold text-slate-300">{loc.name}</span>
+                                      <span className={`text-[8px] mt-1 uppercase tracking-wider ${loc.code === 'CRAWLED' ? 'text-cyan-400' : loc.code === 'ERROR' ? 'text-red-400' : 'text-slate-500'}`}>{loc.status}</span>
+                                  </div>
+                               ))}
+                            </div>
+                          </div>
                         </div>
                       )}
 
