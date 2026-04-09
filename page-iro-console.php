@@ -418,6 +418,8 @@
                             </div>
                           </div>
                         </div>
+                      )}
+                      
                       {/* NOTES TAB */}
                       {activeTab === 'NOTES' && (
                         <div className="p-4 h-full flex flex-col">
