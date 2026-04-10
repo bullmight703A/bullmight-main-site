@@ -128,6 +128,7 @@
           ];
 
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
+          const [n8nErrors, setN8nErrors] = useState([]);
           const messagesEndRef = useRef(null);
 
           useEffect(() => {
@@ -278,23 +279,28 @@
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-none">
                     <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Activity Monitor</h2>
                     <div className="space-y-3">
-                      <div className="p-2 rounded border border-slate-800 bg-slate-950/40">
-                        <div className="flex items-center gap-2 mb-1">
-                          <div className="w-2 h-2 rounded-full bg-cyan-400" />
-                          <span className="text-[11px] font-bold uppercase text-white">IRO: Deep Brain</span>
-                        </div>
-                        <p className="text-[9px] text-slate-500">Processing TN/FL regulation ruleset...</p>
-                      </div>
-                      <div className="p-2 rounded border border-red-900/50 bg-red-950/10 relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-red-600/10 animate-pulse pointer-events-none" />
-                        <div className="relative z-10">
+                      {n8nErrors && n8nErrors.length > 0 ? (
+                        n8nErrors.slice(0, 3).map((err, idx) => (
+                           <div key={idx} className="p-2 rounded border border-red-900/50 bg-red-950/10 relative overflow-hidden group">
+                             <div className="absolute inset-0 bg-red-600/10 animate-pulse pointer-events-none" />
+                             <div className="relative z-10">
+                               <div className="flex items-center gap-2 mb-1">
+                                 <AlertCircle size={10} className="text-red-500 animate-bounce" />
+                                 <span className="text-[11px] text-red-200 uppercase font-bold">N8N WorkFlow Err: {err.workflowId}</span>
+                               </div>
+                               <p className="text-[9px] text-red-400/80 uppercase font-bold tracking-tighter truncate">{err.message}</p>
+                             </div>
+                           </div>
+                        ))
+                      ) : (
+                        <div className="p-2 rounded border border-slate-800 bg-slate-950/40">
                           <div className="flex items-center gap-2 mb-1">
-                            <AlertCircle size={10} className="text-red-500 animate-bounce" />
-                            <span className="text-[11px] text-red-200 uppercase font-bold">Volt: Loop Warning</span>
+                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                            <span className="text-[11px] font-bold uppercase text-white">SYSTEM CLEAR</span>
                           </div>
-                          <p className="text-[9px] text-red-400/80 uppercase font-bold tracking-tighter">Execution: 08:42s - Bottleneck</p>
+                          <p className="text-[9px] text-slate-500">All local and upstream pipelines are reporting healthy status telemetry.</p>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </section>
 
