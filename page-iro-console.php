@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://applying-inserted-female-dod.trycloudflare.com';
+        const API_BASE = 'https://iro-bullmight-bridge14.loca.lt';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
@@ -343,7 +343,7 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'BRAIN', 'SEO', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
+                      {['CHAT', 'BRAIN', 'SEO', 'KIDAZZLE', 'WIMPER', 'VIDEO', 'NOTES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -611,6 +611,67 @@
                                 <div className="bg-slate-950/60 p-2 rounded text-[9px] text-slate-500 border-l-2 border-yellow-600">
                                    [INF] Extraction: LinkedIn-Lead-Pool-B
                                    <br />[RES] 4,201 records indexed
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* VIDEO TAB */}
+                      {activeTab === 'VIDEO' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
+                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col gap-4">
+                            <div className="flex items-center gap-3">
+                              <Video size={24} className="text-purple-500" />
+                              <div>
+                                <h3 className="text-xs font-bold text-slate-200 uppercase">Wan2GP Studio (Deepy Agent)</h3>
+                                <p className="text-[9px] text-slate-500 uppercase">Headless Video Generation Subprocesses</p>
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-3 p-3 bg-slate-950/40 border border-slate-800/40 rounded">
+                                <div>
+                                  <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Video Prompt</label>
+                                  <textarea className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500 resize-none h-16" placeholder="Describe the scene in high fidelity..."></textarea>
+                                </div>
+                                <div>
+                                  <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Negative Prompt</label>
+                                  <input type="text" className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500" placeholder="blurry, distorted, low quality..." />
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <div>
+                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Generation Engine</label>
+                                    <select className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500">
+                                      <option>Wan 2.1 (14B)</option>
+                                      <option>Hunyuan Video</option>
+                                      <option>LTX Video</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Aspect Ratio</label>
+                                    <select className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500">
+                                      <option>16:9 (Landscape)</option>
+                                      <option>9:16 (Vertical)</option>
+                                      <option>1:1 (Square)</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <button className="w-full mt-2 bg-purple-600/20 border border-purple-500/50 text-purple-400 hover:bg-purple-500 hover:text-white font-bold py-2 rounded text-[10px] uppercase transition-all flex items-center justify-center gap-2">
+                                  <Zap size={12} /> Spawn Video Process
+                                </button>
+                              </div>
+                              
+                              <div className="space-y-3 flex flex-col">
+                                <h4 className="text-[10px] text-slate-400 font-bold uppercase tracking-widest border-b border-slate-800 pb-1">Queue & Telemetry</h4>
+                                <div className="flex-1 bg-slate-950/60 border border-slate-800/40 rounded p-3 font-mono text-[9px] text-slate-400 flex flex-col space-y-2 overflow-y-auto">
+                                  <div className="border-l-2 border-purple-600 pl-2">
+                                    <span className="text-purple-400 font-bold">[IDEAL]</span> Deepy Agent Standby. Ready for CLI orchestration.
+                                  </div>
+                                  <div className="border-l-2 border-slate-600 pl-2 opacity-50">
+                                    <span className="text-slate-500 font-bold">[SYS]</span> Awaiting render payload... CUDA/GGUF modules checked.
+                                  </div>
                                 </div>
                               </div>
                             </div>
