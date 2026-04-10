@@ -360,7 +360,7 @@
                                       <span className={msg.role === 'user' ? "text-cyan-600 font-bold" : "text-cyan-400 font-bold"}>
                                         {msg.role === 'user' ? 'User:' : `${msg.name} //`}
                                       </span>
-                                      <span className="text-slate-300 ml-2 leading-relaxed">{msg.text}</span>
+                                      <span className="text-slate-300 ml-2 leading-relaxed whitespace-pre-wrap">{msg.text}</span>
                                     </div>
                                       {/* Thought block removed - Native to BRAIN tab only */}
                                   </div>
@@ -407,17 +407,19 @@
                                </div>
                            </div>
 
-                           <div className="bg-slate-900/40 border border-slate-800 p-3 rounded shrink-0">
-                               <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Core OpenClaw Memory (The Brain)</p>
-                               <div className="bg-slate-950/50 p-2 rounded text-[10px] text-slate-400 border border-slate-800/40 font-mono whitespace-pre-wrap max-h-40 overflow-y-auto">
-                                   {brainLogs.memory}
-                               </div>
-                           </div>
-                           <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex-1 flex flex-col min-h-0">
-                               <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Live Neural Stream (Inner Monologue)</p>
-                               <div className="bg-slate-950/50 p-2 border-l-2 border-cyan-800 rounded text-[10px] text-slate-300 font-mono whitespace-pre-wrap flex-1 overflow-y-auto shadow-inner">
-                                   {brainLogs.thoughts || 'Waiting for thought intercept...'}
-                               </div>
+                           <div className="flex-1 flex flex-col md:flex-row gap-4 min-h-0">
+                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex-1 flex flex-col min-h-[30vh]">
+                                 <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Core OpenClaw Memory (The Brain)</p>
+                                 <div className="bg-slate-950/50 p-2 rounded text-[10px] text-slate-400 border border-slate-800/40 font-mono whitespace-pre-wrap flex-1 overflow-y-auto custom-scrollbar">
+                                     {brainLogs.memory}
+                                 </div>
+                             </div>
+                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex-1 flex flex-col min-h-[30vh]">
+                                 <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Live Neural Stream (Inner Monologue)</p>
+                                 <div className="bg-slate-950/50 p-2 border-l-2 border-cyan-800 rounded text-[10px] text-slate-300 font-mono whitespace-pre-wrap flex-1 overflow-y-auto shadow-inner custom-scrollbar">
+                                     {brainLogs.thoughts || 'Waiting for thought intercept...'}
+                                 </div>
+                             </div>
                            </div>
                         </div>
                       )}
