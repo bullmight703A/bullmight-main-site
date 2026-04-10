@@ -238,7 +238,7 @@
           ];
 
           return (
-            <div className="min-h-screen bg-[#0a0f14] text-slate-300 font-mono p-2 md:p-4 selection:bg-cyan-500/30 flex flex-col max-h-screen overflow-hidden">
+            <div className="min-h-screen bg-[#0a0f14] text-slate-300 font-mono p-2 md:p-4 selection:bg-cyan-500/30 flex flex-col lg:max-h-screen lg:overflow-hidden">
               {/* HEADER */}
               <header className="flex flex-col md:flex-row justify-between items-center border-b border-cyan-900/30 pb-4 mb-4 gap-4 flex-none">
                 <div className="flex items-center gap-3 w-full md:w-auto">
@@ -256,7 +256,7 @@
               <div className="grid grid-cols-12 gap-4 md:gap-6 flex-1 min-h-0">
                 
                 {/* LEFT COLUMN: AGENTS & DOCUMENTS */}
-                <div className="col-span-12 lg:col-span-3 flex flex-col gap-4 order-2 lg:order-1 h-full min-h-0 overflow-hidden">
+                <div className="col-span-12 lg:col-span-3 flex flex-col gap-4 order-2 lg:order-1 lg:h-full lg:min-h-0 lg:overflow-hidden">
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-none">
                     <div className="flex justify-between items-center mb-4">
                       <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Agent Fleet</h2>
@@ -322,7 +322,7 @@
                 </div>
 
                 {/* MIDDLE COLUMN: INPUT & EXTENDED CHAT */}
-                <div className="col-span-12 lg:col-span-6 flex flex-col gap-4 order-1 lg:order-2 h-full min-h-0 overflow-hidden">
+                <div className="col-span-12 lg:col-span-6 flex flex-col gap-4 order-1 lg:order-2 min-h-[60vh] lg:h-full lg:min-h-0 lg:overflow-hidden">
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-3 flex-none">
                     <div className="flex flex-col sm:flex-row items-center gap-3">
                       <label className="text-[9px] font-bold text-slate-500 uppercase whitespace-nowrap self-start sm:self-center">GitHub Repo:</label>
@@ -632,7 +632,7 @@
                 </div>
 
                 {/* RIGHT COLUMN: SYSTEM HEALTH (CIRCLES) & SEO MATRIX */}
-                <div className="col-span-12 lg:col-span-3 flex flex-col gap-4 order-3 h-full min-h-0 overflow-hidden">
+                <div className="col-span-12 lg:col-span-3 flex flex-col gap-4 order-3 lg:h-full lg:min-h-0 lg:overflow-hidden">
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-none">
                     <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6 font-bold">Health Dashboard</h2>
                     <div className="grid grid-cols-2 gap-y-10 gap-x-4 pb-4">
