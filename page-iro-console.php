@@ -47,16 +47,16 @@
         const { useState, useEffect, useRef } = React;
         const API_BASE = 'https://iro-bullmight-bridge14.loca.lt';
         
-        // Hardcore Dedicated Tunnels (Separate tunnels to prevent bottlenecks)
+        // Hardcore Dedicated Tunnels (Ensure they use the accessible remote tunnel URL, not localhost which fails in browser)
         const TUNNELS = {
-            CHAT: 'http://localhost:3012',        // Chat / Brain endpoint
-            SEO: 'http://localhost:3013',         // SEO processing
-            KIDAZZLE: 'http://localhost:3014',    // Kidazzle DA tags & pipelines
-            WIMPER: 'http://localhost:3015',      // Wimper Wojo pipelines
-            PICASSO: 'http://localhost:3016',     // Pics / Images
-            VIDEO: 'http://localhost:3017',       // Wan2GP Video rendering
+            CHAT: API_BASE,        // Chat / Brain endpoint
+            SEO: API_BASE,         // SEO processing
+            KIDAZZLE: API_BASE,    // Kidazzle DA tags & pipelines
+            WIMPER: API_BASE,      // Wimper Wojo pipelines
+            PICASSO: API_BASE,     // Pics / Images
+            VIDEO: API_BASE,       // Wan2GP Video rendering
             GLOBAL: API_BASE,
-            SYSTEM: 'http://localhost:3006'       // Base local telemetry
+            SYSTEM: API_BASE       // Base local telemetry
         };
 
         // Custom Light SVG Icons based on Lucide
@@ -499,18 +499,23 @@
                               <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Tracking</span>
                             </div>
                             <div className="p-2 space-y-2">
-                              {[
-                                { group: 'DA - Intake Leads (New)', value: 177 },
-                                { group: 'DA - Tours Scheduled', value: 23 },
-                                { group: 'DA - Enrollment / Waitlist', value: 0 }
-                              ].map((metric, i) => (
+                              {telemetryData?.kidazzle?.opportunities?.length > 0 ? telemetryData.kidazzle.opportunities.map((metric, i) => (
                                 <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-center">
                                   <div className="flex-1 w-full flex justify-between items-center">
                                      <span className="text-xs font-bold text-slate-200 uppercase">{metric.group}</span>
-                                     <span className="font-bold text-cyan-400 text-lg">{metric.value}</span>
+                                     <span className="font-bold text-cyan-400 text-lg">{metric.value || 0}</span>
                                   </div>
                                 </div>
-                              ))}
+                              )) : (
+                                ['DA - Intake Leads (New)', 'DA - Tours Scheduled', 'DA - Enrollment / Waitlist'].map((group, i) => (
+                                  <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-center">
+                                    <div className="flex-1 w-full flex justify-between items-center">
+                                       <span className="text-xs font-bold text-slate-200 uppercase">{group}</span>
+                                       <span className="font-bold text-slate-500 text-lg">Load...</span>
+                                    </div>
+                                  </div>
+                                ))
+                              )}
                             </div>
                           </div>
 
@@ -559,19 +564,19 @@
                               </div>
                               <div className="space-y-4">
                                 <div>
-                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Initial Pitch Sent</span><span>32</span></div>
+                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Initial Pitch Sent</span><span>{telemetryData?.wimper?.wojo?.pitch_sent || 0}</span></div>
                                   <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-cyan-500 w-[60%]" />
+                                    <div className="h-full bg-cyan-500" style={{width: `${Math.min((telemetryData?.wimper?.wojo?.pitch_sent || 0)/50*100, 100)}%`}} />
                                   </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2 text-center text-xs">
                                   <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
                                      <p className="text-[8px] uppercase tracking-wider text-slate-500">Meetings Set</p>
-                                     <p className="font-bold text-white mt-1">14</p>
+                                     <p className="font-bold text-white mt-1">{telemetryData?.wimper?.wojo?.meetings || 0}</p>
                                   </div>
                                   <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
                                      <p className="text-[8px] uppercase tracking-wider text-slate-500">Agreements Sent</p>
-                                     <p className="font-bold text-cyan-400 mt-1">3</p>
+                                     <p className="font-bold text-cyan-400 mt-1">{telemetryData?.wimper?.wojo?.agreements || 0}</p>
                                   </div>
                                 </div>
                               </div>
