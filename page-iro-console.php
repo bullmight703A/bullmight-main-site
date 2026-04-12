@@ -45,12 +45,12 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://iro-bullmight-bridge16.loca.lt';
+        const API_BASE = 'https://iaqylw-ip-74-92-194-249.tunnelmole.net';
         
         // Hardcore Dedicated Tunnels (Ensure they use the accessible remote tunnel URL, not localhost which fails in browser)
         const TUNNELS = {
             CHAT: API_BASE,        // Chat / Brain endpoint
-            SEO: API_BASE,         // SEO processing
+            SEO: 'https://bullmight-n8n-u46728.vm.elestio.app/webhook/96319d34-bf8a-4371-8d5b-bc86aaa9c1c9',         // SEO processing 
             KIDAZZLE: API_BASE,    // Kidazzle DA tags & pipelines
             WIMPER: API_BASE,      // Wimper Wojo pipelines
             PICASSO: API_BASE,     // Pics / Images
@@ -120,12 +120,7 @@
           const localFalconLocations = [
             { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
             { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
-            { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
-            { id: 4, name: 'Midtown', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' },
-            { id: 5, name: 'Decatur', url: 'https://localfalcon.com/scans?q=Decatur+Kidazzle' },
-            { id: 6, name: 'Buckhead', url: 'https://localfalcon.com/scans?q=Buckhead+Kidazzle' },
-            { id: 7, name: 'Roswell', url: 'https://localfalcon.com/scans?q=Roswell+Kidazzle' },
-            { id: 8, name: 'Sandy Spr', url: 'https://localfalcon.com/scans?q=Sandy+Springs+Kidazzle' },
+            { id: 3, name: 'Wimper HQ', url: 'https://localfalcon.com/scans?q=Wimper' }
           ];
 
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
@@ -603,74 +598,66 @@
                         </div>
                       )}
                       
-                      {/* VIDEO TAB */}
+                      {/* VIDEO TAB (Wan2GP integration via N8N) */}
                       {activeTab === 'VIDEO' && (
-                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
-                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col gap-4">
-                            <div className="flex items-center gap-3">
-                              <Video size={24} className="text-purple-500" />
-                              <div>
-                                <h3 className="text-xs font-bold text-slate-200 uppercase">Wan2GP Studio (Deepy Agent)</h3>
-                                <p className="text-[9px] text-slate-500 uppercase">Headless Video Generation Subprocesses</p>
-                              </div>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="space-y-3 p-3 bg-slate-950/40 border border-slate-800/40 rounded">
-                                <div>
-                                  <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Video Prompt</label>
-                                  <textarea className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500 resize-none h-16" placeholder="Describe the scene in high fidelity..."></textarea>
-                                </div>
-                                <div>
-                                  <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Negative Prompt</label>
-                                  <input type="text" className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500" placeholder="blurry, distorted, low quality..." />
-                                </div>
-                                <div className="grid grid-cols-2 gap-2">
+                        <div className="h-full p-6 grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
+                            <div className="bg-slate-900/50 border border-slate-800/60 p-6 rounded flex flex-col relative overflow-hidden">
+                               <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-900/10 rounded-full blur-3xl"></div>
+                               <h3 className="text-sm font-black text-cyan-400 tracking-widest uppercase mb-2 flex items-center gap-2"><Video size={16} /> WAN2GP STUDIO</h3>
+                               <p className="text-xs text-slate-400 mb-6 font-mono leading-relaxed">Integrated GitHub automated open-source deployment engine.</p>
+                               
+                               <div className="space-y-4 relative z-10 w-full flex-1">
                                   <div>
-                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Generation Engine</label>
-                                    <select className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500">
-                                      <option>Wan 2.1 (14B)</option>
-                                      <option>Hunyuan Video</option>
-                                      <option>LTX Video</option>
-                                    </select>
+                                     <label className="text-[9px] uppercase tracking-widest font-black text-slate-500 block mb-1">Image URL or Prompt</label>
+                                     <input type="text" placeholder="https://drive.google.com/.../img.png" className="w-full bg-slate-950/80 border border-slate-800 focus:border-cyan-500/50 p-3 rounded text-sm text-slate-200 outline-none transition-all placeholder:text-slate-700/50 font-mono" />
                                   </div>
-                                  <div>
-                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Aspect Ratio</label>
-                                    <select className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500">
-                                      <option>16:9 (Landscape)</option>
-                                      <option>9:16 (Vertical)</option>
-                                      <option>1:1 (Square)</option>
-                                    </select>
+                                  <div className="grid grid-cols-2 gap-4">
+                                     <div>
+                                        <label className="text-[9px] uppercase tracking-widest font-black text-slate-500 block mb-1">Render Engine</label>
+                                        <select className="w-full bg-slate-950/80 border border-slate-800 focus:border-cyan-500/50 p-3 rounded text-sm text-slate-200 outline-none transition-all font-mono appearance-none cursor-pointer">
+                                           <option>Wan2.1 (HQ)</option>
+                                           <option>Wan2.1 (Fast)</option>
+                                        </select>
+                                     </div>
+                                     <div>
+                                        <label className="text-[9px] uppercase tracking-widest font-black text-slate-500 block mb-1">Aspect Ratio</label>
+                                        <select className="w-full bg-slate-950/80 border border-slate-800 focus:border-cyan-500/50 p-3 rounded text-sm text-slate-200 outline-none transition-all font-mono appearance-none cursor-pointer">
+                                           <option>16:9 (Landscape)</option>
+                                           <option>9:16 (Vertical)</option>
+                                        </select>
+                                     </div>
                                   </div>
-                                </div>
-                                <button className="w-full mt-2 bg-purple-600/20 border border-purple-500/50 text-purple-400 hover:bg-purple-500 hover:text-white font-bold py-2 rounded text-[10px] uppercase transition-all flex items-center justify-center gap-2">
-                                  <Zap size={12} /> Spawn Video Process
-                                </button>
-                              </div>
-                              
-                              <div className="space-y-3 flex flex-col">
-                                <h4 className="text-[10px] text-slate-400 font-bold uppercase tracking-widest border-b border-slate-800 pb-1">Queue & Telemetry</h4>
-                                <div className="flex-1 bg-slate-950/60 border border-slate-800/40 rounded p-3 font-mono text-[9px] text-slate-400 flex flex-col space-y-2 overflow-y-auto">
-                                  <div className="border-l-2 border-purple-600 pl-2">
-                                    <span className="text-purple-400 font-bold">[IDEAL]</span> Deepy Agent Standby. Ready for CLI orchestration.
-                                  </div>
-                                  <div className="border-l-2 border-slate-600 pl-2 opacity-50">
-                                    <span className="text-slate-500 font-bold">[SYS]</span> Awaiting render payload... CUDA/GGUF modules checked.
-                                  </div>
-                                </div>
-                              </div>
+                               </div>
+                               <button className="mt-6 w-full py-4 relative group overflow-hidden bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 flex items-center justify-center gap-2 transition-all">
+                                   <div className="absolute inset-0 w-0 bg-cyan-600/20 group-hover:w-full transition-all duration-500 ease-out"></div>
+                                   <Video size={16} className="text-cyan-400 group-hover:scale-110 transition-transform relative z-10"/> 
+                                   <span className="font-black text-[11px] tracking-[0.2em] text-slate-200 uppercase relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Deploy Video Matrix</span>
+                               </button>
                             </div>
-                          </div>
+                            <div className="bg-slate-900/50 border border-slate-800/60 p-6 rounded flex items-center justify-center text-slate-600 relative overflow-hidden h-full">
+                               <div className="flex flex-col items-center">
+                                  <div className="w-20 h-20 rounded border-2 border-slate-800 border-dashed flex items-center justify-center mb-4">
+                                     <Video size={24} className="text-slate-700 opacity-50"/>
+                                  </div>
+                                  <p className="text-xs uppercase tracking-widest font-bold font-mono">Queue & Telemetry</p>
+                                  <p className="text-[10px] text-slate-700 mt-2 font-mono">Awaiting N8N Job Status.</p>
+                               </div>
+                            </div>
                         </div>
                       )}
                       
-                      {/* IMAGES TAB */}
+                      {/* IMAGES TAB (Picasso to Google Drive integration) */}
                       {activeTab === 'IMAGES' && (
-                        <div className="p-4 h-full overflow-y-auto flex flex-col items-center justify-center space-y-4">
-                          <div className="text-center font-mono text-slate-500 opacity-60">
-                             <Database size={48} className="mx-auto mb-4" />
-                             Awaiting PICASSO Agent Synchronization
-                          </div>
+                        <div className="h-full p-6 flex flex-col">
+                            <div className="flex flex-col items-center justify-center flex-1">
+                               <Database size={48} className="mb-4 text-cyan-900/50" strokeWidth={1.5} />
+                               <h2 className="text-2xl uppercase tracking-[0.2em] font-black text-slate-300">Picasso Agent</h2>
+                               <p className="text-sm font-mono text-slate-500 mt-2 mb-6 text-center max-w-md">Automated image generation synchronized successfully.</p>
+                               
+                               <a href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-slate-800/80 hover:bg-cyan-900/40 text-slate-300 font-black tracking-widest text-[10px] uppercase rounded border border-slate-700 transition-all flex items-center gap-2">
+                                  <Database size={14} /> Open Google Drive Storage
+                               </a>
+                            </div>
                         </div>
                       )}
                       {activeTab === 'NOTES' && (
