@@ -118,9 +118,14 @@
           ]);
 
           const localFalconLocations = [
-            { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
-            { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
-            { id: 3, name: 'Wimper HQ', url: 'https://localfalcon.com/scans?q=Wimper' }
+            { id: 1, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
+            { id: 2, name: 'Summit Building', url: 'https://localfalcon.com/scans?q=Summit+Building+Kidazzle' },
+            { id: 3, name: 'Memphis', url: 'https://localfalcon.com/scans?q=Memphis+Kidazzle' },
+            { id: 4, name: 'Federal Center', url: 'https://localfalcon.com/scans?q=Atlanta+Federal+Center+Kidazzle' },
+            { id: 5, name: 'College Park', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
+            { id: 6, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
+            { id: 7, name: 'Miami', url: 'https://localfalcon.com/scans?q=Miami+Kidazzle' },
+            { id: 8, name: 'Corporate HQ', url: 'https://localfalcon.com/scans?q=Kidazzle+Corporate+HQ' }
           ];
 
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
