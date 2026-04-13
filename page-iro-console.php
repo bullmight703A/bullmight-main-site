@@ -426,7 +426,8 @@
                                    <table className="w-full text-left text-[10px]">
                                       <thead className="bg-slate-900/80 text-slate-500 uppercase">
                                           <tr>
-                                              <th className="p-2 font-bold pl-4">Target Keyword</th>
+                                              <th className="p-2 font-bold pl-4">Location</th>
+                                              <th className="p-2 font-bold">Target Keyword</th>
                                               <th className="p-2 font-bold text-center">1 Mile Avg</th>
                                               <th className="p-2 font-bold text-center">5 Mile Avg</th>
                                               <th className="p-2 font-bold text-center">10 Mile Avg</th>
@@ -435,13 +436,14 @@
                                       <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
                                           {Array.isArray(telemetryData?.seo?.matrix) && telemetryData.seo.matrix.length > 0 ? telemetryData.seo.matrix.map((row, i) => (
                                               <tr key={i} className="hover:bg-slate-800/30">
-                                                  <td className="p-2 pl-4">{row.keyword}</td>
+                                                  <td className="p-2 pl-4 text-cyan-500">{row.location || 'Local Hub'}</td>
+                                                  <td className="p-2 text-slate-400">{row.keyword}</td>
                                                   <td className="p-2 text-center font-bold text-green-400">{row.m1}</td>
                                                   <td className="p-2 text-center text-green-400">{row.m5}</td>
                                                   <td className="p-2 text-center text-yellow-500">{row.m10}</td>
                                               </tr>
                                           )) : (
-                                              <tr><td colSpan="4" className="p-4 text-center text-xs text-slate-500 animate-pulse">AWAITING LIVE METRICS FROM IRO BRIDGE...</td></tr> 
+                                              <tr><td colSpan="5" className="p-4 text-center text-xs text-slate-500 animate-pulse">AWAITING LIVE METRICS FROM IRO BRIDGE...</td></tr> 
                                           )}
                                       </tbody>
                                    </table>
@@ -495,22 +497,28 @@
 
                           <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
                             <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
-                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> DA Pipeline Tag Status</h3>
+                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> DA Enrollments (Past 30 Days)</h3>
                               <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Tracking</span>
                             </div>
-                            <div className="p-2 space-y-2">
-                              {[
-                                { group: 'DA - Intake Leads (New)', value: 177 },
-                                { group: 'DA - Tours Scheduled', value: 23 },
-                                { group: 'DA - Enrollment / Waitlist', value: 0 }
-                              ].map((metric, i) => (
-                                <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-center">
-                                  <div className="flex-1 w-full flex justify-between items-center">
-                                     <span className="text-xs font-bold text-slate-200 uppercase">{metric.group}</span>
-                                     <span className="font-bold text-cyan-400 text-lg">{metric.value}</span>
-                                  </div>
-                                </div>
-                              ))}
+                            <div className="w-full bg-slate-950/50">
+                                <table className="w-full text-left text-[10px]">
+                                  <thead className="bg-slate-900/80 text-slate-500 uppercase">
+                                    <tr>
+                                       <th className="p-2 pl-4">Name</th><th className="p-2">Stage</th><th className="p-2">Time</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
+                                    {Array.isArray(telemetryData?.kidazzle?.lessonPlans) && telemetryData.kidazzle.lessonPlans.length > 0 ? telemetryData.kidazzle.lessonPlans.filter(m => m.name !== 'Loading Data...').map((metric, i) => (
+                                      <tr key={i} className="hover:bg-slate-800/30">
+                                        <td className="p-2 pl-4"><span className="text-cyan-400 font-bold">{metric.name}</span><br/><span className="text-[8px] text-slate-500">{metric.email}</span></td>
+                                        <td className="p-2 "><span className="bg-cyan-900/30 text-cyan-500 px-2 py-0.5 rounded border border-cyan-800/40">{metric.stage}</span></td>
+                                        <td className="p-2 text-slate-400">{metric.created}</td>
+                                      </tr>
+                                    )) : (
+                                      <tr><td colSpan="3" className="p-4 text-center text-xs text-slate-500">Waitlist Synchronization Active...</td></tr>
+                                    )}
+                                  </tbody>
+                                </table>
                             </div>
                           </div>
 
