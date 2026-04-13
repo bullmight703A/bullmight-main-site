@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://surgeon-catalog-defeat-responding.trycloudflare.com';
+        const API_BASE = 'https://iro-mission-control-3006.loca.lt';
         
         // Hardcore Dedicated Tunnels (Ensure they use the accessible remote tunnel URL, not localhost which fails in browser)
         const TUNNELS = {
@@ -139,7 +139,9 @@
           useEffect(() => {
               const fetchHealth = async () => {
                   try {
-                      const res = await fetch(`${TUNNELS.SYSTEM}/api/system-health`);
+                      const res = await fetch(`${TUNNELS.SYSTEM}/api/system-health`, {
+                          headers: {'Bypass-Tunnel-Reminder': 'true'}
+                      });
                       const data = await res.json();
                       if(!data.error) setSystemHealth(data);
                   } catch(e) {}
@@ -148,12 +150,16 @@
               const fetchTelemetry = async () => {
                   try {
                       // Kidazzle array
-                      const resK = await fetch(`${TUNNELS.KIDAZZLE}/api/kidazzle-matrix`);
+                      const resK = await fetch(`${TUNNELS.KIDAZZLE}/api/kidazzle-matrix`, {
+                          headers: {'Bypass-Tunnel-Reminder': 'true'}
+                      });
                       let dataK = [];
                       if(resK.ok) dataK = await resK.json();
                       
                       // SEO array
-                      const resS = await fetch(`${TUNNELS.SEO}/api/seo-matrix`);
+                      const resS = await fetch(`${TUNNELS.SEO}/api/seo-matrix`, {
+                          headers: {'Bypass-Tunnel-Reminder': 'true'}
+                      });
                       let dataS = [];
                       if(resS.ok) dataS = await resS.json();
                       
@@ -177,7 +183,9 @@
           useEffect(() => {
               const fetchBrain = async () => {
                   try {
-                      const res = await fetch(`${TUNNELS.SYSTEM}/api/brain-logs`);
+                      const res = await fetch(`${TUNNELS.SYSTEM}/api/brain-logs`, {
+                          headers: {'Bypass-Tunnel-Reminder': 'true'}
+                      });
                       const data = await res.json();
                       if(!data.error) setBrainLogs(data);
                   } catch(e) {}
@@ -195,7 +203,7 @@
             try {
                 await fetch(`${API_BASE}/api/restart-agent`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true'},
                     body: JSON.stringify({ agent: agName })
                 });
             } catch(e) {}
@@ -217,7 +225,7 @@
             try {
                 const res = await fetch(`${TUNNELS.CHAT}/api/chat`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true'},
                     body: JSON.stringify({ message: txt })
                 });
                 const data = await res.json();
