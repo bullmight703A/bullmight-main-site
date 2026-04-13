@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://immigration-slide-lover-exact.trycloudflare.com';
+        const API_BASE = 'https://compaq-written-gdp-jets.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Ensure they use the accessible remote tunnel URL, not localhost which fails in browser)
         const TUNNELS = {
