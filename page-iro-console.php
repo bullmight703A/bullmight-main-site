@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://cosmetics-volvo-rangers-starting.trycloudflare.com';
+        const API_BASE = 'https://slr2n2-ip-74-92-194-249.tunnelmole.net';
         
         // Hardcore Dedicated Tunnels (Ensure they use the accessible remote tunnel URL, not localhost which fails in browser)
         const TUNNELS = {
