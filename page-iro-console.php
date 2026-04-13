@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://music-sacramento-tex-valve.trycloudflare.com';
+        const API_BASE = 'https://typing-paradise-counties-acknowledged.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Ensure they use the accessible remote tunnel URL, not localhost which fails in browser)
         const TUNNELS = {
