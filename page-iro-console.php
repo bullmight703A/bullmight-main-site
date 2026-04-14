@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://aruba-travel-firewall-settled.trycloudflare.com';
+        const API_BASE = 'https://originally-hobby-nicholas-mobiles.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Separate tunnels to prevent bottlenecks)
         const TUNNELS = {
