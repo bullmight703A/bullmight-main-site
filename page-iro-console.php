@@ -601,20 +601,14 @@
                                 <Layers size={14} /> Wojo Pipeline Status
                               </div>
                               <div className="space-y-4">
-                                <div>
-                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Initial Pitch Sent</span><span>32</span></div>
-                                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-cyan-500 w-[60%]" />
-                                  </div>
-                                </div>
                                 <div className="grid grid-cols-2 gap-2 text-center text-xs">
-                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
-                                     <p className="text-[8px] uppercase tracking-wider text-slate-500">Meetings Set</p>
-                                     <p className="font-bold text-white mt-1">14</p>
+                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded shadow-lg">
+                                     <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold flex justify-center items-center gap-1"><Users size={12}/> Webinar Signups</p>
+                                     <p className="font-mono text-3xl text-cyan-400 mt-2">18</p>
                                   </div>
-                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
-                                     <p className="text-[8px] uppercase tracking-wider text-slate-500">Agreements Sent</p>
-                                     <p className="font-bold text-cyan-400 mt-1">3</p>
+                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded shadow-lg">
+                                     <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold flex justify-center items-center gap-1"><Zap size={12}/> New Leads</p>
+                                     <p className="font-mono text-3xl text-yellow-500 mt-2">34</p>
                                   </div>
                                 </div>
                               </div>
