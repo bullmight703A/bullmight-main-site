@@ -329,6 +329,35 @@
                     </div>
                   </section>
 
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-none flex flex-col max-h-[300px]">
+                      <h2 className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                         <span><Zap size={12} className="inline mr-2"/> Night Protocol Tracker</span>
+                      </h2>
+                      <div className="bg-slate-950/50 p-3 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-3 font-mono text-[10px]">
+                          <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                              <div className="flex flex-col overflow-hidden">
+                                <span className="text-slate-300 truncate font-bold">/daycare-roswell-toddlers (Kidazzle)</span>
+                                <span className="text-slate-500 text-[8px] mt-1">Created: 2026-04-12</span>
+                              </div>
+                              <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded ml-2">✓ INDEXED</span>
+                          </div>
+                          <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                              <div className="flex flex-col overflow-hidden">
+                                <span className="text-slate-300 truncate font-bold">/childcare-hampton-infants (Kidazzle)</span>
+                                <span className="text-slate-500 text-[8px] mt-1">Created: 2026-04-13</span>
+                              </div>
+                              <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded ml-2">✓ INDEXED</span>
+                          </div>
+                          <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                              <div className="flex flex-col overflow-hidden">
+                                <span className="text-slate-300 truncate font-bold">/wimper-employer-tax-advantage (Wimper)</span>
+                                <span className="text-slate-500 text-[8px] mt-1">Created: 2026-04-14</span>
+                              </div>
+                              <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded ml-2">WAITING</span>
+                          </div>
+                      </div>
+                  </section>
+
                 </div>
 
                 {/* MIDDLE COLUMN: INPUT & EXTENDED CHAT */}
@@ -476,31 +505,6 @@
                                           )}
                                       </tbody>
                                    </table>
-                               </div>
-                           </div>
-
-                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex-1 flex flex-col min-h-0">
-                               <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
-                                  <span><Zap size={12} className="inline mr-2"/> Night Protocol Tracker</span>
-                                  <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Pages Created & Indexed</span>
-                               </p>
-                               <div className="bg-slate-950/50 p-3 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-3 font-mono text-[10px]">
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/daycare-roswell-toddlers (Kidazzle)</span>
-                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">âœ“ INDEXED</span>
-                                   </div>
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/childcare-hampton-infants (Kidazzle)</span>
-                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">âœ“ INDEXED</span>
-                                   </div>
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/wimper-employer-tax-advantage (Wimper)</span>
-                                       <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded">CRAWLED_WAITING</span>
-                                   </div>
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/section-125-calculators (Wimper)</span>
-                                       <span className="text-cyan-500 whitespace-nowrap bg-cyan-900/20 px-2 rounded">DISPATCHED</span>
-                                   </div>
                                </div>
                            </div>
                         </div>
