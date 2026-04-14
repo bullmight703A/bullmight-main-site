@@ -132,6 +132,26 @@
           const [n8nErrors, setN8nErrors] = useState([]);
           const messagesEndRef = useRef(null);
 
+          // Helper to convert rank (1-20+) to Share of Voice percentage
+          const calculateSOV = (rankStr) => {
+              if (rankStr === undefined || rankStr === null) return 0;
+              const str = String(rankStr);
+              if (str.includes('+') || str.includes('>')) return 5;
+              const rank = parseFloat(str);
+              if (isNaN(rank)) return 0;
+              return Math.max(5, Math.min(100, Math.floor(100 - ((rank - 1) * 5))));
+          };
+
+          const PieChart = ({ percentage, color }) => (
+            <svg viewBox="0 0 36 36" className="w-8 h-8 md:w-10 md:h-10 mx-auto">
+              {/* Background Circle */}
+              <path className="text-slate-800" strokeDasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="4" />
+              {/* Foreground Circle */}
+              <path className={color} strokeDasharray={`${percentage || 0}, 100`} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="4" />
+              <text x="18" y="20.35" className="font-mono text-[8px] fill-white" textAnchor="middle">{percentage || 0}%</text>
+            </svg>
+          );
+
           useEffect(() => {
               messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
           }, [chatMessages]);
@@ -436,11 +456,20 @@
                                       <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
                                           {Array.isArray(telemetryData?.seo?.matrix) && telemetryData.seo.matrix.length > 0 ? telemetryData.seo.matrix.map((row, i) => (
                                               <tr key={i} className="hover:bg-slate-800/30">
-                                                  <td className="p-2 pl-4 text-cyan-500">{row.location || 'Local Hub'}</td>
-                                                  <td className="p-2 text-slate-400">{row.keyword}</td>
-                                                  <td className="p-2 text-center font-bold text-green-400">{row.m1}</td>
-                                                  <td className="p-2 text-center text-green-400">{row.m5}</td>
-                                                  <td className="p-2 text-center text-yellow-500">{row.m10}</td>
+                                                  <td className="p-3 pl-4 text-cyan-500 font-bold">{row.location || 'Local Hub'}</td>
+                                                  <td className="p-3 text-slate-400">{row.keyword}</td>
+                                                  <td className="p-3 text-center">
+                                                      <PieChart percentage={calculateSOV(row.m1)} color="text-green-500" />
+                                                      <span className="block mt-1 font-bold text-green-400">Rank: {row.m1}</span>
+                                                  </td>
+                                                  <td className="p-3 text-center">
+                                                      <PieChart percentage={calculateSOV(row.m5)} color="text-yellow-400" />
+                                                      <span className="block mt-1 text-yellow-400">Rank: {row.m5}</span>
+                                                  </td>
+                                                  <td className="p-3 text-center">
+                                                      <PieChart percentage={calculateSOV(row.m10)} color="text-orange-500" />
+                                                      <span className="block mt-1 text-orange-500">Rank: {row.m10}</span>
+                                                  </td>
                                               </tr>
                                           )) : (
                                               <tr><td colSpan="5" className="p-4 text-center text-xs text-slate-500 animate-pulse">AWAITING LIVE METRICS FROM IRO BRIDGE...</td></tr> 
