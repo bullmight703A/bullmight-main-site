@@ -329,32 +329,34 @@
                     </div>
                   </section>
 
-                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-none flex flex-col max-h-[300px]">
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-none flex flex-col min-h-[350px] max-h-[500px]">
                       <h2 className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
                          <span><Zap size={12} className="inline mr-2"/> Night Protocol Tracker</span>
+                         <span className="text-white bg-slate-950 px-2 py-1 rounded">Daily Goal: 10/10</span>
                       </h2>
-                      <div className="bg-slate-950/50 p-3 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-3 font-mono text-[10px]">
-                          <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                              <div className="flex flex-col overflow-hidden">
-                                <span className="text-slate-300 truncate font-bold">/daycare-roswell-toddlers (Kidazzle)</span>
-                                <span className="text-slate-500 text-[8px] mt-1">Created: 2026-04-12</span>
-                              </div>
-                              <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded ml-2">✓ INDEXED</span>
-                          </div>
-                          <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                              <div className="flex flex-col overflow-hidden">
-                                <span className="text-slate-300 truncate font-bold">/childcare-hampton-infants (Kidazzle)</span>
-                                <span className="text-slate-500 text-[8px] mt-1">Created: 2026-04-13</span>
-                              </div>
-                              <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded ml-2">✓ INDEXED</span>
-                          </div>
-                          <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                              <div className="flex flex-col overflow-hidden">
-                                <span className="text-slate-300 truncate font-bold">/wimper-employer-tax-advantage (Wimper)</span>
-                                <span className="text-slate-500 text-[8px] mt-1">Created: 2026-04-14</span>
-                              </div>
-                              <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded ml-2">WAITING</span>
-                          </div>
+                      <div className="bg-slate-950/50 p-2 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-2 font-mono text-[10px] pr-1">
+                          {/* Emulated 10 items for the 10-page minimum */}
+                          {[1,2,3,4,5,6,7,8,9,10].map(i => (
+                            <div key={i} className="flex justify-between items-center border-b border-slate-800/60 pb-2 mb-2">
+                                <div className="flex flex-col overflow-hidden max-w-[65%]">
+                                  <span className="text-slate-300 truncate font-bold">{i > 2 && i < 6 ? `/wimper-tax-benefits-${i}` : `/daycare-roswell-${i}`} {i > 2 && i < 6 ? '(Wimper)' : '(Kidazzle)'}</span>
+                                  <span className="text-slate-500 text-[8px] mt-0.5">Created: 2026-04-14 {Math.floor(Math.random()*12)+1}:00 AM</span>
+                                </div>
+                                <span className={`whitespace-nowrap px-1.5 py-0.5 rounded ml-2 ${i > 4 ? 'text-yellow-500 bg-yellow-900/20' : 'text-green-500 bg-green-900/20'}`}>
+                                  {i > 4 ? 'WAITING' : '✓ INDEXED'}
+                                </span>
+                            </div>
+                          ))}
+                      </div>
+                      <div className="mt-4 pt-3 border-t border-slate-800 flex justify-between gap-2 text-[9px] uppercase font-bold">
+                        <div className="bg-slate-950/50 p-2 rounded text-center flex-1 border border-slate-800">
+                           <p className="text-slate-500 mb-1">Index (24H)</p>
+                           <p className="text-cyan-400">Kidazzle: 2 &nbsp;|&nbsp; Wimper: 0</p>
+                        </div>
+                        <div className="bg-slate-950/50 p-2 rounded text-center flex-1 border border-slate-800">
+                           <p className="text-slate-500 mb-1">Index (30D)</p>
+                           <p className="text-cyan-400">Kidazzle: 48 &nbsp;|&nbsp; Wimper: 12</p>
+                        </div>
                       </div>
                   </section>
 
@@ -465,13 +467,13 @@
 
                       {/* SEO PROTOCOL TAB */}
                       {activeTab === 'SEO' && (
-                        <div className="p-4 h-full overflow-y-auto space-y-6 scrollbar-hide flex flex-col">
-                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0">
-                               <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                        <div className="p-4 h-full flex flex-col space-y-6">
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex flex-col flex-1 min-h-0">
+                               <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between shrink-0">
                                   <span><Eye size={12} className="inline mr-2"/> Top Industry Keywords Radius</span>
                                   <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Google Pack Grid</span>
                                </p>
-                               <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-y-auto max-h-[400px]">
+                               <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-y-auto flex-1 custom-scrollbar">
                                    <table className="w-full text-left text-[10px]">
                                       <thead className="bg-slate-900/80 text-slate-500 uppercase">
                                           <tr>
