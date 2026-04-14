@@ -442,7 +442,7 @@
                                   <span><Eye size={12} className="inline mr-2"/> Top Industry Keywords Radius</span>
                                   <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Google Pack Grid</span>
                                </p>
-                               <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden">
+                               <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-y-auto max-h-[400px]">
                                    <table className="w-full text-left text-[10px]">
                                       <thead className="bg-slate-900/80 text-slate-500 uppercase">
                                           <tr>
@@ -509,18 +509,24 @@
                       {/* KIDAZZLE TAB */}
                       {activeTab === 'KIDAZZLE' && (
                         <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
-                              <p className="text-[9px] text-slate-500 uppercase font-bold mb-1">GHL Pipeline Opportunities</p>
-                              <p className="text-xl font-bold text-cyan-400">Active Syncing...</p>
-                              <div className="mt-2 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-cyan-500 w-[100%] animate-pulse" />
-                              </div>
+                          <div className="grid grid-cols-3 gap-4">
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center shadow-lg">
+                              <p className="text-[10px] text-slate-500 uppercase font-bold mb-2 flex justify-center items-center gap-1"><Users size={12}/> New Leads</p>
+                              <p className="text-3xl font-mono text-cyan-400">
+                                 {Array.isArray(telemetryData?.kidazzle?.lessonPlans) ? telemetryData.kidazzle.lessonPlans.length : 0}
+                              </p>
                             </div>
-                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex flex-col justify-center">
-                              <a href="https://app.bullmight.com/v2/location/ZR2UvxPL2wlZNSvHjmJD/opportunities/list" target="_blank" className="w-full py-2 bg-cyan-600/10 border border-cyan-600/40 text-cyan-500 rounded text-[10px] hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
-                                 <ExternalLink size={12} /> Launch GHL Portal
-                              </a>
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center shadow-lg">
+                              <p className="text-[10px] text-slate-500 uppercase font-bold mb-2 flex justify-center items-center gap-1"><Eye size={12}/> Tours</p>
+                              <p className="text-3xl font-mono text-yellow-500">
+                                 {Array.isArray(telemetryData?.kidazzle?.lessonPlans) ? telemetryData.kidazzle.lessonPlans.filter(m => m.stage && m.stage.includes('Tour')).length : 0}
+                              </p>
+                            </div>
+                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center shadow-lg">
+                               <p className="text-[10px] text-slate-500 uppercase font-bold mb-2 flex justify-center items-center gap-1"><Zap size={12}/> Enrollments</p>
+                               <p className="text-3xl font-mono text-green-500">
+                                 {Array.isArray(telemetryData?.kidazzle?.lessonPlans) ? telemetryData.kidazzle.lessonPlans.filter(m => m.stage && m.stage.includes('Enroll')).length : 0}
+                               </p>
                             </div>
                           </div>
 
