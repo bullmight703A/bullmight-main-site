@@ -420,7 +420,7 @@
                            <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0">
                                <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
                                   <span><Eye size={12} className="inline mr-2"/> Top Industry Keywords Radius</span>
-                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Local Falcon Grid</span>
+                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Google Pack Grid</span>
                                </p>
                                <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden">
                                    <table className="w-full text-left text-[10px]">
@@ -732,7 +732,7 @@
                    {/* SEO LOCATION MATRIX REPLACING QUICK TOOLS */}
                    <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 flex flex-col overflow-hidden">
                       <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">Local Falcon Matrix</h2>
+                        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">Google Pack Matrix</h2>
                         <Search size={10} className="text-cyan-600" />
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
@@ -773,8 +773,8 @@
                        <div className="flex-grow rounded border border-slate-800 relative bg-[#0a0f14] overflow-hidden group">
                          <div className="absolute inset-0 flex flex-col items-center justify-center opacity-40 z-0">
                             <Search size={40} className="text-cyan-600 animate-pulse mb-4" />
-                            <p className="text-slate-400 text-xs font-mono text-center px-4">Initializing Secure Map Frame for <strong className="text-white">{activeIframe.name}</strong>...<br/><span className="text-[10px] text-slate-600 mt-2 block">Local Falcon architecture may prevent embedded loading (X-Frame-Options).<br/>Use the external portal launch link below if frame refuses to connect.</span></p>
-                          <a href={activeIframe.url} target="_blank" className="mt-6 px-4 py-2 border border-slate-700 rounded text-xs hover:bg-slate-800 transition-colors uppercase font-bold text-slate-300">Launch Local Falcon</a></div>
+                            <p className="text-slate-400 text-xs font-mono text-center px-4">Initializing Secure Map Frame for <strong className="text-white">{activeIframe.name}</strong>...<br/><span className="text-[10px] text-slate-600 mt-2 block">Google Pack architecture may prevent embedded loading (X-Frame-Options).<br/>Use the external portal launch link below if frame refuses to connect.</span></p>
+                          <a href={activeIframe.url} target="_blank" className="mt-6 px-4 py-2 border border-slate-700 rounded text-xs hover:bg-slate-800 transition-colors uppercase font-bold text-slate-300">Launch Google Pack</a></div>
                          <iframe src={activeIframe.url} className="w-full h-full border-0 absolute inset-0 z-10 bg-transparent" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" />
                        </div>
                        <div className="mt-4 flex justify-end">
