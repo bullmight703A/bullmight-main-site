@@ -53,7 +53,7 @@
             SEO: API_BASE,         // Architecture Target: http://localhost:3013
             KIDAZZLE: API_BASE,    // Architecture Target: http://localhost:3014
             WIMPER: API_BASE,      // Architecture Target: http://localhost:3015
-            PICASSO: API_BASE,     // Architecture Target: http://localhost:3016
+            PICASSO:: API_BASE,     // Architecture Target: http://localhost:3016
             GLOBAL: API_BASE,
             SYSTEM: API_BASE       // Architecture Target: http://localhost:3006
         };
@@ -112,8 +112,8 @@
           const [agents, setAgents] = useState([
             { id: 'iro', name: 'IRO', status: 'ONLINE & LISTENING', color: 'text-cyan-400', isRestarting: false },
             { id: 'masterchef', name: 'MASTERCHEF', status: 'AWAITING TASK', color: 'text-yellow-400', isRestarting: false },
-            { id: 'volt', name: 'VOLT', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false },
-            { id: 'picasso', name: 'PICASSO', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false }
+            { id: 'volt', name: 'VOLT:', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false },
+            { id: 'picasso', name: 'PICASSO:', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false }
           ]);
 
           const localFalconLocations = [
@@ -675,7 +675,7 @@
                    {/* SEO LOCATION MATRIX REPLACING QUICK TOOLS */}
                    <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 flex flex-col overflow-hidden">
                       <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">Local Falcon Matrix</h2>
+                        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">Google Pack Matrix</h2>
                         <Search size={10} className="text-cyan-600" />
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
