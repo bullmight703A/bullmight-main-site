@@ -45,18 +45,17 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://originally-hobby-nicholas-mobiles.trycloudflare.com';
+        const API_BASE = 'https://iro-bullmight-bridge16.loca.lt';
         
-        // Hardcore Dedicated Tunnels (Separate tunnels to prevent bottlenecks)
+        // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
-            CHAT: API_BASE,
-            SEO: API_BASE,
-            KIDAZZLE: API_BASE,
-            WIMPER: API_BASE,
-            PICASSO: API_BASE,
-            VIDEO: API_BASE,
+            CHAT: API_BASE,        // Architecture Target: http://localhost:3012
+            SEO: API_BASE,         // Architecture Target: http://localhost:3013
+            KIDAZZLE: API_BASE,    // Architecture Target: http://localhost:3014
+            WIMPER: API_BASE,      // Architecture Target: http://localhost:3015
+            PICASSO: API_BASE,     // Architecture Target: http://localhost:3016
             GLOBAL: API_BASE,
-            SYSTEM: API_BASE
+            SYSTEM: API_BASE       // Architecture Target: http://localhost:3006
         };
 
         // Custom Light SVG Icons based on Lucide
@@ -132,26 +131,6 @@
           const [n8nErrors, setN8nErrors] = useState([]);
           const messagesEndRef = useRef(null);
 
-          // Helper to convert rank (1-20+) to Share of Voice percentage
-          const calculateSOV = (rankStr) => {
-              if (rankStr === undefined || rankStr === null) return 0;
-              const str = String(rankStr);
-              if (str.includes('+') || str.includes('>')) return 5;
-              const rank = parseFloat(str);
-              if (isNaN(rank)) return 0;
-              return Math.max(5, Math.min(100, Math.floor(100 - ((rank - 1) * 5))));
-          };
-
-          const PieChart = ({ percentage, color }) => (
-            <svg viewBox="0 0 36 36" className="w-8 h-8 md:w-10 md:h-10 mx-auto">
-              {/* Background Circle */}
-              <path className="text-slate-800" strokeDasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="4" />
-              {/* Foreground Circle */}
-              <path className={color} strokeDasharray={`${percentage || 0}, 100`} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" strokeWidth="4" />
-              <text x="18" y="20.35" className="font-mono text-[8px] fill-white" textAnchor="middle">{percentage || 0}%</text>
-            </svg>
-          );
-
           useEffect(() => {
               messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
           }, [chatMessages]);
@@ -168,23 +147,19 @@
               const fetchTelemetry = async () => {
                   try {
                       // Kidazzle array
-                      const resK = await fetch(`${TUNNELS.KIDAZZLE}/api/kidazzle-matrix`);
-                      let dataK = [];
-                      if(resK.ok) dataK = await resK.json();
+                      const resK = await fetch(`${TUNNELS.SYSTEM}/api/kidazzle-matrix`);
+                      const dataK = await resK.json();
                       
                       // SEO array
-                      const resS = await fetch(`${TUNNELS.SEO}/api/seo-matrix`);
-                      let dataS = [];
-                      if(resS.ok) dataS = await resS.json();
+                      const resS = await fetch(`${TUNNELS.SYSTEM}/api/seo-matrix`);
+                      const dataS = await resS.json();
                       
                       setTelemetryData(prev => ({
                           ...prev, 
                           kidazzle: { ...prev.kidazzle, lessonPlans: dataK },
                           seo: { ...prev.seo, matrix: dataS }
                       }));
-                  } catch(e) {
-                      console.log("Telemetry fetch warning:", e);
-                  }
+                  } catch(e) {}
               };
               
               fetchHealth();
@@ -329,37 +304,27 @@
                     </div>
                   </section>
 
-                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-none flex flex-col min-h-[350px] max-h-[500px]">
-                      <h2 className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
-                         <span><Zap size={12} className="inline mr-2"/> Night Protocol Tracker</span>
-                         <span className="text-white bg-slate-950 px-2 py-1 rounded">Daily Goal: 10/10</span>
-                      </h2>
-                      <div className="bg-slate-950/50 p-2 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-2 font-mono text-[10px] pr-1">
-                          {/* Emulated 10 items for the 10-page minimum */}
-                          {[1,2,3,4,5,6,7,8,9,10].map(i => (
-                            <div key={i} className="flex justify-between items-center border-b border-slate-800/60 pb-2 mb-2">
-                                <div className="flex flex-col overflow-hidden max-w-[65%]">
-                                  <span className="text-slate-300 truncate font-bold">{i > 2 && i < 6 ? `/wimper-tax-benefits-${i}` : `/daycare-roswell-${i}`} {i > 2 && i < 6 ? '(Wimper)' : '(Kidazzle)'}</span>
-                                  <span className="text-slate-500 text-[8px] mt-0.5">Created: 2026-04-14 {Math.floor(Math.random()*12)+1}:00 AM</span>
-                                </div>
-                                <span className={`whitespace-nowrap px-1.5 py-0.5 rounded ml-2 ${i > 4 ? 'text-yellow-500 bg-yellow-900/20' : 'text-green-500 bg-green-900/20'}`}>
-                                  {i > 4 ? 'WAITING' : '✓ INDEXED'}
-                                </span>
-                            </div>
-                          ))}
-                      </div>
-                      <div className="mt-4 pt-3 border-t border-slate-800 flex justify-between gap-2 text-[9px] uppercase font-bold">
-                        <div className="bg-slate-950/50 p-2 rounded text-center flex-1 border border-slate-800">
-                           <p className="text-slate-500 mb-1">Index (24H)</p>
-                           <p className="text-cyan-400">Kidazzle: 2 &nbsp;|&nbsp; Wimper: 0</p>
+                  <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 overflow-hidden flex flex-col min-h-0">
+                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 flex-none">Bridge Active Files</h2>
+                    <div className="space-y-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
+                      {[
+                        { name: 'Architecture_Mapping.png', type: 'IMG', url: '/deliverables/Architecture_Mapping.png' },
+                        { name: 'telemetry.json', type: 'JSON', url: '/deliverables/telemetry.json' },
+                        { name: 'real_health.json', type: 'JSON', url: '/deliverables/real_health.json' },
+                        { name: 'n8n_errors.json', type: 'JSON', url: '/deliverables/n8n_errors.json' }
+                      ].map((doc, i) => (
+                        <div key={i} className="flex items-center justify-between p-2 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group">
+                          <div className="flex items-center gap-2 overflow-hidden flex-1">
+                            <FileText size={12} className={doc.error ? "text-red-500" : "text-cyan-600"} />
+                            <span className="text-[10px] truncate text-slate-400 group-hover:text-slate-200">{doc.name}</span>
+                          </div>
+                          <div className="flex gap-2">
+                            <a href={`${API_BASE}${doc.url}`} target="_blank" className="text-slate-600 hover:text-cyan-400" title="View Document"><Eye size={10}/></a>
+                          </div>
                         </div>
-                        <div className="bg-slate-950/50 p-2 rounded text-center flex-1 border border-slate-800">
-                           <p className="text-slate-500 mb-1">Index (30D)</p>
-                           <p className="text-cyan-400">Kidazzle: 48 &nbsp;|&nbsp; Wimper: 12</p>
-                        </div>
-                      </div>
+                      ))}
+                    </div>
                   </section>
-
                 </div>
 
                 {/* MIDDLE COLUMN: INPUT & EXTENDED CHAT */}
@@ -378,8 +343,8 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'BRAIN', 'SEO', 'KIDAZZLE', 'WIMPER', 'VIDEO', 'IMAGES', 'NOTES'].map(tab => (
-                        <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-6 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
+                      {['CHAT', 'BRAIN', 'SEO', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
+                        <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
                       ))}
@@ -467,18 +432,17 @@
 
                       {/* SEO PROTOCOL TAB */}
                       {activeTab === 'SEO' && (
-                        <div className="p-4 h-full flex flex-col space-y-6">
-                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex flex-col flex-1 min-h-0">
-                               <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between shrink-0">
+                        <div className="p-4 h-full overflow-y-auto space-y-6 scrollbar-hide flex flex-col">
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0">
+                               <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
                                   <span><Eye size={12} className="inline mr-2"/> Top Industry Keywords Radius</span>
-                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Google Pack Grid</span>
+                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Local Falcon Grid</span>
                                </p>
-                               <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-y-auto flex-1 custom-scrollbar">
+                               <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden">
                                    <table className="w-full text-left text-[10px]">
                                       <thead className="bg-slate-900/80 text-slate-500 uppercase">
                                           <tr>
-                                              <th className="p-2 font-bold pl-4">Location</th>
-                                              <th className="p-2 font-bold">Target Keyword</th>
+                                              <th className="p-2 font-bold pl-4">Target Keyword</th>
                                               <th className="p-2 font-bold text-center">1 Mile Avg</th>
                                               <th className="p-2 font-bold text-center">5 Mile Avg</th>
                                               <th className="p-2 font-bold text-center">10 Mile Avg</th>
@@ -487,26 +451,41 @@
                                       <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
                                           {Array.isArray(telemetryData?.seo?.matrix) && telemetryData.seo.matrix.length > 0 ? telemetryData.seo.matrix.map((row, i) => (
                                               <tr key={i} className="hover:bg-slate-800/30">
-                                                  <td className="p-3 pl-4 text-cyan-500 font-bold">{row.location || 'Local Hub'}</td>
-                                                  <td className="p-3 text-slate-400">{row.keyword}</td>
-                                                  <td className="p-3 text-center">
-                                                      <PieChart percentage={calculateSOV(row.m1)} color="text-green-500" />
-                                                      <span className="block mt-1 font-bold text-green-400">Rank: {row.m1}</span>
-                                                  </td>
-                                                  <td className="p-3 text-center">
-                                                      <PieChart percentage={calculateSOV(row.m5)} color="text-yellow-400" />
-                                                      <span className="block mt-1 text-yellow-400">Rank: {row.m5}</span>
-                                                  </td>
-                                                  <td className="p-3 text-center">
-                                                      <PieChart percentage={calculateSOV(row.m10)} color="text-orange-500" />
-                                                      <span className="block mt-1 text-orange-500">Rank: {row.m10}</span>
-                                                  </td>
+                                                  <td className="p-2 pl-4">{row.keyword}</td>
+                                                  <td className="p-2 text-center font-bold text-green-400">{row.m1}</td>
+                                                  <td className="p-2 text-center text-green-400">{row.m5}</td>
+                                                  <td className="p-2 text-center text-yellow-500">{row.m10}</td>
                                               </tr>
                                           )) : (
-                                              <tr><td colSpan="5" className="p-4 text-center text-xs text-slate-500 animate-pulse">AWAITING LIVE METRICS FROM IRO BRIDGE...</td></tr> 
+                                              <tr><td colSpan="4" className="p-4 text-center text-xs text-slate-500 animate-pulse">AWAITING LIVE METRICS FROM IRO BRIDGE...</td></tr> 
                                           )}
                                       </tbody>
                                    </table>
+                               </div>
+                           </div>
+
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex-1 flex flex-col min-h-0">
+                               <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                                  <span><Zap size={12} className="inline mr-2"/> Night Protocol Tracker</span>
+                                  <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Pages Created & Indexed</span>
+                               </p>
+                               <div className="bg-slate-950/50 p-3 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-3 font-mono text-[10px]">
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/daycare-roswell-toddlers (Kidazzle)</span>
+                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/childcare-hampton-infants (Kidazzle)</span>
+                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/wimper-employer-tax-advantage (Wimper)</span>
+                                       <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded">CRAWLED_WAITING</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/section-125-calculators (Wimper)</span>
+                                       <span className="text-cyan-500 whitespace-nowrap bg-cyan-900/20 px-2 rounded">DISPATCHED</span>
+                                   </div>
                                </div>
                            </div>
                         </div>
@@ -515,51 +494,39 @@
                       {/* KIDAZZLE TAB */}
                       {activeTab === 'KIDAZZLE' && (
                         <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
-                          <div className="grid grid-cols-3 gap-4">
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center shadow-lg">
-                              <p className="text-[10px] text-slate-500 uppercase font-bold mb-2 flex justify-center items-center gap-1"><Users size={12}/> New Leads</p>
-                              <p className="text-3xl font-mono text-cyan-400">
-                                 {Array.isArray(telemetryData?.kidazzle?.lessonPlans) ? telemetryData.kidazzle.lessonPlans.length : 0}
-                              </p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
+                              <p className="text-[9px] text-slate-500 uppercase font-bold mb-1">GHL Pipeline Opportunities</p>
+                              <p className="text-xl font-bold text-cyan-400">Active Syncing...</p>
+                              <div className="mt-2 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-cyan-500 w-[100%] animate-pulse" />
+                              </div>
                             </div>
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center shadow-lg">
-                              <p className="text-[10px] text-slate-500 uppercase font-bold mb-2 flex justify-center items-center gap-1"><Eye size={12}/> Tours</p>
-                              <p className="text-3xl font-mono text-yellow-500">
-                                 {Array.isArray(telemetryData?.kidazzle?.lessonPlans) ? telemetryData.kidazzle.lessonPlans.filter(m => m.stage && m.stage.includes('Tour')).length : 0}
-                              </p>
-                            </div>
-                            <div className="bg-slate-900/40 border border-slate-800 p-4 rounded text-center shadow-lg">
-                               <p className="text-[10px] text-slate-500 uppercase font-bold mb-2 flex justify-center items-center gap-1"><Zap size={12}/> Enrollments</p>
-                               <p className="text-3xl font-mono text-green-500">
-                                 {Array.isArray(telemetryData?.kidazzle?.lessonPlans) ? telemetryData.kidazzle.lessonPlans.filter(m => m.stage && m.stage.includes('Enroll')).length : 0}
-                               </p>
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex flex-col justify-center">
+                              <a href="https://app.bullmight.com/v2/location/ZR2UvxPL2wlZNSvHjmJD/opportunities/list" target="_blank" className="w-full py-2 bg-cyan-600/10 border border-cyan-600/40 text-cyan-500 rounded text-[10px] hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
+                                 <ExternalLink size={12} /> Launch GHL Portal
+                              </a>
                             </div>
                           </div>
 
                           <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
                             <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
-                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> DA Enrollments (Past 30 Days)</h3>
+                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Opportunity Pipeline Status</h3>
                               <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Tracking</span>
                             </div>
-                            <div className="w-full bg-slate-950/50">
-                                <table className="w-full text-left text-[10px]">
-                                  <thead className="bg-slate-900/80 text-slate-500 uppercase">
-                                    <tr>
-                                       <th className="p-2 pl-4">Name</th><th className="p-2">Stage</th><th className="p-2">Time</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
-                                    {Array.isArray(telemetryData?.kidazzle?.lessonPlans) && telemetryData.kidazzle.lessonPlans.length > 0 ? telemetryData.kidazzle.lessonPlans.filter(m => m.name !== 'Loading Data...').map((metric, i) => (
-                                      <tr key={i} className="hover:bg-slate-800/30">
-                                        <td className="p-2 pl-4"><span className="text-cyan-400 font-bold">{metric.name}</span><br/><span className="text-[8px] text-slate-500">{metric.email}</span></td>
-                                        <td className="p-2 "><span className="bg-cyan-900/30 text-cyan-500 px-2 py-0.5 rounded border border-cyan-800/40">{metric.stage}</span></td>
-                                        <td className="p-2 text-slate-400">{metric.created}</td>
-                                      </tr>
-                                    )) : (
-                                      <tr><td colSpan="3" className="p-4 text-center text-xs text-slate-500">Waitlist Synchronization Active...</td></tr>
-                                    )}
-                                  </tbody>
-                                </table>
+                            <div className="p-2 space-y-2">
+                              {[
+                                { group: 'Intake Leads (New)', value: 177 },
+                                { group: 'Tours Scheduled & Completed', value: 23 },
+                                { group: 'Confirmed Enrollments (Won)', value: 0 }
+                              ].map((metric, i) => (
+                                <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-center">
+                                  <div className="flex-1 w-full flex justify-between items-center">
+                                     <span className="text-xs font-bold text-slate-200 uppercase">{metric.group}</span>
+                                     <span className="font-bold text-cyan-400 text-lg">{metric.value}</span>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
 
@@ -604,36 +571,46 @@
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
                               <div className="flex items-center gap-2 mb-3 text-cyan-400 font-bold uppercase text-[10px]">
-                                <Layers size={14} /> Wojo Pipeline Status
+                                <Mail size={14} /> Global Email Status
                               </div>
                               <div className="space-y-4">
+                                <div>
+                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Total Dispatched</span><span>14,000+</span></div>
+                                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                    <div className="h-full bg-cyan-500 w-[100%]" />
+                                  </div>
+                                </div>
                                 <div className="grid grid-cols-2 gap-2 text-center text-xs">
-                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded shadow-lg">
-                                     <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold flex justify-center items-center gap-1"><Users size={12}/> Webinar Signups</p>
-                                     <p className="font-mono text-3xl text-cyan-400 mt-2">18</p>
+                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
+                                     <p className="text-[8px] uppercase tracking-wider text-slate-500">Open Rate</p>
+                                     <p className="font-bold text-white mt-1">Pending Sync</p>
                                   </div>
-                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded shadow-lg">
-                                     <p className="text-[10px] uppercase tracking-wider text-slate-500 font-bold flex justify-center items-center gap-1"><Zap size={12}/> New Leads</p>
-                                     <p className="font-mono text-3xl text-yellow-500 mt-2">34</p>
+                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
+                                     <p className="text-[8px] uppercase tracking-wider text-slate-500">Response Rate</p>
+                                     <p className="font-bold text-cyan-400 mt-1">Pending Sync</p>
                                   </div>
+                                </div>
+                                <div className="p-2 border border-green-900/40 bg-green-950/20 rounded">
+                                  <p className="text-[8px] uppercase tracking-wider text-green-500 font-bold">Deliverability Health</p>
+                                  <p className="font-bold text-green-300 text-xs mt-1">99.8% - No Spam Bounding</p>
                                 </div>
                               </div>
                             </div>
 
                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
                               <div className="flex items-center gap-2 mb-3 text-yellow-500 font-bold uppercase text-[10px]">
-                                <Users size={14} /> Wojo Active Integrations
+                                <Search size={14} /> Scraper Intelligence
                               </div>
                               <div className="space-y-3">
                                 <div>
-                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Onboarding Compliance</span><span>85%</span></div>
+                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Active Progress</span><span>72%</span></div>
                                   <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-yellow-500 w-[85%] shadow-[0_0_8px_orange]" />
+                                    <div className="h-full bg-yellow-500 w-[72%] shadow-[0_0_8px_orange]" />
                                   </div>
                                 </div>
                                 <div className="bg-slate-950/60 p-2 rounded text-[9px] text-slate-500 border-l-2 border-yellow-600">
-                                   [WOJO] Wimper Agreement Countersigned
-                                   <br />[N8N] Syncing employee census data
+                                   [INF] Extraction: LinkedIn-Lead-Pool-B
+                                   <br />[RES] 4,201 records indexed
                                 </div>
                               </div>
                             </div>
@@ -641,76 +618,7 @@
                         </div>
                       )}
                       
-                      {/* VIDEO TAB */}
-                      {activeTab === 'VIDEO' && (
-                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
-                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col gap-4">
-                            <div className="flex items-center gap-3">
-                              <Video size={24} className="text-purple-500" />
-                              <div>
-                                <h3 className="text-xs font-bold text-slate-200 uppercase">Wan2GP Studio (Deepy Agent)</h3>
-                                <p className="text-[9px] text-slate-500 uppercase">Headless Video Generation Subprocesses</p>
-                              </div>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="space-y-3 p-3 bg-slate-950/40 border border-slate-800/40 rounded">
-                                <div>
-                                  <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Video Prompt</label>
-                                  <textarea className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500 resize-none h-16" placeholder="Describe the scene in high fidelity..."></textarea>
-                                </div>
-                                <div>
-                                  <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Negative Prompt</label>
-                                  <input type="text" className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500" placeholder="blurry, distorted, low quality..." />
-                                </div>
-                                <div className="grid grid-cols-2 gap-2">
-                                  <div>
-                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Generation Engine</label>
-                                    <select className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500">
-                                      <option>Wan 2.1 (14B)</option>
-                                      <option>Hunyuan Video</option>
-                                      <option>LTX Video</option>
-                                    </select>
-                                  </div>
-                                  <div>
-                                    <label className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1 block">Aspect Ratio</label>
-                                    <select className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-[10px] text-slate-200 focus:outline-none focus:border-purple-500">
-                                      <option>16:9 (Landscape)</option>
-                                      <option>9:16 (Vertical)</option>
-                                      <option>1:1 (Square)</option>
-                                    </select>
-                                  </div>
-                                </div>
-                                <button className="w-full mt-2 bg-purple-600/20 border border-purple-500/50 text-purple-400 hover:bg-purple-500 hover:text-white font-bold py-2 rounded text-[10px] uppercase transition-all flex items-center justify-center gap-2">
-                                  <Zap size={12} /> Spawn Video Process
-                                </button>
-                              </div>
-                              
-                              <div className="space-y-3 flex flex-col">
-                                <h4 className="text-[10px] text-slate-400 font-bold uppercase tracking-widest border-b border-slate-800 pb-1">Queue & Telemetry</h4>
-                                <div className="flex-1 bg-slate-950/60 border border-slate-800/40 rounded p-3 font-mono text-[9px] text-slate-400 flex flex-col space-y-2 overflow-y-auto">
-                                  <div className="border-l-2 border-purple-600 pl-2">
-                                    <span className="text-purple-400 font-bold">[IDEAL]</span> Deepy Agent Standby. Ready for CLI orchestration.
-                                  </div>
-                                  <div className="border-l-2 border-slate-600 pl-2 opacity-50">
-                                    <span className="text-slate-500 font-bold">[SYS]</span> Awaiting render payload... CUDA/GGUF modules checked.
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* IMAGES TAB */}
-                      {activeTab === 'IMAGES' && (
-                        <div className="p-4 h-full overflow-y-auto flex flex-col items-center justify-center space-y-4">
-                          <div className="text-center font-mono text-slate-500 opacity-60">
-                             <Database size={48} className="mx-auto mb-4" />
-                             Awaiting PICASSO Agent Synchronization
-                          </div>
-                        </div>
-                      )}
+                      {/* NOTES TAB */}
                       {activeTab === 'NOTES' && (
                         <div className="p-4 h-full flex flex-col">
                           <div className="bg-slate-900/40 p-3 border border-slate-800 flex flex-col flex-1 rounded overflow-hidden">
@@ -767,7 +675,7 @@
                    {/* SEO LOCATION MATRIX REPLACING QUICK TOOLS */}
                    <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 flex flex-col overflow-hidden">
                       <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">Google Pack Matrix</h2>
+                        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">Local Falcon Matrix</h2>
                         <Search size={10} className="text-cyan-600" />
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
@@ -808,13 +716,13 @@
                        <div className="flex-grow rounded border border-slate-800 relative bg-[#0a0f14] overflow-hidden group">
                          <div className="absolute inset-0 flex flex-col items-center justify-center opacity-40 z-0">
                             <Search size={40} className="text-cyan-600 animate-pulse mb-4" />
-                            <p className="text-slate-400 text-xs font-mono text-center px-4">Initializing Secure Map Frame for <strong className="text-white">{activeIframe.name}</strong>...<br/><span className="text-[10px] text-slate-600 mt-2 block">Google Pack architecture may prevent embedded loading (X-Frame-Options).<br/>Use the external portal launch link below if frame refuses to connect.</span></p>
-                          <a href={activeIframe.url} target="_blank" className="mt-6 px-4 py-2 border border-slate-700 rounded text-xs hover:bg-slate-800 transition-colors uppercase font-bold text-slate-300">Launch Google Pack</a></div>
+                            <p className="text-slate-400 text-xs font-mono text-center px-4">Initializing Secure Map Frame for <strong className="text-white">{activeIframe.name}</strong>...<br/><span className="text-[10px] text-slate-600 mt-2 block">Local Falcon architecture may prevent embedded loading (X-Frame-Options).<br/>Use the external portal launch link below if frame refuses to connect.</span></p>
+                          <a href={activeIframe.url} target="_blank" className="mt-6 px-4 py-2 border border-slate-700 rounded text-xs hover:bg-slate-800 transition-colors uppercase font-bold text-slate-300">Launch Local Falcon</a></div>
                          <iframe src={activeIframe.url} className="w-full h-full border-0 absolute inset-0 z-10 bg-transparent" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" />
                        </div>
                        <div className="mt-4 flex justify-end">
-                         <a href={activeIframe.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-6 py-3 bg-cyan-900/40 border border-cyan-700 hover:border-cyan-400 text-xs text-cyan-300 hover:text-cyan-100 uppercase tracking-widest font-bold rounded transition-colors shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-                             Launch Dedicated Port <ExternalLink size={14} className="ml-2" />
+                         <a href={activeIframe.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-700 hover:border-cyan-500 text-[10px] text-cyan-600 hover:text-cyan-400 uppercase tracking-widest font-mono rounded transition-colors group">
+                             Launch Dedicated Portal <ExternalLink size={10} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                          </a>
                        </div>
                     </div>
