@@ -411,7 +411,7 @@ const IROConsole = () => {
           React.useEffect(() => {
               const fetchErrors = async () => {
                   try {
-                      const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/errors').catch(e => null);
+                      const res = await fetch('https://photo-dependent-ties-dimensions.trycloudflare.com/api/errors').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          setPendingErrors(Array.isArray(data) ? data : []);
@@ -421,7 +421,7 @@ const IROConsole = () => {
               
               const fetchDeliverables = async () => {
                   try {
-                      const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/deliverables').catch(e => null);
+                      const res = await fetch('https://photo-dependent-ties-dimensions.trycloudflare.com/api/deliverables').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          setDeliverables(Array.isArray(data) ? data : []);
@@ -431,7 +431,7 @@ const IROConsole = () => {
               
               const fetchTelemetry = async () => {
                   try {
-                      const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/telemetry').catch(e => null);
+                      const res = await fetch('https://photo-dependent-ties-dimensions.trycloudflare.com/api/telemetry').catch(e => null);
                       if (res && res.ok) {
                          const data = await res.json();
                          if(data && Object.keys(data).length > 0) {
@@ -458,7 +458,7 @@ const IROConsole = () => {
             setChatHistory(prev => [...prev, {sender: 'You', msg}]);
             setChatInput('');
             try {
-               const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/chat', {
+               const res = await fetch('https://photo-dependent-ties-dimensions.trycloudflare.com/api/chat', {
                    method: 'POST',
                    headers: { 'Content-Type': 'application/json' },
                    body: JSON.stringify({ message: msg })
@@ -472,7 +472,7 @@ const IROConsole = () => {
 
           const handleApproveAsset = async (url) => {
               try {
-                  const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/command', {
+                  const res = await fetch('https://photo-dependent-ties-dimensions.trycloudflare.com/api/command', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({ target: 'GHL_SOCIAL', message: `APPROVE_IMAGE: ${url}` })
@@ -753,7 +753,7 @@ const IROConsole = () => {
   React.useEffect(() => {
     const fetchErrors = async () => {
       try {
-        const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/errors').catch(e => null);
+        const res = await fetch('https://photo-dependent-ties-dimensions.trycloudflare.com/api/errors').catch(e => null);
         if (res && res.ok) {
           const data = await res.json();
           setPendingErrors(Array.isArray(data) ? data : []);
@@ -762,7 +762,7 @@ const IROConsole = () => {
     };
     const fetchDeliverables = async () => {
       try {
-        const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/deliverables').catch(e => null);
+        const res = await fetch('https://photo-dependent-ties-dimensions.trycloudflare.com/api/deliverables').catch(e => null);
         if (res && res.ok) {
           const data = await res.json();
           setDeliverables(Array.isArray(data) ? data : []);
@@ -771,7 +771,7 @@ const IROConsole = () => {
     };
     const fetchTelemetry = async () => {
       try {
-        const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/telemetry').catch(e => null);
+        const res = await fetch('https://photo-dependent-ties-dimensions.trycloudflare.com/api/telemetry').catch(e => null);
         if (res && res.ok) {
           const data = await res.json();
           if (data && Object.keys(data).length > 0) {
@@ -802,7 +802,7 @@ const IROConsole = () => {
     }]);
     setChatInput('');
     try {
-      const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/chat', {
+      const res = await fetch('https://photo-dependent-ties-dimensions.trycloudflare.com/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -825,7 +825,7 @@ const IROConsole = () => {
   };
   const handleApproveAsset = async url => {
     try {
-      const res = await fetch('https://stuffed-year-anderson-backed.trycloudflare.com/api/command', {
+      const res = await fetch('https://photo-dependent-ties-dimensions.trycloudflare.com/api/command', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
