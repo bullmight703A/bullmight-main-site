@@ -305,7 +305,7 @@
                   </section>
 
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 overflow-hidden flex flex-col min-h-0">
-                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 flex-none">Bridge Active Files</h2>
+                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 flex-none">Night Protocol</h2>
                     <div className="space-y-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
                       {[
                         { name: 'Architecture_Mapping.png', type: 'IMG', url: '/deliverables/Architecture_Mapping.png' },
