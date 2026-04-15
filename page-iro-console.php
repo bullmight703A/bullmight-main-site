@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://iro-bullmight-bridge16.loca.lt';
+        const API_BASE = 'https://photo-dependent-ties-dimensions.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
