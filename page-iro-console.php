@@ -53,7 +53,7 @@
             SEO: API_BASE,         // Architecture Target: http://localhost:3013
             KIDAZZLE: API_BASE,    // Architecture Target: http://localhost:3014
             WIMPER: API_BASE,      // Architecture Target: http://localhost:3015
-            PICASSO:: API_BASE,     // Architecture Target: http://localhost:3016
+            PICASSO: API_BASE,     // Architecture Target: http://localhost:3016
             GLOBAL: API_BASE,
             SYSTEM: API_BASE       // Architecture Target: http://localhost:3006
         };
