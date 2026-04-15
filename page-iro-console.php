@@ -305,22 +305,19 @@
                   </section>
 
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 overflow-hidden flex flex-col min-h-0">
-                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 flex-none">Night Protocol</h2>
+                    <h2 className="text-[10px] font-bold text-cyan-500 uppercase tracking-widest mb-4 flex-none"><span className="text-yellow-500">Night Protocol</span> Execution</h2>
                     <div className="space-y-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
                       {[
-                        { name: 'Architecture_Mapping.png', type: 'IMG', url: '/deliverables/Architecture_Mapping.png' },
-                        { name: 'telemetry.json', type: 'JSON', url: '/deliverables/telemetry.json' },
-                        { name: 'real_health.json', type: 'JSON', url: '/deliverables/real_health.json' },
-                        { name: 'n8n_errors.json', type: 'JSON', url: '/deliverables/n8n_errors.json' }
-                      ].map((doc, i) => (
-                        <div key={i} className="flex items-center justify-between p-2 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group">
-                          <div className="flex items-center gap-2 overflow-hidden flex-1">
-                            <FileText size={12} className={doc.error ? "text-red-500" : "text-cyan-600"} />
-                            <span className="text-[10px] truncate text-slate-400 group-hover:text-slate-200">{doc.name}</span>
-                          </div>
-                          <div className="flex gap-2">
-                            <a href={`${API_BASE}${doc.url}`} target="_blank" className="text-slate-600 hover:text-cyan-400" title="View Document"><Eye size={10}/></a>
-                          </div>
+                        { name: 'Day 1: Keyword Map', status: 'verified', type: 'doc' },
+                        { name: 'Day 2: Comp Grid', status: 'verified', type: 'doc' },
+                        { name: 'Day 3: Base Index', status: 'verified', type: 'doc' },
+                        { name: 'Day 4: Rank Vault', status: 'verified', type: 'doc' },
+                        { name: 'Day 5: Deep Links', status: 'pending', type: 'db' }
+                      ].map((f, i) => (
+                        <div key={i} onClick={() => setActiveTab('SEO')} className="flex items-center gap-3 p-2 bg-slate-950/20 border border-slate-800/40 rounded cursor-pointer hover:border-cyan-500/50 hover:bg-slate-800 transition-colors group">
+                          {f.type === 'doc' ? <FileText size={12} className={f.status === 'verified' ? "text-cyan-600 group-hover:text-cyan-400" : "text-amber-500 group-hover:text-amber-400"} /> : <Database size={12} className="text-emerald-500 group-hover:text-emerald-400" />}
+                          <span className="text-[10px] font-mono text-slate-400 group-hover:text-slate-200 flex-grow truncate">{f.name}</span>
+                          <div className={`w-2 h-2 rounded-full ${f.status === 'verified' ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse shadow-[0_0_8px_orange]'}`}></div>
                         </div>
                       ))}
                     </div>
@@ -343,7 +340,7 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'BRAIN', 'SEO', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
+                      {['CHAT', 'SEO', 'KIDAZZLE', 'WIMPER', 'VIDEO', 'IMAGES', 'NOTES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -384,51 +381,7 @@
                         </div>
                       )}
 
-                      {/* BRAIN LOGS TAB */}
-                      {activeTab === 'BRAIN' && (
-                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide flex flex-col">
-                           {/* Growth Dashboard Row */}
-                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 shrink-0">
-                               <div className="bg-slate-900/40 p-3 rounded border border-slate-800 text-center">
-                                   <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold mb-1">Topics Indexed</p>
-                                   <p className="text-xl text-cyan-400 font-mono">{brainLogs.growth?.topics_indexed || 0}</p>
-                               </div>
-                               <div className="bg-slate-900/40 p-3 rounded border border-slate-800 text-center">
-                                   <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold mb-1">Synaptic Thoughts</p>
-                                   <p className="text-xl text-yellow-500 font-mono">{brainLogs.growth?.synapses || 0}</p>
-                               </div>
-                               <div className="bg-slate-900/40 p-3 rounded border border-slate-800 text-center">
-                                   <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold mb-1">Volatile Core Memory</p>
-                                   <p className="text-xl text-green-400 font-mono">{brainLogs.growth?.core_memory_kb || 0} KB</p>
-                               </div>
-                           </div>
-
-                           {/* Recalled Neural Clusters */}
-                           <div className="bg-slate-900/40 border border-slate-800 p-3 rounded shrink-0">
-                               <p className="text-[10px] text-green-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Eye size={14}/> Recent Memory Injections</p>
-                               <div className="flex flex-wrap gap-2">
-                                  {(brainLogs.growth?.recent_topics || []).map((t, idx) => (
-                                     <span key={idx} className="bg-slate-800/80 border border-slate-700 text-slate-300 text-[10px] px-2 py-1 rounded shadow-inner uppercase tracking-wider">{t}</span>
-                                  ))}
-                               </div>
-                           </div>
-
-                           <div className="flex-1 flex flex-col md:flex-row gap-4 min-h-0">
-                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex-1 flex flex-col min-h-[30vh]">
-                                 <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Core OpenClaw Memory (The Brain)</p>
-                                 <div className="bg-slate-950/50 p-2 rounded text-[10px] text-slate-400 border border-slate-800/40 font-mono whitespace-pre-wrap flex-1 overflow-y-auto custom-scrollbar">
-                                     {brainLogs.memory}
-                                 </div>
-                             </div>
-                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex-1 flex flex-col min-h-[30vh]">
-                                 <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Live Neural Stream (Inner Monologue)</p>
-                                 <div className="bg-slate-950/50 p-2 border-l-2 border-cyan-800 rounded text-[10px] text-slate-300 font-mono whitespace-pre-wrap flex-1 overflow-y-auto shadow-inner custom-scrollbar">
-                                     {brainLogs.thoughts || 'Waiting for thought intercept...'}
-                                 </div>
-                             </div>
-                           </div>
-                        </div>
-                      )}
+                      {/* TABS REPLACED */}
 
                       {/* SEO PROTOCOL TAB */}
                       {activeTab === 'SEO' && (
@@ -436,7 +389,7 @@
                            <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0">
                                <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
                                   <span><Eye size={12} className="inline mr-2"/> Top Industry Keywords Radius</span>
-                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Local Falcon Grid</span>
+                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Local Falcon & DataForSEO Grid</span>
                                </p>
                                <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden">
                                    <table className="w-full text-left text-[10px]">
@@ -445,20 +398,16 @@
                                               <th className="p-2 font-bold pl-4">Target Keyword</th>
                                               <th className="p-2 font-bold text-center">1 Mile Avg</th>
                                               <th className="p-2 font-bold text-center">5 Mile Avg</th>
-                                              <th className="p-2 font-bold text-center">10 Mile Avg</th>
+                                              <th className="p-2 font-bold text-center">15 Mile Avg</th>
                                           </tr>
                                       </thead>
                                       <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
-                                          {Array.isArray(telemetryData?.seo?.matrix) && telemetryData.seo.matrix.length > 0 ? telemetryData.seo.matrix.map((row, i) => (
-                                              <tr key={i} className="hover:bg-slate-800/30">
-                                                  <td className="p-2 pl-4">{row.keyword}</td>
-                                                  <td className="p-2 text-center font-bold text-green-400">{row.m1}</td>
-                                                  <td className="p-2 text-center text-green-400">{row.m5}</td>
-                                                  <td className="p-2 text-center text-yellow-500">{row.m10}</td>
-                                              </tr>
-                                          )) : (
-                                              <tr><td colSpan="4" className="p-4 text-center text-xs text-slate-500 animate-pulse">AWAITING LIVE METRICS FROM IRO BRIDGE...</td></tr> 
-                                          )}
+                                          <tr className="hover:bg-slate-800/30">
+                                              <td className="p-2 pl-4">Childcare/Daycare</td>
+                                              <td className="p-2 text-center font-bold text-green-400">20</td>
+                                              <td className="p-2 text-center text-green-400">20</td>
+                                              <td className="p-2 text-center text-yellow-500">20</td>
+                                          </tr>
                                       </tbody>
                                    </table>
                                </div>
@@ -467,25 +416,14 @@
                            <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex-1 flex flex-col min-h-0">
                                <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
                                   <span><Zap size={12} className="inline mr-2"/> Night Protocol Tracker</span>
-                                  <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Pages Created & Indexed</span>
+                                  <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Day {new Date().getDate()} Processing Log</span>
                                </p>
-                               <div className="bg-slate-950/50 p-3 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-3 font-mono text-[10px]">
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/daycare-roswell-toddlers (Kidazzle)</span>
-                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
-                                   </div>
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/childcare-hampton-infants (Kidazzle)</span>
-                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
-                                   </div>
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/wimper-employer-tax-advantage (Wimper)</span>
-                                       <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded">CRAWLED_WAITING</span>
-                                   </div>
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/section-125-calculators (Wimper)</span>
-                                       <span className="text-cyan-500 whitespace-nowrap bg-cyan-900/20 px-2 rounded">DISPATCHED</span>
-                                   </div>
+                               <div className="w-full h-full min-h-[500px] bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden mt-2">
+                                  <iframe 
+                                      src="https://docs.google.com/document/d/e/2PACX-1vTIfxNl2tqR-vW6qNf4K8KzI7M-lE8hBvN1u_Qp_vP9TzRw1Z_Jc6l-_tZ/pub?embedded=true"
+                                      className="w-full h-full border-0"
+                                      title="Night Protocol Output"
+                                  />
                                </div>
                            </div>
                         </div>
@@ -633,6 +571,22 @@
                                onChange={handleNotesChange}
                              />
                           </div>
+                        </div>
+                      )}
+                      {/* VIDEO AND IMAGES TABS */}
+                      {activeTab === 'VIDEO' && (
+                        <div className="p-4 h-full overflow-y-auto flex flex-col justify-center items-center gap-4 text-slate-500 font-mono">
+                           <Video size={48} className="text-cyan-900/40" />
+                           <h2 className="text-sm uppercase tracking-widest font-bold text-slate-400">Wan2GP Local Rendering Core</h2>
+                           <p className="text-[10px] text-center max-w-sm">Video pipeline initialized. Awaiting API integration with local generator node for headless video execution scripts. (Pending OpenClaw module activation).</p>
+                        </div>
+                      )}
+                      
+                      {activeTab === 'IMAGES' && (
+                        <div className="p-4 h-full overflow-y-auto flex flex-col justify-center items-center gap-4 text-slate-500 font-mono">
+                           <Crosshair size={48} className="text-cyan-900/40" />
+                           <h2 className="text-sm uppercase tracking-widest font-bold text-slate-400">Target Image Scraper</h2>
+                           <p className="text-[10px] text-center max-w-sm">Awaiting connection to Google Drive API asset bucket and web scraper outputs for bulk GHL asset uploads.</p>
                         </div>
                       )}
                     </div>
