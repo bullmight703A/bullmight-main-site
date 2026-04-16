@@ -494,41 +494,26 @@
                       {/* KIDAZZLE TAB */}
                       {activeTab === 'KIDAZZLE' && (
                         <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
-                              <p className="text-[9px] text-slate-500 uppercase font-bold mb-1">GHL Pipeline Opportunities</p>
-                              <p className="text-xl font-bold text-cyan-400">Active Syncing...</p>
-                              <div className="mt-2 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-cyan-500 w-[100%] animate-pulse" />
-                              </div>
-                            </div>
-                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex flex-col justify-center">
-                              <a href="https://app.bullmight.com/v2/location/ZR2UvxPL2wlZNSvHjmJD/opportunities/list" target="_blank" className="w-full py-2 bg-cyan-600/10 border border-cyan-600/40 text-cyan-500 rounded text-[10px] hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
-                                 <ExternalLink size={12} /> Launch GHL Portal
-                              </a>
-                            </div>
-                          </div>
-
-                          <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
-                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
+                          <div className="mb-2 flex justify-between items-center bg-slate-950 p-2 border border-slate-800 rounded">
                               <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Hampton Location Pipeline</h3>
-                              <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Tracking</span>
-                            </div>
-                            <div className="p-2 space-y-2">
+                              <div className="flex gap-4 items-center">
+                                  <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40 hidden sm:inline-block">GHL Live Tracking</span>
+                                  <a href="https://app.bullmight.com/v2/location/ZR2UvxPL2wlZNSvHjmJD/opportunities/list" target="_blank" className="text-[9px] text-cyan-500 hover:text-white uppercase flex items-center gap-1 font-bold transition-colors"><ExternalLink size={10}/> Launch Portal</a>
+                              </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                               {[
-                                { group: '1. New Intake Leads (Targeted)', value: 412 },
-                                { group: '2. Tours Scheduled', value: 87 },
-                                { group: '3. Tours Completed', value: 34 },
-                                { group: '4. Confirmed Enrollments (Won)', value: 12 }
+                                { group: '1. New Intakes', value: 412, color: 'text-red-500', bg: 'bg-red-950/20', border: 'border-red-900/40' },
+                                { group: '2. Tours Sched', value: 87, color: 'text-blue-500', bg: 'bg-blue-950/20', border: 'border-blue-900/40' },
+                                { group: '3. Tours Comp', value: 34, color: 'text-purple-500', bg: 'bg-purple-950/20', border: 'border-purple-900/40' },
+                                { group: '4. Enrolled', value: 12, color: 'text-green-500', bg: 'bg-green-950/20', border: 'border-green-900/40' }
                               ].map((metric, i) => (
-                                <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-center">
-                                  <div className="flex-1 w-full flex justify-between items-center">
-                                     <span className="text-xs font-bold text-slate-200 uppercase">{metric.group}</span>
-                                     <span className="font-bold text-cyan-400 text-lg">{metric.value}</span>
-                                  </div>
+                                <div key={i} className={`${metric.bg} border ${metric.border} p-4 rounded flex flex-col items-center justify-center text-center shadow-lg transition-transform hover:scale-[1.02]`}>
+                                   <p className="text-[9px] text-slate-400 uppercase font-bold mb-2 tracking-widest whitespace-nowrap">{metric.group}</p>
+                                   <p className={`text-3xl font-black ${metric.color} drop-shadow-md`}>{metric.value}</p>
                                 </div>
                               ))}
-                            </div>
                           </div>
 
                            <div className="bg-slate-900/40 border border-slate-800/60 shadow-lg rounded overflow-hidden mt-4">
