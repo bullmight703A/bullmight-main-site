@@ -645,55 +645,67 @@
                       {/* VIDEO AND IMAGES TABS */}
                       {activeTab === 'VIDEO' && (
                         <div className="p-4 h-full overflow-y-auto flex flex-col gap-4 font-mono scrollbar-hide">
-                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex justify-between items-center shrink-0">
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex flex-col sm:flex-row justify-between items-center sm:items-start shrink-0 gap-4">
                                <div className="flex items-center gap-4">
-                                   <div className="w-10 h-10 rounded bg-cyan-950/50 border border-cyan-800 flex items-center justify-center">
-                                       <Video size={20} className="text-cyan-400" />
+                                   <div className="w-12 h-12 rounded bg-cyan-950/50 border border-cyan-800 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                                       <Video size={24} className="text-cyan-400" />
                                    </div>
                                    <div>
-                                       <h2 className="text-xs uppercase tracking-widest font-bold text-slate-200">OpenMontage Engine</h2>
-                                       <p className="text-[9px] text-cyan-500 uppercase tracking-widest mt-1 font-bold">12 Pipelines • 48 Tools • Agentic Core</p>
+                                       <h2 className="text-sm uppercase tracking-widest font-black text-slate-200">OpenClaw Omni-Video Engine</h2>
+                                       <p className="text-[9px] text-cyan-500 uppercase tracking-widest mt-1 font-bold">Claude Bot • HeyGen CLI • C-Dance</p>
                                    </div>
                                </div>
-                               <button className="px-4 py-2 bg-slate-950 border border-slate-700 hover:border-cyan-500 text-[10px] text-cyan-600 hover:text-cyan-400 uppercase tracking-widest font-bold rounded transition-colors group">
-                                   Launch Studio <ExternalLink size={10} className="inline ml-1" />
+                               <button className="px-5 py-2.5 bg-cyan-950/50 border border-cyan-700 hover:bg-cyan-900 transition-colors text-[10px] text-cyan-400 uppercase tracking-widest font-black rounded w-full sm:w-auto shadow-[0_0_10px_rgba(34,211,238,0.1)] flex items-center justify-center gap-2">
+                                   <Zap size={12} /> Execute Master Production
                                </button>
                            </div>
 
-                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 shrink-0">
-                               <div className="bg-slate-950/30 border border-slate-800/60 rounded p-3 relative overflow-hidden group">
-                                   <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-xl group-hover:bg-purple-500/10 transition-colors" />
-                                   <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-3 border-b border-slate-800/50 pb-2">Active Generation Pipeline</p>
-                                   <div className="flex items-center gap-3">
-                                       <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_orange]" />
-                                       <span className="text-xs text-amber-400 font-bold uppercase tracking-wide">Awaiting Content Payload...</span>
+                           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 shrink-0">
+                               {/* Stage 1: Long Form Generation */}
+                               <div className="bg-slate-900/40 border-t-2 border-t-purple-500 border-x border-b border-slate-800/60 rounded p-4 relative overflow-hidden group">
+                                   <div className="absolute -top-10 -right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl flex-none pointer-events-none" />
+                                   <p className="text-[10px] text-purple-400 uppercase font-black tracking-widest mb-3 flex items-center justify-between">1. Long-Form Core <TrendingUp size={12} /></p>
+                                   <div className="space-y-3 mt-4">
+                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter hover:border-purple-500/40 transition-colors flex items-center gap-2"><span className="text-purple-500">↳</span> Deep Research Prompts</div>
+                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter hover:border-purple-500/40 transition-colors flex items-center gap-2"><span className="text-purple-500">↳</span> Script & Outline Generation</div>
+                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter hover:border-purple-500/40 transition-colors flex items-center gap-2"><span className="text-purple-500">↳</span> HeyGen & C-Dance Rendering</div>
                                    </div>
-                                   <p className="text-[9px] text-slate-600 mt-2 leading-relaxed max-w-sm">Ready to compile Wimper FICA explainers or Local Kidazzle motion graphics. Remotion renderer on standby.</p>
                                </div>
 
-                               <div className="bg-slate-950/30 border border-slate-800/60 rounded p-3">
-                                   <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-3 border-b border-slate-800/50 pb-2 flex justify-between">
-                                      <span>Tool Registry Matrix</span>
-                                      <span className="text-green-500">Live</span>
-                                   </p>
-                                   <div className="space-y-2 text-[9px] text-slate-400 uppercase tracking-tighter">
-                                       <div className="flex justify-between items-center"><span className="flex items-center gap-1.5"><Crosshair size={10} /> Video Generation</span><span className="text-white">13 Models OK</span></div>
-                                       <div className="flex justify-between items-center"><span className="flex items-center gap-1.5"><Mic size={10} /> Voice & Audio</span><span className="text-white">ElevenLabs / Suno</span></div>
-                                       <div className="flex justify-between items-center"><span className="flex items-center gap-1.5"><Layers size={10} /> Remotion Composer</span><span className="text-cyan-400 font-bold">Bridged</span></div>
+                               {/* Stage 2: Fragmentation */}
+                               <div className="bg-slate-900/40 border-t-2 border-t-amber-500 border-x border-b border-slate-800/60 rounded p-4 relative overflow-hidden group">
+                                   <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl flex-none pointer-events-none" />
+                                   <p className="text-[10px] text-amber-500 uppercase font-black tracking-widest mb-3 flex items-center justify-between">2. Hook Fragmentation <Layers size={12} /></p>
+                                   <div className="space-y-3 mt-4">
+                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 flex justify-between items-center text-[9px] text-slate-400 uppercase tracking-tighter hover:border-amber-500/40 transition-colors"><span>Extract 30s Shorts</span><span className="text-amber-500 font-bold">12 Active</span></div>
+                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 flex justify-between items-center text-[9px] text-slate-400 uppercase tracking-tighter hover:border-amber-500/40 transition-colors"><span>Extract 60s Reels</span><span className="text-amber-500 font-bold">8 Active</span></div>
+                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 flex justify-between items-center text-[9px] text-slate-400 uppercase tracking-tighter hover:border-amber-500/40 transition-colors"><span>Generate YT Titles</span><span className="text-amber-500 font-bold px-1.5 py-0.5 bg-amber-950/30 rounded border border-amber-900/50">Ready</span></div>
+                                   </div>
+                               </div>
+
+                               {/* Stage 3: Social & GHL */}
+                               <div className="bg-slate-900/40 border-t-2 border-t-green-500 border-x border-b border-slate-800/60 rounded p-4 relative overflow-hidden group">
+                                   <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-2xl flex-none pointer-events-none" />
+                                   <p className="text-[10px] text-green-500 uppercase font-black tracking-widest mb-3 flex items-center justify-between">3. Omni-Channel Push <Send size={12} /></p>
+                                   <div className="space-y-3 mt-4">
+                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter flex items-center justify-between hover:border-green-500/40 transition-colors"><span>Blogging / LinkedIn</span><div className="w-1.5 h-1.5 rounded-full bg-slate-600" /></div>
+                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter flex items-center justify-between hover:border-green-500/40 transition-colors"><span>X / Social Threads</span><div className="w-1.5 h-1.5 rounded-full bg-slate-600" /></div>
+                                      <div className="bg-green-950/30 rounded border border-green-800/60 p-2 text-[9px] text-green-400 font-bold uppercase tracking-widest text-center shadow-[0_0_10px_rgba(34,197,94,0.1)] hover:bg-green-900/40 transition-colors cursor-pointer flex items-center justify-center gap-2"><Send size={10} /> Sync Compilations to GHL</div>
                                    </div>
                                </div>
                            </div>
 
                            <div className="bg-slate-900/20 border border-slate-800/40 rounded p-4 flex-1 flex flex-col min-h-0">
-                               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-3 flex items-center gap-2">
-                                  <Terminal size={12} /> Execution Log
+                               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-3 flex items-center justify-between">
+                                  <span className="flex items-center gap-2"><Terminal size={12} /> Live Post-Production Stream</span>
+                                  <span className="text-[8px] bg-slate-950 text-slate-500 px-2 rounded border border-slate-800 py-0.5 shadow-sm hidden sm:inline-block">GHL Listening Webhook Active</span>
                                </p>
-                               <div className="bg-black/50 border border-slate-800/50 rounded flex-1 p-3 font-mono text-[9px] text-slate-500 space-y-1.5 overflow-y-auto overflow-x-hidden w-full">
-                                   <p className="border-l-2 border-cyan-800 pl-2">[SYS] OpenMontage core initialized successfully.</p>
-                                   <p className="border-l-2 border-cyan-800 pl-2">[SYS] Loaded 11 pipeline patterns (Explainer, Documentary, Talking Head...).</p>
-                                   <p className="border-l-2 border-cyan-800 pl-2">[SYS] 400+ Agent Skills synchronized with local OpenClaw.</p>
-                                   <p className="border-l-2 border-emerald-800 pl-2 text-emerald-500/70">[NET] Pre-compose and ffmpeg tools validated locally.</p>
-                                   <p className="border-l-2 border-amber-800 pl-2 text-amber-500/80 animate-pulse mt-4">[IDLE] Waiting for WIMPER or Kidazzle video brief...</p>
+                               <div className="bg-black/50 border border-slate-800/50 rounded flex-1 p-3 font-mono text-[9px] text-slate-500 space-y-2 overflow-y-auto overflow-x-hidden w-full">
+                                   <p className="border-l-2 border-cyan-800 pl-2 text-cyan-500/90">[SYS] Claude Bot master control mapped to OpenClaw core.</p>
+                                   <p className="border-l-2 border-cyan-800 pl-2">[SYS] Obsidian daily briefing workflow pre-loaded.</p>
+                                   <p className="border-l-2 border-cyan-800 pl-2">[SYS] HeyGen CLI and C-Dance environment authenticated seamlessly.</p>
+                                   <p className="border-l-2 border-emerald-800 pl-2 text-emerald-500/90 font-bold">[NET] GHL Media API initialized for automated social uploads.</p>
+                                   <p className="border-l-2 border-amber-800 pl-2 text-amber-500 animate-pulse mt-4">[IDLE] Waiting for deep UI prompt payload to ignite pipeline...</p>
                                </div>
                            </div>
                         </div>
