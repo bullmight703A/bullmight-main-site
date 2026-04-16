@@ -718,14 +718,20 @@
                                    </div>
                                </div>
 
-                               {/* Stage 3: Social & GHL */}
+                               {/* Stage 3: Social & GHL Metrics */}
                                <div className="bg-slate-900/40 border-t-2 border-t-green-500 border-x border-b border-slate-800/60 rounded p-4 relative overflow-hidden group">
                                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-2xl flex-none pointer-events-none" />
-                                   <p className="text-[10px] text-green-500 uppercase font-black tracking-widest mb-3 flex items-center justify-between">3. Omni-Channel Push <Send size={12} /></p>
+                                   <p className="text-[10px] text-green-500 uppercase font-black tracking-widest mb-3 flex items-center justify-between">3. GHL Social Engagement <Send size={12} /></p>
                                    <div className="space-y-3 mt-4">
-                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter flex items-center justify-between hover:border-green-500/40 transition-colors"><span>Blogging / LinkedIn</span><div className="w-1.5 h-1.5 rounded-full bg-slate-600" /></div>
-                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter flex items-center justify-between hover:border-green-500/40 transition-colors"><span>X / Social Threads</span><div className="w-1.5 h-1.5 rounded-full bg-slate-600" /></div>
-                                      <div className="bg-green-950/30 rounded border border-green-800/60 p-2 text-[9px] text-green-400 font-bold uppercase tracking-widest text-center shadow-[0_0_10px_rgba(34,197,94,0.1)] hover:bg-green-900/40 transition-colors cursor-pointer flex items-center justify-center gap-2"><Send size={10} /> Sync Compilations to GHL</div>
+                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter flex items-center justify-between hover:border-green-500/40 transition-colors">
+                                          <span>Facebook CTR</span>
+                                          <span className="text-green-400 font-bold flex items-center gap-1"><TrendingUp size={10} /> +137%</span>
+                                      </div>
+                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter flex items-center justify-between hover:border-green-500/40 transition-colors">
+                                          <span>LinkedIn Plays</span>
+                                          <span className="text-slate-300 font-bold">Syncing...</span>
+                                      </div>
+                                      <div className="bg-green-950/30 rounded border border-green-800/60 p-2 text-[9px] text-green-400 font-bold uppercase tracking-widest text-center shadow-[0_0_10px_rgba(34,197,94,0.1)] hover:bg-green-900/40 transition-colors cursor-pointer flex items-center justify-center gap-2"><Send size={10} /> Sync GHL Matrix Data</div>
                                    </div>
                                </div>
                            </div>
