@@ -146,6 +146,9 @@
 
           const [activeLessonPlanLoc, setActiveLessonPlanLoc] = useState('MAIN MASTER OUTBOX');
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
+          const [videoPrompt, setVideoPrompt] = useState('');
+          const [imagePrompt, setImagePrompt] = useState('');
+          const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
           const [n8nErrors, setN8nErrors] = useState([]);
           const messagesEndRef = useRef(null);
 
@@ -666,7 +669,7 @@
                       {/* VIDEO AND IMAGES TABS */}
                       {activeTab === 'VIDEO' && (
                         <div className="p-4 h-full overflow-y-auto flex flex-col gap-4 font-mono scrollbar-hide">
-                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex flex-col sm:flex-row justify-between items-center sm:items-start shrink-0 gap-4">
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex flex-col shrink-0 gap-4">
                                <div className="flex items-center gap-4">
                                    <div className="w-12 h-12 rounded bg-cyan-950/50 border border-cyan-800 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
                                        <Video size={24} className="text-cyan-400" />
@@ -676,9 +679,20 @@
                                        <p className="text-[9px] text-cyan-500 uppercase tracking-widest mt-1 font-bold">Claude Bot • HeyGen CLI • C-Dance</p>
                                    </div>
                                </div>
-                               <button className="px-5 py-2.5 bg-cyan-950/50 border border-cyan-700 hover:bg-cyan-900 transition-colors text-[10px] text-cyan-400 uppercase tracking-widest font-black rounded w-full sm:w-auto shadow-[0_0_10px_rgba(34,211,238,0.1)] flex items-center justify-center gap-2">
-                                   <Zap size={12} /> Execute Master Production
-                               </button>
+                               <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                                 <input 
+                                     type="text" 
+                                     value={videoPrompt}
+                                     onChange={(e) => setVideoPrompt(e.target.value)}
+                                     placeholder="Enter YouTube URL for Deep Research OR HeyGen Prompt..."
+                                     className="flex-1 bg-slate-950/80 border border-slate-800 rounded p-2.5 text-[10px] text-slate-300 focus:outline-none focus:border-cyan-800 font-mono tracking-widest"
+                                 />
+                                 <button 
+                                     onClick={() => { setIsGeneratingVideo(true); setVideoPrompt(''); }}
+                                     className="px-5 py-2.5 bg-cyan-950/50 border border-cyan-700 hover:bg-cyan-900 transition-colors text-[10px] text-cyan-400 uppercase tracking-widest font-black rounded w-full sm:w-auto shadow-[0_0_10px_rgba(34,211,238,0.1)] flex items-center justify-center gap-2">
+                                     <Zap size={12} /> {isGeneratingVideo ? 'Processing...' : 'Execute Master Production'}
+                                 </button>
+                               </div>
                            </div>
 
                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 shrink-0">
@@ -734,10 +748,44 @@
                       )}
                       
                       {activeTab === 'IMAGES' && (
-                        <div className="p-4 h-full overflow-y-auto flex flex-col justify-center items-center gap-4 text-slate-500 font-mono">
-                           <Crosshair size={48} className="text-cyan-900/40" />
-                           <h2 className="text-sm uppercase tracking-widest font-bold text-slate-400">Target Image Scraper</h2>
-                           <p className="text-[10px] text-center max-w-sm">Awaiting connection to Google Drive API asset bucket and web scraper outputs for bulk GHL asset uploads.</p>
+                        <div className="p-4 h-full overflow-y-auto flex flex-col gap-4 font-mono scrollbar-hide">
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex flex-col sm:flex-row justify-between items-center sm:items-start shrink-0 gap-4">
+                               <div className="flex items-center gap-4">
+                                   <div className="w-12 h-12 rounded bg-fuchsia-950/50 border border-fuchsia-800 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(217,70,239,0.2)]">
+                                       <Crosshair size={24} className="text-fuchsia-400" />
+                                   </div>
+                                   <div>
+                                       <h2 className="text-sm uppercase tracking-widest font-black text-slate-200">Picasso Multi-Modal Matrix</h2>
+                                       <p className="text-[9px] text-fuchsia-500 uppercase tracking-widest mt-1 font-bold">Flux Core • Midjourney V6 • GHL Auto-Push</p>
+                                   </div>
+                               </div>
+                           </div>
+
+                           <div className="bg-slate-900/20 border border-slate-800/40 rounded p-4 flex-1 flex flex-col min-h-0">
+                               <div className="flex flex-col gap-3 h-full">
+                                   <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest flex items-center justify-between">
+                                      <span className="flex items-center gap-2"><Terminal size={12} /> Master Graphic Prompt</span>
+                                      <span className="text-[8px] bg-slate-950 text-slate-500 px-2 rounded border border-slate-800 py-0.5">Google Drive Sandbox Linked</span>
+                                   </p>
+
+                                   <textarea 
+                                       className="w-full h-32 bg-slate-950/80 border border-slate-800 rounded p-3 text-[11px] text-slate-300 focus:outline-none focus:border-fuchsia-800 scrollbar-hide font-mono tracking-widest resize-none"
+                                       placeholder="Enter graphic prompt here... (e.g. 'Stylized illustration of a diner scene, Wimper business owners discussing Section 125 tax loopholes')"
+                                       value={imagePrompt}
+                                       onChange={(e) => setImagePrompt(e.target.value)}
+                                   />
+                                   
+                                   <div className="flex justify-between items-center mt-2">
+                                       <p className="text-[9px] text-slate-500 animate-pulse">[IDLE] Picasso node awaiting input payload...</p>
+                                       <button 
+                                           onClick={() => setImagePrompt('')}
+                                           className="px-6 py-2.5 bg-fuchsia-950/50 border border-fuchsia-700 hover:bg-fuchsia-900 transition-colors text-[10px] text-fuchsia-400 uppercase tracking-widest font-black rounded shadow-[0_0_10px_rgba(217,70,239,0.1)] flex items-center justify-center gap-2"
+                                       >
+                                           <Zap size={12} /> Render Graphix
+                                       </button>
+                                   </div>
+                               </div>
+                           </div>
                         </div>
                       )}
                     </div>
