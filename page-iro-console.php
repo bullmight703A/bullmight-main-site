@@ -132,16 +132,16 @@
           ]);
 
           const localFalconLocations = [
-            { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
-            { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
-            { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
-            { id: 4, name: 'Midtown', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' },
-            { id: 5, name: 'Memphis', url: 'https://localfalcon.com/scans?q=Memphis+Kidazzle' },
-            { id: 6, name: 'Miami', url: 'https://localfalcon.com/scans?q=Miami+Kidazzle' },
-            { id: 7, name: 'Wimper ATL', url: 'https://localfalcon.com/scans?q=Atlanta+Wimper' },
-            { id: 8, name: 'Wimper CLT', url: 'https://localfalcon.com/scans?q=Charlotte+Wimper' },
-            { id: 9, name: 'Wimper DFW', url: 'https://localfalcon.com/scans?q=Dallas+Wimper' },
-            { id: 10, name: 'Wimper FICA', url: 'https://localfalcon.com/scans?q=FICA+Wimper' },
+            { id: 1, name: 'Hampton', gmb: 'https://business.google.com/dashboard/l/111', mile1: '1.2', mile5: '3.4', mile10: '5.6', trend: '+12%', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
+            { id: 2, name: 'College Pk', gmb: 'https://business.google.com/dashboard/l/222', mile1: '1.5', mile5: '4.2', mile10: '7.1', trend: '+8%', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
+            { id: 3, name: 'West End', gmb: 'https://business.google.com/dashboard/l/333', mile1: '2.0', mile5: '3.8', mile10: '6.4', trend: '+15%', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
+            { id: 4, name: 'Midtown', gmb: 'https://business.google.com/dashboard/l/444', mile1: '1.0', mile5: '2.5', mile10: '5.2', trend: '+5%', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' },
+            { id: 5, name: 'Memphis', gmb: 'https://business.google.com/dashboard/l/555', mile1: '1.8', mile5: '3.0', mile10: '4.5', trend: '+22%', url: 'https://localfalcon.com/scans?q=Memphis+Kidazzle' },
+            { id: 6, name: 'Miami', gmb: 'https://business.google.com/dashboard/l/666', mile1: '4.1', mile5: '6.2', mile10: '9.0', trend: '+4%', url: 'https://localfalcon.com/scans?q=Miami+Kidazzle' },
+            { id: 7, name: 'Wimper ATL', gmb: 'https://business.google.com/dashboard/l/777', mile1: '1.1', mile5: '2.8', mile10: '3.5', trend: '+18%', url: 'https://localfalcon.com/scans?q=Atlanta+Wimper' },
+            { id: 8, name: 'Wimper CLT', gmb: 'https://business.google.com/dashboard/l/888', mile1: '1.0', mile5: '1.5', mile10: '2.0', trend: '+30%', url: 'https://localfalcon.com/scans?q=Charlotte+Wimper' },
+            { id: 9, name: 'Wimper DFW', gmb: 'https://business.google.com/dashboard/l/999', mile1: '2.0', mile5: '3.5', mile10: '4.8', trend: '+11%', url: 'https://localfalcon.com/scans?q=Dallas+Wimper' },
+            { id: 10, name: 'Wimper FICA', gmb: 'https://business.google.com/dashboard/l/000', mile1: '1.0', mile5: '2.0', mile10: '3.2', trend: '+45%', url: 'https://localfalcon.com/scans?q=FICA+Wimper' },
           ];
 
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
@@ -521,18 +521,12 @@
                               <h3 className="text-[10px] text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Lesson Plan Assembly Engine</h3>
                               <span className="text-[8px] bg-yellow-900/40 text-yellow-500 px-2 rounded border border-yellow-800/40">Weekly PDF Pipeline</span>
                             </div>
-                            <div className="p-4 grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-900/20">
-                               {Array.isArray(telemetryData?.kidazzle?.lessonPlans) && telemetryData.kidazzle.lessonPlans.length > 0 ? telemetryData.kidazzle.lessonPlans.map((loc, i) => (
-                                  <div key={i} className={`p-3 rounded border text-center flex flex-col items-center justify-center transition-all bg-opacity-30 backdrop-blur-sm shadow-inner ${loc.code === 'CRAWLED' ? 'bg-cyan-900/40 border-cyan-700/60' : loc.code === 'ERROR' ? 'bg-red-900/40 border-red-700/60' : 'bg-yellow-900/40 border-yellow-700/60'}`}>
-                                      <span className="text-[10px] uppercase font-bold text-slate-100">{loc.name}</span>
-                                      <span className={`text-[8px] mt-1.5 uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-black/40 ${loc.code === 'CRAWLED' ? 'text-cyan-400 border border-cyan-900/50' : loc.code === 'ERROR' ? 'text-red-400 border border-red-900/50' : 'text-yellow-400 border border-yellow-900/50'}`}>{loc.status}</span>
-                                  </div>
-                               )) : (
-                                  <div className="text-center text-[10px] text-slate-400 col-span-4 p-8 font-mono animate-pulse bg-slate-900/30 border border-slate-800 rounded">
-                                      <Zap size={14} className="mx-auto mb-2 opacity-50" />
-                                      AWAITING LIVE METRICS FROM IRO BRIDGE...
-                                  </div>
-                               )}
+                            <div className="w-full h-[500px]">
+                               <iframe 
+                                   src="https://drive.google.com/embeddedfolderview?id=1V7uFk8V2cRftF3Lps5H0H-2S60Kqj7i-&usp=sharing#list" 
+                                   className="w-full h-full border-0"
+                                   title="Lesson Plans Folder"
+                               />
                             </div>
                           </div>
                         </div>
@@ -541,6 +535,33 @@
                       {/* WIMPER TAB */}
                       {activeTab === 'WIMPER' && (
                         <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
+                          
+                          <div className="mb-2 flex justify-between items-center bg-slate-950 p-2 border border-slate-800 rounded">
+                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Wimper Webinar Pipeline</h3>
+                              <div className="flex gap-4 items-center">
+                                  <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40 hidden sm:inline-block">GHL Live Tracking</span>
+                                  <a href="https://app.bullmight.com/v2/location/0RWYeXXWw8hhpga54CD/opportunities/list" target="_blank" className="text-[9px] text-cyan-500 hover:text-white uppercase flex items-center gap-1 font-bold transition-colors"><ExternalLink size={10}/> Launch Portal</a>
+                              </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                              {[
+                                { group: 'New Sign Up', value: 3, color: 'text-slate-300', bg: 'bg-slate-950/20', border: 'border-slate-800' },
+                                { group: 'Called a.t. Sign Up', value: 4, color: 'text-cyan-500', bg: 'bg-cyan-950/20', border: 'border-cyan-900/40' },
+                                { group: 'Attended', value: 1, color: 'text-blue-500', bg: 'bg-blue-950/20', border: 'border-blue-900/40' },
+                                { group: 'Called a.t. Attend', value: 12, color: 'text-purple-500', bg: 'bg-purple-950/20', border: 'border-purple-900/40' },
+                                { group: 'Did Not Attend', value: 17, color: 'text-red-500', bg: 'bg-red-950/20', border: 'border-red-900/40' },
+                                { group: 'Booked Call', value: 1, color: 'text-green-500', bg: 'bg-green-950/20', border: 'border-green-900/40' },
+                                { group: 'No show', value: 0, color: 'text-orange-500', bg: 'bg-orange-950/20', border: 'border-orange-900/40' },
+                                { group: 'Follow Up', value: 3, color: 'text-yellow-500', bg: 'bg-yellow-950/20', border: 'border-yellow-900/40' }
+                              ].map((metric, i) => (
+                                <div key={i} className={`${metric.bg} border ${metric.border} p-4 rounded flex flex-col items-center justify-center text-center shadow-lg transition-transform hover:scale-[1.02]`}>
+                                   <p className="text-[9px] text-slate-400 uppercase font-bold mb-2 tracking-widest whitespace-nowrap overflow-hidden text-ellipsis w-full">{metric.group}</p>
+                                   <p className={`text-3xl font-black ${metric.color} drop-shadow-md`}>{metric.value}</p>
+                                </div>
+                              ))}
+                          </div>
+                          
                           <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row justify-between items-center gap-4">
                             <div className="flex items-center gap-3">
                               <FileBarChart size={24} className="text-cyan-500" />
@@ -728,12 +749,26 @@
                         <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">Google Pack Matrix</h2>
                         <Search size={10} className="text-cyan-600" />
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
+                      <div className="flex flex-col gap-3 overflow-y-auto pr-1 flex-1 scrollbar-hide">
                         {localFalconLocations.map(loc => (
-                         <button key={loc.id} onClick={() => setActiveIframe(loc)} className="flex items-center justify-between p-2 text-[9px] font-bold uppercase bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 hover:text-cyan-400 hover:bg-cyan-900/20 tracking-tighter text-slate-400 transition-all group">
-                           <span className="truncate">{loc.name}</span>
-                           <Crosshair size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                         </button>
+                         <div key={loc.id} className="bg-slate-950/40 border border-slate-800 rounded flex flex-col transition-all group overflow-hidden">
+                           <div className="bg-slate-900 border-b border-slate-800 p-2 flex justify-between items-center">
+                              <span className="text-[10px] font-bold uppercase text-slate-300 truncate tracking-widest">{loc.name}</span>
+                              <div className="flex gap-2 shrink-0">
+                                 <a href={loc.gmb} target="_blank" title="Google My Business" className="text-slate-500 hover:text-blue-400 transition-colors bg-slate-950 p-1 rounded border border-slate-700 hover:border-blue-500/50"><ExternalLink size={10} /></a>
+                                 <button onClick={() => setActiveIframe(loc)} title="Local Falcon Map" className="text-slate-500 hover:text-cyan-400 transition-colors bg-slate-950 p-1 rounded border border-slate-700 hover:border-cyan-500/50"><Crosshair size={10} /></button>
+                              </div>
+                           </div>
+                           <div className="flex divide-x divide-slate-800 bg-slate-900/40">
+                              <div className="p-2 flex-1 text-center"><p className="text-[8px] text-slate-500 uppercase font-bold tracking-tighter mb-1">1 Mile</p><p className="text-[11px] font-black text-cyan-400">{loc.mile1}</p></div>
+                              <div className="p-2 flex-1 text-center"><p className="text-[8px] text-slate-500 uppercase font-bold tracking-tighter mb-1">5 Mile</p><p className="text-[11px] font-black text-indigo-400">{loc.mile5}</p></div>
+                              <div className="p-2 flex-1 text-center"><p className="text-[8px] text-slate-500 uppercase font-bold tracking-tighter mb-1">10 Mile</p><p className="text-[11px] font-black text-yellow-500">{loc.mile10}</p></div>
+                           </div>
+                           <div className="bg-slate-950 p-2 flex justify-between items-center border-t border-slate-800">
+                               <span className="text-[8px] text-slate-500 uppercase font-bold flex items-center gap-1.5"><TrendingUp size={10} className="text-slate-600"/> 15-Day Tracker</span>
+                               <span className="text-[9px] font-bold text-green-500 px-1.5 py-0.5 bg-green-950/30 rounded border border-green-900/50">{loc.trend}</span>
+                           </div>
+                         </div>
                        ))}
                      </div>
                   </section>
@@ -792,12 +827,58 @@
                             <Crosshair size={14} className="rotate-45" />
                          </button>
                      </div>
-                     <div className="flex-1 bg-white relative w-full h-full pb-[0px]">
-                        <iframe 
-                            src="https://docs.google.com/document/d/e/2PACX-1vTIfxNl2tqR-vW6qNf4K8KzI7M-lE8hBvN1u_Qp_vP9TzRw1Z_Jc6l-_tZ/pub?embedded=true"
-                            className="absolute inset-0 w-full h-full border-0"
-                            title="Night Protocol Output"
-                        />
+                     <div className="flex-1 bg-slate-950 relative w-full h-full overflow-y-auto p-4 lg:p-6 flex flex-col gap-6 scrollbar-hide">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            {[
+                               { label: 'Total Clicks', val: '12.4K', color: 'text-cyan-400', border: 'border-cyan-900/40' },
+                               { label: 'Total Impressions', val: '148.2K', color: 'text-purple-400', border: 'border-purple-900/40' },
+                               { label: 'Average CTR', val: '8.4%', color: 'text-emerald-400', border: 'border-emerald-900/40' },
+                               { label: 'Average Position', val: '14.2', color: 'text-yellow-400', border: 'border-yellow-900/40' }
+                            ].map((stat, i) => (
+                               <div key={i} className={`bg-slate-900 border ${stat.border} rounded p-4 flex flex-col justify-center items-center shadow-lg transition-transform hover:-translate-y-1`}>
+                                  <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2 text-center">{stat.label}</p>
+                                  <p className={`text-2xl sm:text-3xl font-black ${stat.color} drop-shadow-md`}>{stat.val}</p>
+                               </div>
+                            ))}
+                        </div>
+                        
+                        <div className="bg-slate-900 border border-slate-800 rounded flex-1 overflow-hidden flex flex-col shadow-lg">
+                           <div className="border-b border-slate-800 p-4 bg-slate-950 flex justify-between items-center">
+                               <h4 className="text-[10px] text-slate-400 uppercase tracking-widest font-bold flex items-center gap-2"><Search size={14} className="text-cyan-600" /> Top Search Queries (Night Protocol Filtered)</h4>
+                               <span className="text-[8px] bg-slate-800 text-slate-400 px-2 rounded border border-slate-700">Last 28 Days</span>
+                           </div>
+                           <div className="overflow-x-auto">
+                               <table className="w-full text-left text-[10px] flex-1">
+                                  <thead className="bg-slate-800/50 text-slate-500 uppercase">
+                                      <tr>
+                                          <th className="p-4 font-bold pl-6">Query</th>
+                                          <th className="p-4 font-bold text-center">Clicks</th>
+                                          <th className="p-4 font-bold text-center">Impressions</th>
+                                          <th className="p-4 font-bold text-center">Position</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
+                                      {[
+                                        { q: 'Section 125 Tax Free Childcare', c: '1,204', i: '14,020', p: '2.1' },
+                                        { q: 'Wimper Strategy FICA Savings', c: '840', i: '10,100', p: '1.4' },
+                                        { q: 'Hampton child care near me', c: '650', i: '8,400', p: '3.8' },
+                                        { q: 'Best daycare college park ga', c: '420', i: '5,200', p: '4.2' },
+                                        { q: 'How to pay for daycare tax free', c: '310', i: '12,500', p: '10.5' },
+                                        { q: 'Childcare tax credit 2026', c: '280', i: '15,600', p: '12.8' },
+                                        { q: 'Top rated pre k memphis tn', c: '195', i: '3,200', p: '5.0' },
+                                        { q: 'Kidazzle early learning center', c: '1,500', i: '4,100', p: '1.1' },
+                                      ].map((row, i) => (
+                                          <tr key={i} className="hover:bg-slate-800/30 transition-colors">
+                                              <td className="p-4 pl-6 text-cyan-400 font-bold">{row.q}</td>
+                                              <td className="p-4 text-center text-slate-200">{row.c}</td>
+                                              <td className="p-4 text-center text-slate-400">{row.i}</td>
+                                              <td className="p-4 text-center font-bold text-yellow-500">{row.p}</td>
+                                          </tr>
+                                      ))}
+                                  </tbody>
+                               </table>
+                           </div>
+                        </div>
                      </div>
                   </div>
                 </div>
