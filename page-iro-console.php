@@ -702,6 +702,7 @@
                                </p>
                                <div className="bg-black/50 border border-slate-800/50 rounded flex-1 p-3 font-mono text-[9px] text-slate-500 space-y-2 overflow-y-auto overflow-x-hidden w-full">
                                    <p className="border-l-2 border-cyan-800 pl-2 text-cyan-500/90">[SYS] Claude Bot master control mapped to OpenClaw core.</p>
+                                   <p className="border-l-2 border-purple-800 pl-2 text-purple-400">[SYS] AirLLM Stream Init: 70B Model Inference Online.</p>
                                    <p className="border-l-2 border-cyan-800 pl-2">[SYS] Obsidian daily briefing workflow pre-loaded.</p>
                                    <p className="border-l-2 border-cyan-800 pl-2">[SYS] HeyGen CLI and C-Dance environment authenticated seamlessly.</p>
                                    <p className="border-l-2 border-emerald-800 pl-2 text-emerald-500/90 font-bold">[NET] GHL Media API initialized for automated social uploads.</p>
@@ -788,10 +789,12 @@
               </div>
               
               <footer className="mt-4 p-3 md:p-2 border border-slate-800 bg-slate-900/20 rounded flex flex-col md:flex-row justify-between items-center text-[8px] text-slate-600 uppercase tracking-[0.2em] gap-2 flex-none">
-                <div className="flex gap-6"><span>Instance: IRO_Node_X1</span><span>Uptime: 01:42:04</span></div>
-                <div className="flex gap-4 items-center font-bold tracking-tighter">
-                  <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_green]"></span> All Nodes OK</span>
-                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-4 uppercase">Ver 2.5.4_Mobile_Refined</span>
+                <div className="flex gap-6"><span>Instance: IRO_Node_X1</span><span>AirLLM Linked</span></div>
+                <div className="flex gap-4 items-center tracking-tighter">
+                  <span className="flex items-center gap-2 font-bold text-yellow-500 animate-[pulse_2s_ease-in-out_infinite] bg-yellow-950/40 px-3 py-1 rounded border border-yellow-900/50">
+                     <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_5px_yellow]"></span> OpenClaw Compute Active (Thinking... Check back in 10-15m)
+                  </span>
+                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-4 uppercase">Ver 2.5.5_Media_Core</span>
                 </div>
               </footer>
 
