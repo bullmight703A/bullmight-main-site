@@ -92,6 +92,14 @@
           const [activeTab, setActiveTab] = useState('CHAT');
           const [inputValue, setInputValue] = useState('');
           const [activeIframe, setActiveIframe] = useState(null);
+          const [isNightProtocolModalOpen, setIsNightProtocolModalOpen] = useState(false);
+          const [brainContext, setBrainContext] = useState(() => {
+              try { return localStorage.getItem('iro_brain_context') || ''; } catch(e) { return ''; }
+          });
+          const handleBrainChange = (e) => {
+              setBrainContext(e.target.value);
+              try { localStorage.setItem('iro_brain_context', e.target.value); } catch(e) {}
+          };
           
           const [systemHealth, setSystemHealth] = useState({ cpu: 0, ram: 0, diskC: 0, diskD: 0, network: 0 });
 
@@ -333,7 +341,7 @@
                         { name: 'Day 4: Rank Vault', status: 'verified', type: 'doc' },
                         { name: 'Day 5: Deep Links', status: 'pending', type: 'db' }
                       ].map((f, i) => (
-                        <div key={i} onClick={() => setActiveTab('NIGHT_PROTOCOL')} className="flex items-center gap-3 p-2 bg-slate-950/20 border border-slate-800/40 rounded cursor-pointer hover:border-cyan-500/50 hover:bg-slate-800 transition-colors group">
+                        <div key={i} onClick={() => setIsNightProtocolModalOpen(true)} className="flex items-center gap-3 p-2 bg-slate-950/20 border border-slate-800/40 rounded cursor-pointer hover:border-cyan-500/50 hover:bg-slate-800 transition-colors group">
                           {f.type === 'doc' ? <FileText size={12} className={f.status === 'verified' ? "text-cyan-600 group-hover:text-cyan-400" : "text-amber-500 group-hover:text-amber-400"} /> : <Database size={12} className="text-emerald-500 group-hover:text-emerald-400" />}
                           <span className="text-[10px] font-mono text-slate-400 group-hover:text-slate-200 flex-grow truncate">{f.name}</span>
                           <div className={`w-2 h-2 rounded-full ${f.status === 'verified' ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse shadow-[0_0_8px_orange]'}`}></div>
@@ -359,7 +367,7 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'NIGHT_PROTOCOL', 'SEO', 'KIDAZZLE', 'WIMPER', 'VIDEO', 'IMAGES', 'NOTES'].map(tab => (
+                      {['CHAT', 'BRAIN', 'SEO', 'KIDAZZLE', 'WIMPER', 'VIDEO', 'IMAGES', 'NOTES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -402,22 +410,23 @@
 
                       {/* TABS REPLACED */}
 
-                      {/* NIGHT PROTOCOL TAB */}
-                      {activeTab === 'NIGHT_PROTOCOL' && (
-                        <div className="p-4 h-full flex flex-col min-h-0">
-                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex-1 flex flex-col">
-                               <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
-                                  <span><Zap size={12} className="inline mr-2"/> Day {new Date().getDate()} Execution Log</span>
-                                  <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Night Protocol Tracker</span>
-                               </p>
-                               <div className="w-full h-full min-h-[500px] bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden mt-2">
-                                  <iframe 
-                                      src="https://docs.google.com/document/d/e/2PACX-1vTIfxNl2tqR-vW6qNf4K8KzI7M-lE8hBvN1u_Qp_vP9TzRw1Z_Jc6l-_tZ/pub?embedded=true"
-                                      className="w-full h-full border-0"
-                                      title="Night Protocol Output"
-                                  />
-                               </div>
-                           </div>
+                      {/* BRAIN TAB */}
+                      {activeTab === 'BRAIN' && (
+                        <div className="p-4 h-full flex flex-col min-h-0 bg-slate-950/20">
+                            <p className="text-[10px] text-emerald-500 uppercase font-bold tracking-widest mb-3 flex items-center justify-between">
+                               <span><Terminal size={12} className="inline mr-2"/> IRO Long-Term Memory / Guidelines</span>
+                               <span className="text-[8px] bg-emerald-900/30 text-emerald-500 px-2 py-0.5 rounded">Persistent Storage</span>
+                            </p>
+                            <label className="text-[9px] text-slate-500 mb-2 uppercase font-bold tracking-tighter">Enter global rules, target facts, or directives for IRO's cognitive loop below:</label>
+                            <textarea 
+                                value={brainContext}
+                                onChange={handleBrainChange}
+                                placeholder="Example: Always ensure FICA Strategy targets are prioritized."
+                                className="w-full flex-1 bg-black/40 border border-slate-800 rounded p-4 text-xs font-mono text-emerald-400 focus:outline-none focus:border-emerald-500 transition-colors resize-none placeholder-emerald-900/50"
+                            />
+                            <div className="mt-3 flex justify-end">
+                                <button className="px-4 py-2 bg-emerald-900/30 text-emerald-400 text-[10px] uppercase tracking-widest font-bold border border-emerald-800/50 rounded hover:bg-emerald-900/50 hover:border-emerald-500 transition-all shadow-[0_0_10px_rgba(16,185,129,0.1)]">Inject to Memory</button>
+                            </div>
                         </div>
                       )}
 
@@ -781,6 +790,29 @@
                          </a>
                        </div>
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {/* NIGHT PROTOCOL MODAL */}
+              {isNightProtocolModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 lg:p-12 animate-in fade-in duration-200">
+                  <div className="bg-slate-900 border border-slate-700 rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.5)] w-full h-full max-w-7xl flex flex-col overflow-hidden relative">
+                     <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+                         <p className="text-xs text-yellow-500 uppercase font-bold tracking-widest flex items-center gap-2">
+                            <Zap size={14} /> Night Protocol Execution Log <span className="text-[9px] text-slate-500 ml-2 border border-slate-800 px-2 py-0.5 rounded">Live Viewer</span>
+                         </p>
+                         <button onClick={() => setIsNightProtocolModalOpen(false)} className="text-slate-500 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 p-1.5 rounded-full">
+                            <Crosshair size={14} className="rotate-45" />
+                         </button>
+                     </div>
+                     <div className="flex-1 bg-white relative w-full h-full pb-[0px]">
+                        <iframe 
+                            src="https://docs.google.com/document/d/e/2PACX-1vTIfxNl2tqR-vW6qNf4K8KzI7M-lE8hBvN1u_Qp_vP9TzRw1Z_Jc6l-_tZ/pub?embedded=true"
+                            className="absolute inset-0 w-full h-full border-0"
+                            title="Night Protocol Output"
+                        />
+                     </div>
                   </div>
                 </div>
               )}
