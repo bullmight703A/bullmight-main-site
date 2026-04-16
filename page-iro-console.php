@@ -127,10 +127,12 @@
             { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
             { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
             { id: 4, name: 'Midtown', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' },
-            { id: 5, name: 'Decatur', url: 'https://localfalcon.com/scans?q=Decatur+Kidazzle' },
-            { id: 6, name: 'Buckhead', url: 'https://localfalcon.com/scans?q=Buckhead+Kidazzle' },
-            { id: 7, name: 'Roswell', url: 'https://localfalcon.com/scans?q=Roswell+Kidazzle' },
-            { id: 8, name: 'Sandy Spr', url: 'https://localfalcon.com/scans?q=Sandy+Springs+Kidazzle' },
+            { id: 5, name: 'Memphis', url: 'https://localfalcon.com/scans?q=Memphis+Kidazzle' },
+            { id: 6, name: 'Miami', url: 'https://localfalcon.com/scans?q=Miami+Kidazzle' },
+            { id: 7, name: 'Wimper ATL', url: 'https://localfalcon.com/scans?q=Atlanta+Wimper' },
+            { id: 8, name: 'Wimper CLT', url: 'https://localfalcon.com/scans?q=Charlotte+Wimper' },
+            { id: 9, name: 'Wimper DFW', url: 'https://localfalcon.com/scans?q=Dallas+Wimper' },
+            { id: 10, name: 'Wimper FICA', url: 'https://localfalcon.com/scans?q=FICA+Wimper' },
           ];
 
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
@@ -445,10 +447,12 @@
                                             { loc: 'College Park', kw: 'Daycare College Park', mile1: '1.5', mile5: '4.2', mile15: '12.0', trend: '▲' },
                                             { loc: 'West End', kw: 'Afterschool Program', mile1: '2.0', mile5: '3.8', mile15: '7.4', trend: '▬' },
                                             { loc: 'Midtown', kw: 'Best Daycare Midtown', mile1: '1.0', mile5: '2.5', mile15: '9.2', trend: '▲' },
-                                            { loc: 'Decatur', kw: 'Infant Childcare Section 125', mile1: '1.8', mile5: '3.0', mile15: '6.5', trend: '▲' },
-                                            { loc: 'Buckhead', kw: 'Luxury Daycare', mile1: '3.4', mile5: '5.1', mile15: '14.0', trend: '▼' },
-                                            { loc: 'Roswell', kw: 'Childcare Centers Roswell', mile1: '1.1', mile5: '2.8', mile15: '5.5', trend: '▲' },
-                                            { loc: 'Sandy Springs', kw: 'Kidazzle Daycare GA', mile1: '1.0', mile5: '1.5', mile15: '3.0', trend: '▲' },
+                                            { loc: 'Memphis', kw: 'Infant Childcare TN', mile1: '1.8', mile5: '3.0', mile15: '6.5', trend: '▲' },
+                                            { loc: 'Miami', kw: 'Miami Childcare Center', mile1: '4.1', mile5: '6.2', mile15: '14.0', trend: '▲' },
+                                            { loc: 'Wimper ATL HQ', kw: 'Childcare Section 125', mile1: '1.1', mile5: '2.8', mile15: '3.5', trend: '▲' },
+                                            { loc: 'Wimper CLT', kw: 'B2B Childcare Benefits', mile1: '1.0', mile5: '1.5', mile15: '3.0', trend: '▲' },
+                                            { loc: 'Wimper DFW', kw: 'FICA Tax Strategy', mile1: '2.0', mile5: '3.5', mile15: '5.0', trend: '▲' },
+                                            { loc: 'Wimper FICA', kw: 'Section 125 Administration', mile1: '1.0', mile5: '2.0', mile15: '4.5', trend: '▲' },
                                           ].map((row, i) => (
                                               <tr key={i} className="hover:bg-slate-800/30">
                                                   <td className="p-2 pl-4 text-cyan-400 font-bold ">{row.loc}</td>
