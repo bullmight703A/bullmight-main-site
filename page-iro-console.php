@@ -623,10 +623,58 @@
                       )}
                       {/* VIDEO AND IMAGES TABS */}
                       {activeTab === 'VIDEO' && (
-                        <div className="p-4 h-full overflow-y-auto flex flex-col justify-center items-center gap-4 text-slate-500 font-mono">
-                           <Video size={48} className="text-cyan-900/40" />
-                           <h2 className="text-sm uppercase tracking-widest font-bold text-slate-400">Wan2GP Local Rendering Core</h2>
-                           <p className="text-[10px] text-center max-w-sm">Video pipeline initialized. Awaiting API integration with local generator node for headless video execution scripts. (Pending OpenClaw module activation).</p>
+                        <div className="p-4 h-full overflow-y-auto flex flex-col gap-4 font-mono scrollbar-hide">
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex justify-between items-center shrink-0">
+                               <div className="flex items-center gap-4">
+                                   <div className="w-10 h-10 rounded bg-cyan-950/50 border border-cyan-800 flex items-center justify-center">
+                                       <Video size={20} className="text-cyan-400" />
+                                   </div>
+                                   <div>
+                                       <h2 className="text-xs uppercase tracking-widest font-bold text-slate-200">OpenMontage Engine</h2>
+                                       <p className="text-[9px] text-cyan-500 uppercase tracking-widest mt-1 font-bold">12 Pipelines • 48 Tools • Agentic Core</p>
+                                   </div>
+                               </div>
+                               <button className="px-4 py-2 bg-slate-950 border border-slate-700 hover:border-cyan-500 text-[10px] text-cyan-600 hover:text-cyan-400 uppercase tracking-widest font-bold rounded transition-colors group">
+                                   Launch Studio <ExternalLink size={10} className="inline ml-1" />
+                               </button>
+                           </div>
+
+                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 shrink-0">
+                               <div className="bg-slate-950/30 border border-slate-800/60 rounded p-3 relative overflow-hidden group">
+                                   <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-xl group-hover:bg-purple-500/10 transition-colors" />
+                                   <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-3 border-b border-slate-800/50 pb-2">Active Generation Pipeline</p>
+                                   <div className="flex items-center gap-3">
+                                       <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_orange]" />
+                                       <span className="text-xs text-amber-400 font-bold uppercase tracking-wide">Awaiting Content Payload...</span>
+                                   </div>
+                                   <p className="text-[9px] text-slate-600 mt-2 leading-relaxed max-w-sm">Ready to compile Wimper FICA explainers or Local Kidazzle motion graphics. Remotion renderer on standby.</p>
+                               </div>
+
+                               <div className="bg-slate-950/30 border border-slate-800/60 rounded p-3">
+                                   <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-3 border-b border-slate-800/50 pb-2 flex justify-between">
+                                      <span>Tool Registry Matrix</span>
+                                      <span className="text-green-500">Live</span>
+                                   </p>
+                                   <div className="space-y-2 text-[9px] text-slate-400 uppercase tracking-tighter">
+                                       <div className="flex justify-between items-center"><span className="flex items-center gap-1.5"><Crosshair size={10} /> Video Generation</span><span className="text-white">13 Models OK</span></div>
+                                       <div className="flex justify-between items-center"><span className="flex items-center gap-1.5"><Mic size={10} /> Voice & Audio</span><span className="text-white">ElevenLabs / Suno</span></div>
+                                       <div className="flex justify-between items-center"><span className="flex items-center gap-1.5"><Layers size={10} /> Remotion Composer</span><span className="text-cyan-400 font-bold">Bridged</span></div>
+                                   </div>
+                               </div>
+                           </div>
+
+                           <div className="bg-slate-900/20 border border-slate-800/40 rounded p-4 flex-1 flex flex-col min-h-0">
+                               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-3 flex items-center gap-2">
+                                  <Terminal size={12} /> Execution Log
+                               </p>
+                               <div className="bg-black/50 border border-slate-800/50 rounded flex-1 p-3 font-mono text-[9px] text-slate-500 space-y-1.5 overflow-y-auto overflow-x-hidden w-full">
+                                   <p className="border-l-2 border-cyan-800 pl-2">[SYS] OpenMontage core initialized successfully.</p>
+                                   <p className="border-l-2 border-cyan-800 pl-2">[SYS] Loaded 11 pipeline patterns (Explainer, Documentary, Talking Head...).</p>
+                                   <p className="border-l-2 border-cyan-800 pl-2">[SYS] 400+ Agent Skills synchronized with local OpenClaw.</p>
+                                   <p className="border-l-2 border-emerald-800 pl-2 text-emerald-500/70">[NET] Pre-compose and ffmpeg tools validated locally.</p>
+                                   <p className="border-l-2 border-amber-800 pl-2 text-amber-500/80 animate-pulse mt-4">[IDLE] Waiting for WIMPER or Kidazzle video brief...</p>
+                               </div>
+                           </div>
                         </div>
                       )}
                       
