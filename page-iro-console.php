@@ -144,6 +144,7 @@
             { id: 10, name: 'Wimper FICA', gmb: 'https://business.google.com/dashboard/l/000', mile1: '1.0', mile5: '2.0', mile10: '3.2', trend: '+45%', url: 'https://localfalcon.com/scans?q=FICA+Wimper' },
           ];
 
+          const [activeLessonPlanLoc, setActiveLessonPlanLoc] = useState('MAIN MASTER OUTBOX');
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
           const [n8nErrors, setN8nErrors] = useState([]);
           const messagesEndRef = useRef(null);
@@ -516,19 +517,39 @@
                               ))}
                           </div>
 
-                           <div className="bg-slate-900/40 border border-slate-800/60 shadow-lg rounded overflow-hidden mt-4">
-                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
-                              <h3 className="text-[10px] text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Lesson Plan Assembly Engine</h3>
-                              <span className="text-[8px] bg-yellow-900/40 text-yellow-500 px-2 rounded border border-yellow-800/40">Weekly PDF Pipeline</span>
-                            </div>
-                            <div className="w-full h-[500px]">
+                           <div className="bg-slate-900/40 border border-slate-800/60 shadow-lg rounded overflow-hidden mt-4 flex flex-col">
+                             <div className="bg-slate-950 p-3 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                               <h3 className="text-[10px] text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Lesson Plan Assembly Engine</h3>
+                               <span className="text-[8px] bg-yellow-900/40 text-yellow-500 px-2 rounded border border-yellow-800/40">OpenClaw Node Sync</span>
+                             </div>
+
+                             <div className="flex bg-slate-950/40 border-b border-slate-800 p-2 gap-2 overflow-x-auto scrollbar-hide shrink-0">
+                                {['MAIN MASTER OUTBOX', 'Hampton', 'College Pk', 'West End', 'Midtown', 'Memphis', 'Miami'].map(loc => (
+                                   <button 
+                                      key={loc}
+                                      onClick={() => setActiveLessonPlanLoc(loc)}
+                                      className={`px-3 py-1.5 text-[9px] uppercase tracking-widest font-bold whitespace-nowrap rounded transition-all ${activeLessonPlanLoc === loc ? 'bg-cyan-900/60 text-cyan-400 border border-cyan-700/50' : 'bg-slate-900/50 text-slate-500 border border-slate-800 hover:text-slate-300 hover:border-slate-600'}`}
+                                   >
+                                      {loc}
+                                   </button>
+                                ))}
+                             </div>
+
+                             <div className="w-full h-[500px] relative bg-slate-950 group">
+                               {activeLessonPlanLoc !== 'MAIN MASTER OUTBOX' && (
+                                  <div className="absolute inset-0 bg-slate-950/90 z-10 flex flex-col items-center justify-center pointer-events-none fade-in duration-300">
+                                      <Zap size={24} className="text-yellow-500 mb-2 animate-pulse" />
+                                      <span className="text-[10px] text-yellow-500 font-bold uppercase tracking-widest bg-yellow-950/40 border border-yellow-900/40 px-3 py-1 rounded">Targeting: {activeLessonPlanLoc}</span>
+                                      <p className="text-[9px] text-slate-500 max-w-xs text-center mt-2 font-mono">Awaiting precise Sub-Folder UUID from OpenClaw Node for {activeLessonPlanLoc}. Currently targeting global bucket.</p>
+                                  </div>
+                               )}
                                <iframe 
-                                   src="https://drive.google.com/embeddedfolderview?id=1V7uFk8V2cRftF3Lps5H0H-2S60Kqj7i-&usp=sharing#list" 
-                                   className="w-full h-full border-0"
+                                   src="https://drive.google.com/embeddedfolderview?id=1D4RRpu_xPZ5U-95065LA5lOxTRp9kauY&usp=sharing#list" 
+                                   className={`w-full h-full border-0 absolute inset-0 ${activeLessonPlanLoc !== 'MAIN MASTER OUTBOX' ? 'opacity-20 blur-[1px]' : 'opacity-100'}`}
                                    title="Lesson Plans Folder"
                                />
-                            </div>
-                          </div>
+                             </div>
+                           </div>
                         </div>
                       )}
 
