@@ -103,11 +103,17 @@
               try { localStorage.setItem('iro_notes_save', e.target.value); } catch(e) {}
           };
 
-          const [chatMessages, setChatMessages] = useState([
-            { role: 'system', text: 'Secure connection re-established via Cloudflare.' },
-            { role: 'user', text: '@IRO, check the GHL pipeline for the new tech leads.' },
-            { role: 'agent', text: 'Accessing GoHighLevel API... 14 new opportunities found.', name: 'IRO' },
-          ]);
+          const [chatMessages, setChatMessages] = useState(() => {
+              try {
+                  const saved = localStorage.getItem('iro_chat_thread');
+                  if(saved) return JSON.parse(saved);
+              } catch(e) {}
+              return [
+                { role: 'system', text: 'Secure connection re-established via Cloudflare.' },
+                { role: 'user', text: '@IRO, check the GHL pipeline for the new tech leads.' },
+                { role: 'agent', text: 'Accessing GoHighLevel API... 14 new opportunities found.', name: 'IRO' },
+              ];
+          });
 
           const [agents, setAgents] = useState([
             { id: 'iro', name: 'IRO', status: 'ONLINE & LISTENING', color: 'text-cyan-400', isRestarting: false },
@@ -203,7 +209,12 @@
             e.preventDefault();
             if (!inputValue.trim()) return;
             const txt = inputValue;
-            setChatMessages(prev => [...prev, { role: 'user', text: txt }]);
+            
+            // Generate clean history array immediately to safely pass down
+            const currentHistory = [...chatMessages, { role: 'user', text: txt }];
+            setChatMessages(currentHistory);
+            try { localStorage.setItem('iro_chat_thread', JSON.stringify(currentHistory)); } catch(e) {}
+            
             setInputValue('');
             
             // Temporary indicator
@@ -213,18 +224,24 @@
                 const res = await fetch(`${TUNNELS.CHAT}/api/chat`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ message: txt })
+                    body: JSON.stringify({ message: txt, history: currentHistory })
                 });
                 const data = await res.json();
                 
                 // Add reply, filter out temp
                 setChatMessages(prev => {
                     const newArr = prev.filter(m => !m.temp);
-                    return [...newArr, { role: 'agent', name: 'IRO', text: data.reply || '[Network Error]', thought: data.thought || null }];
+                    const finalArr = [...newArr, { role: 'agent', name: 'IRO', text: data.reply || '[Network Error]', thought: data.thought || null }];
+                    try { localStorage.setItem('iro_chat_thread', JSON.stringify(finalArr)); } catch(e) {}
+                    return finalArr;
                 });
             } catch(err) {
-                setChatMessages(prev => prev.filter(m => !m.temp));
-                setChatMessages(prev => [...prev, { role: 'system', text: '[System error connecting to deep brain]' }]);
+                setChatMessages(prev => {
+                    const newArr = prev.filter(m => !m.temp);
+                    const finalArr = [...newArr, { role: 'system', text: '[System error connecting to deep brain]' }];
+                    try { localStorage.setItem('iro_chat_thread', JSON.stringify(finalArr)); } catch(e) {}
+                    return finalArr;
+                });
             }
           };
 
