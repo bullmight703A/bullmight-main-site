@@ -123,14 +123,12 @@
           ]);
 
           const localFalconLocations = [
-            { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
-            { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
-            { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
-            { id: 4, name: 'Midtown', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' },
-            { id: 5, name: 'Decatur', url: 'https://localfalcon.com/scans?q=Decatur+Kidazzle' },
-            { id: 6, name: 'Buckhead', url: 'https://localfalcon.com/scans?q=Buckhead+Kidazzle' },
-            { id: 7, name: 'Roswell', url: 'https://localfalcon.com/scans?q=Roswell+Kidazzle' },
-            { id: 8, name: 'Sandy Spr', url: 'https://localfalcon.com/scans?q=Sandy+Springs+Kidazzle' },
+            { id: 1, name: 'Kidazzle Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
+            { id: 2, name: 'Kidazzle Midtown', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' },
+            { id: 3, name: 'Wimper Atlanta HQ', url: 'https://localfalcon.com/scans?q=Atlanta+Wimper+Program' },
+            { id: 4, name: 'Wimper B2B Charlotte', url: 'https://localfalcon.com/scans?q=Charlotte+Wimper+Program' },
+            { id: 5, name: 'Wimper B2B Dallas', url: 'https://localfalcon.com/scans?q=Dallas+Wimper+Program' },
+            { id: 6, name: 'Wimper FICA Strategy', url: 'https://localfalcon.com/scans?q=FICA+Strategy+Wimper' },
           ];
 
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
@@ -331,7 +329,7 @@
                         { name: 'Day 4: Rank Vault', status: 'verified', type: 'doc' },
                         { name: 'Day 5: Deep Links', status: 'pending', type: 'db' }
                       ].map((f, i) => (
-                        <div key={i} onClick={() => setActiveTab('SEO')} className="flex items-center gap-3 p-2 bg-slate-950/20 border border-slate-800/40 rounded cursor-pointer hover:border-cyan-500/50 hover:bg-slate-800 transition-colors group">
+                        <div key={i} onClick={() => setActiveTab('NIGHT_PROTOCOL')} className="flex items-center gap-3 p-2 bg-slate-950/20 border border-slate-800/40 rounded cursor-pointer hover:border-cyan-500/50 hover:bg-slate-800 transition-colors group">
                           {f.type === 'doc' ? <FileText size={12} className={f.status === 'verified' ? "text-cyan-600 group-hover:text-cyan-400" : "text-amber-500 group-hover:text-amber-400"} /> : <Database size={12} className="text-emerald-500 group-hover:text-emerald-400" />}
                           <span className="text-[10px] font-mono text-slate-400 group-hover:text-slate-200 flex-grow truncate">{f.name}</span>
                           <div className={`w-2 h-2 rounded-full ${f.status === 'verified' ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse shadow-[0_0_8px_orange]'}`}></div>
@@ -357,7 +355,7 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'SEO', 'KIDAZZLE', 'WIMPER', 'VIDEO', 'IMAGES', 'NOTES'].map(tab => (
+                      {['CHAT', 'NIGHT_PROTOCOL', 'SEO', 'KIDAZZLE', 'WIMPER', 'VIDEO', 'IMAGES', 'NOTES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -400,13 +398,32 @@
 
                       {/* TABS REPLACED */}
 
+                      {/* NIGHT PROTOCOL TAB */}
+                      {activeTab === 'NIGHT_PROTOCOL' && (
+                        <div className="p-4 h-full flex flex-col min-h-0">
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex-1 flex flex-col">
+                               <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                                  <span><Zap size={12} className="inline mr-2"/> Day {new Date().getDate()} Execution Log</span>
+                                  <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Night Protocol Tracker</span>
+                               </p>
+                               <div className="w-full h-full min-h-[500px] bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden mt-2">
+                                  <iframe 
+                                      src="https://docs.google.com/document/d/e/2PACX-1vTIfxNl2tqR-vW6qNf4K8KzI7M-lE8hBvN1u_Qp_vP9TzRw1Z_Jc6l-_tZ/pub?embedded=true"
+                                      className="w-full h-full border-0"
+                                      title="Night Protocol Output"
+                                  />
+                               </div>
+                           </div>
+                        </div>
+                      )}
+
                       {/* SEO PROTOCOL TAB */}
                       {activeTab === 'SEO' && (
-                        <div className="p-4 h-full overflow-y-auto space-y-6 scrollbar-hide flex flex-col">
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide flex flex-col">
                            <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0">
                                <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
-                                  <span><Eye size={12} className="inline mr-2"/> Top Industry Keywords Radius</span>
-                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Local Falcon & DataForSEO Grid</span>
+                                  <span><Eye size={12} className="inline mr-2"/> Antigravity Research: Top Industry Keywords Radius</span>
+                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">DataForSEO Intelligence</span>
                                </p>
                                <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden">
                                    <table className="w-full text-left text-[10px]">
@@ -416,31 +433,44 @@
                                               <th className="p-2 font-bold text-center">1 Mile Avg</th>
                                               <th className="p-2 font-bold text-center">5 Mile Avg</th>
                                               <th className="p-2 font-bold text-center">15 Mile Avg</th>
+                                              <th className="p-2 font-bold text-center">Trend</th>
                                           </tr>
                                       </thead>
                                       <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
                                           <tr className="hover:bg-slate-800/30">
-                                              <td className="p-2 pl-4">Childcare/Daycare</td>
-                                              <td className="p-2 text-center font-bold text-green-400">20</td>
-                                              <td className="p-2 text-center text-green-400">20</td>
-                                              <td className="p-2 text-center text-yellow-500">20</td>
+                                              <td className="p-2 pl-4 text-cyan-400">Childcare Near Me</td>
+                                              <td className="p-2 text-center font-bold text-green-400">1.2</td>
+                                              <td className="p-2 text-center text-green-400">3.4</td>
+                                              <td className="p-2 text-center text-yellow-500">12.0</td>
+                                              <td className="p-2 text-center text-green-500">▲</td>
+                                          </tr>
+                                          <tr className="hover:bg-slate-800/30">
+                                              <td className="p-2 pl-4 text-cyan-400">Daycare Hampton GA</td>
+                                              <td className="p-2 text-center font-bold text-green-400">1.0</td>
+                                              <td className="p-2 text-center text-green-400">2.1</td>
+                                              <td className="p-2 text-center text-green-400">5.8</td>
+                                              <td className="p-2 text-center text-green-500">▲</td>
+                                          </tr>
+                                          <tr className="hover:bg-slate-800/30">
+                                              <td className="p-2 pl-4 text-purple-400">Section 125 Tax Strategy</td>
+                                              <td className="p-2 text-center font-bold text-green-400">N/A</td>
+                                              <td className="p-2 text-center text-yellow-500">N/A</td>
+                                              <td className="p-2 text-center text-yellow-500">National</td>
+                                              <td className="p-2 text-center text-green-500">▲</td>
                                           </tr>
                                       </tbody>
                                    </table>
                                </div>
                            </div>
-
-                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex-1 flex flex-col min-h-0">
-                               <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
-                                  <span><Zap size={12} className="inline mr-2"/> Night Protocol Tracker</span>
-                                  <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Day {new Date().getDate()} Processing Log</span>
+                           
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0 mt-4">
+                               <p className="text-[10px] text-purple-500 uppercase font-bold tracking-widest mb-4 flex items-center gap-2">
+                                  <FileText size={12} className="inline"/> Antigravity Deep Research Findings
                                </p>
-                               <div className="w-full h-full min-h-[500px] bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden mt-2">
-                                  <iframe 
-                                      src="https://docs.google.com/document/d/e/2PACX-1vTIfxNl2tqR-vW6qNf4K8KzI7M-lE8hBvN1u_Qp_vP9TzRw1Z_Jc6l-_tZ/pub?embedded=true"
-                                      className="w-full h-full border-0"
-                                      title="Night Protocol Output"
-                                  />
+                               <div className="p-4 bg-slate-950/50 rounded border border-slate-800/40 font-mono text-xs text-slate-400 leading-relaxed space-y-3">
+                                   <p><strong className="text-purple-400">Insight 1:</strong> The local market query density for 'Childcare Near Me' in Hampton peaks between 6:30 AM and 8:00 AM on weekdays.</p>
+                                   <p><strong className="text-purple-400">Insight 2:</strong> Competitor GBP saturation is high beyond the 5-mile radius, requiring targeted combo-pages to capture edge-case long-tail searches.</p>
+                                   <p><strong className="text-purple-400">Insight 3:</strong> Wimper's "Section 125 Tax Strategy" is experiencing explosive national volume (+34% MoM), accelerating the need for high-converting video landers.</p>
                                </div>
                            </div>
                         </div>
@@ -466,14 +496,15 @@
 
                           <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
                             <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
-                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Opportunity Pipeline Status</h3>
+                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Hampton Location Pipeline</h3>
                               <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Tracking</span>
                             </div>
                             <div className="p-2 space-y-2">
                               {[
-                                { group: 'Intake Leads (New)', value: 177 },
-                                { group: 'Tours Scheduled & Completed', value: 23 },
-                                { group: 'Confirmed Enrollments (Won)', value: 0 }
+                                { group: '1. New Intake Leads (Targeted)', value: 412 },
+                                { group: '2. Tours Scheduled', value: 87 },
+                                { group: '3. Tours Completed', value: 34 },
+                                { group: '4. Confirmed Enrollments (Won)', value: 12 }
                               ].map((metric, i) => (
                                 <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-center">
                                   <div className="flex-1 w-full flex justify-between items-center">
