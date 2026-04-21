@@ -258,12 +258,11 @@
                 <div id="moments-content" style="display: flex; justify-content: center; width: 100%;">
                     
                     <div id="earth-day-video" class="moment-panel" style="display: block; width: 100%; max-width: 800px; aspect-ratio: 16/9;">
-                        <!-- Using iframe as requested -->
-                        <iframe 
+                        <video 
                             src="<?php echo get_stylesheet_directory_uri(); ?>/videos/earth_day_performance.mp4" 
                             style="width: 100%; height: 100%; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);" 
-                            allowfullscreen>
-                        </iframe>
+                            controls preload="metadata">
+                        </video>
                     </div>
                     
                     <div id="other-moments" class="moment-panel" style="display: none; width: 100%; text-align: center; padding: 4rem 2rem;">
