@@ -144,6 +144,25 @@
             </div>
         </section>
 
+        <!-- NEW GAMIFICATION MODULE PROTOTYPE -->
+        <section id="interactive-games" class="glass-card section-container" style="margin-bottom: 2rem; text-align: center;">
+            <div class="section-header">
+                <h2>Live Apple Pencil Game (Beta Protocol)</h2>
+                <p>This is a live test of converting an uploaded document into a web game! Use your mouse or iPad Pencil on the canvas below to trace.</p>
+            </div>
+            <div style="background: rgba(0,0,0,0.5); padding: 2rem; border-radius: 16px; display: inline-block;">
+                <h3 style="margin-bottom: 1rem; color: var(--primary);">Trace the Letter: 'S'</h3>
+                <!-- The Canvas for Tracing -->
+                <canvas id="tracingCanvas" width="400" height="400" style="background: #ffffff; border-radius: 12px; cursor: crosshair; touch-action: none; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);"></canvas>
+                
+                <div style="margin-top: 1.5rem;">
+                    <button class="btn btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
+                    <button class="btn btn-primary" onclick="alert('Great job Sterling! Progress Saved.')">Finish Tracing</button>
+                </div>
+            </div>
+        </section>
+        <!-- END GAMIFICATION MODULE -->
+
         <section id="upload" class="glass-card section-container" style="margin-bottom: 2rem; text-align: center;">
             <div class="section-header">
                 <h2>Upload Center</h2>
@@ -226,6 +245,73 @@
                     if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
             });
+
+            // --- CANVAS DRAWING LOGIC FOR iPAD PENCIL/GAMIFICATION ---
+            const canvas = document.getElementById("tracingCanvas");
+            if(canvas) {
+                const ctx = canvas.getContext("2d");
+                let isDrawing = false;
+                
+                // Draw a faint guide letter "S" for him to trace
+                function drawGuide() {
+                    ctx.font = "bold 300px 'Outfit', sans-serif";
+                    ctx.fillStyle = "rgba(220, 220, 220, 0.5)"; // Light grey guide
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("S", canvas.width/2, canvas.height/2 + 20);
+                }
+                drawGuide();
+
+                // Start drawing
+                const startDrawing = (e) => {
+                    isDrawing = true;
+                    ctx.beginPath();
+                    const { x, y } = getCoord(e);
+                    ctx.moveTo(x, y);
+                    e.preventDefault(); // Prevent scrolling on iPad while drawing
+                };
+
+                // Draw
+                const draw = (e) => {
+                    if (!isDrawing) return;
+                    e.preventDefault();
+                    const { x, y } = getCoord(e);
+                    ctx.lineTo(x, y);
+                    ctx.strokeStyle = "#0ea5e9"; // Blue ink
+                    ctx.lineWidth = 15; // Thick stroke for kids
+                    ctx.lineCap = "round";
+                    ctx.lineJoin = "round";
+                    ctx.stroke();
+                };
+
+                // Stop drawing
+                const stopDrawing = () => { isDrawing = false; };
+
+                // Get correct coordinate whether mouse or touch/pencil
+                const getCoord = (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    if (e.touches && e.touches.length > 0) {
+                        return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+                    }
+                    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+                };
+
+                // Event Listeners for Apple Pencil / Touch / Mouse
+                canvas.addEventListener("mousedown", startDrawing);
+                canvas.addEventListener("mousemove", draw);
+                canvas.addEventListener("mouseup", stopDrawing);
+                canvas.addEventListener("mouseout", stopDrawing);
+                
+                canvas.addEventListener("touchstart", startDrawing, {passive: false});
+                canvas.addEventListener("touchmove", draw, {passive: false});
+                canvas.addEventListener("touchend", stopDrawing);
+                
+                // Global Clear Canvas Function
+                window.clearCanvas = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGuide();
+                };
+            }
         });
     </script>
 </body>
