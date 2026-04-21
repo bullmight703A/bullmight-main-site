@@ -148,17 +148,54 @@
         <!-- NEW GAMIFICATION MODULE PROTOTYPE -->
         <section id="interactive-games" class="glass-card section-container" style="margin-bottom: 2rem; text-align: center;">
             <div class="section-header">
-                <h2>Live Apple Pencil Game (Beta Protocol)</h2>
-                <p>This is a live test of converting an uploaded document into a web game! Use your mouse or iPad Pencil on the canvas below to trace.</p>
+                <h2>Live Apple Pencil Game (Tracing Catalog)</h2>
+                <p>Interactive tracing exercises with audio prompts to help Sterling practice trigger letters and words.</p>
             </div>
-            <div style="background: rgba(0,0,0,0.5); padding: 2rem; border-radius: 16px; display: inline-block;">
-                <h3 style="margin-bottom: 1rem; color: var(--primary);">Trace the Letter: 'S'</h3>
-                <!-- The Canvas for Tracing -->
-                <canvas id="tracingCanvas" width="400" height="400" style="background: #ffffff; border-radius: 12px; cursor: crosshair; touch-action: none; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);"></canvas>
+            
+            <div style="display: flex; flex-direction: column; gap: 2rem; align-items: center;">
                 
-                <div style="margin-top: 1.5rem;">
-                    <button class="btn btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
-                    <button class="btn btn-primary" onclick="alert('Great job Sterling! Progress Saved.')">Finish Tracing</button>
+                <!-- Selection Menu -->
+                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 900px;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.2rem; color: var(--text-muted);">Select an Exercise</h3>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <strong style="color: var(--primary); display: block; margin-bottom: 0.5rem;">Focus Triggers</strong>
+                        <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;" id="focus-exercises">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div>
+                        <strong style="color: var(--secondary); display: block; margin-bottom: 0.5rem;">Alphabet Catalog</strong>
+                        <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;" id="alphabet-exercises">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tracing Area -->
+                <div style="background: rgba(0,0,0,0.5); padding: 2rem; border-radius: 16px; display: inline-block; width: 100%; max-width: 900px;">
+                    <h3 id="tracing-title" style="margin-bottom: 1.5rem; color: var(--primary); font-size: 2rem;">Trace the Letter: 'S'</h3>
+                    
+                    <div style="display: flex; gap: 2rem; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
+                        <div>
+                            <!-- The Canvas for Tracing -->
+                            <canvas id="tracingCanvas" width="400" height="400" style="background: #ffffff; border-radius: 12px; cursor: crosshair; touch-action: none; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);"></canvas>
+                            
+                            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center;">
+                                <button class="btn btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
+                                <button class="btn btn-primary" onclick="finishTracing()">Finish Tracing</button>
+                            </div>
+                        </div>
+
+                        <!-- Reward / Practice Area (Hidden until finished) -->
+                        <div id="practice-area" style="display: none; background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 16px; flex: 1; min-width: 300px; border: 1px solid rgba(255,255,255,0.1);">
+                            <h4 style="color: var(--accent); margin-bottom: 1.5rem; font-size: 1.5rem;">Great Job! Repeat after me:</h4>
+                            <div id="practice-items" style="display: flex; flex-direction: column; gap: 1rem;">
+                                <!-- Items populated by JS -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -303,46 +340,168 @@
 
             // --- CANVAS DRAWING LOGIC FOR iPAD PENCIL/GAMIFICATION ---
             const canvas = document.getElementById("tracingCanvas");
+            let currentExercise = 'S';
+            let audioContextReady = false;
+
+            const tracingData = {
+                'S': { type: 'letter', text: 'S', items: [{ word: 'Snake', icon: '🐍' }, { word: 'Sky', icon: '☁️' }, { word: 'Silk', icon: '🧣' }] },
+                'WH': { type: 'words', text: 'WH', items: [{ word: 'What', icon: '❓' }, { word: 'Why', icon: '🤔' }, { word: 'Where', icon: '📍' }, { word: 'When', icon: '⏰' }, { word: 'Which', icon: '🤷‍♂️' }] },
+                'C': { type: 'words', text: 'C', items: [{ word: 'Can', icon: '🥫' }, { word: 'Could', icon: '💭' }] },
+                'D': { type: 'words', text: 'D', items: [{ word: 'Did', icon: '✔️' }, { word: 'Do', icon: '👍' }, { word: 'Does', icon: '👌' }] },
+                'W': { type: 'words', text: 'W', items: [{ word: 'Will', icon: '🔮' }, { word: 'We', icon: '🤝' }, { word: 'Would', icon: '🪵' }] },
+                'I': { type: 'phrases', text: 'I', items: [{ word: 'I want this', icon: '👈' }, { word: 'I want that', icon: '👉' }, { word: 'I can do anything', icon: '🦸‍♂️' }] }
+            };
+
+            // Generate Alphabet A-Z
+            for(let i=65; i<=90; i++) {
+                let letter = String.fromCharCode(i);
+                if(!tracingData[letter]) {
+                    tracingData[letter] = { type: 'letter', text: letter, items: [{ word: letter + ' word 1', icon: '⭐' }, { word: letter + ' word 2', icon: '⭐' }] };
+                }
+            }
+
+            // Initialize Menu UI
+            const focusContainer = document.getElementById('focus-exercises');
+            const alphaContainer = document.getElementById('alphabet-exercises');
+            
+            const focusKeys = ['S', 'WH', 'C', 'D', 'W', 'I'];
+            
+            Object.keys(tracingData).forEach(key => {
+                const btn = document.createElement('button');
+                btn.innerText = key;
+                btn.id = 'btn-ex-' + key;
+                btn.className = 'btn btn-secondary exercise-btn';
+                btn.style.padding = '0.5rem 1rem';
+                btn.style.margin = '0';
+                btn.style.opacity = key === 'S' ? '1' : '0.5';
+                btn.onclick = () => loadExercise(key);
+                
+                if(focusKeys.includes(key)) {
+                    btn.className = 'btn btn-primary exercise-btn';
+                    focusContainer.appendChild(btn);
+                } else {
+                    alphaContainer.appendChild(btn);
+                }
+            });
+
+            // Native SpeechSynthesis (Acts as ElevenLabs placeholder)
+            function speakText(text) {
+                if ('speechSynthesis' in window) {
+                    const msg = new SpeechSynthesisUtterance(text);
+                    const voices = window.speechSynthesis.getVoices();
+                    const voice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Female'));
+                    if(voice) msg.voice = voice;
+                    msg.rate = 0.85; // Slower for kids
+                    msg.pitch = 1.1; 
+                    window.speechSynthesis.speak(msg);
+                } else {
+                    console.log("ElevenLabs API integration fallback: " + text);
+                }
+            }
+
+            // Initialize Voice API workaround for iOS/Safari
+            document.body.addEventListener('touchstart', function() {
+                if(!audioContextReady && 'speechSynthesis' in window) {
+                    const msg = new SpeechSynthesisUtterance('');
+                    window.speechSynthesis.speak(msg);
+                    audioContextReady = true;
+                }
+            }, {once:true});
+
+            window.loadExercise = function(key) {
+                currentExercise = key;
+                const data = tracingData[key];
+                
+                // Update Title
+                let titlePrefix = data.type === 'phrases' ? "Trace Phrase Start:" : (data.type === 'words' ? "Trace Group:" : "Trace Letter:");
+                document.getElementById('tracing-title').innerText = `${titlePrefix} '${data.text}'`;
+                
+                // Reset UI
+                clearCanvas();
+                document.getElementById('practice-area').style.display = 'none';
+                
+                // Highlight active button
+                document.querySelectorAll('.exercise-btn').forEach(btn => btn.style.opacity = '0.5');
+                const activeBtn = document.getElementById('btn-ex-' + key);
+                if(activeBtn) activeBtn.style.opacity = '1';
+            };
+
+            window.finishTracing = function() {
+                document.getElementById('practice-area').style.display = 'block';
+                const data = tracingData[currentExercise];
+                const container = document.getElementById('practice-items');
+                container.innerHTML = '';
+                
+                speakText("Great job Sterling! Repeat after me.");
+
+                data.items.forEach((item, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn btn-secondary';
+                    btn.style.display = 'flex';
+                    btn.style.alignItems = 'center';
+                    btn.style.justifyContent = 'flex-start';
+                    btn.style.gap = '1rem';
+                    btn.style.width = '100%';
+                    btn.style.padding = '1rem';
+                    btn.style.fontSize = '1.2rem';
+                    btn.style.transition = 'all 0.3s';
+                    
+                    btn.innerHTML = `<span style="font-size: 2rem;">${item.icon}</span> <span>${item.word}</span>`;
+                    
+                    btn.onclick = () => speakText(item.word);
+
+                    // Auto-play sequence
+                    setTimeout(() => {
+                        btn.style.background = 'rgba(14, 165, 233, 0.4)'; // Highlight Blue
+                        speakText(item.word);
+                        setTimeout(() => {
+                             btn.style.background = 'rgba(255, 255, 255, 0.1)'; // Reset
+                        }, 2000);
+                    }, 3000 + (index * 2500)); // Delay between words
+
+                    container.appendChild(btn);
+                });
+            };
+
             if(canvas) {
                 const ctx = canvas.getContext("2d");
                 let isDrawing = false;
                 
-                // Draw a faint guide letter "S" for him to trace
                 function drawGuide() {
-                    ctx.font = "bold 300px 'Outfit', sans-serif";
+                    const text = tracingData[currentExercise] ? tracingData[currentExercise].text : currentExercise;
+                    let fontSize = text.length > 2 ? 150 : (text.length === 2 ? 200 : 300);
+                    ctx.font = `bold ${fontSize}px 'Outfit', sans-serif`;
                     ctx.fillStyle = "rgba(220, 220, 220, 0.5)"; // Light grey guide
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText("S", canvas.width/2, canvas.height/2 + 20);
+                    ctx.fillText(text, canvas.width/2, canvas.height/2 + 20);
                 }
-                drawGuide();
+                
+                // Initialize guide
+                setTimeout(drawGuide, 100);
 
-                // Start drawing
                 const startDrawing = (e) => {
                     isDrawing = true;
                     ctx.beginPath();
                     const { x, y } = getCoord(e);
                     ctx.moveTo(x, y);
-                    e.preventDefault(); // Prevent scrolling on iPad while drawing
+                    e.preventDefault(); 
                 };
 
-                // Draw
                 const draw = (e) => {
                     if (!isDrawing) return;
                     e.preventDefault();
                     const { x, y } = getCoord(e);
                     ctx.lineTo(x, y);
-                    ctx.strokeStyle = "#0ea5e9"; // Blue ink
-                    ctx.lineWidth = 15; // Thick stroke for kids
+                    ctx.strokeStyle = "#0ea5e9";
+                    ctx.lineWidth = 15;
                     ctx.lineCap = "round";
                     ctx.lineJoin = "round";
                     ctx.stroke();
                 };
 
-                // Stop drawing
                 const stopDrawing = () => { isDrawing = false; };
 
-                // Get correct coordinate whether mouse or touch/pencil
                 const getCoord = (e) => {
                     const rect = canvas.getBoundingClientRect();
                     if (e.touches && e.touches.length > 0) {
@@ -351,7 +510,6 @@
                     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
                 };
 
-                // Event Listeners for Apple Pencil / Touch / Mouse
                 canvas.addEventListener("mousedown", startDrawing);
                 canvas.addEventListener("mousemove", draw);
                 canvas.addEventListener("mouseup", stopDrawing);
@@ -361,7 +519,6 @@
                 canvas.addEventListener("touchmove", draw, {passive: false});
                 canvas.addEventListener("touchend", stopDrawing);
                 
-                // Global Clear Canvas Function
                 window.clearCanvas = () => {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     drawGuide();
