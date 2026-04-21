@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://api.bullmight.com';
+        const API_BASE = 'https://photo-dependent-ties-dimensions.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
@@ -87,20 +87,11 @@
         const ShieldCheck = (p) => <IconBase {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></IconBase>;
         const Crosshair = (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></IconBase>;
         const X = (p) => <IconBase {...p}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></IconBase>;
-        const Terminal = (p) => <IconBase {...p}><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></IconBase>;
 
         const App = () => {
           const [activeTab, setActiveTab] = useState('CHAT');
           const [inputValue, setInputValue] = useState('');
           const [activeIframe, setActiveIframe] = useState(null);
-          const [isNightProtocolModalOpen, setIsNightProtocolModalOpen] = useState(false);
-          const [brainContext, setBrainContext] = useState(() => {
-              try { return localStorage.getItem('iro_brain_context') || ''; } catch(e) { return ''; }
-          });
-          const handleBrainChange = (e) => {
-              setBrainContext(e.target.value);
-              try { localStorage.setItem('iro_brain_context', e.target.value); } catch(e) {}
-          };
           
           const [systemHealth, setSystemHealth] = useState({ cpu: 0, ram: 0, diskC: 0, diskD: 0, network: 0 });
 
@@ -112,43 +103,31 @@
               try { localStorage.setItem('iro_notes_save', e.target.value); } catch(e) {}
           };
 
-          const [chatMessages, setChatMessages] = useState(() => {
-              try {
-                  const saved = localStorage.getItem('iro_chat_thread');
-                  if(saved) return JSON.parse(saved);
-              } catch(e) {}
-              return [
-                { role: 'system', text: 'Secure connection re-established via Cloudflare.' },
-                { role: 'user', text: '@IRO, check the GHL pipeline for the new tech leads.' },
-                { role: 'agent', text: 'Accessing GoHighLevel API... 14 new opportunities found.', name: 'IRO' },
-              ];
-          });
+          const [chatMessages, setChatMessages] = useState([
+            { role: 'system', text: 'Secure connection re-established via Cloudflare.' },
+            { role: 'user', text: '@IRO, check the GHL pipeline for the new tech leads.' },
+            { role: 'agent', text: 'Accessing GoHighLevel API... 14 new opportunities found.', name: 'IRO' },
+          ]);
 
           const [agents, setAgents] = useState([
             { id: 'iro', name: 'IRO', status: 'ONLINE & LISTENING', color: 'text-cyan-400', isRestarting: false },
             { id: 'masterchef', name: 'MASTERCHEF', status: 'AWAITING TASK', color: 'text-yellow-400', isRestarting: false },
-            { id: 'volt', name: 'VOLT:', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false },
-            { id: 'picasso', name: 'PICASSO:', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false }
+            { id: 'volt', name: 'VOLT', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false },
+            { id: 'picasso', name: 'PICASSO', status: 'STNDBY_MODE', color: 'text-slate-500', isRestarting: false }
           ]);
 
           const localFalconLocations = [
-            { id: 1, name: 'Hampton', gmb: 'https://business.google.com/dashboard/l/111', mile1: '1.2', mile5: '3.4', mile10: '5.6', trend: '+12%', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
-            { id: 2, name: 'College Pk', gmb: 'https://business.google.com/dashboard/l/222', mile1: '1.5', mile5: '4.2', mile10: '7.1', trend: '+8%', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
-            { id: 3, name: 'West End', gmb: 'https://business.google.com/dashboard/l/333', mile1: '2.0', mile5: '3.8', mile10: '6.4', trend: '+15%', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
-            { id: 4, name: 'Midtown', gmb: 'https://business.google.com/dashboard/l/444', mile1: '1.0', mile5: '2.5', mile10: '5.2', trend: '+5%', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' },
-            { id: 5, name: 'Memphis', gmb: 'https://business.google.com/dashboard/l/555', mile1: '1.8', mile5: '3.0', mile10: '4.5', trend: '+22%', url: 'https://localfalcon.com/scans?q=Memphis+Kidazzle' },
-            { id: 6, name: 'Miami', gmb: 'https://business.google.com/dashboard/l/666', mile1: '4.1', mile5: '6.2', mile10: '9.0', trend: '+4%', url: 'https://localfalcon.com/scans?q=Miami+Kidazzle' },
-            { id: 7, name: 'Wimper ATL', gmb: 'https://business.google.com/dashboard/l/777', mile1: '1.1', mile5: '2.8', mile10: '3.5', trend: '+18%', url: 'https://localfalcon.com/scans?q=Atlanta+Wimper' },
-            { id: 8, name: 'Wimper CLT', gmb: 'https://business.google.com/dashboard/l/888', mile1: '1.0', mile5: '1.5', mile10: '2.0', trend: '+30%', url: 'https://localfalcon.com/scans?q=Charlotte+Wimper' },
-            { id: 9, name: 'Wimper DFW', gmb: 'https://business.google.com/dashboard/l/999', mile1: '2.0', mile5: '3.5', mile10: '4.8', trend: '+11%', url: 'https://localfalcon.com/scans?q=Dallas+Wimper' },
-            { id: 10, name: 'Wimper FICA', gmb: 'https://business.google.com/dashboard/l/000', mile1: '1.0', mile5: '2.0', mile10: '3.2', trend: '+45%', url: 'https://localfalcon.com/scans?q=FICA+Wimper' },
+            { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
+            { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
+            { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
+            { id: 4, name: 'Midtown', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' },
+            { id: 5, name: 'Decatur', url: 'https://localfalcon.com/scans?q=Decatur+Kidazzle' },
+            { id: 6, name: 'Buckhead', url: 'https://localfalcon.com/scans?q=Buckhead+Kidazzle' },
+            { id: 7, name: 'Roswell', url: 'https://localfalcon.com/scans?q=Roswell+Kidazzle' },
+            { id: 8, name: 'Sandy Spr', url: 'https://localfalcon.com/scans?q=Sandy+Springs+Kidazzle' },
           ];
 
-          const [activeLessonPlanLoc, setActiveLessonPlanLoc] = useState('MAIN MASTER OUTBOX');
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
-          const [videoPrompt, setVideoPrompt] = useState('');
-          const [imagePrompt, setImagePrompt] = useState('');
-          const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
           const [n8nErrors, setN8nErrors] = useState([]);
           const messagesEndRef = useRef(null);
 
@@ -224,12 +203,7 @@
             e.preventDefault();
             if (!inputValue.trim()) return;
             const txt = inputValue;
-            
-            // Generate clean history array immediately to safely pass down
-            const currentHistory = [...chatMessages, { role: 'user', text: txt }];
-            setChatMessages(currentHistory);
-            try { localStorage.setItem('iro_chat_thread', JSON.stringify(currentHistory)); } catch(e) {}
-            
+            setChatMessages(prev => [...prev, { role: 'user', text: txt }]);
             setInputValue('');
             
             // Temporary indicator
@@ -239,24 +213,18 @@
                 const res = await fetch(`${TUNNELS.CHAT}/api/chat`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ message: txt, history: currentHistory })
+                    body: JSON.stringify({ message: txt })
                 });
                 const data = await res.json();
                 
                 // Add reply, filter out temp
                 setChatMessages(prev => {
                     const newArr = prev.filter(m => !m.temp);
-                    const finalArr = [...newArr, { role: 'agent', name: 'IRO', text: data.reply || '[Network Error]', thought: data.thought || null }];
-                    try { localStorage.setItem('iro_chat_thread', JSON.stringify(finalArr)); } catch(e) {}
-                    return finalArr;
+                    return [...newArr, { role: 'agent', name: 'IRO', text: data.reply || '[Network Error]', thought: data.thought || null }];
                 });
             } catch(err) {
-                setChatMessages(prev => {
-                    const newArr = prev.filter(m => !m.temp);
-                    const finalArr = [...newArr, { role: 'system', text: '[System error connecting to deep brain]' }];
-                    try { localStorage.setItem('iro_chat_thread', JSON.stringify(finalArr)); } catch(e) {}
-                    return finalArr;
-                });
+                setChatMessages(prev => prev.filter(m => !m.temp));
+                setChatMessages(prev => [...prev, { role: 'system', text: '[System error connecting to deep brain]' }]);
             }
           };
 
@@ -337,19 +305,22 @@
                   </section>
 
                   <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 overflow-hidden flex flex-col min-h-0">
-                    <h2 className="text-[10px] font-bold text-cyan-500 uppercase tracking-widest mb-4 flex-none"><span className="text-yellow-500">Night Protocol</span> Execution</h2>
+                    <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 flex-none">Bridge Active Files</h2>
                     <div className="space-y-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
                       {[
-                        { name: 'Day 1: Keyword Map', status: 'verified', type: 'doc' },
-                        { name: 'Day 2: Comp Grid', status: 'verified', type: 'doc' },
-                        { name: 'Day 3: Base Index', status: 'verified', type: 'doc' },
-                        { name: 'Day 4: Rank Vault', status: 'verified', type: 'doc' },
-                        { name: 'Day 5: Deep Links', status: 'pending', type: 'db' }
-                      ].map((f, i) => (
-                        <div key={i} onClick={() => setIsNightProtocolModalOpen(true)} className="flex items-center gap-3 p-2 bg-slate-950/20 border border-slate-800/40 rounded cursor-pointer hover:border-cyan-500/50 hover:bg-slate-800 transition-colors group">
-                          {f.type === 'doc' ? <FileText size={12} className={f.status === 'verified' ? "text-cyan-600 group-hover:text-cyan-400" : "text-amber-500 group-hover:text-amber-400"} /> : <Database size={12} className="text-emerald-500 group-hover:text-emerald-400" />}
-                          <span className="text-[10px] font-mono text-slate-400 group-hover:text-slate-200 flex-grow truncate">{f.name}</span>
-                          <div className={`w-2 h-2 rounded-full ${f.status === 'verified' ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse shadow-[0_0_8px_orange]'}`}></div>
+                        { name: 'Architecture_Mapping.png', type: 'IMG', url: '/deliverables/Architecture_Mapping.png' },
+                        { name: 'telemetry.json', type: 'JSON', url: '/deliverables/telemetry.json' },
+                        { name: 'real_health.json', type: 'JSON', url: '/deliverables/real_health.json' },
+                        { name: 'n8n_errors.json', type: 'JSON', url: '/deliverables/n8n_errors.json' }
+                      ].map((doc, i) => (
+                        <div key={i} className="flex items-center justify-between p-2 bg-slate-950/20 border border-slate-800/40 rounded hover:border-cyan-900 transition-colors group">
+                          <div className="flex items-center gap-2 overflow-hidden flex-1">
+                            <FileText size={12} className={doc.error ? "text-red-500" : "text-cyan-600"} />
+                            <span className="text-[10px] truncate text-slate-400 group-hover:text-slate-200">{doc.name}</span>
+                          </div>
+                          <div className="flex gap-2">
+                            <a href={`${API_BASE}${doc.url}`} target="_blank" className="text-slate-600 hover:text-cyan-400" title="View Document"><Eye size={10}/></a>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -372,7 +343,7 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'BRAIN', 'SEO', 'KIDAZZLE', 'WIMPER', 'VIDEO', 'IMAGES', 'NOTES'].map(tab => (
+                      {['CHAT', 'BRAIN', 'SEO', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -413,83 +384,108 @@
                         </div>
                       )}
 
-                      {/* TABS REPLACED */}
-
-                      {/* BRAIN TAB */}
+                      {/* BRAIN LOGS TAB */}
                       {activeTab === 'BRAIN' && (
-                        <div className="p-4 h-full flex flex-col min-h-0 bg-slate-950/20">
-                            <p className="text-[10px] text-emerald-500 uppercase font-bold tracking-widest mb-3 flex items-center justify-between">
-                               <span><Terminal size={12} className="inline mr-2"/> IRO Long-Term Memory / Guidelines</span>
-                               <span className="text-[8px] bg-emerald-900/30 text-emerald-500 px-2 py-0.5 rounded">Persistent Storage</span>
-                            </p>
-                            <label className="text-[9px] text-slate-500 mb-2 uppercase font-bold tracking-tighter">Enter global rules, target facts, or directives for IRO's cognitive loop below:</label>
-                            <textarea 
-                                value={brainContext}
-                                onChange={handleBrainChange}
-                                placeholder="Example: Always ensure FICA Strategy targets are prioritized."
-                                className="w-full flex-1 bg-black/40 border border-slate-800 rounded p-4 text-xs font-mono text-emerald-400 focus:outline-none focus:border-emerald-500 transition-colors resize-none placeholder-emerald-900/50"
-                            />
-                            <div className="mt-3 flex justify-end">
-                                <button className="px-4 py-2 bg-emerald-900/30 text-emerald-400 text-[10px] uppercase tracking-widest font-bold border border-emerald-800/50 rounded hover:bg-emerald-900/50 hover:border-emerald-500 transition-all shadow-[0_0_10px_rgba(16,185,129,0.1)]">Inject to Memory</button>
-                            </div>
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide flex flex-col">
+                           {/* Growth Dashboard Row */}
+                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 shrink-0">
+                               <div className="bg-slate-900/40 p-3 rounded border border-slate-800 text-center">
+                                   <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold mb-1">Topics Indexed</p>
+                                   <p className="text-xl text-cyan-400 font-mono">{brainLogs.growth?.topics_indexed || 0}</p>
+                               </div>
+                               <div className="bg-slate-900/40 p-3 rounded border border-slate-800 text-center">
+                                   <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold mb-1">Synaptic Thoughts</p>
+                                   <p className="text-xl text-yellow-500 font-mono">{brainLogs.growth?.synapses || 0}</p>
+                               </div>
+                               <div className="bg-slate-900/40 p-3 rounded border border-slate-800 text-center">
+                                   <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold mb-1">Volatile Core Memory</p>
+                                   <p className="text-xl text-green-400 font-mono">{brainLogs.growth?.core_memory_kb || 0} KB</p>
+                               </div>
+                           </div>
+
+                           {/* Recalled Neural Clusters */}
+                           <div className="bg-slate-900/40 border border-slate-800 p-3 rounded shrink-0">
+                               <p className="text-[10px] text-green-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Eye size={14}/> Recent Memory Injections</p>
+                               <div className="flex flex-wrap gap-2">
+                                  {(brainLogs.growth?.recent_topics || []).map((t, idx) => (
+                                     <span key={idx} className="bg-slate-800/80 border border-slate-700 text-slate-300 text-[10px] px-2 py-1 rounded shadow-inner uppercase tracking-wider">{t}</span>
+                                  ))}
+                               </div>
+                           </div>
+
+                           <div className="flex-1 flex flex-col md:flex-row gap-4 min-h-0">
+                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex-1 flex flex-col min-h-[30vh]">
+                                 <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Core OpenClaw Memory (The Brain)</p>
+                                 <div className="bg-slate-950/50 p-2 rounded text-[10px] text-slate-400 border border-slate-800/40 font-mono whitespace-pre-wrap flex-1 overflow-y-auto custom-scrollbar">
+                                     {brainLogs.memory}
+                                 </div>
+                             </div>
+                             <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex-1 flex flex-col min-h-[30vh]">
+                                 <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={14}/> Live Neural Stream (Inner Monologue)</p>
+                                 <div className="bg-slate-950/50 p-2 border-l-2 border-cyan-800 rounded text-[10px] text-slate-300 font-mono whitespace-pre-wrap flex-1 overflow-y-auto shadow-inner custom-scrollbar">
+                                     {brainLogs.thoughts || 'Waiting for thought intercept...'}
+                                 </div>
+                             </div>
+                           </div>
                         </div>
                       )}
 
                       {/* SEO PROTOCOL TAB */}
                       {activeTab === 'SEO' && (
-                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide flex flex-col">
+                        <div className="p-4 h-full overflow-y-auto space-y-6 scrollbar-hide flex flex-col">
                            <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0">
                                <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
-                                  <span><Eye size={12} className="inline mr-2"/> Antigravity Research: Kidazzle Location SEO Rankings</span>
-                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">DataForSEO & Local Falcon Grid</span>
+                                  <span><Eye size={12} className="inline mr-2"/> Top Industry Keywords Radius</span>
+                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Local Falcon Grid</span>
                                </p>
                                <div className="w-full bg-slate-950/50 rounded border border-slate-800/40 overflow-hidden">
                                    <table className="w-full text-left text-[10px]">
                                       <thead className="bg-slate-900/80 text-slate-500 uppercase">
                                           <tr>
-                                              <th className="p-2 font-bold pl-4">Location</th>
-                                              <th className="p-2 font-bold">Top Keyword Ranked</th>
+                                              <th className="p-2 font-bold pl-4">Target Keyword</th>
                                               <th className="p-2 font-bold text-center">1 Mile Avg</th>
                                               <th className="p-2 font-bold text-center">5 Mile Avg</th>
-                                              <th className="p-2 font-bold text-center">15 Mile Avg</th>
-                                              <th className="p-2 font-bold text-center">MoM Trend</th>
+                                              <th className="p-2 font-bold text-center">10 Mile Avg</th>
                                           </tr>
                                       </thead>
                                       <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
-                                          {[
-                                            { loc: 'Hampton', kw: 'Childcare Near Me', mile1: '1.2', mile5: '3.4', mile15: '8.5', trend: '▲' },
-                                            { loc: 'College Park', kw: 'Daycare College Park', mile1: '1.5', mile5: '4.2', mile15: '12.0', trend: '▲' },
-                                            { loc: 'West End', kw: 'Afterschool Program', mile1: '2.0', mile5: '3.8', mile15: '7.4', trend: '▬' },
-                                            { loc: 'Midtown', kw: 'Best Daycare Midtown', mile1: '1.0', mile5: '2.5', mile15: '9.2', trend: '▲' },
-                                            { loc: 'Memphis', kw: 'Infant Childcare TN', mile1: '1.8', mile5: '3.0', mile15: '6.5', trend: '▲' },
-                                            { loc: 'Miami', kw: 'Miami Childcare Center', mile1: '4.1', mile5: '6.2', mile15: '14.0', trend: '▲' },
-                                            { loc: 'Wimper ATL HQ', kw: 'Childcare Section 125', mile1: '1.1', mile5: '2.8', mile15: '3.5', trend: '▲' },
-                                            { loc: 'Wimper CLT', kw: 'B2B Childcare Benefits', mile1: '1.0', mile5: '1.5', mile15: '3.0', trend: '▲' },
-                                            { loc: 'Wimper DFW', kw: 'FICA Tax Strategy', mile1: '2.0', mile5: '3.5', mile15: '5.0', trend: '▲' },
-                                            { loc: 'Wimper FICA', kw: 'Section 125 Administration', mile1: '1.0', mile5: '2.0', mile15: '4.5', trend: '▲' },
-                                          ].map((row, i) => (
+                                          {Array.isArray(telemetryData?.seo?.matrix) && telemetryData.seo.matrix.length > 0 ? telemetryData.seo.matrix.map((row, i) => (
                                               <tr key={i} className="hover:bg-slate-800/30">
-                                                  <td className="p-2 pl-4 text-cyan-400 font-bold ">{row.loc}</td>
-                                                  <td className="p-2 text-slate-400">{row.kw}</td>
-                                                  <td className="p-2 text-center font-bold text-green-400">{row.mile1}</td>
-                                                  <td className="p-2 text-center text-green-400">{row.mile5}</td>
-                                                  <td className="p-2 text-center text-yellow-500">{row.mile15}</td>
-                                                  <td className={`p-2 text-center ${row.trend === '▼' ? 'text-red-500' : row.trend === '▬' ? 'text-slate-500' : 'text-green-500'}`}>{row.trend}</td>
+                                                  <td className="p-2 pl-4">{row.keyword}</td>
+                                                  <td className="p-2 text-center font-bold text-green-400">{row.m1}</td>
+                                                  <td className="p-2 text-center text-green-400">{row.m5}</td>
+                                                  <td className="p-2 text-center text-yellow-500">{row.m10}</td>
                                               </tr>
-                                          ))}
+                                          )) : (
+                                              <tr><td colSpan="4" className="p-4 text-center text-xs text-slate-500 animate-pulse">AWAITING LIVE METRICS FROM IRO BRIDGE...</td></tr> 
+                                          )}
                                       </tbody>
                                    </table>
                                </div>
                            </div>
-                           
-                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0 mt-4">
-                               <p className="text-[10px] text-purple-500 uppercase font-bold tracking-widest mb-4 flex items-center gap-2">
-                                  <FileText size={12} className="inline"/> Antigravity Deep Research Findings
+
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex-1 flex flex-col min-h-0">
+                               <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                                  <span><Zap size={12} className="inline mr-2"/> Night Protocol Tracker</span>
+                                  <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Pages Created & Indexed</span>
                                </p>
-                               <div className="p-4 bg-slate-950/50 rounded border border-slate-800/40 font-mono text-xs text-slate-400 leading-relaxed space-y-3">
-                                   <p><strong className="text-purple-400">Insight 1:</strong> The local market query density for 'Childcare Near Me' in Hampton peaks between 6:30 AM and 8:00 AM on weekdays.</p>
-                                   <p><strong className="text-purple-400">Insight 2:</strong> Competitor GBP saturation is high beyond the 5-mile radius, requiring targeted combo-pages to capture edge-case long-tail searches.</p>
-                                   <p><strong className="text-purple-400">Insight 3:</strong> Wimper's "Section 125 Tax Strategy" is experiencing explosive national volume (+34% MoM), accelerating the need for high-converting video landers.</p>
+                               <div className="bg-slate-950/50 p-3 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-3 font-mono text-[10px]">
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/daycare-roswell-toddlers (Kidazzle)</span>
+                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/childcare-hampton-infants (Kidazzle)</span>
+                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/wimper-employer-tax-advantage (Wimper)</span>
+                                       <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded">CRAWLED_WAITING</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/section-125-calculators (Wimper)</span>
+                                       <span className="text-cyan-500 whitespace-nowrap bg-cyan-900/20 px-2 rounded">DISPATCHED</span>
+                                   </div>
                                </div>
                            </div>
                         </div>
@@ -498,94 +494,67 @@
                       {/* KIDAZZLE TAB */}
                       {activeTab === 'KIDAZZLE' && (
                         <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
-                          <div className="mb-2 flex justify-between items-center bg-slate-950 p-2 border border-slate-800 rounded">
-                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Hampton Location Pipeline</h3>
-                              <div className="flex gap-4 items-center">
-                                  <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40 hidden sm:inline-block">GHL Live Tracking</span>
-                                  <a href="https://app.bullmight.com/v2/location/ZR2UvxPL2wlZNSvHjmJD/opportunities/list" target="_blank" className="text-[9px] text-cyan-500 hover:text-white uppercase flex items-center gap-1 font-bold transition-colors"><ExternalLink size={10}/> Launch Portal</a>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
+                              <p className="text-[9px] text-slate-500 uppercase font-bold mb-1">GHL Pipeline Opportunities</p>
+                              <p className="text-xl font-bold text-cyan-400">Active Syncing...</p>
+                              <div className="mt-2 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-cyan-500 w-[100%] animate-pulse" />
                               </div>
+                            </div>
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex flex-col justify-center">
+                              <a href="https://app.bullmight.com/v2/location/ZR2UvxPL2wlZNSvHjmJD/opportunities/list" target="_blank" className="w-full py-2 bg-cyan-600/10 border border-cyan-600/40 text-cyan-500 rounded text-[10px] hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
+                                 <ExternalLink size={12} /> Launch GHL Portal
+                              </a>
+                            </div>
                           </div>
-                          
-                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+
+                          <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
+                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
+                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Opportunity Pipeline Status</h3>
+                              <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Tracking</span>
+                            </div>
+                            <div className="p-2 space-y-2">
                               {[
-                                { group: '1. New Intakes', value: 412, color: 'text-red-500', bg: 'bg-red-950/20', border: 'border-red-900/40' },
-                                { group: '2. Tours Sched', value: 87, color: 'text-blue-500', bg: 'bg-blue-950/20', border: 'border-blue-900/40' },
-                                { group: '3. Tours Comp', value: 34, color: 'text-purple-500', bg: 'bg-purple-950/20', border: 'border-purple-900/40' },
-                                { group: '4. Enrolled', value: 12, color: 'text-green-500', bg: 'bg-green-950/20', border: 'border-green-900/40' }
+                                { group: 'Intake Leads (New)', value: 177 },
+                                { group: 'Tours Scheduled & Completed', value: 23 },
+                                { group: 'Confirmed Enrollments (Won)', value: 0 }
                               ].map((metric, i) => (
-                                <div key={i} className={`${metric.bg} border ${metric.border} p-4 rounded flex flex-col items-center justify-center text-center shadow-lg transition-transform hover:scale-[1.02]`}>
-                                   <p className="text-[9px] text-slate-400 uppercase font-bold mb-2 tracking-widest whitespace-nowrap">{metric.group}</p>
-                                   <p className={`text-3xl font-black ${metric.color} drop-shadow-md`}>{metric.value}</p>
+                                <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-center">
+                                  <div className="flex-1 w-full flex justify-between items-center">
+                                     <span className="text-xs font-bold text-slate-200 uppercase">{metric.group}</span>
+                                     <span className="font-bold text-cyan-400 text-lg">{metric.value}</span>
+                                  </div>
                                 </div>
                               ))}
+                            </div>
                           </div>
 
-                           <div className="bg-slate-900/40 border border-slate-800/60 shadow-lg rounded overflow-hidden mt-4 flex flex-col">
-                             <div className="bg-slate-950 p-3 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                               <h3 className="text-[10px] text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Lesson Plan Assembly Engine</h3>
-                               <span className="text-[8px] bg-yellow-900/40 text-yellow-500 px-2 rounded border border-yellow-800/40">OpenClaw Node Sync</span>
-                             </div>
-
-                             <div className="flex bg-slate-950/40 border-b border-slate-800 p-2 gap-2 overflow-x-auto scrollbar-hide shrink-0">
-                                {['MAIN MASTER OUTBOX', 'Hampton', 'College Pk', 'West End', 'Midtown', 'Memphis', 'Miami'].map(loc => (
-                                   <button 
-                                      key={loc}
-                                      onClick={() => setActiveLessonPlanLoc(loc)}
-                                      className={`px-3 py-1.5 text-[9px] uppercase tracking-widest font-bold whitespace-nowrap rounded transition-all ${activeLessonPlanLoc === loc ? 'bg-cyan-900/60 text-cyan-400 border border-cyan-700/50' : 'bg-slate-900/50 text-slate-500 border border-slate-800 hover:text-slate-300 hover:border-slate-600'}`}
-                                   >
-                                      {loc}
-                                   </button>
-                                ))}
-                             </div>
-
-                             <div className="w-full h-[500px] relative bg-slate-950 group">
-                               {activeLessonPlanLoc !== 'MAIN MASTER OUTBOX' && (
-                                  <div className="absolute inset-0 bg-slate-950/90 z-10 flex flex-col items-center justify-center pointer-events-none fade-in duration-300">
-                                      <Zap size={24} className="text-yellow-500 mb-2 animate-pulse" />
-                                      <span className="text-[10px] text-yellow-500 font-bold uppercase tracking-widest bg-yellow-950/40 border border-yellow-900/40 px-3 py-1 rounded">Targeting: {activeLessonPlanLoc}</span>
-                                      <p className="text-[9px] text-slate-500 max-w-xs text-center mt-2 font-mono">Awaiting precise Sub-Folder UUID from OpenClaw Node for {activeLessonPlanLoc}. Currently targeting global bucket.</p>
+                           <div className="bg-slate-900/40 border border-slate-800/60 shadow-lg rounded overflow-hidden mt-4">
+                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
+                              <h3 className="text-[10px] text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Lesson Plan Assembly Engine</h3>
+                              <span className="text-[8px] bg-yellow-900/40 text-yellow-500 px-2 rounded border border-yellow-800/40">Weekly PDF Pipeline</span>
+                            </div>
+                            <div className="p-4 grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-900/20">
+                               {Array.isArray(telemetryData?.kidazzle?.lessonPlans) && telemetryData.kidazzle.lessonPlans.length > 0 ? telemetryData.kidazzle.lessonPlans.map((loc, i) => (
+                                  <div key={i} className={`p-3 rounded border text-center flex flex-col items-center justify-center transition-all bg-opacity-30 backdrop-blur-sm shadow-inner ${loc.code === 'CRAWLED' ? 'bg-cyan-900/40 border-cyan-700/60' : loc.code === 'ERROR' ? 'bg-red-900/40 border-red-700/60' : 'bg-yellow-900/40 border-yellow-700/60'}`}>
+                                      <span className="text-[10px] uppercase font-bold text-slate-100">{loc.name}</span>
+                                      <span className={`text-[8px] mt-1.5 uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-black/40 ${loc.code === 'CRAWLED' ? 'text-cyan-400 border border-cyan-900/50' : loc.code === 'ERROR' ? 'text-red-400 border border-red-900/50' : 'text-yellow-400 border border-yellow-900/50'}`}>{loc.status}</span>
+                                  </div>
+                               )) : (
+                                  <div className="text-center text-[10px] text-slate-400 col-span-4 p-8 font-mono animate-pulse bg-slate-900/30 border border-slate-800 rounded">
+                                      <Zap size={14} className="mx-auto mb-2 opacity-50" />
+                                      AWAITING LIVE METRICS FROM IRO BRIDGE...
                                   </div>
                                )}
-                               <iframe 
-                                   src="https://drive.google.com/embeddedfolderview?id=1D4RRpu_xPZ5U-95065LA5lOxTRp9kauY&usp=sharing#list" 
-                                   className={`w-full h-full border-0 absolute inset-0 ${activeLessonPlanLoc !== 'MAIN MASTER OUTBOX' ? 'opacity-20 blur-[1px]' : 'opacity-100'}`}
-                                   title="Lesson Plans Folder"
-                               />
-                             </div>
-                           </div>
+                            </div>
+                          </div>
                         </div>
                       )}
 
                       {/* WIMPER TAB */}
                       {activeTab === 'WIMPER' && (
                         <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
-                          
-                          <div className="mb-2 flex justify-between items-center bg-slate-950 p-2 border border-slate-800 rounded">
-                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Wimper Webinar Pipeline</h3>
-                              <div className="flex gap-4 items-center">
-                                  <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40 hidden sm:inline-block">GHL Live Tracking</span>
-                                  <a href="https://app.bullmight.com/v2/location/0RWYeXXWw8hhpga54CD/opportunities/list" target="_blank" className="text-[9px] text-cyan-500 hover:text-white uppercase flex items-center gap-1 font-bold transition-colors"><ExternalLink size={10}/> Launch Portal</a>
-                              </div>
-                          </div>
-                          
-                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-                              {[
-                                { group: 'New Sign Up', value: 3, color: 'text-slate-300', bg: 'bg-slate-950/20', border: 'border-slate-800' },
-                                { group: 'Called a.t. Sign Up', value: 4, color: 'text-cyan-500', bg: 'bg-cyan-950/20', border: 'border-cyan-900/40' },
-                                { group: 'Attended', value: 1, color: 'text-blue-500', bg: 'bg-blue-950/20', border: 'border-blue-900/40' },
-                                { group: 'Called a.t. Attend', value: 12, color: 'text-purple-500', bg: 'bg-purple-950/20', border: 'border-purple-900/40' },
-                                { group: 'Did Not Attend', value: 17, color: 'text-red-500', bg: 'bg-red-950/20', border: 'border-red-900/40' },
-                                { group: 'Booked Call', value: 1, color: 'text-green-500', bg: 'bg-green-950/20', border: 'border-green-900/40' },
-                                { group: 'No show', value: 0, color: 'text-orange-500', bg: 'bg-orange-950/20', border: 'border-orange-900/40' },
-                                { group: 'Follow Up', value: 3, color: 'text-yellow-500', bg: 'bg-yellow-950/20', border: 'border-yellow-900/40' }
-                              ].map((metric, i) => (
-                                <div key={i} className={`${metric.bg} border ${metric.border} p-4 rounded flex flex-col items-center justify-center text-center shadow-lg transition-transform hover:scale-[1.02]`}>
-                                   <p className="text-[9px] text-slate-400 uppercase font-bold mb-2 tracking-widest whitespace-nowrap overflow-hidden text-ellipsis w-full">{metric.group}</p>
-                                   <p className={`text-3xl font-black ${metric.color} drop-shadow-md`}>{metric.value}</p>
-                                </div>
-                              ))}
-                          </div>
-                          
                           <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row justify-between items-center gap-4">
                             <div className="flex items-center gap-3">
                               <FileBarChart size={24} className="text-cyan-500" />
@@ -666,134 +635,6 @@
                           </div>
                         </div>
                       )}
-                      {/* VIDEO AND IMAGES TABS */}
-                      {activeTab === 'VIDEO' && (
-                        <div className="p-4 h-full overflow-y-auto flex flex-col gap-4 font-mono scrollbar-hide">
-                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex flex-col shrink-0 gap-4">
-                               <div className="flex items-center gap-4">
-                                   <div className="w-12 h-12 rounded bg-cyan-950/50 border border-cyan-800 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
-                                       <Video size={24} className="text-cyan-400" />
-                                   </div>
-                                   <div>
-                                       <h2 className="text-sm uppercase tracking-widest font-black text-slate-200">OpenClaw Omni-Video Engine</h2>
-                                       <p className="text-[9px] text-cyan-500 uppercase tracking-widest mt-1 font-bold">Claude Bot • HeyGen CLI • C-Dance</p>
-                                   </div>
-                               </div>
-                               <div className="flex flex-col sm:flex-row gap-2 mt-2">
-                                 <input 
-                                     type="text" 
-                                     value={videoPrompt}
-                                     onChange={(e) => setVideoPrompt(e.target.value)}
-                                     placeholder="Enter YouTube URL for Deep Research OR HeyGen Prompt..."
-                                     className="flex-1 bg-slate-950/80 border border-slate-800 rounded p-2.5 text-[10px] text-slate-300 focus:outline-none focus:border-cyan-800 font-mono tracking-widest"
-                                 />
-                                 <button 
-                                     onClick={() => { setIsGeneratingVideo(true); setVideoPrompt(''); }}
-                                     className="px-5 py-2.5 bg-cyan-950/50 border border-cyan-700 hover:bg-cyan-900 transition-colors text-[10px] text-cyan-400 uppercase tracking-widest font-black rounded w-full sm:w-auto shadow-[0_0_10px_rgba(34,211,238,0.1)] flex items-center justify-center gap-2">
-                                     <Zap size={12} /> {isGeneratingVideo ? 'Processing...' : 'Execute Master Production'}
-                                 </button>
-                               </div>
-                           </div>
-
-                           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 shrink-0">
-                               {/* Stage 1: Long Form Generation */}
-                               <div className="bg-slate-900/40 border-t-2 border-t-purple-500 border-x border-b border-slate-800/60 rounded p-4 relative overflow-hidden group">
-                                   <div className="absolute -top-10 -right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl flex-none pointer-events-none" />
-                                   <p className="text-[10px] text-purple-400 uppercase font-black tracking-widest mb-3 flex items-center justify-between">1. Long-Form Core <TrendingUp size={12} /></p>
-                                   <div className="space-y-3 mt-4">
-                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter hover:border-purple-500/40 transition-colors flex items-center gap-2"><span className="text-purple-500">↳</span> Deep Research Prompts</div>
-                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter hover:border-purple-500/40 transition-colors flex items-center gap-2"><span className="text-purple-500">↳</span> Script & Outline Generation</div>
-                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter hover:border-purple-500/40 transition-colors flex items-center gap-2"><span className="text-purple-500">↳</span> HeyGen & C-Dance Rendering</div>
-                                   </div>
-                               </div>
-
-                               {/* Stage 2: Fragmentation */}
-                               <div className="bg-slate-900/40 border-t-2 border-t-amber-500 border-x border-b border-slate-800/60 rounded p-4 relative overflow-hidden group">
-                                   <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl flex-none pointer-events-none" />
-                                   <p className="text-[10px] text-amber-500 uppercase font-black tracking-widest mb-3 flex items-center justify-between">2. Hook Fragmentation <Layers size={12} /></p>
-                                   <div className="space-y-3 mt-4">
-                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 flex justify-between items-center text-[9px] text-slate-400 uppercase tracking-tighter hover:border-amber-500/40 transition-colors"><span>Extract 30s Shorts</span><span className="text-amber-500 font-bold">12 Active</span></div>
-                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 flex justify-between items-center text-[9px] text-slate-400 uppercase tracking-tighter hover:border-amber-500/40 transition-colors"><span>Extract 60s Reels</span><span className="text-amber-500 font-bold">8 Active</span></div>
-                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 flex justify-between items-center text-[9px] text-slate-400 uppercase tracking-tighter hover:border-amber-500/40 transition-colors"><span>Generate YT Titles</span><span className="text-amber-500 font-bold px-1.5 py-0.5 bg-amber-950/30 rounded border border-amber-900/50">Ready</span></div>
-                                   </div>
-                               </div>
-
-                               {/* Stage 3: Social & GHL Metrics */}
-                               <div className="bg-slate-900/40 border-t-2 border-t-green-500 border-x border-b border-slate-800/60 rounded p-4 relative overflow-hidden group">
-                                   <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-2xl flex-none pointer-events-none" />
-                                   <p className="text-[10px] text-green-500 uppercase font-black tracking-widest mb-3 flex items-center justify-between">3. GHL Social Engagement <Send size={12} /></p>
-                                   <div className="space-y-3 mt-4">
-                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter flex items-center justify-between hover:border-green-500/40 transition-colors">
-                                          <span>Facebook CTR</span>
-                                          <span className="text-green-400 font-bold flex items-center gap-1"><TrendingUp size={10} /> +137%</span>
-                                      </div>
-                                      <div className="bg-slate-950/50 rounded border border-slate-800 p-2 text-[9px] text-slate-400 uppercase tracking-tighter flex items-center justify-between hover:border-green-500/40 transition-colors">
-                                          <span>LinkedIn Plays</span>
-                                          <span className="text-slate-300 font-bold">Syncing...</span>
-                                      </div>
-                                      <div className="bg-green-950/30 rounded border border-green-800/60 p-2 text-[9px] text-green-400 font-bold uppercase tracking-widest text-center shadow-[0_0_10px_rgba(34,197,94,0.1)] hover:bg-green-900/40 transition-colors cursor-pointer flex items-center justify-center gap-2"><Send size={10} /> Sync GHL Matrix Data</div>
-                                   </div>
-                               </div>
-                           </div>
-
-                           <div className="bg-slate-900/20 border border-slate-800/40 rounded p-4 flex-1 flex flex-col min-h-0">
-                               <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-3 flex items-center justify-between">
-                                  <span className="flex items-center gap-2"><Terminal size={12} /> Live Post-Production Stream</span>
-                                  <span className="text-[8px] bg-slate-950 text-slate-500 px-2 rounded border border-slate-800 py-0.5 shadow-sm hidden sm:inline-block">GHL Listening Webhook Active</span>
-                               </p>
-                               <div className="bg-black/50 border border-slate-800/50 rounded flex-1 p-3 font-mono text-[9px] text-slate-500 space-y-2 overflow-y-auto overflow-x-hidden w-full">
-                                   <p className="border-l-2 border-cyan-800 pl-2 text-cyan-500/90">[SYS] Claude Bot master control mapped to OpenClaw core.</p>
-                                   <p className="border-l-2 border-purple-800 pl-2 text-purple-400">[SYS] AirLLM Stream Init: 70B Model Inference Online.</p>
-                                   <p className="border-l-2 border-cyan-800 pl-2">[SYS] Obsidian daily briefing workflow pre-loaded.</p>
-                                   <p className="border-l-2 border-cyan-800 pl-2">[SYS] HeyGen CLI and C-Dance environment authenticated seamlessly.</p>
-                                   <p className="border-l-2 border-emerald-800 pl-2 text-emerald-500/90 font-bold">[NET] GHL Media API initialized for automated social uploads.</p>
-                                   <p className="border-l-2 border-amber-800 pl-2 text-amber-500 animate-pulse mt-4">[IDLE] Waiting for deep UI prompt payload to ignite pipeline...</p>
-                               </div>
-                           </div>
-                        </div>
-                      )}
-                      
-                      {activeTab === 'IMAGES' && (
-                        <div className="p-4 h-full overflow-y-auto flex flex-col gap-4 font-mono scrollbar-hide">
-                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex flex-col sm:flex-row justify-between items-center sm:items-start shrink-0 gap-4">
-                               <div className="flex items-center gap-4">
-                                   <div className="w-12 h-12 rounded bg-fuchsia-950/50 border border-fuchsia-800 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(217,70,239,0.2)]">
-                                       <Crosshair size={24} className="text-fuchsia-400" />
-                                   </div>
-                                   <div>
-                                       <h2 className="text-sm uppercase tracking-widest font-black text-slate-200">Picasso Multi-Modal Matrix</h2>
-                                       <p className="text-[9px] text-fuchsia-500 uppercase tracking-widest mt-1 font-bold">Flux Core • Midjourney V6 • GHL Auto-Push</p>
-                                   </div>
-                               </div>
-                           </div>
-
-                           <div className="bg-slate-900/20 border border-slate-800/40 rounded p-4 flex-1 flex flex-col min-h-0">
-                               <div className="flex flex-col gap-3 h-full">
-                                   <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest flex items-center justify-between">
-                                      <span className="flex items-center gap-2"><Terminal size={12} /> Master Graphic Prompt</span>
-                                      <span className="text-[8px] bg-slate-950 text-slate-500 px-2 rounded border border-slate-800 py-0.5">Google Drive Sandbox Linked</span>
-                                   </p>
-
-                                   <textarea 
-                                       className="w-full h-32 bg-slate-950/80 border border-slate-800 rounded p-3 text-[11px] text-slate-300 focus:outline-none focus:border-fuchsia-800 scrollbar-hide font-mono tracking-widest resize-none"
-                                       placeholder="Enter graphic prompt here... (e.g. 'Stylized illustration of a diner scene, Wimper business owners discussing Section 125 tax loopholes')"
-                                       value={imagePrompt}
-                                       onChange={(e) => setImagePrompt(e.target.value)}
-                                   />
-                                   
-                                   <div className="flex justify-between items-center mt-2">
-                                       <p className="text-[9px] text-slate-500 animate-pulse">[IDLE] Picasso node awaiting input payload...</p>
-                                       <button 
-                                           onClick={() => setImagePrompt('')}
-                                           className="px-6 py-2.5 bg-fuchsia-950/50 border border-fuchsia-700 hover:bg-fuchsia-900 transition-colors text-[10px] text-fuchsia-400 uppercase tracking-widest font-black rounded shadow-[0_0_10px_rgba(217,70,239,0.1)] flex items-center justify-center gap-2"
-                                       >
-                                           <Zap size={12} /> Render Graphix
-                                       </button>
-                                   </div>
-                               </div>
-                           </div>
-                        </div>
-                      )}
                     </div>
                   </section>
                 </div>
@@ -834,29 +675,15 @@
                    {/* SEO LOCATION MATRIX REPLACING QUICK TOOLS */}
                    <section className="bg-slate-900/20 border border-slate-800/60 rounded p-4 flex-1 flex flex-col overflow-hidden">
                       <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">Google Pack Matrix</h2>
+                        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-bold">Local Falcon Matrix</h2>
                         <Search size={10} className="text-cyan-600" />
                       </div>
-                      <div className="flex flex-col gap-3 overflow-y-auto pr-1 flex-1 scrollbar-hide">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1 scrollbar-hide">
                         {localFalconLocations.map(loc => (
-                         <div key={loc.id} className="bg-slate-950/40 border border-slate-800 rounded flex flex-col transition-all group overflow-hidden">
-                           <div className="bg-slate-900 border-b border-slate-800 p-2 flex justify-between items-center">
-                              <span className="text-[10px] font-bold uppercase text-slate-300 truncate tracking-widest">{loc.name}</span>
-                              <div className="flex gap-2 shrink-0">
-                                 <a href={loc.gmb} target="_blank" title="Google My Business" className="text-slate-500 hover:text-blue-400 transition-colors bg-slate-950 p-1 rounded border border-slate-700 hover:border-blue-500/50"><ExternalLink size={10} /></a>
-                                 <button onClick={() => setActiveIframe(loc)} title="Local Falcon Map" className="text-slate-500 hover:text-cyan-400 transition-colors bg-slate-950 p-1 rounded border border-slate-700 hover:border-cyan-500/50"><Crosshair size={10} /></button>
-                              </div>
-                           </div>
-                           <div className="flex divide-x divide-slate-800 bg-slate-900/40">
-                              <div className="p-2 flex-1 text-center"><p className="text-[8px] text-slate-500 uppercase font-bold tracking-tighter mb-1">1 Mile</p><p className="text-[11px] font-black text-cyan-400">{loc.mile1}</p></div>
-                              <div className="p-2 flex-1 text-center"><p className="text-[8px] text-slate-500 uppercase font-bold tracking-tighter mb-1">5 Mile</p><p className="text-[11px] font-black text-indigo-400">{loc.mile5}</p></div>
-                              <div className="p-2 flex-1 text-center"><p className="text-[8px] text-slate-500 uppercase font-bold tracking-tighter mb-1">10 Mile</p><p className="text-[11px] font-black text-yellow-500">{loc.mile10}</p></div>
-                           </div>
-                           <div className="bg-slate-950 p-2 flex justify-between items-center border-t border-slate-800">
-                               <span className="text-[8px] text-slate-500 uppercase font-bold flex items-center gap-1.5"><TrendingUp size={10} className="text-slate-600"/> 15-Day Tracker</span>
-                               <span className="text-[9px] font-bold text-green-500 px-1.5 py-0.5 bg-green-950/30 rounded border border-green-900/50">{loc.trend}</span>
-                           </div>
-                         </div>
+                         <button key={loc.id} onClick={() => setActiveIframe(loc)} className="flex items-center justify-between p-2 text-[9px] font-bold uppercase bg-slate-950/40 border border-slate-800 rounded hover:border-cyan-500 hover:text-cyan-400 hover:bg-cyan-900/20 tracking-tighter text-slate-400 transition-all group">
+                           <span className="truncate">{loc.name}</span>
+                           <Crosshair size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                         </button>
                        ))}
                      </div>
                   </section>
@@ -864,12 +691,10 @@
               </div>
               
               <footer className="mt-4 p-3 md:p-2 border border-slate-800 bg-slate-900/20 rounded flex flex-col md:flex-row justify-between items-center text-[8px] text-slate-600 uppercase tracking-[0.2em] gap-2 flex-none">
-                <div className="flex gap-6"><span>Instance: IRO_Node_X1</span><span>AirLLM Linked</span></div>
-                <div className="flex gap-4 items-center tracking-tighter">
-                  <span className="flex items-center gap-2 font-bold text-yellow-500 animate-[pulse_2s_ease-in-out_infinite] bg-yellow-950/40 px-3 py-1 rounded border border-yellow-900/50">
-                     <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 shadow-[0_0_5px_yellow]"></span> OpenClaw Compute Active (Thinking... Check back in 10-15m)
-                  </span>
-                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-4 uppercase">Ver 2.5.5_Media_Core</span>
+                <div className="flex gap-6"><span>Instance: IRO_Node_X1</span><span>Uptime: 01:42:04</span></div>
+                <div className="flex gap-4 items-center font-bold tracking-tighter">
+                  <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_green]"></span> All Nodes OK</span>
+                  <span className="text-cyan-600 font-bold border-l border-slate-800 pl-4 uppercase">Ver 2.5.4_Mobile_Refined</span>
                 </div>
               </footer>
 
@@ -901,75 +726,6 @@
                          </a>
                        </div>
                     </div>
-                  </div>
-                </div>
-              )}
-
-              {/* NIGHT PROTOCOL MODAL */}
-              {isNightProtocolModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 lg:p-12 animate-in fade-in duration-200">
-                  <div className="bg-slate-900 border border-slate-700 rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.5)] w-full h-full max-w-7xl flex flex-col overflow-hidden relative">
-                     <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
-                         <p className="text-xs text-yellow-500 uppercase font-bold tracking-widest flex items-center gap-2">
-                            <Zap size={14} /> Night Protocol Execution Log <span className="text-[9px] text-slate-500 ml-2 border border-slate-800 px-2 py-0.5 rounded">Live Viewer</span>
-                         </p>
-                         <button onClick={() => setIsNightProtocolModalOpen(false)} className="text-slate-500 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 p-1.5 rounded-full">
-                            <Crosshair size={14} className="rotate-45" />
-                         </button>
-                     </div>
-                     <div className="flex-1 bg-slate-950 relative w-full h-full overflow-y-auto p-4 lg:p-6 flex flex-col gap-6 scrollbar-hide">
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            {[
-                               { label: 'Total Clicks', val: '12.4K', color: 'text-cyan-400', border: 'border-cyan-900/40' },
-                               { label: 'Total Impressions', val: '148.2K', color: 'text-purple-400', border: 'border-purple-900/40' },
-                               { label: 'Average CTR', val: '8.4%', color: 'text-emerald-400', border: 'border-emerald-900/40' },
-                               { label: 'Average Position', val: '14.2', color: 'text-yellow-400', border: 'border-yellow-900/40' }
-                            ].map((stat, i) => (
-                               <div key={i} className={`bg-slate-900 border ${stat.border} rounded p-4 flex flex-col justify-center items-center shadow-lg transition-transform hover:-translate-y-1`}>
-                                  <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2 text-center">{stat.label}</p>
-                                  <p className={`text-2xl sm:text-3xl font-black ${stat.color} drop-shadow-md`}>{stat.val}</p>
-                               </div>
-                            ))}
-                        </div>
-                        
-                        <div className="bg-slate-900 border border-slate-800 rounded flex-1 overflow-hidden flex flex-col shadow-lg">
-                           <div className="border-b border-slate-800 p-4 bg-slate-950 flex justify-between items-center">
-                               <h4 className="text-[10px] text-slate-400 uppercase tracking-widest font-bold flex items-center gap-2"><Search size={14} className="text-cyan-600" /> Top Search Queries (Night Protocol Filtered)</h4>
-                               <span className="text-[8px] bg-slate-800 text-slate-400 px-2 rounded border border-slate-700">Last 28 Days</span>
-                           </div>
-                           <div className="overflow-x-auto">
-                               <table className="w-full text-left text-[10px] flex-1">
-                                  <thead className="bg-slate-800/50 text-slate-500 uppercase">
-                                      <tr>
-                                          <th className="p-4 font-bold pl-6">Query</th>
-                                          <th className="p-4 font-bold text-center">Clicks</th>
-                                          <th className="p-4 font-bold text-center">Impressions</th>
-                                          <th className="p-4 font-bold text-center">Position</th>
-                                      </tr>
-                                  </thead>
-                                  <tbody className="text-slate-300 divide-y divide-slate-800/50 font-mono">
-                                      {[
-                                        { q: 'Section 125 Tax Free Childcare', c: '1,204', i: '14,020', p: '2.1' },
-                                        { q: 'Wimper Strategy FICA Savings', c: '840', i: '10,100', p: '1.4' },
-                                        { q: 'Hampton child care near me', c: '650', i: '8,400', p: '3.8' },
-                                        { q: 'Best daycare college park ga', c: '420', i: '5,200', p: '4.2' },
-                                        { q: 'How to pay for daycare tax free', c: '310', i: '12,500', p: '10.5' },
-                                        { q: 'Childcare tax credit 2026', c: '280', i: '15,600', p: '12.8' },
-                                        { q: 'Top rated pre k memphis tn', c: '195', i: '3,200', p: '5.0' },
-                                        { q: 'Kidazzle early learning center', c: '1,500', i: '4,100', p: '1.1' },
-                                      ].map((row, i) => (
-                                          <tr key={i} className="hover:bg-slate-800/30 transition-colors">
-                                              <td className="p-4 pl-6 text-cyan-400 font-bold">{row.q}</td>
-                                              <td className="p-4 text-center text-slate-200">{row.c}</td>
-                                              <td className="p-4 text-center text-slate-400">{row.i}</td>
-                                              <td className="p-4 text-center font-bold text-yellow-500">{row.p}</td>
-                                          </tr>
-                                      ))}
-                                  </tbody>
-                               </table>
-                           </div>
-                        </div>
-                     </div>
                   </div>
                 </div>
               )}
