@@ -67,7 +67,7 @@
         <div class="nav-links">
             <a href="#about">Goals & Vision</a>
             <a href="#how-to-assist">How to Assist</a>
-            <a href="#worksheets">iPad Worksheets</a>
+            <a href="#interactive-games">Curriculum</a>
             <a href="#upload">Upload Center</a>
             <a href="#videos">Video Log</a>
             <a href="#special-moments">Special Moments</a>
@@ -80,7 +80,7 @@
             <p class="subtitle animate-up delay-1">Creating a seamless, supportive learning environment to help him navigate through stuttering cycles. A central hub recognizing trigger words, tracking progress, and enabling iPad learning.</p>
             <div class="cta-group animate-up delay-2">
                 <a href="#about" class="btn btn-primary">Our Goals</a>
-                <a href="#worksheets" class="btn btn-secondary">Download Worksheets</a>
+                <a href="#interactive-games" class="btn btn-secondary">Interactive Curriculum</a>
             </div>
         </div>
     </header>
@@ -124,94 +124,138 @@
             </div>
         </section>
 
-        <section id="worksheets" class="section-container" style="margin-bottom: 2rem;">
-            <div class="section-header">
-                <h2>iPad Worksheets & Tracing Library</h2>
-                <p>Downloadable files customized for iPad Apple Pencil use.</p>
-            </div>
-            <div class="grid-layout" style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
-                <div class="glass-card" style="padding: 2rem; text-align: center; width: 300px;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
-                    <h3 style="margin-bottom: 0.5rem;">Letter Tracing Pack</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Digital trace-and-write module focusing on current trigger letters.</p>
-                    <a href="#" class="btn btn-secondary" style="width: 100%; margin: 0;">Download PDF</a>
-                </div>
-                <div class="glass-card" style="padding: 2rem; text-align: center; width: 300px;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">✍️</div>
-                    <h3 style="margin-bottom: 0.5rem;">Daily Practice Log</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Blank writing templates for morning routines on the tablet.</p>
-                    <a href="#" class="btn btn-secondary" style="width: 100%; margin: 0;">Download PDF</a>
-                </div>
-            </div>
-        </section>
 
-        <!-- NEW GAMIFICATION MODULE PROTOTYPE -->
-        <section id="interactive-games" class="glass-card section-container" style="margin-bottom: 2rem; text-align: center;">
-            <div class="section-header">
-                <h2>Live Apple Pencil Game (Tracing Catalog)</h2>
-                <p>Interactive tracing exercises with audio prompts to help Sterling practice trigger letters and words.</p>
+
+        <!-- INTERACTIVE CURRICULUM MODULE -->
+        <section id="interactive-games" class="glass-card section-container" style="margin-bottom: 2rem;">
+            <div class="section-header" style="text-align: center;">
+                <h2>Sterling's Interactive Curriculum</h2>
+                <p>Select a learning module below to begin practice.</p>
             </div>
             
-            <div style="display: flex; flex-direction: column; gap: 2rem; align-items: center;">
-                
-                <!-- Selection Menu -->
-                <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 900px;">
-                    <h3 style="margin-bottom: 1rem; font-size: 1.2rem; color: var(--text-muted);">Select an Exercise</h3>
-                    
-                    <div style="margin-bottom: 1.5rem;">
-                        <strong style="color: var(--primary); display: block; margin-bottom: 0.5rem;">Focus Triggers</strong>
-                        <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;" id="focus-exercises">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-
-                    <div>
-                        <strong style="color: var(--secondary); display: block; margin-bottom: 0.5rem;">Alphabet Catalog</strong>
-                        <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;" id="alphabet-exercises">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tracing Area -->
-                <div style="background: rgba(0,0,0,0.5); padding: 2rem; border-radius: 16px; display: inline-block; width: 100%; max-width: 900px;">
-                    <h3 id="tracing-title" style="margin-bottom: 1.5rem; color: var(--primary); font-size: 2rem;">Trace the Letter: 'S'</h3>
-                    
-                    <div style="display: flex; gap: 2rem; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
-                        <div>
-                            <!-- The Canvas for Tracing -->
-                            <canvas id="tracingCanvas" width="400" height="400" style="background: #ffffff; border-radius: 12px; cursor: crosshair; touch-action: none; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);"></canvas>
+            <div class="curriculum-accordion">
+                <!-- Reading & Speech -->
+                <details class="curriculum-module" open>
+                    <summary>✍️ Reading & Speech (Tracing Catalog)</summary>
+                    <div class="module-content">
+                        <div style="display: flex; flex-direction: column; gap: 2rem; align-items: center; padding-top: 1rem;">
                             
-                            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center;">
-                                <button class="btn btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
-                                <button class="btn btn-primary" onclick="finishTracing()">Finish Tracing</button>
-                            </div>
-                        </div>
+                            <!-- Selection Menu -->
+                            <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 900px;">
+                                <h3 style="margin-bottom: 1rem; font-size: 1.2rem; color: var(--text-muted); text-align: center;">Select an Exercise</h3>
+                                
+                                <div style="margin-bottom: 1.5rem;">
+                                    <strong style="color: var(--primary); display: block; margin-bottom: 0.5rem; text-align: center;">Focus Triggers</strong>
+                                    <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;" id="focus-exercises">
+                                        <!-- Populated by JS -->
+                                    </div>
+                                </div>
 
-                        <!-- Reward / Practice Area (Hidden until finished) -->
-                        <div id="practice-area" style="display: none; background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 16px; flex: 1; min-width: 300px; border: 1px solid rgba(255,255,255,0.1);">
-                            <h4 style="color: var(--accent); margin-bottom: 1.5rem; font-size: 1.5rem;">Great Job! Repeat after me:</h4>
-                            <div id="practice-items" style="display: flex; flex-direction: column; gap: 1rem;">
-                                <!-- Items populated by JS -->
+                                <div>
+                                    <strong style="color: var(--secondary); display: block; margin-bottom: 0.5rem; text-align: center;">Alphabet Catalog</strong>
+                                    <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;" id="alphabet-exercises">
+                                        <!-- Populated by JS -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tracing Area -->
+                            <div style="background: rgba(0,0,0,0.5); padding: 2rem; border-radius: 16px; display: inline-block; width: 100%; max-width: 900px; text-align: center;">
+                                <h3 id="tracing-title" style="margin-bottom: 1.5rem; color: var(--primary); font-size: 2rem;">Trace the Letter: 'S'</h3>
+                                
+                                <div style="display: flex; gap: 2rem; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
+                                    <div>
+                                        <!-- The Canvas for Tracing -->
+                                        <canvas id="tracingCanvas" width="400" height="400" style="background: #ffffff; border-radius: 12px; cursor: crosshair; touch-action: none; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);"></canvas>
+                                        
+                                        <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center;">
+                                            <button class="btn btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
+                                            <button class="btn btn-primary" onclick="finishTracing()">Finish Tracing</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Reward / Practice Area (Hidden until finished) -->
+                                    <div id="practice-area" style="display: none; background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 16px; flex: 1; min-width: 300px; border: 1px solid rgba(255,255,255,0.1);">
+                                        <h4 style="color: var(--accent); margin-bottom: 1.5rem; font-size: 1.5rem;">Great Job! Repeat after me:</h4>
+                                        <div id="practice-items" style="display: flex; flex-direction: column; gap: 1rem;">
+                                            <!-- Items populated by JS -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-        <!-- END GAMIFICATION MODULE -->
+                </details>
 
-        <section id="upload" class="glass-card section-container" style="margin-bottom: 2rem; text-align: center;">
-            <div class="section-header">
-                <h2>Upload Center</h2>
-                <p>Upload new videos or scanned documents to be added to Sterling's database.</p>
+                <!-- Math & Logic -->
+                <details class="curriculum-module">
+                    <summary>🔢 Math & Logic (Counting)</summary>
+                    <div class="module-content">
+                        <div style="text-align: center; padding: 2rem;">
+                            <h3 style="color: var(--primary); font-size: 2rem; margin-bottom: 1rem;">Let's Count!</h3>
+                            <div id="math-problem" style="font-size: 5rem; margin-bottom: 2rem; background: rgba(0,0,0,0.3); padding: 2rem; border-radius: 16px; letter-spacing: 0.5rem;">
+                                <!-- Apples injected here -->
+                            </div>
+                            <h4 style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1.5rem;">How many apples are there?</h4>
+                            <div id="math-options" style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                                <!-- Options injected here -->
+                            </div>
+                            <div id="math-feedback" style="margin-top: 2rem; font-size: 1.5rem; font-weight: bold; min-height: 2rem;"></div>
+                        </div>
+                    </div>
+                </details>
             </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 4rem; border-radius: 16px; border: 2px dashed rgba(255,255,255,0.2); max-width: 600px; margin: 0 auto; transition: background 0.3s;" id="dropzone">
-                <div style="font-size: 4rem; margin-bottom: 1rem;">📁</div>
-                <h3 style="margin-bottom: 1rem;">Drag & Drop Files Here</h3>
-                <p style="color: var(--text-muted); margin-bottom: 2rem;">Supports .mp4 videos for the video log, or image/PDF scans to be converted into iPad worksheets.</p>
-                <label for="file-upload" class="btn btn-primary" style="cursor: pointer;">
-                    Browse Computer
+            
+            <style>
+                .curriculum-accordion {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+                .curriculum-module {
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    overflow: hidden;
+                }
+                .curriculum-module summary {
+                    padding: 1.5rem;
+                    font-size: 1.5rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    background: rgba(0, 0, 0, 0.2);
+                    list-style: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+                .curriculum-module summary::-webkit-details-marker {
+                    display: none;
+                }
+                .curriculum-module summary::after {
+                    content: '▼';
+                    font-size: 1.2rem;
+                    color: var(--primary);
+                }
+                .curriculum-module[open] summary::after {
+                    content: '▲';
+                }
+                .module-content {
+                    padding: 1.5rem;
+                    border-top: 1px solid rgba(255, 255, 255, 0.05);
+                }
+            </style>
+        </section>
+        <!-- END CURRICULUM MODULE -->
+
+        <section id="upload" class="glass-card section-container" style="margin-bottom: 2rem; padding: 2rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                <div style="text-align: left;">
+                    <h2 style="margin-bottom: 0.5rem; font-size: 1.5rem;">Database Upload Center</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Upload .mp4 video logs or worksheet scans.</p>
+                </div>
+                <label for="file-upload" class="btn btn-primary" style="cursor: pointer; margin: 0; padding: 0.8rem 1.5rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <span>📁</span> Browse Computer
                 </label>
                 <input id="file-upload" type="file" style="display: none;" multiple accept="video/*, image/*, .pdf">
             </div>
@@ -343,19 +387,44 @@
             let audioContextReady = false;
 
             const tracingData = {
+                // Focus Triggers
                 'S': { type: 'letter', text: 'S', items: [{ word: 'Snake', icon: '🐍' }, { word: 'Sky', icon: '☁️' }, { word: 'Silk', icon: '🧣' }] },
                 'WH': { type: 'words', text: 'WH', items: [{ word: 'What', icon: '❓' }, { word: 'Why', icon: '🤔' }, { word: 'Where', icon: '📍' }, { word: 'When', icon: '⏰' }, { word: 'Which', icon: '🤷‍♂️' }] },
                 'C': { type: 'words', text: 'C', items: [{ word: 'Can', icon: '🥫' }, { word: 'Could', icon: '💭' }] },
                 'D': { type: 'words', text: 'D', items: [{ word: 'Did', icon: '✔️' }, { word: 'Do', icon: '👍' }, { word: 'Does', icon: '👌' }] },
                 'W': { type: 'words', text: 'W', items: [{ word: 'Will', icon: '🔮' }, { word: 'We', icon: '🤝' }, { word: 'Would', icon: '🪵' }] },
-                'I': { type: 'phrases', text: 'I', items: [{ word: 'I want this', icon: '👈' }, { word: 'I want that', icon: '👉' }, { word: 'I can do anything', icon: '🦸‍♂️' }] }
+                'TH': { type: 'words', text: 'TH', items: [{ word: 'The', icon: '⭐' }, { word: 'They', icon: '👥' }, { word: 'That', icon: '👉' }] },
+                'I': { type: 'phrases', text: 'I', items: [{ word: 'I want this', icon: '👈' }, { word: 'I want that', icon: '👉' }, { word: 'I can do anything', icon: '🦸‍♂️' }] },
+                
+                // Kindergarten / Preschool Alphabet Dictionary
+                'A': { type: 'letter', text: 'A', items: [{ word: 'Apple', icon: '🍎' }, { word: 'And', icon: '➕' }, { word: 'Ant', icon: '🐜' }] },
+                'B': { type: 'letter', text: 'B', items: [{ word: 'But', icon: '✋' }, { word: 'Because', icon: '🤔' }, { word: 'Ball', icon: '⚽' }] },
+                'E': { type: 'letter', text: 'E', items: [{ word: 'Elephant', icon: '🐘' }, { word: 'Egg', icon: '🥚' }] },
+                'F': { type: 'letter', text: 'F', items: [{ word: 'Fish', icon: '🐟' }, { word: 'Fun', icon: '🎈' }] },
+                'G': { type: 'letter', text: 'G', items: [{ word: 'Get', icon: '👐' }, { word: 'Give', icon: '🎁' }, { word: 'Go', icon: '🚦' }] },
+                'H': { type: 'letter', text: 'H', items: [{ word: 'House', icon: '🏠' }, { word: 'Horse', icon: '🐎' }, { word: 'Have', icon: '🤲' }, { word: 'How', icon: '🤷' }, { word: 'Who', icon: '🦉' }] },
+                'J': { type: 'letter', text: 'J', items: [{ word: 'Jump', icon: '🦘' }, { word: 'Juice', icon: '🧃' }] },
+                'K': { type: 'letter', text: 'K', items: [{ word: 'Kite', icon: '🪁' }, { word: 'Key', icon: '🔑' }] },
+                'L': { type: 'letter', text: 'L', items: [{ word: 'Lion', icon: '🦁' }, { word: 'Look', icon: '👀' }] },
+                'M': { type: 'letter', text: 'M', items: [{ word: 'Monkey', icon: '🐒' }, { word: 'Moon', icon: '🌙' }] },
+                'N': { type: 'letter', text: 'N', items: [{ word: 'No', icon: '🛑' }, { word: 'Nut', icon: '🥜' }] },
+                'O': { type: 'letter', text: 'O', items: [{ word: 'Often', icon: '🔄' }, { word: 'Owl', icon: '🦉' }, { word: 'Open', icon: '🔓' }] },
+                'P': { type: 'letter', text: 'P', items: [{ word: 'Pig', icon: '🐷' }, { word: 'Play', icon: '🎮' }] },
+                'Q': { type: 'letter', text: 'Q', items: [{ word: 'Queen', icon: '👑' }, { word: 'Quiet', icon: '🤫' }] },
+                'R': { type: 'letter', text: 'R', items: [{ word: 'Remember', icon: '🧠' }, { word: 'Run', icon: '🏃' }] },
+                'T': { type: 'letter', text: 'T', items: [{ word: 'Tiger', icon: '🐅' }, { word: 'Tree', icon: '🌳' }] },
+                'U': { type: 'letter', text: 'U', items: [{ word: 'Up', icon: '⬆️' }, { word: 'Under', icon: '👇' }, { word: 'Us', icon: '🫂' }] },
+                'V': { type: 'letter', text: 'V', items: [{ word: 'Van', icon: '🚐' }, { word: 'Very', icon: '✨' }] },
+                'X': { type: 'letter', text: 'X', items: [{ word: 'X-ray', icon: '🦴' }, { word: 'Box', icon: '📦' }] },
+                'Y': { type: 'letter', text: 'Y', items: [{ word: 'Yes', icon: '✅' }, { word: 'Yellow', icon: '🟡' }] },
+                'Z': { type: 'letter', text: 'Z', items: [{ word: 'Zebra', icon: '🦓' }, { word: 'Zoo', icon: '🦁' }] }
             };
 
-            // Generate Alphabet A-Z
+            // Generate remaining Alphabet A-Z if not defined
             for(let i=65; i<=90; i++) {
                 let letter = String.fromCharCode(i);
                 if(!tracingData[letter]) {
-                    tracingData[letter] = { type: 'letter', text: letter, items: [{ word: letter + ' word 1', icon: '⭐' }, { word: letter + ' word 2', icon: '⭐' }] };
+                    tracingData[letter] = { type: 'letter', text: letter, items: [{ word: letter + ' word', icon: '⭐' }] };
                 }
             }
 
@@ -363,7 +432,7 @@
             const focusContainer = document.getElementById('focus-exercises');
             const alphaContainer = document.getElementById('alphabet-exercises');
             
-            const focusKeys = ['S', 'WH', 'C', 'D', 'W', 'I'];
+            const focusKeys = ['S', 'WH', 'C', 'D', 'W', 'TH', 'I'];
             
             Object.keys(tracingData).forEach(key => {
                 const btn = document.createElement('button');
@@ -378,7 +447,7 @@
                 if(focusKeys.includes(key)) {
                     btn.className = 'btn btn-primary exercise-btn';
                     focusContainer.appendChild(btn);
-                } else {
+                } else if(key.length === 1) { // Only put single letters in alphabet
                     alphaContainer.appendChild(btn);
                 }
             });
@@ -461,6 +530,63 @@
                     container.appendChild(btn);
                 });
             };
+
+            // --- MATH GAME LOGIC ---
+            let currentApples = 1;
+            
+            function loadMathLevel() {
+                currentApples = Math.floor(Math.random() * 5) + 1; // 1 to 5
+                const container = document.getElementById('math-problem');
+                container.innerHTML = '🍎'.repeat(currentApples);
+                
+                const optionsContainer = document.getElementById('math-options');
+                optionsContainer.innerHTML = '';
+                document.getElementById('math-feedback').innerText = '';
+                
+                // Generate 3 unique options including the correct one
+                let options = [currentApples];
+                while(options.length < 3) {
+                    let rand = Math.floor(Math.random() * 5) + 1;
+                    if(!options.includes(rand)) options.push(rand);
+                }
+                options.sort(() => Math.random() - 0.5);
+                
+                options.forEach(num => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn btn-secondary';
+                    btn.style.fontSize = '2.5rem';
+                    btn.style.padding = '1rem 3rem';
+                    btn.innerText = num;
+                    btn.onclick = () => checkMathAnswer(num, btn);
+                    optionsContainer.appendChild(btn);
+                });
+            }
+
+            function checkMathAnswer(selected, btn) {
+                const feedback = document.getElementById('math-feedback');
+                if(selected === currentApples) {
+                    btn.className = 'btn btn-primary';
+                    btn.style.background = '#10b981'; // Green
+                    feedback.style.color = '#10b981';
+                    feedback.innerText = 'Correct! Great job Sterling!';
+                    speakText(`Correct! There are ${currentApples} apples.`);
+                    
+                    // Add subtle visual celebration
+                    btn.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        btn.style.transform = 'scale(1)';
+                        loadMathLevel();
+                    }, 3000);
+                } else {
+                    btn.style.opacity = '0.3';
+                    feedback.style.color = '#ef4444'; // Red
+                    feedback.innerText = 'Oops, try again!';
+                    speakText("Oops, try again!");
+                }
+            }
+
+            // Initialize Math
+            setTimeout(loadMathLevel, 1000);
 
             if(canvas) {
                 const ctx = canvas.getContext("2d");
