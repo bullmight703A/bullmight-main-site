@@ -70,6 +70,7 @@
             <a href="#worksheets">iPad Worksheets</a>
             <a href="#upload">Upload Center</a>
             <a href="#videos">Video Log</a>
+            <a href="#special-moments">Special Moments</a>
         </div>
     </nav>
 
@@ -194,13 +195,50 @@
             </div>
         </section>
 
-        <section id="videos" class="section-container">
+        <section id="videos" class="section-container" style="margin-bottom: 2rem;">
             <div class="section-header">
                 <h2>Video Progress & Logs</h2>
                 <p>Recent footage of Sterling capturing conversational patterns, struggles, and breakthroughs.</p>
             </div>
             <div class="grid-layout video-grid" id="videoContainer"></div>
         </section>
+
+        <!-- SPECIAL MOMENTS SECTION -->
+        <section id="special-moments" class="glass-card section-container" style="margin-bottom: 2rem;">
+            <div class="section-header">
+                <h2>Sterling's Special Moments</h2>
+                <p>Celebrating the child and the beautiful moments he has created. Select a tab below to watch.</p>
+            </div>
+            
+            <div style="background: rgba(0,0,0,0.3); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
+                <!-- Tabs -->
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; justify-content: center;" id="moment-tabs">
+                    <button class="btn btn-primary" onclick="openMoment(this, 'earth-day-video')">Earth Day Performance</button>
+                    <button class="btn btn-secondary" onclick="openMoment(this, 'other-moments')">Other Moments</button>
+                </div>
+                
+                <!-- Content -->
+                <div id="moments-content" style="display: flex; justify-content: center; width: 100%;">
+                    
+                    <div id="earth-day-video" class="moment-panel" style="display: block; width: 100%; max-width: 800px; aspect-ratio: 16/9;">
+                        <!-- Using iframe as requested -->
+                        <iframe 
+                            src="<?php echo get_stylesheet_directory_uri(); ?>/videos/earth_day_performance.mp4" 
+                            style="width: 100%; height: 100%; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    
+                    <div id="other-moments" class="moment-panel" style="display: none; width: 100%; text-align: center; padding: 4rem 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🌟</div>
+                        <h3 style="color: var(--text-main); margin-bottom: 1rem;">More beautiful moments coming soon</h3>
+                        <p style="color: var(--text-muted);">We are continually adding to Sterling's collection of special memories.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- END SPECIAL MOMENTS -->
     </main>
 
     <footer>
@@ -245,6 +283,23 @@
                     if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
             });
+
+            // --- MOMENTS TABS LOGIC ---
+            window.openMoment = function(btn, panelId) {
+                // Update buttons
+                const buttons = document.getElementById('moment-tabs').querySelectorAll('button');
+                buttons.forEach(b => {
+                    b.className = 'btn btn-secondary'; // Reset all to secondary
+                });
+                btn.className = 'btn btn-primary'; // Set active to primary
+
+                // Update panels
+                const panels = document.querySelectorAll('.moment-panel');
+                panels.forEach(p => {
+                    p.style.display = 'none';
+                });
+                document.getElementById(panelId).style.display = 'block';
+            };
 
             // --- CANVAS DRAWING LOGIC FOR iPAD PENCIL/GAMIFICATION ---
             const canvas = document.getElementById("tracingCanvas");
