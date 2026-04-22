@@ -29,6 +29,8 @@
         .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-links a { color: var(--text-main); text-decoration: none; margin-left: 2rem; font-weight: 600; transition: color 0.3s; }
         .nav-links a:hover { color: var(--primary); }
+        body.admin-bar .glass-nav { top: 32px; }
+        @media screen and (max-width: 782px) { body.admin-bar .glass-nav { top: 46px; } }
         .hero { min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 5%; padding-top: 100px; }
         .hero-content { max-width: 800px; }
         h1 { font-size: 4.5rem; margin-bottom: 1rem; line-height: 1.1; }
@@ -59,7 +61,7 @@
         @media (max-width: 768px) { h1 { font-size: 3rem; } .nav-links { display: none; } .btn-secondary { margin-left: 0; margin-top: 1rem; display: block; } }
     </style>
 </head>
-<body>
+<body <?php body_class(); ?>>
     <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div>
 
     <nav class="glass-nav">
@@ -77,7 +79,7 @@
 
     <header class="hero">
         <div class="hero-content">
-            <h1 class="animate-up">Assisting <span class="highlight">Sterling</span></h1>
+            <h1 class="animate-up">Sterling's <span class="highlight">World</span></h1>
             <p class="subtitle animate-up delay-1">Creating a seamless, supportive learning environment to help him navigate through stuttering cycles. A central hub recognizing trigger words, tracking progress, and enabling iPad learning.</p>
             <div class="cta-group animate-up delay-2">
                 <a href="#about" class="btn btn-primary">Our Goals</a>
