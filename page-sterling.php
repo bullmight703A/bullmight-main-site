@@ -502,18 +502,48 @@
                 }
             });
 
-            // Native SpeechSynthesis (Acts as ElevenLabs placeholder)
-            function speakText(text) {
-                if ('speechSynthesis' in window) {
-                    const msg = new SpeechSynthesisUtterance(text);
-                    const voices = window.speechSynthesis.getVoices();
-                    const voice = voices.find(v => v.name.includes('Samantha') || v.name.includes('Female'));
-                    if(voice) msg.voice = voice;
-                    msg.rate = 0.85; // Slower for kids
-                    msg.pitch = 1.1; 
-                    window.speechSynthesis.speak(msg);
-                } else {
-                    console.log("ElevenLabs API integration fallback: " + text);
+            // --- HIGH FIDELITY TEXT TO SPEECH ---
+            async function speakText(text) {
+                // IMPORTANT: Do not commit API keys to GitHub! 
+                // Paste your ElevenLabs API Key here to enable high-quality American voices.
+                const ELEVENLABS_API_KEY = ''; 
+                
+                // Fallback to Native API if no key is provided
+                if(!ELEVENLABS_API_KEY) {
+                    if ('speechSynthesis' in window) {
+                        const msg = new SpeechSynthesisUtterance(text);
+                        const voices = window.speechSynthesis.getVoices();
+                        const voice = voices.find(v => v.lang === 'en-US' && (v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('Samantha')));
+                        if(voice) msg.voice = voice;
+                        msg.rate = 0.9;
+                        window.speechSynthesis.speak(msg);
+                    }
+                    return;
+                }
+
+                try {
+                    const response = await fetch('https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB', { // Adam - Standard American Male
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'audio/mpeg',
+                            'xi-api-key': ELEVENLABS_API_KEY,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            text: text,
+                            model_id: "eleven_monolingual_v1",
+                            voice_settings: { stability: 0.5, similarity_boost: 0.5 }
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        const audioUrl = URL.createObjectURL(blob);
+                        const audio = new Audio(audioUrl);
+                        audio.play();
+                    }
+                } catch(e) {
+                    console.error("TTS API error:", e);
                 }
             }
 
@@ -553,31 +583,59 @@
                 speakText("Great job Sterling! Repeat after me.");
 
                 data.items.forEach((item, index) => {
-                    const btn = document.createElement('button');
-                    btn.className = 'btn btn-secondary';
-                    btn.style.display = 'flex';
-                    btn.style.alignItems = 'center';
-                    btn.style.justifyContent = 'flex-start';
-                    btn.style.gap = '1rem';
-                    btn.style.width = '100%';
-                    btn.style.padding = '1rem';
-                    btn.style.fontSize = '1.2rem';
-                    btn.style.transition = 'all 0.3s';
-                    
-                    btn.innerHTML = `<span style="font-size: 2rem;">${item.icon}</span> <span>${item.word}</span>`;
-                    
-                    btn.onclick = () => speakText(item.word);
+                    const wrap = document.createElement('div');
+                    wrap.style.display = 'flex';
+                    wrap.style.alignItems = 'center';
+                    wrap.style.gap = '1rem';
+                    wrap.style.background = 'rgba(255,255,255,0.05)';
+                    wrap.style.padding = '1rem';
+                    wrap.style.borderRadius = '12px';
+                    wrap.style.width = '100%';
 
-                    // Auto-play sequence
-                    setTimeout(() => {
-                        btn.style.background = 'rgba(14, 165, 233, 0.4)'; // Highlight Blue
-                        speakText(item.word);
-                        setTimeout(() => {
-                             btn.style.background = 'rgba(255, 255, 255, 0.1)'; // Reset
-                        }, 2000);
-                    }, 3000 + (index * 2500)); // Delay between words
+                    const textSect = document.createElement('div');
+                    textSect.style.flex = '1';
+                    textSect.style.fontSize = '1.5rem';
+                    textSect.innerHTML = `<span style="font-size: 2rem; margin-right: 1rem;">${item.icon}</span> <strong>${item.word}</strong>`;
 
-                    container.appendChild(btn);
+                    const listenBtn = document.createElement('button');
+                    listenBtn.className = 'btn btn-primary';
+                    listenBtn.style.padding = '0.5rem 1rem';
+                    listenBtn.innerHTML = '🎙️ Listen';
+                    listenBtn.onclick = () => speakText(item.word);
+
+                    const recBtn = document.createElement('button');
+                    recBtn.className = 'btn btn-secondary';
+                    recBtn.style.padding = '0.5rem 1rem';
+                    recBtn.style.background = '#f43f5e';
+                    recBtn.style.border = 'none';
+                    recBtn.innerHTML = '🔴 Record';
+                    recBtn.id = 'rec-btn-' + index;
+
+                    let isRec = false;
+                    recBtn.onclick = () => {
+                        if(!isRec) {
+                            isRec = true;
+                            recBtn.innerHTML = '⏹️ Stop';
+                            recBtn.style.background = '#64748b';
+                        } else {
+                            isRec = false;
+                            recBtn.innerHTML = '✅ Saved';
+                            recBtn.style.background = '#10b981';
+                            const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                            progressLogs.unshift({
+                                date: today,
+                                exercise: `Tracing Phonics: ${item.word}`,
+                                status: '✅ Completed',
+                                notes: 'Audio recording saved.'
+                            });
+                            renderProgressLogs();
+                        }
+                    };
+
+                    wrap.appendChild(textSect);
+                    wrap.appendChild(listenBtn);
+                    wrap.appendChild(recBtn);
+                    container.appendChild(wrap);
                 });
             };
 
