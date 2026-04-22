@@ -89,9 +89,9 @@
     </header>
 
     <main>
-        <section id="about" class="section-container" style="margin-bottom: 2rem;">
+        <section id="info-section" class="section-container" style="padding-top: 2rem; padding-bottom: 1rem;">
             <div class="curriculum-accordion">
-                <details class="curriculum-module glass-card">
+                <details id="about" class="curriculum-module glass-card">
                     <summary>🎯 Page Goals & Vision</summary>
                     <div class="module-content">
                         <div style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 1rem;">
@@ -104,12 +104,8 @@
                         </div>
                     </div>
                 </details>
-            </div>
-        </section>
 
-        <section id="how-to-assist" class="section-container" style="margin-bottom: 2rem;">
-            <div class="curriculum-accordion">
-                <details class="curriculum-module glass-card">
+                <details id="how-to-assist" class="curriculum-module glass-card">
                     <summary>🤝 How to Assist Sterling</summary>
                     <div class="module-content">
                         <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Actionable techniques to support him when his stuttering kicks up.</p>
@@ -788,7 +784,7 @@
             // --- PROGRESS TRACKER LOGIC ---
             const progressLogs = [
                 { date: 'Apr 18, 2026', exercise: 'Math: Counting Apples', status: '✅ Completed', notes: 'Nailed the numbers 1-5.', hasAudio: false },
-                { date: 'Apr 20, 2026', exercise: 'Tracing: Focus WH', status: '✅ Completed', notes: 'Struggled slightly with "Where" but pushed through.', hasAudio: false }
+                { date: 'Apr 20, 2026', exercise: 'Tracing: Focus WH', status: '✅ Completed', notes: 'Struggled slightly with "Where" but pushed through.', hasAudio: true }
             ];
 
             function renderProgressLogs() {
