@@ -27,6 +27,8 @@
         @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
         @keyframes pixarFloat { 0% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-8px) scale(1.02); } 100% { transform: translateY(0px) scale(1); } }
         .pixar-float { animation: pixarFloat 3s ease-in-out infinite; transform-origin: center bottom; }
+        @keyframes flyAcross { 0% { transform: translate(-20vw, 50vh) rotate(15deg) scale(0.5); } 25% { transform: translate(30vw, 20vh) rotate(-10deg) scale(0.7); } 50% { transform: translate(80vw, 60vh) rotate(20deg) scale(1); } 75% { transform: translate(120vw, 10vh) rotate(-15deg) scale(0.8); } 100% { transform: translate(-20vw, 50vh) rotate(15deg) scale(0.5); } }
+        .flying-astronaut { position: fixed; z-index: 999; pointer-events: none; animation: flyAcross 35s infinite linear; opacity: 0.85; filter: drop-shadow(0 0 20px rgba(14,165,233,0.8)); }
         .glass-nav { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); z-index: 9999; }
         .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-links a { color: var(--text-main); text-decoration: none; margin-left: 2rem; font-weight: 600; transition: color 0.3s; }
@@ -64,6 +66,7 @@
     </style>
 </head>
 <body <?php body_class(); ?>>
+    <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" class="flying-astronaut" style="width: 150px; height: auto;" alt="Flying Sterling Astronaut">
     <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div>
 
     <nav class="glass-nav">
