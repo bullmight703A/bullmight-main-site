@@ -25,6 +25,8 @@
         .animate-up { opacity: 0; transform: translateY(30px); animation: slideUp 0.8s forwards cubic-bezier(0.16, 1, 0.3, 1); }
         .delay-1 { animation-delay: 0.2s; } .delay-2 { animation-delay: 0.4s; }
         @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes pixarFloat { 0% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-8px) scale(1.02); } 100% { transform: translateY(0px) scale(1); } }
+        .pixar-float { animation: pixarFloat 3s ease-in-out infinite; transform-origin: center bottom; }
         .glass-nav { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); z-index: 9999; }
         .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-links a { color: var(--text-main); text-decoration: none; margin-left: 2rem; font-weight: 600; transition: color 0.3s; }
@@ -221,8 +223,8 @@
                             <div style="display: flex; flex-direction: column; align-items: center; gap: 2rem;">
                                 <!-- AI Avatar Video Area -->
                                 <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 16px; border: 1px solid var(--glass-border); width: 100%; max-width: 400px;">
-                                    <div id="avatar-video-placeholder" style="width: 100%; height: 250px; background: #1e293b; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1);">
-                                        <span style="font-size: 3rem;">🤖</span>
+                                    <div id="avatar-video-placeholder" style="width: 100%; height: 250px; background: #0f172a; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: relative;">
+                                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/spaceman_avatar.png" class="pixar-float" style="width: 100%; height: 100%; object-fit: cover;" alt="Space Man Avatar" id="avatar-img">
                                     </div>
                                     <h4 id="sentence-text" style="color: var(--text-main); font-size: 1.8rem; margin: 1.5rem 0;">"The space man"</h4>
                                     <button class="btn btn-primary" id="btn-play-avatar" onclick="playAvatarSentence()" style="width: 100%; font-size: 1.2rem;">🎙️ Listen to Avatar</button>
@@ -895,14 +897,15 @@
             // --- SILLY SENTENCES (ENUNCIATION) LOGIC ---
             window.playAvatarSentence = function() {
                 const placeholder = document.getElementById('avatar-video-placeholder');
-                placeholder.style.background = '#0284c7'; // change color to simulate active
-                placeholder.innerHTML = '<span style="font-size: 3rem;" class="animate-pulse">🗣️</span>';
+                const img = document.getElementById('avatar-img');
+                placeholder.style.boxShadow = '0 0 30px rgba(14, 165, 233, 0.5)'; // change glow to simulate active
+                img.style.animation = 'pixarFloat 0.5s ease-in-out infinite'; // speak faster animation
                 
                 speakText("The space man.");
                 
                 setTimeout(() => {
-                    placeholder.style.background = '#1e293b';
-                    placeholder.innerHTML = '<span style="font-size: 3rem;">🤖</span>';
+                    placeholder.style.boxShadow = 'none';
+                    img.style.animation = 'pixarFloat 3s ease-in-out infinite'; // return to idle
                     
                     const yourTurn = document.getElementById('your-turn-area');
                     yourTurn.style.display = 'block';
