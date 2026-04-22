@@ -89,41 +89,49 @@
     </header>
 
     <main>
-        <section id="about" class="glass-card section-container" style="margin-bottom: 2rem;">
-            <div class="section-header">
-                <h2>Page Goals & Vision</h2>
-                <p>What we aim to achieve with Sterling's support hub.</p>
-            </div>
-            <div style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; max-width: 900px; margin: 0 auto; background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
-                <p><strong>Primary Goal:</strong> To create a unified, stress-free ecosystem for Sterling's progress. This portal allows his support network to easily understand his current needs, recognize stuttering triggers, and apply the correct assistance techniques without adding pressure.</p>
-                <br>
-                <p><strong>The iPad Tracing Initiative:</strong> We are building a continuous pipeline of educational resources. By uploading physical worksheets to this portal, they will eventually be converted into digital, traceable documents specifically optimized for iPad and Apple Pencil interaction, helping train cognitive and motor skills seamlessly.</p>
-                <br>
-                <p><strong>Long-Term Gamification:</strong> As Sterling progresses, these static exercises will evolve into interactive games directly accessible on his devices, turning speech adaptation and learning into an engaging, rewarding experience.</p>
+        <section id="about" class="section-container" style="margin-bottom: 2rem;">
+            <div class="curriculum-accordion">
+                <details class="curriculum-module glass-card">
+                    <summary>🎯 Page Goals & Vision</summary>
+                    <div class="module-content">
+                        <div style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; max-width: 900px; margin: 0 auto; padding: 1rem;">
+                            <p style="text-align: center; margin-bottom: 2rem;">What we aim to achieve with Sterling's support hub.</p>
+                            <p><strong>Primary Goal:</strong> To create a unified, stress-free ecosystem for Sterling's progress. This portal allows his support network to easily understand his current needs, recognize stuttering triggers, and apply the correct assistance techniques without adding pressure.</p>
+                            <br>
+                            <p><strong>The iPad Tracing Initiative:</strong> We are building a continuous pipeline of educational resources. By uploading physical worksheets to this portal, they will eventually be converted into digital, traceable documents specifically optimized for iPad and Apple Pencil interaction, helping train cognitive and motor skills seamlessly.</p>
+                            <br>
+                            <p><strong>Long-Term Gamification:</strong> As Sterling progresses, these static exercises will evolve into interactive games directly accessible on his devices, turning speech adaptation and learning into an engaging, rewarding experience.</p>
+                        </div>
+                    </div>
+                </details>
             </div>
         </section>
 
-        <section id="how-to-assist" class="glass-card section-container" style="margin-bottom: 2rem;">
-            <div class="section-header">
-                <h2>How to Assist Sterling</h2>
-                <p>Actionable techniques to support him when his stuttering kicks up.</p>
-            </div>
-            <div class="grid-layout trigger-grid">
-                <div class="trigger-card" style="background: rgba(99, 102, 241, 0.1);">
-                    <div class="trigger-letter">⏳</div>
-                    <h3>Maintain Natural Eye Contact</h3>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Don't look away or show distress when he stutters. Patiently wait for him to finish his sentence without interrupting or finishing his words for him.</p>
-                </div>
-                <div class="trigger-card" style="background: rgba(14, 165, 233, 0.1);">
-                    <div class="trigger-letter">👂</div>
-                    <h3>Focus on 'What' Not 'How'</h3>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Listen intently to the message he is conveying rather than the manner in which he is speaking. React entirely to the content of his sentence.</p>
-                </div>
-                <div class="trigger-card" style="background: rgba(244, 63, 94, 0.1);">
-                    <div class="trigger-letter">🛑</div>
-                    <h3>Avoid Unhelpful Advice</h3>
-                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Refrain from saying things like "slow down," "take a breath," or "relax." While well-meaning, these commands often increase pressure and self-consciousness.</p>
-                </div>
+        <section id="how-to-assist" class="section-container" style="margin-bottom: 2rem;">
+            <div class="curriculum-accordion">
+                <details class="curriculum-module glass-card">
+                    <summary>🤝 How to Assist Sterling</summary>
+                    <div class="module-content">
+                        <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Actionable techniques to support him when his stuttering kicks up.</p>
+                        <div class="grid-layout trigger-grid">
+                            <div class="trigger-card" style="background: rgba(99, 102, 241, 0.1);">
+                                <div class="trigger-letter">⏳</div>
+                                <h3>Maintain Natural Eye Contact</h3>
+                                <p style="color: var(--text-muted); margin-top: 0.5rem;">Don't look away or show distress when he stutters. Patiently wait for him to finish his sentence without interrupting or finishing his words for him.</p>
+                            </div>
+                            <div class="trigger-card" style="background: rgba(14, 165, 233, 0.1);">
+                                <div class="trigger-letter">👂</div>
+                                <h3>Focus on 'What' Not 'How'</h3>
+                                <p style="color: var(--text-muted); margin-top: 0.5rem;">Listen intently to the message he is conveying rather than the manner in which he is speaking. React entirely to the content of his sentence.</p>
+                            </div>
+                            <div class="trigger-card" style="background: rgba(244, 63, 94, 0.1);">
+                                <div class="trigger-letter">🛑</div>
+                                <h3>Avoid Unhelpful Advice</h3>
+                                <p style="color: var(--text-muted); margin-top: 0.5rem;">Refrain from saying things like "slow down," "take a breath," or "relax." While well-meaning, these commands often increase pressure and self-consciousness.</p>
+                            </div>
+                        </div>
+                    </div>
+                </details>
             </div>
         </section>
 
