@@ -79,8 +79,19 @@
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="hero-content">
+    <header class="hero" style="position: relative;">
+        <!-- Decorative Floating Sterlings -->
+        <div class="pixar-float" style="position: absolute; top: 15%; left: 8%; width: 120px; height: 120px; border-radius: 50%; overflow: hidden; opacity: 0.7; box-shadow: 0 0 30px rgba(14,165,233,0.6); border: 2px solid rgba(14,165,233,0.3); display: none; @media(min-width: 768px){display: block;}">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+        </div>
+        <div class="pixar-float delay-1" style="position: absolute; top: 55%; right: 8%; width: 150px; height: 150px; border-radius: 50%; overflow: hidden; opacity: 0.6; box-shadow: 0 0 30px rgba(244,63,94,0.6); border: 2px solid rgba(244,63,94,0.3); display: none; @media(min-width: 768px){display: block;}">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+        </div>
+        <div class="pixar-float delay-2" style="position: absolute; bottom: 5%; left: 20%; width: 90px; height: 90px; border-radius: 50%; overflow: hidden; opacity: 0.5; box-shadow: 0 0 30px rgba(99,102,241,0.6); border: 2px solid rgba(99,102,241,0.3); display: none; @media(min-width: 768px){display: block;}">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+        </div>
+
+        <div class="hero-content" style="position: relative; z-index: 2;">
             <h1 class="animate-up">Sterling's <span class="highlight">World</span></h1>
             <p class="subtitle animate-up delay-1">Creating a seamless, supportive learning environment to help him navigate through stuttering cycles. A central hub recognizing trigger words, tracking progress, and enabling iPad learning.</p>
             <div class="cta-group animate-up delay-2">
@@ -224,7 +235,7 @@
                                 <!-- AI Avatar Video Area -->
                                 <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 16px; border: 1px solid var(--glass-border); width: 100%; max-width: 400px;">
                                     <div id="avatar-video-placeholder" style="width: 100%; height: 250px; background: #0f172a; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: relative;">
-                                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/spaceman_avatar.png" class="pixar-float" style="width: 100%; height: 100%; object-fit: cover;" alt="Space Man Avatar" id="avatar-img">
+                                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" class="pixar-float" style="width: 100%; height: 100%; object-fit: contain;" alt="Space Man Avatar" id="avatar-img">
                                     </div>
                                     <h4 id="sentence-text" style="color: var(--text-main); font-size: 1.8rem; margin: 1.5rem 0;">"The space man"</h4>
                                     <button class="btn btn-primary" id="btn-play-avatar" onclick="playAvatarSentence()" style="width: 100%; font-size: 1.2rem;">🎙️ Listen to Avatar</button>
