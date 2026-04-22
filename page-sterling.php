@@ -637,21 +637,10 @@
                     recBtn.onclick = () => {
                         if(!isRec) {
                             isRec = true;
-                            recBtn.innerHTML = '⏹️ Stop';
-                            recBtn.style.background = '#64748b';
+                            startRealRecording(recBtn, `Tracing Phonics: ${item.word}`);
                         } else {
                             isRec = false;
-                            recBtn.innerHTML = '✅ Saved';
-                            recBtn.style.background = '#10b981';
-                            const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                            progressLogs.unshift({
-                                date: today,
-                                exercise: `Tracing Phonics: ${item.word}`,
-                                status: '✅ Completed',
-                                notes: 'Audio recording saved.',
-                                hasAudio: true
-                            });
-                            renderProgressLogs();
+                            stopRealRecording(recBtn);
                         }
                     };
 
@@ -781,6 +770,67 @@
                 };
             }
 
+            // --- REAL AUDIO RECORDING LOGIC ---
+            let mediaRecorder = null;
+            let audioChunks = [];
+
+            async function startRealRecording(btnElement, exerciseName) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+                    
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        
+                        // Add to progress log
+                        const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                        progressLogs.unshift({
+                            date: today,
+                            exercise: exerciseName,
+                            status: '✅ Completed',
+                            notes: 'Audio recording saved.',
+                            hasAudio: true,
+                            audioUrl: audioUrl
+                        });
+                        renderProgressLogs();
+                        
+                        // Release mic
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+                    
+                    mediaRecorder.start();
+                    btnElement.innerHTML = '⏹️ Stop Recording';
+                    btnElement.style.background = '#64748b';
+                } catch(err) {
+                    console.error("Microphone access denied:", err);
+                    alert("Please allow microphone access to record.");
+                }
+            }
+            
+            function stopRealRecording(btnElement) {
+                if(mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    btnElement.innerHTML = '✅ Saved';
+                    btnElement.style.background = '#10b981';
+                    speakText("Great job!");
+                }
+            }
+
+            window.playRealRecording = function(audioUrl) {
+                if(audioUrl) {
+                    const audio = new Audio(audioUrl);
+                    audio.play();
+                } else {
+                    speakText("No recording found.");
+                }
+            };
+
             // --- PROGRESS TRACKER LOGIC ---
             const progressLogs = [
                 { date: 'Apr 18, 2026', exercise: 'Math: Counting Apples', status: '✅ Completed', notes: 'Nailed the numbers 1-5.', hasAudio: false },
@@ -796,7 +846,11 @@
                     
                     let audioBtnHTML = '';
                     if(log.hasAudio) {
-                        audioBtnHTML = `<button class="btn btn-primary" style="padding: 0.2rem 0.6rem; font-size: 0.8rem; border-radius: 6px; margin-left: 1rem;" onclick="speakText('Playing recording of Sterling saying: ${log.exercise.split(':')[1] || log.exercise}')">▶️ Play Recording</button>`;
+                        if(log.audioUrl) {
+                            audioBtnHTML = `<button class="btn btn-primary" style="padding: 0.2rem 0.6rem; font-size: 0.8rem; border-radius: 6px; margin-left: 1rem;" onclick="playRealRecording('${log.audioUrl}')">▶️ Play Recording</button>`;
+                        } else {
+                            audioBtnHTML = `<button class="btn btn-primary" style="padding: 0.2rem 0.6rem; font-size: 0.8rem; border-radius: 6px; margin-left: 1rem;" onclick="speakText('Playing recording of Sterling saying: ${log.exercise.split(':')[1] || log.exercise}')">▶️ Play Demo</button>`;
+                        }
                     }
 
                     tr.innerHTML = `
@@ -863,30 +917,12 @@
                 
                 if(!isRecording) {
                     isRecording = true;
-                    btn.innerHTML = '⏹️ Stop Recording';
-                    btn.style.background = '#64748b';
                     status.innerText = 'Listening to Sterling...';
-                    
-                    // Simulate recording
-                    setTimeout(() => {
-                        if(isRecording) toggleRecording(); // Auto stop after 5s
-                    }, 5000);
+                    startRealRecording(btn, 'Enunciation: "The space man"');
                 } else {
                     isRecording = false;
-                    btn.innerHTML = '🔴 Start Recording';
-                    btn.style.background = '#f43f5e';
                     status.innerText = 'Recording saved!';
-                    
-                    // Add to progress tracker
-                    const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                    progressLogs.unshift({
-                        date: today,
-                        exercise: 'Enunciation: "The space man"',
-                        status: '✅ Completed',
-                        notes: 'Audio recording logged.'
-                    });
-                    renderProgressLogs();
-                    speakText("Great job!");
+                    stopRealRecording(btn);
                 }
             };
         });
