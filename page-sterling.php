@@ -204,6 +204,33 @@
                         </div>
                     </div>
                 </details>
+
+                <!-- Enunciation & Speech -->
+                <details class="curriculum-module">
+                    <summary>🗣️ Enunciation & Speech (Silly Sentences)</summary>
+                    <div class="module-content">
+                        <div style="text-align: center; padding: 2rem;">
+                            <h3 style="color: var(--primary); font-size: 2rem; margin-bottom: 1rem;">Let's Practice Speaking!</h3>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 2rem;">
+                                <!-- AI Avatar Video Area -->
+                                <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 16px; border: 1px solid var(--glass-border); width: 100%; max-width: 400px;">
+                                    <div id="avatar-video-placeholder" style="width: 100%; height: 250px; background: #1e293b; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1);">
+                                        <span style="font-size: 3rem;">🤖</span>
+                                    </div>
+                                    <h4 id="sentence-text" style="color: var(--text-main); font-size: 1.8rem; margin: 1.5rem 0;">"The space man"</h4>
+                                    <button class="btn btn-primary" id="btn-play-avatar" onclick="playAvatarSentence()" style="width: 100%; font-size: 1.2rem;">🎙️ Listen to Avatar</button>
+                                </div>
+                                
+                                <!-- Recording Area -->
+                                <div id="your-turn-area" style="display: none; background: rgba(14, 165, 233, 0.1); padding: 2rem; border-radius: 16px; border: 1px solid var(--primary); width: 100%; max-width: 400px;">
+                                    <h4 style="color: var(--primary); font-size: 1.5rem; margin-bottom: 1rem;">Your Turn!</h4>
+                                    <button class="btn btn-secondary" id="btn-record" onclick="toggleRecording()" style="width: 100%; font-size: 1.2rem; background: #f43f5e; border: none;">🔴 Start Recording</button>
+                                    <p id="recording-status" style="margin-top: 1rem; color: var(--text-muted);"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
             </div>
             
             <style>
@@ -273,6 +300,29 @@
                         <li>(Waiting for document text...)</li>
                     </ul>
                 </div>
+            </div>
+            </div>
+        </section>
+
+        <section id="progress-tracker" class="glass-card section-container" style="margin-bottom: 2rem;">
+            <div class="section-header">
+                <h2>Weekly Progress Log</h2>
+                <p>Track completed exercises and measure growth week over week.</p>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); overflow-x: auto;">
+                <table style="width: 100%; text-align: left; border-collapse: collapse; min-width: 600px;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--glass-border); color: var(--text-muted);">
+                            <th style="padding: 1rem;">Date</th>
+                            <th style="padding: 1rem;">Exercise</th>
+                            <th style="padding: 1rem;">Status</th>
+                            <th style="padding: 1rem;">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="progress-log-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
             </div>
         </section>
 
@@ -649,6 +699,81 @@
                     drawGuide();
                 };
             }
+
+            // --- PROGRESS TRACKER LOGIC ---
+            const progressLogs = [
+                { date: 'Apr 18, 2026', exercise: 'Math: Counting Apples', status: '✅ Completed', notes: 'Nailed the numbers 1-5.' },
+                { date: 'Apr 20, 2026', exercise: 'Tracing: Focus WH', status: '✅ Completed', notes: 'Struggled slightly with "Where" but pushed through.' }
+            ];
+
+            function renderProgressLogs() {
+                const tbody = document.getElementById('progress-log-body');
+                tbody.innerHTML = '';
+                progressLogs.forEach(log => {
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                    tr.innerHTML = `
+                        <td style="padding: 1rem;">${log.date}</td>
+                        <td style="padding: 1rem; color: var(--primary);">${log.exercise}</td>
+                        <td style="padding: 1rem;">${log.status}</td>
+                        <td style="padding: 1rem; color: var(--text-muted);">${log.notes}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            renderProgressLogs();
+
+            // --- SILLY SENTENCES (ENUNCIATION) LOGIC ---
+            window.playAvatarSentence = function() {
+                const placeholder = document.getElementById('avatar-video-placeholder');
+                placeholder.style.background = '#0284c7'; // change color to simulate active
+                placeholder.innerHTML = '<span style="font-size: 3rem;" class="animate-pulse">🗣️</span>';
+                
+                speakText("The space man.");
+                
+                setTimeout(() => {
+                    placeholder.style.background = '#1e293b';
+                    placeholder.innerHTML = '<span style="font-size: 3rem;">🤖</span>';
+                    
+                    const yourTurn = document.getElementById('your-turn-area');
+                    yourTurn.style.display = 'block';
+                    speakText("Your turn!");
+                }, 2000);
+            };
+
+            let isRecording = false;
+            window.toggleRecording = function() {
+                const btn = document.getElementById('btn-record');
+                const status = document.getElementById('recording-status');
+                
+                if(!isRecording) {
+                    isRecording = true;
+                    btn.innerHTML = '⏹️ Stop Recording';
+                    btn.style.background = '#64748b';
+                    status.innerText = 'Listening to Sterling...';
+                    
+                    // Simulate recording
+                    setTimeout(() => {
+                        if(isRecording) toggleRecording(); // Auto stop after 5s
+                    }, 5000);
+                } else {
+                    isRecording = false;
+                    btn.innerHTML = '🔴 Start Recording';
+                    btn.style.background = '#f43f5e';
+                    status.innerText = 'Recording saved!';
+                    
+                    // Add to progress tracker
+                    const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    progressLogs.unshift({
+                        date: today,
+                        exercise: 'Enunciation: "The space man"',
+                        status: '✅ Completed',
+                        notes: 'Audio recording logged.'
+                    });
+                    renderProgressLogs();
+                    speakText("Great job!");
+                }
+            };
         });
     </script>
 </body>
