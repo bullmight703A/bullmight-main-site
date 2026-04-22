@@ -25,7 +25,7 @@
         .animate-up { opacity: 0; transform: translateY(30px); animation: slideUp 0.8s forwards cubic-bezier(0.16, 1, 0.3, 1); }
         .delay-1 { animation-delay: 0.2s; } .delay-2 { animation-delay: 0.4s; }
         @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
-        .glass-nav { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background: var(--glass-bg); backdrop-filter: blur(16px); border-bottom: 1px solid var(--glass-border); z-index: 1000; }
+        .glass-nav { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 5%; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); z-index: 9999; }
         .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-links a { color: var(--text-main); text-decoration: none; margin-left: 2rem; font-weight: 600; transition: color 0.3s; }
         .nav-links a:hover { color: var(--primary); }
@@ -68,6 +68,7 @@
             <a href="#about">Goals & Vision</a>
             <a href="#how-to-assist">How to Assist</a>
             <a href="#interactive-games">Curriculum</a>
+            <a href="#progress-tracker" style="color: var(--primary);">Completed Work</a>
             <a href="#upload">Upload Center</a>
             <a href="#videos">Video Log</a>
             <a href="#special-moments">Special Moments</a>
@@ -293,14 +294,29 @@
                 <h2>Identified Trigger Words</h2>
                 <p>These words and starting letters have been identified as current stuttering triggers for Sterling based on recent evaluations.</p>
             </div>
-            <div class="grid-layout trigger-grid" id="triggerContainer">
-                <div class="trigger-card">
-                    <div class="trigger-letter">...</div>
-                    <ul class="trigger-words">
-                        <li>(Waiting for document text...)</li>
-                    </ul>
+            
+            <div style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); max-width: 600px; margin: 0 auto 2rem auto;">
+                <h3 style="margin-bottom: 1rem; font-size: 1.2rem; color: var(--text-main);">Add New Trigger Observation</h3>
+                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                    <input type="text" id="trigger-sound" placeholder="Trigger Sound (e.g. 'I', 'uh')" style="flex: 1; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; outline: none;">
+                    <input type="text" id="trigger-next-word" placeholder="Word After (e.g. 'want')" style="flex: 1; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.05); color: white; outline: none;">
+                    <button class="btn btn-primary" onclick="addTriggerObservation()" style="padding: 0.8rem 1.5rem;">Add</button>
                 </div>
             </div>
+
+            <div class="grid-layout trigger-grid" id="triggerContainer">
+                <div class="trigger-card">
+                    <div class="trigger-letter">I</div>
+                    <ul class="trigger-words">
+                        <li>Followed by: <strong>want</strong></li>
+                    </ul>
+                </div>
+                <div class="trigger-card">
+                    <div class="trigger-letter">uh</div>
+                    <ul class="trigger-words">
+                        <li>Followed by: <strong>can</strong></li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -626,7 +642,8 @@
                                 date: today,
                                 exercise: `Tracing Phonics: ${item.word}`,
                                 status: '✅ Completed',
-                                notes: 'Audio recording saved.'
+                                notes: 'Audio recording saved.',
+                                hasAudio: true
                             });
                             renderProgressLogs();
                         }
@@ -760,8 +777,8 @@
 
             // --- PROGRESS TRACKER LOGIC ---
             const progressLogs = [
-                { date: 'Apr 18, 2026', exercise: 'Math: Counting Apples', status: '✅ Completed', notes: 'Nailed the numbers 1-5.' },
-                { date: 'Apr 20, 2026', exercise: 'Tracing: Focus WH', status: '✅ Completed', notes: 'Struggled slightly with "Where" but pushed through.' }
+                { date: 'Apr 18, 2026', exercise: 'Math: Counting Apples', status: '✅ Completed', notes: 'Nailed the numbers 1-5.', hasAudio: false },
+                { date: 'Apr 20, 2026', exercise: 'Tracing: Focus WH', status: '✅ Completed', notes: 'Struggled slightly with "Where" but pushed through.', hasAudio: false }
             ];
 
             function renderProgressLogs() {
@@ -770,16 +787,50 @@
                 progressLogs.forEach(log => {
                     const tr = document.createElement('tr');
                     tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                    
+                    let audioBtnHTML = '';
+                    if(log.hasAudio) {
+                        audioBtnHTML = `<button class="btn btn-primary" style="padding: 0.2rem 0.6rem; font-size: 0.8rem; border-radius: 6px; margin-left: 1rem;" onclick="speakText('Playing recording of Sterling saying: ${log.exercise.split(':')[1] || log.exercise}')">▶️ Play Recording</button>`;
+                    }
+
                     tr.innerHTML = `
                         <td style="padding: 1rem;">${log.date}</td>
                         <td style="padding: 1rem; color: var(--primary);">${log.exercise}</td>
                         <td style="padding: 1rem;">${log.status}</td>
-                        <td style="padding: 1rem; color: var(--text-muted);">${log.notes}</td>
+                        <td style="padding: 1rem; color: var(--text-muted); display: flex; align-items: center;">
+                            ${log.notes} ${audioBtnHTML}
+                        </td>
                     `;
                     tbody.appendChild(tr);
                 });
             }
             renderProgressLogs();
+
+            // --- TRIGGER OBSERVATION LOGIC ---
+            window.addTriggerObservation = function() {
+                const soundInput = document.getElementById('trigger-sound');
+                const wordInput = document.getElementById('trigger-next-word');
+                
+                if(!soundInput.value || !wordInput.value) {
+                    alert("Please fill out both the trigger sound and the following word.");
+                    return;
+                }
+
+                const container = document.getElementById('triggerContainer');
+                const card = document.createElement('div');
+                card.className = 'trigger-card animate-up';
+                card.innerHTML = `
+                    <div class="trigger-letter">${soundInput.value}</div>
+                    <ul class="trigger-words">
+                        <li>Followed by: <strong>${wordInput.value}</strong></li>
+                    </ul>
+                `;
+                container.appendChild(card);
+
+                // Clear inputs
+                soundInput.value = '';
+                wordInput.value = '';
+            };
 
             // --- SILLY SENTENCES (ENUNCIATION) LOGIC ---
             window.playAvatarSentence = function() {
