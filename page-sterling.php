@@ -49,8 +49,8 @@
         .section-header { margin-bottom: 3rem; text-align: center; }
         .section-header h2 { font-size: 2.5rem; margin-bottom: 1rem; }
         .section-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; }
-        .glass-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: var(--glass-shadow); backdrop-filter: blur(20px); }
-        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+        .glass-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: var(--glass-shadow); backdrop-filter: blur(20px); width: 100%; box-sizing: border-box; }
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 2rem; width: 100%; box-sizing: border-box; }
         .trigger-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; transition: transform 0.3s, background 0.3s; }
         .trigger-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.08); }
         .trigger-letter { font-size: 3rem; font-weight: 800; color: var(--accent); margin-bottom: 1rem; }
@@ -236,9 +236,9 @@
                             <h3 style="color: var(--primary); font-size: 2rem; margin-bottom: 1rem;">Let's Practice Speaking!</h3>
                             <div style="display: flex; flex-direction: column; align-items: center; gap: 2rem;">
                                 <!-- AI Avatar Video Area -->
-                                <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 16px; border: 1px solid var(--glass-border); width: 100%; max-width: 400px;">
-                                    <div id="avatar-video-placeholder" style="width: 100%; height: 250px; background: #0f172a; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: relative;">
-                                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" class="pixar-float" style="width: 100%; height: 100%; object-fit: contain;" alt="Space Man Avatar" id="avatar-img">
+                                <div style="width: 100%; max-width: 400px; text-align: center;">
+                                    <div id="avatar-video-placeholder" style="width: 100%; display: flex; align-items: center; justify-content: center; position: relative;">
+                                        <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" class="pixar-float" style="width: 250px; height: auto; object-fit: contain;" alt="Space Man Avatar" id="avatar-img">
                                     </div>
                                     <h4 id="sentence-text" style="color: var(--text-main); font-size: 1.8rem; margin: 1.5rem 0;">"The space man"</h4>
                                     <button class="btn btn-primary" id="btn-play-avatar" onclick="playAvatarSentence()" style="width: 100%; font-size: 1.2rem;">🎙️ Listen to Avatar</button>
@@ -277,7 +277,10 @@
                     list-style: none;
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
+                    justify-content: center;
+                    text-align: center;
+                    gap: 1rem;
+                    position: relative;
                 }
                 .curriculum-module summary::-webkit-details-marker {
                     display: none;
@@ -286,6 +289,8 @@
                     content: '▼';
                     font-size: 1.2rem;
                     color: var(--primary);
+                    position: absolute;
+                    right: 2rem;
                 }
                 .curriculum-module[open] summary::after {
                     content: '▲';
@@ -299,8 +304,8 @@
         <!-- END CURRICULUM MODULE -->
 
         <section id="upload" class="glass-card section-container" style="margin-bottom: 2rem; padding: 2rem;">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-                <div style="text-align: left;">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 1.5rem;">
+                <div>
                     <h2 style="margin-bottom: 0.5rem; font-size: 1.5rem;">Database Upload Center</h2>
                     <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Upload .mp4 video logs or worksheet scans.</p>
                 </div>
