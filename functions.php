@@ -138,3 +138,6 @@ function process_xray_lead($request) {
 
     return new WP_REST_Response(['status' => 'lead_captured_and_pushed'], 200);
 }
+
+require_once get_template_directory() . '/inc/openclaw-api-bridge.php';
+
