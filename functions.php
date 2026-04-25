@@ -63,3 +63,78 @@ function bullmight_iro_subdomain_router($template) {
 }
 add_filter('template_include', 'bullmight_iro_subdomain_router', 99);
 
+
+/**
+ * WIMPER X-RAY LEAD TRACKER
+ */
+add_action('wp_head', function() {
+    ?>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const visitorData = {
+            url: window.location.href,
+            referrer: document.referrer,
+            userAgent: navigator.userAgent,
+            screenWidth: window.screen.width,
+            language: navigator.language,
+            timestamp: new Date().toISOString()
+        };
+        fetch('/wp-json/xray/v1/capture', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(visitorData)
+        }).catch(err => console.error('X-Ray Error:', err));
+    });
+    </script>
+    <?php
+});
+
+add_action('rest_api_init', function () {
+    register_rest_route('xray/v1', '/capture', array(
+        'methods' => 'POST',
+        'callback' => 'process_xray_lead',
+        'permission_callback' => '__return_true'
+    ));
+});
+
+function process_xray_lead($request) {
+    $params = $request->get_json_params();
+    $visitor_ip = $_SERVER['REMOTE_ADDR'];
+
+    $resolved_lead = array(
+        'firstName' => '',
+        'lastName' => '',
+        'email' => '',
+        'phone' => '',
+        'companyName' => ''
+    );
+
+    if (empty($resolved_lead['email']) && empty($resolved_lead['phone'])) {
+        return new WP_REST_Response(['status' => 'anonymous_visitor'], 200);
+    }
+
+    $ghl_location_id = 'YOUR_GHL_LOCATION_ID';
+    $ghl_pit_token = 'YOUR_GHL_PIT_TOKEN';
+
+    $ghl_payload = array(
+        'locationId' => $ghl_location_id,
+        'firstName' => $resolved_lead['firstName'],
+        'lastName' => $resolved_lead['lastName'],
+        'email' => $resolved_lead['email'],
+        'phone' => $resolved_lead['phone'],
+        'companyName' => $resolved_lead['companyName'],
+        'tags' => array('xray-lead', 'wimper-program'),
+        'source' => $params['url']
+    );
+
+    $ghl_response = wp_remote_post('https://services.leadconnectorhq.com/contacts/', array(
+        'headers' => array(
+            'Authorization' => 'Bearer ' . $ghl_pit_token,
+            'Content-Type' => 'application/json',
+            'Version' => '2021-07-28'
+        ),
+        'body' => wp_json_encode($ghl_payload)
+    ));
+
+    return new WP_REST_Response(['status' => 'lead_captured_and_pushed'], 200);
+}
