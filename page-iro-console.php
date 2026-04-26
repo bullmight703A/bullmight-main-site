@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://aluminum-pierre-shaft-eng.trycloudflare.com';
+        const API_BASE = 'https://photo-dependent-ties-dimensions.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
@@ -343,7 +343,7 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'BRAIN', 'SEO', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
+                      {['CHAT', 'BRAIN', 'GROWTH', 'SEO', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -426,6 +426,71 @@
                                      {brainLogs.thoughts || 'Waiting for thought intercept...'}
                                  </div>
                              </div>
+                           </div>
+                        </div>
+                      )}
+
+                      {/* GROWTH TAB (Night Protocol & Social Analysis) */}
+                      {activeTab === 'GROWTH' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-6 scrollbar-hide flex flex-col">
+                           {/* Night Protocol Status */}
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0">
+                               <p className="text-[10px] text-purple-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                                  <span><TrendingUp size={12} className="inline mr-2"/> Night Protocol Engine: Social & SEO Alignment</span>
+                                  <span className="text-[8px] bg-purple-900/30 text-purple-400 px-2 py-0.5 rounded">AUTONOMOUS GENERATION: ACTIVE</span>
+                               </p>
+                               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                   <div className="p-3 bg-slate-950/50 border border-slate-800/40 rounded text-center">
+                                       <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">DALL-E 3 Image Ops</span>
+                                       <span className="text-xl text-cyan-400 font-mono">3 / 3</span>
+                                       <span className="text-[8px] text-green-500 uppercase tracking-widest block mt-2">DRAFTED TO GHL</span>
+                                   </div>
+                                   <div className="p-3 bg-slate-950/50 border border-slate-800/40 rounded text-center">
+                                       <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">LTX-2 Cinematic Ops</span>
+                                       <span className="text-xl text-cyan-400 font-mono">1 / 1</span>
+                                       <span className="text-[8px] text-green-500 uppercase tracking-widest block mt-2">KIDAZZLE RENDER COMPLETED</span>
+                                   </div>
+                                   <div className="p-3 bg-slate-950/50 border border-slate-800/40 rounded text-center">
+                                       <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Trending Topics Matched</span>
+                                       <span className="text-xl text-yellow-500 font-mono">14</span>
+                                       <span className="text-[8px] text-yellow-500 uppercase tracking-widest block mt-2">N8N ALIGNMENT SYNCED</span>
+                                   </div>
+                               </div>
+                           </div>
+
+                           {/* Social Media Content Feed */}
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex-1 flex flex-col min-h-0">
+                               <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                                  <span><Eye size={12} className="inline mr-2"/> Generated Content Approval Queue</span>
+                               </p>
+                               <div className="flex-1 bg-slate-950/50 p-3 rounded border border-slate-800/40 overflow-y-auto space-y-4 font-mono text-[10px]">
+                                   {/* Kidazzle Post */}
+                                   <div className="p-3 border border-slate-800 bg-slate-900/60 rounded">
+                                       <div className="flex justify-between items-center mb-2">
+                                           <span className="text-cyan-400 font-bold uppercase">TARGET: KIDAZZLE (FB/IG)</span>
+                                           <span className="text-green-500 bg-green-900/30 px-2 rounded border border-green-800">READY IN GHL</span>
+                                       </div>
+                                       <p className="text-slate-300 leading-relaxed">"At Kidazzle, we don't just watch your children—we help them shine. Discover early education that feels like family in Hampton and College Park."</p>
+                                       <div className="flex gap-2 mt-2">
+                                           <span className="text-[8px] text-slate-500 bg-slate-800 px-1.5 rounded">Asset: ltx_test.mp4 (LTX-2/Minimax)</span>
+                                           <span className="text-[8px] text-slate-500 bg-slate-800 px-1.5 rounded">SEO Keyword: Childcare Hampton</span>
+                                       </div>
+                                   </div>
+
+                                   {/* Wimper Post */}
+                                   <div className="p-3 border border-slate-800 bg-slate-900/60 rounded">
+                                       <div className="flex justify-between items-center mb-2">
+                                           <span className="text-yellow-400 font-bold uppercase">TARGET: WIMPER (LINKEDIN)</span>
+                                           <span className="text-green-500 bg-green-900/30 px-2 rounded border border-green-800">READY IN GHL</span>
+                                       </div>
+                                       <p className="text-slate-300 leading-relaxed">"Stop leaving earned capital on the table. WIMPER runs an automated compliance check to unlock Section 125 tax advantages you didn't know you qualified for."</p>
+                                       <div className="flex gap-2 mt-2">
+                                           <span className="text-[8px] text-slate-500 bg-slate-800 px-1.5 rounded">Asset: wimper_expert.png (DALL-E)</span>
+                                           <span className="text-[8px] text-slate-500 bg-slate-800 px-1.5 rounded">SEO Keyword: Section 125 Calculators</span>
+                                       </div>
+                                   </div>
+
+                               </div>
                            </div>
                         </div>
                       )}
