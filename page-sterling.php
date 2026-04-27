@@ -77,7 +77,7 @@
             <a href="#interactive-games">Curriculum</a>
             <a href="#progress-tracker" style="color: var(--primary);">Completed Work</a>
             <a href="#upload">Upload Center</a>
-            <a href="#videos">Video Log</a>
+            <a href="#videos">Support Guide</a>
             <a href="#special-moments">Special Moments</a>
         </div>
     </nav>
