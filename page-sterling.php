@@ -84,14 +84,14 @@
 
     <header class="hero" style="position: relative;">
         <!-- Decorative Floating Sterlings -->
-        <div class="pixar-float" style="position: absolute; top: 15%; left: 8%; width: 120px; height: 120px; border-radius: 50%; overflow: hidden; opacity: 0.7; box-shadow: 0 0 30px rgba(14,165,233,0.6); border: 2px solid rgba(14,165,233,0.3); display: none; @media(min-width: 768px){display: block;}">
-            <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+        <div class="pixar-float" style="position: absolute; top: 15%; left: 8%; width: 120px; height: 120px; opacity: 0.7; display: none; @media(min-width: 768px){display: block;}">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" style="width: 100%; height: 100%; object-fit: contain;">
         </div>
-        <div class="pixar-float delay-1" style="position: absolute; top: 55%; right: 8%; width: 150px; height: 150px; border-radius: 50%; overflow: hidden; opacity: 0.6; box-shadow: 0 0 30px rgba(244,63,94,0.6); border: 2px solid rgba(244,63,94,0.3); display: none; @media(min-width: 768px){display: block;}">
-            <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+        <div class="pixar-float delay-1" style="position: absolute; top: 55%; right: 8%; width: 150px; height: 150px; opacity: 0.6; display: none; @media(min-width: 768px){display: block;}">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" style="width: 100%; height: 100%; object-fit: contain;">
         </div>
-        <div class="pixar-float delay-2" style="position: absolute; bottom: 5%; left: 20%; width: 90px; height: 90px; border-radius: 50%; overflow: hidden; opacity: 0.5; box-shadow: 0 0 30px rgba(99,102,241,0.6); border: 2px solid rgba(99,102,241,0.3); display: none; @media(min-width: 768px){display: block;}">
-            <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+        <div class="pixar-float delay-2" style="position: absolute; bottom: 5%; left: 20%; width: 90px; height: 90px; opacity: 0.5; display: none; @media(min-width: 768px){display: block;}">
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/sterling_spaceman.png" style="width: 100%; height: 100%; object-fit: contain;">
         </div>
 
         <div class="hero-content" style="position: relative; z-index: 2;">
@@ -369,12 +369,34 @@
             </div>
         </section>
 
-        <section id="videos" class="section-container" style="margin-bottom: 2rem;">
+        <section id="videos" class="glass-card section-container" style="margin-bottom: 2rem;">
             <div class="section-header">
-                <h2>Video Progress & Logs</h2>
-                <p>Recent footage of Sterling capturing conversational patterns, struggles, and breakthroughs.</p>
+                <h2>How to Support Sterling (Real-World Examples)</h2>
+                <p>What to do, and what not to do when Sterling is communicating.</p>
             </div>
-            <div class="grid-layout video-grid" id="videoContainer"></div>
+            
+            <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 2rem; align-items: stretch; padding: 1rem;">
+                <div style="flex: 1; min-width: 300px;">
+                    <!-- Placeholder for the single video -->
+                    <div style="aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); display: flex; align-items: center; justify-content: center; height: 100%;">
+                        <span style="color: var(--text-muted); font-size: 1.2rem; text-align: center; padding: 1rem;">[ Educational Video Coming Soon ]<br><small style="opacity:0.6;">(Best practices for stuttering scenarios)</small></span>
+                    </div>
+                </div>
+                
+                <div style="flex: 1; min-width: 300px; background: rgba(0,0,0,0.3); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h3 style="color: var(--primary); margin-bottom: 1.5rem; font-size: 1.5rem;">The Dinner Example</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-style: italic;">
+                        "At dinner, a patron said the boys were so nice. Robert said 'thank you'. Sterling was excited to speak but started stuttering..."
+                    </p>
+                    
+                    <h4 style="color: var(--text-main); margin-bottom: 1rem; font-size: 1.2rem;">The 3 Keys to Handling This:</h4>
+                    <ul style="color: var(--text-muted); padding-left: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+                        <li style="margin-bottom: 0.5rem;"><strong>1. Let him finish:</strong> Maintain eye contact and do not try to finish the sentence for him or rush him. Let him complete the thought at his own pace.</li>
+                        <li style="margin-bottom: 0.5rem;"><strong>2. Identify the word & situation:</strong> Understand what word he is trying to get out in the context of his excitement.</li>
+                        <li style="margin-bottom: 0;"><strong>3. Gentle repetition:</strong> You can allow him to say it again calmly, or you can gently say the word back to him individually without pressure.</li>
+                    </ul>
+                </div>
+            </div>
         </section>
 
         <!-- SPECIAL MOMENTS SECTION -->
@@ -420,34 +442,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const videos = [
-                { file: "video_2026-04-21_08-50-38.mp4", date: "April 21, 2026 08:50 AM" },
-                { file: "video_2026-04-21_08-51-43.mp4", date: "April 21, 2026 08:51 AM" },
-                { file: "video_2026-04-21_08-51-48.mp4", date: "April 21, 2026 08:51 AM" },
-                { file: "video_2026-04-21_08-51-52.mp4", date: "April 21, 2026 08:51 AM" },
-                { file: "video_2026-04-21_08-52-17.mp4", date: "April 21, 2026 08:52 AM" },
-                { file: "video_2026-04-21_08-52-22.mp4", date: "April 21, 2026 08:52 AM" }
-            ];
-
-            const videoContainer = document.getElementById("videoContainer");
-            const wpUploadPath = "<?php echo get_stylesheet_directory_uri(); ?>/assets/videos/"; 
-
-            videos.forEach((vid, index) => {
-                const card = document.createElement("div");
-                card.className = "video-card animate-up";
-                card.style.animationDelay = `${0.1 * index}s`;
-
-                const videoSrc = window.location.hostname === "" ? `videos/${vid.file}` : `${wpUploadPath}${vid.file}`;
-
-                card.innerHTML = `
-                    <video src="${videoSrc}" controls preload="metadata"></video>
-                    <div class="video-info">
-                        <h3>Video Log #${index + 1}</h3>
-                        <p>Recorded: ${vid.date}</p>
-                    </div>
-                `;
-                videoContainer.appendChild(card);
-            });
+            // (Video array removed as requested to be replaced by a single educational video placeholder)
 
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
