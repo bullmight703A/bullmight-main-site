@@ -2,7 +2,18 @@
 /**
  * Template Name: Sterling Game Hub
  */
-get_header(); ?>
+get_header(); 
+
+// This ensures any existing content on the page is displayed BEFORE the game hub
+while ( have_posts() ) :
+    the_post();
+    ?>
+    <div class="sterling-existing-content" style="max-w: 1200px; margin: 0 auto; padding: 2rem;">
+        <?php the_content(); ?>
+    </div>
+    <?php
+endwhile;
+?>
 
 <div class="min-h-screen bg-yellow-50 font-sans p-6" style="background-color: #fefce8; padding: 2rem; font-family: sans-serif;">
     <div style="max-w: 1200px; margin: 0 auto; display: flex; gap: 2rem; flex-wrap: wrap;">
