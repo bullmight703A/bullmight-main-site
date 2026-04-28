@@ -1158,40 +1158,8 @@
                             csLoadingOverlay.style.display = 'none';
                             csIdleScreen.style.display = 'none';
                             
-                            // Render a real, visible mini-game fallback instead of about:blank
-                            const mockGameHtml = `
-                            <!DOCTYPE html>
-                            <html>
-                            <head>
-                                <style>
-                                    body { margin: 0; overflow: hidden; background: #87CEEB; font-family: 'Arial', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; }
-                                    .ground { position: absolute; bottom: 0; width: 100%; height: 50px; background: #8B4513; }
-                                    .grass { position: absolute; bottom: 50px; width: 100%; height: 20px; background: #32CD32; }
-                                    .bear { font-size: 5rem; position: absolute; bottom: 70px; left: 50px; animation: bounce 1s infinite alternate ease-in-out; }
-                                    .letter { font-size: 3rem; color: white; background: #FF4500; padding: 10px 20px; border-radius: 10px; position: absolute; bottom: 70px; right: 50px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-                                    @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-150px); } }
-                                    h1 { position: absolute; top: 20px; color: white; text-shadow: 2px 2px 0 #000; font-size: 2rem; margin: 0; padding: 0 20px; text-align: center; }
-                                </style>
-                            </head>
-                            <body>
-                                <h1>${prompt || "My New Game!"}</h1>
-                                <div class="bear">🐻</div>
-                                <div class="letter">A</div>
-                                <div class="grass"></div>
-                                <div class="ground"></div>
-                                <script>
-                                    const letters = ['A', 'B', 'C', 'D', 'S', 'W', 'Z'];
-                                    const letterDiv = document.querySelector('.letter');
-                                    setInterval(() => {
-                                        letterDiv.innerText = letters[Math.floor(Math.random() * letters.length)];
-                                    }, 2000);
-                                </script>
-                            </body>
-                            </html>
-                            `;
-                            
-                            const blob = new Blob([mockGameHtml], {type: 'text/html'});
-                            const mockGameUrl = URL.createObjectURL(blob);
+                            // Render the custom Stick Figure Pickaxe game based on Sterling's prompt
+                            const mockGameUrl = '/wp-content/themes/bullmight/sterling-pickaxe.html';
                             
                             csIframe.src = mockGameUrl;
                             csIframe.style.display = 'block';
