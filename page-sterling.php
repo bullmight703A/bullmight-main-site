@@ -254,6 +254,59 @@
                         </div>
                     </div>
                 </details>
+
+                <!-- Creation Station -->
+                <details class="curriculum-module">
+                    <summary>🚀 Creation Station</summary>
+                    <div class="module-content">
+                        <div style="background-color: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 16px; width: 100%;">
+                            <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                                
+                                <!-- LEFT COLUMN: Creation Station -->
+                                <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 1.5rem;">
+                                    <h3 style="font-size: 2rem; color: var(--primary); margin: 0; text-align: center;">Build Your Own Game!</h3>
+                                    
+                                    <!-- The Game Player -->
+                                    <div style="flex: 1; min-height: 400px; background: rgba(0,0,0,0.3); border-radius: 1.5rem; border: 4px solid var(--primary); overflow: hidden; position: relative;">
+                                        <div id="cs-loading-overlay" style="display: none; position: absolute; inset: 0; background: rgba(15, 23, 42, 0.9); flex-direction: column; align-items: center; justify-content: center; z-index: 50;">
+                                            <h4 style="font-size: 1.5rem; font-weight: 900; color: #f97316;">Building your game...</h4>
+                                        </div>
+
+                                        <iframe id="cs-game-iframe" style="display: none; width: 100%; height: 100%; border: none;"></iframe>
+                                        
+                                        <div id="cs-idle-screen" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 2rem;">
+                                            <span style="font-size: 4rem;">🎙️</span>
+                                            <h4 style="font-size: 1.5rem; font-weight: bold; color: var(--text-muted); text-align: center; margin-top: 1rem;">Tap the mic and tell me what to build!</h4>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dictation Controls -->
+                                    <div style="background: rgba(0,0,0,0.3); border-radius: 1.5rem; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 1.5rem;">
+                                        <button id="cs-mic-btn" style="padding: 1.5rem; border-radius: 50%; background: #f43f5e; border: none; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);">
+                                            <svg style="width: 2rem; height: 2rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                            </svg>
+                                        </button>
+                                        <div id="cs-transcript-display" style="flex: 1; background: rgba(255,255,255,0.05); border-radius: 1rem; padding: 1rem; font-size: 1.1rem; color: var(--text-main); font-weight: 500;">
+                                            Waiting for your idea...
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- RIGHT COLUMN: Game Gallery -->
+                                <div style="width: 300px; display: flex; flex-direction: column; gap: 1rem;">
+                                    <h4 style="font-size: 1.25rem; font-weight: bold; color: var(--text-main); background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 1rem; margin: 0; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+                                        Games Created
+                                    </h4>
+                                    <div id="cs-game-gallery" style="display: flex; flex-direction: column; gap: 1rem; overflow-y: auto; max-height: 500px;">
+                                        <p id="cs-no-games-msg" style="color: var(--text-muted); text-align: center; font-weight: 500; margin-top: 1rem;">No games yet. Build one!</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </details>
             </div>
             
             <style>
@@ -942,6 +995,103 @@
                     stopRealRecording(btn);
                 }
             };
+            // --- CREATION STATION (VOICE-TO-GAME) LOGIC ---
+            let csSavedGames = [];
+            let csIsRecording = false;
+            
+            const csMicBtn = document.getElementById('cs-mic-btn');
+            const csTranscriptDisplay = document.getElementById('cs-transcript-display');
+            const csLoadingOverlay = document.getElementById('cs-loading-overlay');
+            const csIframe = document.getElementById('cs-game-iframe');
+            const csIdleScreen = document.getElementById('cs-idle-screen');
+            const csGameGallery = document.getElementById('cs-game-gallery');
+            const csNoGamesMsg = document.getElementById('cs-no-games-msg');
+
+            function csSpeakToChild(text) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    const voices = window.speechSynthesis.getVoices();
+                    const americanVoice = voices.find(v => v.lang === 'en-US' && v.name.includes('Google')) || 
+                                          voices.find(v => v.lang === 'en-US') || 
+                                          voices[0];
+                    utterance.voice = americanVoice;
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.1;
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+
+            function csRenderGallery() {
+                if (csSavedGames.length > 0) {
+                    if (csNoGamesMsg) csNoGamesMsg.style.display = 'none';
+                }
+                
+                Array.from(csGameGallery.children).forEach(child => {
+                    if (child.id !== 'cs-no-games-msg') child.remove();
+                });
+
+                csSavedGames.forEach(game => {
+                    const card = document.createElement('div');
+                    card.style.cssText = 'background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1); border-left: 4px solid var(--primary); cursor: pointer; transition: background 0.2s;';
+                    card.innerHTML = `
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">👾</div>
+                        <h3 style="font-weight: bold; font-size: 1.1rem; color: var(--text-main); margin: 0;">${game.name}</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.25rem 0 0 0;">Play again</p>
+                    `;
+                    
+                    card.addEventListener('click', () => {
+                        csIframe.src = game.url;
+                        csIframe.style.display = 'block';
+                        csIdleScreen.style.display = 'none';
+                    });
+                    
+                    csGameGallery.appendChild(card);
+                });
+            }
+
+            if (csMicBtn) {
+                csMicBtn.addEventListener('click', () => {
+                    csIsRecording = !csIsRecording;
+                    
+                    if(csIsRecording) {
+                        csMicBtn.style.backgroundColor = '#ef4444'; // Red
+                        csMicBtn.style.transform = 'scale(1.1)';
+                        csTranscriptDisplay.innerText = "Listening...";
+                        
+                        // MOCK: Simulate dictation and generation
+                        setTimeout(() => {
+                            csTranscriptDisplay.innerText = "Make a game where a bear jumps on letters.";
+                            csIsRecording = false;
+                            csMicBtn.style.backgroundColor = '#f43f5e'; // Back to normal red/pink
+                            csMicBtn.style.transform = 'scale(1)';
+                            
+                            csLoadingOverlay.style.display = 'flex';
+                            
+                            // MOCK: Simulate rendering time
+                            setTimeout(() => {
+                                csLoadingOverlay.style.display = 'none';
+                                csIdleScreen.style.display = 'none';
+                                
+                                const mockGameUrl = 'about:blank'; // Replace with real generated URL
+                                csIframe.src = mockGameUrl;
+                                csIframe.style.display = 'block';
+                                
+                                // Add to gallery (push to top)
+                                csSavedGames.unshift({
+                                    id: Date.now(),
+                                    name: "Bear Letter Jump",
+                                    url: mockGameUrl
+                                });
+                                
+                                csRenderGallery();
+                                csSpeakToChild("I built your bear game! Let's play it, Sterling!");
+                                
+                            }, 3000);
+                        }, 2000);
+                    }
+                });
+            }
+
         });
     </script>
 </body>
