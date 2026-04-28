@@ -268,28 +268,28 @@
                                     
                                     <!-- The Game Player -->
                                     <div style="flex: 1; min-height: 400px; background: rgba(0,0,0,0.3); border-radius: 1.5rem; border: 4px solid var(--primary); overflow: hidden; position: relative;">
-                                        <div id="cs-loading-overlay" style="display: none; position: absolute; inset: 0; background: rgba(15, 23, 42, 0.9); flex-direction: column; align-items: center; justify-content: center; z-index: 50;">
-                                            <h4 style="font-size: 1.5rem; font-weight: 900; color: #f97316;">Building your game...</h4>
+                                        <div id="cs-loading-overlay" style="display: none; position: absolute; inset: 0; background: rgba(15, 23, 42, 0.95); flex-direction: column; align-items: center; justify-content: center; z-index: 50;">
+                                            <div style="font-size: 5rem; animation: pixarFloat 2s infinite ease-in-out;">⏳</div>
+                                            <h4 style="font-size: 1.8rem; font-weight: 900; color: #f97316; margin-top: 1rem; text-align: center;">Building your game!<br><span style="font-size: 1.2rem; color: var(--text-muted); font-weight: 400;">Please wait a moment...</span></h4>
                                         </div>
 
                                         <iframe id="cs-game-iframe" style="display: none; width: 100%; height: 100%; border: none;"></iframe>
                                         
                                         <div id="cs-idle-screen" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 2rem;">
                                             <span style="font-size: 4rem;">🎙️</span>
-                                            <h4 style="font-size: 1.5rem; font-weight: bold; color: var(--text-muted); text-align: center; margin-top: 1rem;">Tap the mic and tell me what to build!</h4>
+                                            <h4 style="font-size: 1.5rem; font-weight: bold; color: var(--text-muted); text-align: center; margin-top: 1rem;">Type or tap the mic to build!</h4>
                                         </div>
                                     </div>
 
                                     <!-- Dictation Controls -->
-                                    <div style="background: rgba(0,0,0,0.3); border-radius: 1.5rem; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 1.5rem;">
-                                        <button id="cs-mic-btn" style="padding: 1.5rem; border-radius: 50%; background: #f43f5e; border: none; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);">
+                                    <div style="background: rgba(0,0,0,0.3); border-radius: 1.5rem; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                                        <button id="cs-mic-btn" style="padding: 1rem; border-radius: 50%; background: #f43f5e; border: none; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4); display: flex; align-items: center; justify-content: center; min-width: 60px; height: 60px;">
                                             <svg style="width: 2rem; height: 2rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                                             </svg>
                                         </button>
-                                        <div id="cs-transcript-display" style="flex: 1; background: rgba(255,255,255,0.05); border-radius: 1rem; padding: 1rem; font-size: 1.1rem; color: var(--text-main); font-weight: 500;">
-                                            Waiting for your idea...
-                                        </div>
+                                        <input type="text" id="cs-transcript-input" placeholder="Type or say your idea..." style="flex: 1; min-width: 200px; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1rem 1.5rem; font-size: 1.1rem; color: var(--text-main); font-weight: 500; outline: none;">
+                                        <button id="cs-generate-btn" class="btn btn-primary" style="padding: 1rem 2rem; border-radius: 1rem; font-size: 1.1rem;">Build It! 🚀</button>
                                     </div>
                                 </div>
 
@@ -997,15 +997,42 @@
             };
             // --- CREATION STATION (VOICE-TO-GAME) LOGIC ---
             let csSavedGames = [];
-            let csIsRecording = false;
+            let csSpeechRecog = null;
+            let csRecogTimeout = null;
             
             const csMicBtn = document.getElementById('cs-mic-btn');
-            const csTranscriptDisplay = document.getElementById('cs-transcript-display');
+            const csTranscriptInput = document.getElementById('cs-transcript-input');
+            const csGenerateBtn = document.getElementById('cs-generate-btn');
+            
             const csLoadingOverlay = document.getElementById('cs-loading-overlay');
             const csIframe = document.getElementById('cs-game-iframe');
             const csIdleScreen = document.getElementById('cs-idle-screen');
             const csGameGallery = document.getElementById('cs-game-gallery');
             const csNoGamesMsg = document.getElementById('cs-no-games-msg');
+
+            // Setup Speech Recognition
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                csSpeechRecog = new SpeechRecognition();
+                csSpeechRecog.continuous = true;
+                csSpeechRecog.interimResults = true;
+                
+                csSpeechRecog.onresult = function(event) {
+                    let transcript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        transcript += event.results[i][0].transcript;
+                    }
+                    if(transcript.trim().length > 0) {
+                        csTranscriptInput.value = transcript;
+                    }
+                };
+                
+                csSpeechRecog.onend = function() {
+                    csMicBtn.style.backgroundColor = '#f43f5e';
+                    csMicBtn.style.transform = 'scale(1)';
+                    if(csRecogTimeout) clearTimeout(csRecogTimeout);
+                };
+            }
 
             function csSpeakToChild(text) {
                 if ('speechSynthesis' in window) {
@@ -1051,43 +1078,91 @@
 
             if (csMicBtn) {
                 csMicBtn.addEventListener('click', () => {
-                    csIsRecording = !csIsRecording;
+                    if(!csSpeechRecog) {
+                        alert("Speech recognition is not supported in this browser.");
+                        return;
+                    }
                     
-                    if(csIsRecording) {
-                        csMicBtn.style.backgroundColor = '#ef4444'; // Red
+                    // Stop if already running
+                    if(csMicBtn.style.backgroundColor === 'rgb(239, 68, 68)' || csMicBtn.style.backgroundColor === '#ef4444') {
+                        csSpeechRecog.stop();
+                        return;
+                    }
+
+                    try {
+                        csSpeechRecog.start();
+                        csMicBtn.style.backgroundColor = '#ef4444'; // Red active state
                         csMicBtn.style.transform = 'scale(1.1)';
-                        csTranscriptDisplay.innerText = "Listening...";
+                        csTranscriptInput.placeholder = "Listening... (15s max)";
+                        csTranscriptInput.value = ""; // Clear for new dictation
                         
-                        // MOCK: Simulate dictation and generation
-                        setTimeout(() => {
-                            csTranscriptDisplay.innerText = "Make a game where a bear jumps on letters.";
-                            csIsRecording = false;
-                            csMicBtn.style.backgroundColor = '#f43f5e'; // Back to normal red/pink
+                        // Set 15 second hard cutoff
+                        csRecogTimeout = setTimeout(() => {
+                            csSpeechRecog.stop();
+                            csMicBtn.style.backgroundColor = '#f43f5e';
                             csMicBtn.style.transform = 'scale(1)';
+                            csTranscriptInput.placeholder = "Type or say your idea...";
+                        }, 15000);
+                        
+                    } catch(e) {
+                        console.error(e);
+                    }
+                });
+            }
+
+            if (csGenerateBtn) {
+                csGenerateBtn.addEventListener('click', async () => {
+                    const prompt = csTranscriptInput.value.trim();
+                    if(!prompt) {
+                        alert("Please tell me what game to build first!");
+                        return;
+                    }
+
+                    // Show visual clock Loading State
+                    csLoadingOverlay.style.display = 'flex';
+                    
+                    try {
+                        // Attempt to hit the local bridge server which proxies to Cloud Ollama
+                        const response = await fetch('http://localhost:3008/api/generate-game', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ prompt: prompt })
+                        });
+                        
+                        if(response.ok) {
+                            const data = await response.json();
+                            const blob = new Blob([data.html], {type: 'text/html'});
+                            const blobUrl = URL.createObjectURL(blob);
                             
-                            csLoadingOverlay.style.display = 'flex';
+                            csLoadingOverlay.style.display = 'none';
+                            csIdleScreen.style.display = 'none';
+                            csIframe.src = blobUrl;
+                            csIframe.style.display = 'block';
                             
-                            // MOCK: Simulate rendering time
-                            setTimeout(() => {
-                                csLoadingOverlay.style.display = 'none';
-                                csIdleScreen.style.display = 'none';
-                                
-                                const mockGameUrl = 'about:blank'; // Replace with real generated URL
-                                csIframe.src = mockGameUrl;
-                                csIframe.style.display = 'block';
-                                
-                                // Add to gallery (push to top)
-                                csSavedGames.unshift({
-                                    id: Date.now(),
-                                    name: "Bear Letter Jump",
-                                    url: mockGameUrl
-                                });
-                                
-                                csRenderGallery();
-                                csSpeakToChild("I built your bear game! Let's play it, Sterling!");
-                                
-                            }, 3000);
-                        }, 2000);
+                            csSavedGames.unshift({ id: Date.now(), name: prompt.substring(0, 20) + "...", url: blobUrl });
+                            csRenderGallery();
+                            csSpeakToChild("I built your game! Let's play it, Sterling!");
+                        } else {
+                            throw new Error("Backend error");
+                        }
+                    } catch(e) {
+                        console.warn("Backend not reachable. Falling back to mock render.", e);
+                        
+                        // MOCK FALLBACK: Simulate a visually appealing render time for 5 seconds
+                        setTimeout(() => {
+                            csLoadingOverlay.style.display = 'none';
+                            csIdleScreen.style.display = 'none';
+                            
+                            const mockGameUrl = 'about:blank'; // Will be replaced by real LLM HTML iframe
+                            csIframe.src = mockGameUrl;
+                            csIframe.style.display = 'block';
+                            
+                            csSavedGames.unshift({ id: Date.now(), name: prompt.substring(0, 20) + "...", url: mockGameUrl });
+                            
+                            csRenderGallery();
+                            csSpeakToChild("I built your game! Let's play it, Sterling!");
+                            
+                        }, 5000);
                     }
                 });
             }
