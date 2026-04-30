@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://patricia-despite-phil-organizations.trycloudflare.com';
+        const API_BASE = 'https://kidazzle-chat-2026.loca.lt';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
@@ -120,7 +120,10 @@
               { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
               { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
               { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
-              { id: 4, name: 'Midtown', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' }
+              { id: 4, name: 'Summit', url: 'https://localfalcon.com/scans?q=Summit+Kidazzle' },
+              { id: 5, name: 'Memphis', url: 'https://localfalcon.com/scans?q=Memphis+Kidazzle' },
+              { id: 6, name: 'Miami', url: 'https://localfalcon.com/scans?q=Miami+Kidazzle' },
+              { id: 7, name: 'AFC', url: 'https://localfalcon.com/scans?q=Atlanta+Federal+Center+Kidazzle' }
             ];
 
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
@@ -134,7 +137,7 @@
           useEffect(() => {
               const fetchHealth = async () => {
                   try {
-                      const res = await fetch(`${TUNNELS.SYSTEM}/api/system-health`);
+                      const res = await fetch(`${TUNNELS.SYSTEM}/api/system-health`, { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
                       const data = await res.json();
                       if(!data.error) setSystemHealth(data);
                   } catch(e) {}
@@ -143,11 +146,11 @@
               const fetchTelemetry = async () => {
                   try {
                       // Kidazzle array
-                      const resK = await fetch(`${TUNNELS.SYSTEM}/api/kidazzle-matrix`);
+                      const resK = await fetch(`${TUNNELS.SYSTEM}/api/kidazzle-matrix`, { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
                       const dataK = await resK.json();
                       
                       // SEO array
-                      const resS = await fetch(`${TUNNELS.SYSTEM}/api/seo-matrix`);
+                      const resS = await fetch(`${TUNNELS.SYSTEM}/api/seo-matrix`, { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
                       const dataS = await resS.json();
                       
                       setTelemetryData(prev => ({
@@ -168,7 +171,7 @@
           useEffect(() => {
               const fetchBrain = async () => {
                   try {
-                      const res = await fetch(`${TUNNELS.SYSTEM}/api/brain-logs`);
+                      const res = await fetch(`${TUNNELS.SYSTEM}/api/brain-logs`, { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
                       const data = await res.json();
                       if(!data.error) setBrainLogs(data);
                   } catch(e) {}
@@ -186,7 +189,7 @@
             try {
                 await fetch(`${API_BASE}/api/restart-agent`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true'},
                     body: JSON.stringify({ agent: agName })
                 });
             } catch(e) {}
@@ -208,7 +211,7 @@
             try {
                 const res = await fetch(`${TUNNELS.CHAT}/api/chat`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true'},
                     body: JSON.stringify({ message: txt })
                 });
                 const data = await res.json();
