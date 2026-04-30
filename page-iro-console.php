@@ -553,10 +553,23 @@
                                  </div>
                                </div>
                            </div>
+                          )}
+
+                        {/* KIDAZZLE TAB */}
+                        {activeTab === 'KIDAZZLE' && (
+                          <div className="p-4 h-full flex flex-col items-center justify-center text-slate-500">
+                             <p className="text-xs uppercase tracking-widest">Kidazzle Intelligence Stream Offline</p>
+                          </div>
                         )}
-                      )}
-                      
-                      {/* NOTES TAB */}
+
+                        {/* WIMPER TAB */}
+                        {activeTab === 'WIMPER' && (
+                          <div className="p-4 h-full flex flex-col items-center justify-center text-slate-500">
+                             <p className="text-xs uppercase tracking-widest">Wimper Intelligence Stream Offline</p>
+                          </div>
+                        )}
+
+                        {/* NOTES TAB */}
                       {activeTab === 'NOTES' && (
                         <div className="p-4 h-full flex flex-col">
                           <div className="bg-slate-900/40 p-3 border border-slate-800 flex flex-col flex-1 rounded overflow-hidden">
