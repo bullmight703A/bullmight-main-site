@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://remedies-citations-exit-theater.trycloudflare.com';
+        const API_BASE = 'https://patricia-despite-phil-organizations.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
@@ -117,15 +117,11 @@
           ]);
 
           const localFalconLocations = [
-            { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
-            { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
-            { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
-            { id: 4, name: 'Midtown', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' },
-            { id: 5, name: 'Decatur', url: 'https://localfalcon.com/scans?q=Decatur+Kidazzle' },
-            { id: 6, name: 'Buckhead', url: 'https://localfalcon.com/scans?q=Buckhead+Kidazzle' },
-            { id: 7, name: 'Roswell', url: 'https://localfalcon.com/scans?q=Roswell+Kidazzle' },
-            { id: 8, name: 'Sandy Spr', url: 'https://localfalcon.com/scans?q=Sandy+Springs+Kidazzle' },
-          ];
+              { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
+              { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
+              { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
+              { id: 4, name: 'Midtown', url: 'https://localfalcon.com/scans?q=Midtown+Kidazzle' }
+            ];
 
           const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
           const [n8nErrors, setN8nErrors] = useState([]);
@@ -536,151 +532,25 @@
                                </p>
                                <div className="bg-slate-950/50 p-3 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-3 font-mono text-[10px]">
                                    <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/daycare-roswell-toddlers (Kidazzle)</span>
-                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
-                                   </div>
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/childcare-hampton-infants (Kidazzle)</span>
-                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
-                                   </div>
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/wimper-employer-tax-advantage (Wimper)</span>
-                                       <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded">CRAWLED_WAITING</span>
-                                   </div>
-                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                       <span className="text-slate-300 truncate">/section-125-calculators (Wimper)</span>
-                                       <span className="text-cyan-500 whitespace-nowrap bg-cyan-900/20 px-2 rounded">DISPATCHED</span>
-                                   </div>
+                                         <span className="text-slate-300 truncate">/childcare-college-park (Kidazzle)</span>
+                                         <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
+                                     </div>
+                                     <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                         <span className="text-slate-300 truncate">/childcare-hampton (Kidazzle)</span>
+                                         <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
+                                     </div>
+                                     <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                         <span className="text-slate-300 truncate">/childcare-west-end (Kidazzle)</span>
+                                         <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded">CRAWLED_WAITING</span>
+                                     </div>
+                                     <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                         <span className="text-slate-300 truncate">/wimper-employer-tax-advantage (Wimper)</span>
+                                         <span className="text-cyan-500 whitespace-nowrap bg-cyan-900/20 px-2 rounded">DISPATCHED</span>
+                                     </div>
+                                 </div>
                                </div>
                            </div>
-                        </div>
-                      )}
-
-                      {/* KIDAZZLE TAB */}
-                      {activeTab === 'KIDAZZLE' && (
-                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
-                              <p className="text-[9px] text-slate-500 uppercase font-bold mb-1">GHL Pipeline Opportunities</p>
-                              <p className="text-xl font-bold text-cyan-400">Active Syncing...</p>
-                              <div className="mt-2 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-cyan-500 w-[100%] animate-pulse" />
-                              </div>
-                            </div>
-                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex flex-col justify-center">
-                              <a href="https://app.bullmight.com/v2/location/ZR2UvxPL2wlZNSvHjmJD/opportunities/list" target="_blank" className="w-full py-2 bg-cyan-600/10 border border-cyan-600/40 text-cyan-500 rounded text-[10px] hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
-                                 <ExternalLink size={12} /> Launch GHL Portal
-                              </a>
-                            </div>
-                          </div>
-
-                          <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
-                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
-                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Opportunity Pipeline Status</h3>
-                              <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Tracking</span>
-                            </div>
-                            <div className="p-2 space-y-2">
-                              {[
-                                { group: 'Intake Leads (New)', value: 177 },
-                                { group: 'Tours Scheduled & Completed', value: 23 },
-                                { group: 'Confirmed Enrollments (Won)', value: 0 }
-                              ].map((metric, i) => (
-                                <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-center">
-                                  <div className="flex-1 w-full flex justify-between items-center">
-                                     <span className="text-xs font-bold text-slate-200 uppercase">{metric.group}</span>
-                                     <span className="font-bold text-cyan-400 text-lg">{metric.value}</span>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                           <div className="bg-slate-900/40 border border-slate-800/60 shadow-lg rounded overflow-hidden mt-4">
-                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
-                              <h3 className="text-[10px] text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Lesson Plan Assembly Engine</h3>
-                              <span className="text-[8px] bg-yellow-900/40 text-yellow-500 px-2 rounded border border-yellow-800/40">Weekly PDF Pipeline</span>
-                            </div>
-                            <div className="p-4 grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-900/20">
-                               {Array.isArray(telemetryData?.kidazzle?.lessonPlans) && telemetryData.kidazzle.lessonPlans.length > 0 ? telemetryData.kidazzle.lessonPlans.map((loc, i) => (
-                                  <div key={i} className={`p-3 rounded border text-center flex flex-col items-center justify-center transition-all bg-opacity-30 backdrop-blur-sm shadow-inner ${loc.code === 'CRAWLED' ? 'bg-cyan-900/40 border-cyan-700/60' : loc.code === 'ERROR' ? 'bg-red-900/40 border-red-700/60' : 'bg-yellow-900/40 border-yellow-700/60'}`}>
-                                      <span className="text-[10px] uppercase font-bold text-slate-100">{loc.name}</span>
-                                      <span className={`text-[8px] mt-1.5 uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-black/40 ${loc.code === 'CRAWLED' ? 'text-cyan-400 border border-cyan-900/50' : loc.code === 'ERROR' ? 'text-red-400 border border-red-900/50' : 'text-yellow-400 border border-yellow-900/50'}`}>{loc.status}</span>
-                                  </div>
-                               )) : (
-                                  <div className="text-center text-[10px] text-slate-400 col-span-4 p-8 font-mono animate-pulse bg-slate-900/30 border border-slate-800 rounded">
-                                      <Zap size={14} className="mx-auto mb-2 opacity-50" />
-                                      AWAITING LIVE METRICS FROM IRO BRIDGE...
-                                  </div>
-                               )}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* WIMPER TAB */}
-                      {activeTab === 'WIMPER' && (
-                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
-                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row justify-between items-center gap-4">
-                            <div className="flex items-center gap-3">
-                              <FileBarChart size={24} className="text-cyan-500" />
-                              <div>
-                                <h3 className="text-xs font-bold text-slate-200 uppercase">Wimper Tech EOD Summary</h3>
-                                <p className="text-[9px] text-slate-500 uppercase">Status: Awaiting Final Validation</p>
-                              </div>
-                            </div>
-                            <button className="w-full sm:w-auto text-[9px] bg-cyan-600/10 border border-cyan-600/40 text-cyan-400 px-4 py-2 rounded hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
-                               <Clock size={12} /> Generate Tech EOD
-                            </button>
-                          </div>
-
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
-                              <div className="flex items-center gap-2 mb-3 text-cyan-400 font-bold uppercase text-[10px]">
-                                <Mail size={14} /> Global Email Status
-                              </div>
-                              <div className="space-y-4">
-                                <div>
-                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Total Dispatched</span><span>14,000+</span></div>
-                                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-cyan-500 w-[100%]" />
-                                  </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-2 text-center text-xs">
-                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
-                                     <p className="text-[8px] uppercase tracking-wider text-slate-500">Open Rate</p>
-                                     <p className="font-bold text-white mt-1">Pending Sync</p>
-                                  </div>
-                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
-                                     <p className="text-[8px] uppercase tracking-wider text-slate-500">Response Rate</p>
-                                     <p className="font-bold text-cyan-400 mt-1">Pending Sync</p>
-                                  </div>
-                                </div>
-                                <div className="p-2 border border-green-900/40 bg-green-950/20 rounded">
-                                  <p className="text-[8px] uppercase tracking-wider text-green-500 font-bold">Deliverability Health</p>
-                                  <p className="font-bold text-green-300 text-xs mt-1">99.8% - No Spam Bounding</p>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
-                              <div className="flex items-center gap-2 mb-3 text-yellow-500 font-bold uppercase text-[10px]">
-                                <Search size={14} /> Scraper Intelligence
-                              </div>
-                              <div className="space-y-3">
-                                <div>
-                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Active Progress</span><span>72%</span></div>
-                                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-yellow-500 w-[72%] shadow-[0_0_8px_orange]" />
-                                  </div>
-                                </div>
-                                <div className="bg-slate-950/60 p-2 rounded text-[9px] text-slate-500 border-l-2 border-yellow-600">
-                                   [INF] Extraction: LinkedIn-Lead-Pool-B
-                                   <br />[RES] 4,201 records indexed
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        )}
                       )}
                       
                       {/* NOTES TAB */}
