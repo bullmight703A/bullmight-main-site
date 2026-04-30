@@ -141,13 +141,21 @@
                                 <h3>Avoid Unhelpful Advice</h3>
                                 <p style="color: var(--text-muted); margin-top: 0.5rem;">Refrain from saying things like "slow down," "take a breath," or "relax." While well-meaning, these commands often increase pressure and self-consciousness.</p>
                             </div>
+                            <div class="trigger-card" style="background: rgba(16, 185, 129, 0.1);">
+                                <div class="trigger-letter">🌬️</div>
+                                <h3>Exhale, Don't Inhale</h3>
+                                <p style="color: var(--text-muted); margin-top: 0.5rem;">When he experiences a block, all his energy and air is trapped in his chest because he has already inhaled. Remind him to gently <strong>exhale</strong> or "let the balloon out" rather than taking another breath in.</p>
+                            </div>
+                            <div class="trigger-card" style="background: rgba(245, 158, 11, 0.1);">
+                                <div class="trigger-letter">✨</div>
+                                <h3>Intentional Reinforcement</h3>
+                                <p style="color: var(--text-muted); margin-top: 0.5rem;">Be intentional with your feedback. Instead of saying "no, no, no" when he stutters, positively redirect him by saying "try it again" or "let's release that word." Focus on positive reinforcement.</p>
+                            </div>
                         </div>
                     </div>
                 </details>
             </div>
         </section>
-
-
 
         <!-- INTERACTIVE CURRICULUM MODULE -->
         <section id="interactive-games" class="glass-card section-container" style="margin-bottom: 2rem;">
@@ -158,7 +166,7 @@
             
             <div class="curriculum-accordion">
                 <!-- Reading & Speech -->
-                <details class="curriculum-module" open>
+                <details class="curriculum-module">
                     <summary>✍️ Reading & Speech (Tracing Catalog)</summary>
                     <div class="module-content">
                         <div style="display: flex; flex-direction: column; gap: 2rem; align-items: center; padding-top: 1rem;">
