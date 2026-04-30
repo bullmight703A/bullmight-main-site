@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sterling Game Engine (V1 Architecture)</title>
+<style>
+body { margin: 0; overflow: hidden; background: #0f172a; display: flex; justify-content: center; align-items: center; height: 100vh; color: white; font-family: 'Outfit', sans-serif; }
+#gameContainer { background: #1e293b; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center; }
+canvas { background: #f8fafc; border-radius: 8px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.1); cursor: pointer; touch-action: none; }
+h2 { margin: 0 0 10px 0; color: #38bdf8; }
+p { margin: 10px 0 0 0; color: #94a3b8; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div id="gameContainer">
+    <h2>Sterling Game Engine (Dynamic Engine Core)</h2>
+    <canvas id='gameCanvas' width='800' height='600'></canvas>
+    <p>Tap or Click to Jump/Grapple! (Engine successfully decoupled from static mock)</p>
+</div>
+
+<script>
+// The Dynamic Physics Core
+class GameEngine {
+    constructor() {
+        this.state = { objects: [], score: 0, gameOver: false, isPaused: false };
+        this.gravity = 0.6; 
+        this.friction = 0.95;
+    }
+    update() {
+        if (this.state.gameOver) return;
+        for (let obj of this.state.objects) {
+            if (obj.isStatic) continue;
+            
+            // Physics
+            obj.velocity.y += this.gravity;
+            obj.position.x += obj.velocity.x;
+            obj.position.y += obj.velocity.y;
+            obj.velocity.x *= this.friction;
+            
+            // Floor Collision
+            if (obj.position.y + obj.height > 550) {
+                obj.position.y = 550 - obj.height;
+                obj.velocity.y *= -0.3;
+            }
+        }
+    }
+    addObject(obj) { this.state.objects.push(obj); }
+}
+
+// The Dynamic Rendering Core
+class GameRenderer {
+    constructor(ctx, w, h) { this.ctx = ctx; this.w = w; this.h = h; }
+    render(state) {
+        this.ctx.clearRect(0, 0, this.w, this.h);
+        
+        // Draw objects
+        for (let obj of state.objects) {
+            this.ctx.fillStyle = obj.color;
+            this.ctx.fillRect(obj.position.x, obj.position.y, obj.width, obj.height);
+            this.ctx.strokeStyle = '#000';
+            this.ctx.lineWidth = 2;
+            this.ctx.strokeRect(obj.position.x, obj.position.y, obj.width, obj.height);
+        }
+        
+        // Draw UI
+        this.ctx.fillStyle = '#1e293b'; 
+        this.ctx.font = 'bold 24px Arial';
+        this.ctx.fillText('Score: ' + state.score, 20, 40);
+    }
+}
+
+// Initialization
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const engine = new GameEngine();
+const renderer = new GameRenderer(ctx, 800, 600);
+
+// Add Player (Stickman/Grappler equivalent)
+engine.addObject({ id: 'player', position: {x: 375, y: 100}, velocity: {x: 0, y: 0}, width: 50, height: 50, color: '#38bdf8', isStatic: false });
+// Add Floor (Platform equivalent)
+engine.addObject({ id: 'floor', position: {x: 0, y: 550}, velocity: {x: 0, y: 0}, width: 800, height: 50, color: '#4ade80', isStatic: true });
+
+// Game Loop
+function loop() { 
+    engine.update(); 
+    renderer.render(engine.state); 
+    requestAnimationFrame(loop); 
+}
+requestAnimationFrame(loop);
+
+// Interaction
+canvas.addEventListener('pointerdown', () => {
+    let p = engine.state.objects.find(o => o.id === 'player');
+    if(p) {
+        p.velocity.y = -12; // Jump force
+    }
+});
+</script>
+
+</body>
+</html>
