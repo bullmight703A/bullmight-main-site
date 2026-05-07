@@ -54,10 +54,12 @@ add_action('wp_footer', 'bullmight_footer_scripts');
 // Bullmight subdomain routers
 function bullmight_subdomain_router($template) {
     $host = isset($_SERVER['HTTP_HOST']) ? strtolower(sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST']))) : '';
+    $path = isset($_SERVER['REQUEST_URI']) ? trim((string) wp_parse_url(wp_unslash($_SERVER['REQUEST_URI']), PHP_URL_PATH), '/') : '';
 
     $routes = array(
         'iro.bullmight.com' => 'iro-dashboard.php',
         'sterling.bullmight.com' => 'page-sterling.php',
+        'robert.bullmight.com' => 'page-robert.php',
     );
 
     foreach ($routes as $domain => $template_file) {
@@ -66,6 +68,13 @@ function bullmight_subdomain_router($template) {
             if (!empty($new_template)) {
                 return $new_template;
             }
+        }
+    }
+
+    if ($path === 'robert') {
+        $new_template = locate_template(array('page-robert.php'));
+        if (!empty($new_template)) {
+            return $new_template;
         }
     }
 
