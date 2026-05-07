@@ -51,17 +51,27 @@ function bullmight_footer_scripts() {
 }
 add_action('wp_footer', 'bullmight_footer_scripts');
 
-// IRO Subdomain Custom Router
-function bullmight_iro_subdomain_router($template) {
-    if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'iro.bullmight.com') !== false) {
-        $new_template = locate_template(array('iro-dashboard.php'));
-        if (!empty($new_template)) {
-            return $new_template;
+// Bullmight subdomain routers
+function bullmight_subdomain_router($template) {
+    $host = isset($_SERVER['HTTP_HOST']) ? strtolower(sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST']))) : '';
+
+    $routes = array(
+        'iro.bullmight.com' => 'iro-dashboard.php',
+        'sterling.bullmight.com' => 'page-sterling.php',
+    );
+
+    foreach ($routes as $domain => $template_file) {
+        if ($host === $domain) {
+            $new_template = locate_template(array($template_file));
+            if (!empty($new_template)) {
+                return $new_template;
+            }
         }
     }
+
     return $template;
 }
-add_filter('template_include', 'bullmight_iro_subdomain_router', 99);
+add_filter('template_include', 'bullmight_subdomain_router', 99);
 
 
 /**
