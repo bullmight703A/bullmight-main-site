@@ -15,6 +15,7 @@
     <style>
         :root { --primary: #0ea5e9; --primary-dark: #0284c7; --secondary: #6366f1; --accent: #f43f5e; --bg-color: #0f172a; --text-main: #f8fafc; --text-muted: #cbd5e1; --glass-bg: rgba(30, 41, 59, 0.7); --glass-border: rgba(255, 255, 255, 0.1); --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-padding-top: 118px; }
         body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; overflow-x: hidden; position: relative; min-height: 100vh; }
         h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; }
         .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; animation: float 20s infinite ease-in-out alternate; }
@@ -45,7 +46,7 @@
         .btn-primary:hover { box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6); transform: translateY(-2px); }
         .btn-secondary { background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid var(--glass-border); backdrop-filter: blur(10px); margin-left: 1rem; }
         .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
-        .section-container { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; }
+        .section-container { padding: 5rem 5%; max-width: 1400px; margin: 0 auto; scroll-margin-top: 118px; }
         .section-header { margin-bottom: 3rem; text-align: center; }
         .section-header h2 { font-size: 2.5rem; margin-bottom: 1rem; }
         .section-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; }
@@ -62,7 +63,8 @@
         .video-info h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
         .video-info p { color: var(--text-muted); font-size: 0.9rem; }
         footer { text-align: center; padding: 3rem; border-top: 1px solid var(--glass-border); color: var(--text-muted); background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); }
-        @media (max-width: 768px) { h1 { font-size: 3rem; } .nav-links { display: none; } .btn-secondary { margin-left: 0; margin-top: 1rem; display: block; } }
+        .trace-status { margin-top: 1rem; min-height: 1.5rem; color: #7dd3fc; font-weight: 700; }
+        @media (max-width: 768px) { html { scroll-padding-top: 92px; } h1 { font-size: 3rem; } .nav-links { display: none; } .btn-secondary { margin-left: 0; margin-top: 1rem; display: block; } .section-container { scroll-margin-top: 92px; } }
     </style>
 </head>
 <body <?php body_class(); ?>>
@@ -203,6 +205,7 @@
                                             <button class="btn btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
                                             <button class="btn btn-primary" onclick="finishTracing()">Finish Tracing</button>
                                         </div>
+                                        <div id="trace-status" class="trace-status" aria-live="polite">Trace the guide letter, then tap Finish Tracing.</div>
                                     </div>
 
                                     <!-- Reward / Practice Area (Hidden until finished) -->
@@ -509,7 +512,12 @@
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const target = document.querySelector(this.getAttribute('href'));
-                    if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if(target) {
+                        const nav = document.querySelector('.glass-nav');
+                        const offset = (nav ? nav.offsetHeight : 90) + 18;
+                        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+                    }
                 });
             });
 
@@ -666,6 +674,7 @@
                 // Reset UI
                 clearCanvas();
                 document.getElementById('practice-area').style.display = 'none';
+                document.getElementById('trace-status').innerText = 'Trace the guide, then tap Finish Tracing.';
                 
                 // Highlight active button
                 document.querySelectorAll('.exercise-btn').forEach(btn => btn.style.opacity = '0.5');
@@ -675,6 +684,7 @@
 
             window.finishTracing = function() {
                 document.getElementById('practice-area').style.display = 'block';
+                document.getElementById('trace-status').innerText = 'Saved for this practice session. Now repeat the words below.';
                 const data = tracingData[currentExercise];
                 const container = document.getElementById('practice-items');
                 container.innerHTML = '';
@@ -791,12 +801,19 @@
                 
                 function drawGuide() {
                     const text = tracingData[currentExercise] ? tracingData[currentExercise].text : currentExercise;
-                    let fontSize = text.length > 2 ? 150 : (text.length === 2 ? 200 : 300);
+                    let fontSize = text.length > 2 ? 150 : (text.length === 2 ? 205 : 305);
+                    ctx.save();
                     ctx.font = `bold ${fontSize}px 'Outfit', sans-serif`;
-                    ctx.fillStyle = "rgba(220, 220, 220, 0.5)"; // Light grey guide
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
+                    ctx.setLineDash([14, 12]);
+                    ctx.lineWidth = 4;
+                    ctx.strokeStyle = "rgba(14, 165, 233, 0.55)";
+                    ctx.strokeText(text, canvas.width/2, canvas.height/2 + 20);
+                    ctx.setLineDash([]);
+                    ctx.fillStyle = "rgba(15, 23, 42, 0.12)";
                     ctx.fillText(text, canvas.width/2, canvas.height/2 + 20);
+                    ctx.restore();
                 }
                 
                 // Initialize guide
@@ -844,6 +861,8 @@
                 window.clearCanvas = () => {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     drawGuide();
+                    const status = document.getElementById('trace-status');
+                    if (status) status.innerText = 'Canvas cleared. Trace the guide letter again.';
                 };
             }
 
@@ -1166,110 +1185,9 @@
                             csLoadingOverlay.style.display = 'none';
                             csIdleScreen.style.display = 'none';
                             
-                            // Read the raw HTML of the game and inject it directly to bypass WP routing
+                            // Load the bundled game engine without injecting raw script markup into this page.
                             csIframe.removeAttribute('src'); // clear any bad routing
-                            csIframe.srcdoc = "<!DOCTYPE html>
-<html>
-<head>
-<title>Sterling Game Engine (V1 Architecture)</title>
-<style>
-body { margin: 0; overflow: hidden; background: #0f172a; display: flex; justify-content: center; align-items: center; height: 100vh; color: white; font-family: 'Outfit', sans-serif; }
-#gameContainer { background: #1e293b; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center; }
-canvas { background: #f8fafc; border-radius: 8px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.1); cursor: pointer; touch-action: none; }
-h2 { margin: 0 0 10px 0; color: #38bdf8; }
-p { margin: 10px 0 0 0; color: #94a3b8; font-size: 14px; }
-</style>
-</head>
-<body>
-
-<div id=\"gameContainer\">
-    <h2>Sterling Game Engine (Dynamic Engine Core)</h2>
-    <canvas id='gameCanvas' width='800' height='600'></canvas>
-    <p>Tap or Click to Jump/Grapple! (Engine successfully decoupled from static mock)</p>
-</div>
-
-<script>
-// The Dynamic Physics Core
-class GameEngine {
-    constructor() {
-        this.state = { objects: [], score: 0, gameOver: false, isPaused: false };
-        this.gravity = 0.6; 
-        this.friction = 0.95;
-    }
-    update() {
-        if (this.state.gameOver) return;
-        for (let obj of this.state.objects) {
-            if (obj.isStatic) continue;
-            
-            // Physics
-            obj.velocity.y += this.gravity;
-            obj.position.x += obj.velocity.x;
-            obj.position.y += obj.velocity.y;
-            obj.velocity.x *= this.friction;
-            
-            // Floor Collision
-            if (obj.position.y + obj.height > 550) {
-                obj.position.y = 550 - obj.height;
-                obj.velocity.y *= -0.3;
-            }
-        }
-    }
-    addObject(obj) { this.state.objects.push(obj); }
-}
-
-// The Dynamic Rendering Core
-class GameRenderer {
-    constructor(ctx, w, h) { this.ctx = ctx; this.w = w; this.h = h; }
-    render(state) {
-        this.ctx.clearRect(0, 0, this.w, this.h);
-        
-        // Draw objects
-        for (let obj of state.objects) {
-            this.ctx.fillStyle = obj.color;
-            this.ctx.fillRect(obj.position.x, obj.position.y, obj.width, obj.height);
-            this.ctx.strokeStyle = '#000';
-            this.ctx.lineWidth = 2;
-            this.ctx.strokeRect(obj.position.x, obj.position.y, obj.width, obj.height);
-        }
-        
-        // Draw UI
-        this.ctx.fillStyle = '#1e293b'; 
-        this.ctx.font = 'bold 24px Arial';
-        this.ctx.fillText('Score: ' + state.score, 20, 40);
-    }
-}
-
-// Initialization
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const engine = new GameEngine();
-const renderer = new GameRenderer(ctx, 800, 600);
-
-// Add Player (Stickman/Grappler equivalent)
-engine.addObject({ id: 'player', position: {x: 375, y: 100}, velocity: {x: 0, y: 0}, width: 50, height: 50, color: '#38bdf8', isStatic: false });
-// Add Floor (Platform equivalent)
-engine.addObject({ id: 'floor', position: {x: 0, y: 550}, velocity: {x: 0, y: 0}, width: 800, height: 50, color: '#4ade80', isStatic: true });
-
-// Game Loop
-function loop() { 
-    engine.update(); 
-    renderer.render(engine.state); 
-    requestAnimationFrame(loop); 
-}
-requestAnimationFrame(loop);
-
-// Interaction
-canvas.addEventListener('pointerdown', () => {
-    let p = engine.state.objects.find(o => o.id === 'player');
-    if(p) {
-        p.velocity.y = -12; // Jump force
-    }
-});
-</script>
-
-</body>
-</html>
-";
+                            csIframe.src = "<?php echo esc_url(get_stylesheet_directory_uri()); ?>/sterling-game-engine.html";
                             csIframe.style.display = 'block';
 
                         }, 5000);
