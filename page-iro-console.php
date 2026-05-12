@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://deborah-smell-agent-vpn.trycloudflare.com';
+        const API_BASE = 'https://steven-repair-citizen-alexandria.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
