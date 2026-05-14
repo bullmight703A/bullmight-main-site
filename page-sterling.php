@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supporting Sterling | Overcoming the Stutter</title>
+    <title>Sterling Support Hub | Education Growth Plan</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -68,13 +68,14 @@
     </style>
 </head>
 <body <?php body_class(); ?>>
-    
+
     <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div>
 
     <nav class="glass-nav">
         <div class="logo">Sterling's Support Core</div>
         <div class="nav-links">
             <a href="#about">Goals & Vision</a>
+            <a href="#education-plan">Education Plan</a>
             <a href="#how-to-assist">How to Assist</a>
             <a href="#interactive-games">Curriculum</a>
             <a href="#progress-tracker" style="color: var(--primary);">Completed Work</a>
@@ -98,9 +99,9 @@
 
         <div class="hero-content" style="position: relative; z-index: 2;">
             <h1 class="animate-up">Sterling's <span class="highlight">World</span></h1>
-            <p class="subtitle animate-up delay-1">Creating a seamless, supportive learning environment to help him navigate through stuttering cycles. A central hub recognizing trigger words, tracking progress, and enabling iPad learning.</p>
+            <p class="subtitle animate-up delay-1">A private family support hub for speech, language, early literacy, confidence, and school readiness. The goal is simple: support the whole child without adding pressure.</p>
             <div class="cta-group animate-up delay-2">
-                <a href="#about" class="btn btn-primary">Our Goals</a>
+                <a href="#education-plan" class="btn btn-primary">View Education Plan</a>
                 <a href="#interactive-games" class="btn btn-secondary">Interactive Curriculum</a>
             </div>
         </div>
@@ -119,6 +120,29 @@
                             <p><strong>The iPad Tracing Initiative:</strong> We are building a continuous pipeline of educational resources. By uploading physical worksheets to this portal, they will eventually be converted into digital, traceable documents specifically optimized for iPad and Apple Pencil interaction, helping train cognitive and motor skills seamlessly.</p>
                             <br>
                             <p><strong>Long-Term Gamification:</strong> As Sterling progresses, these static exercises will evolve into interactive games directly accessible on his devices, turning speech adaptation and learning into an engaging, rewarding experience.</p>
+                        </div>
+                    </div>
+                </details>
+
+                <details id="education-plan" class="curriculum-module glass-card" open>
+                    <summary>📘 Education Growth Plan</summary>
+                    <div class="module-content">
+                        <div class="education-dashboard">
+                            <div class="edu-hero-card">
+                                <span class="edu-pill">May 2026 Report Review</span>
+                                <h2>Sterling is growing. The plan is to help him use those skills everywhere.</h2>
+                                <p>The Atlanta Speech School report shows strong progress in receptive language, math, fine motor skills, social connection, classroom routines, and school readiness. The next layer is generalizing speech, fluency, word-finding, expressive grammar, and flexibility into everyday conversation.</p>
+                                <p class="edu-note">This page is a family education tool. It does not diagnose or replace guidance from Sterling's school team, SLP, OT, psychologist, or physician.</p>
+                            </div>
+                            <div class="edu-grid">
+                                <article class="edu-card strength"><h3>Strengths To Build On</h3><ul><li>Strong receptive language and vocabulary growth.</li><li>Math, counting, shapes, patterns, and comparisons are strengths.</li><li>Fine motor and visual-motor growth are strong.</li><li>Peer relationships, empathy, routines, attention, and work completion are positive.</li></ul></article>
+                                <article class="edu-card focus"><h3>Support Targets</h3><ul><li>Speech sounds in conversation: /s/, /s/ blends, /sh/, and final consonants.</li><li>Easy fluency when excited, rushed, or frustrated.</li><li>Word-finding, retelling, and longer expressive sentences.</li><li>Rapid naming, letter sounds, and relaxed reading readiness.</li><li>Flexibility when plans change or work feels imperfect.</li></ul></article>
+                                <article class="edu-card rules"><h3>How Adults Should Help</h3><ul><li>Listen to what he says, not how perfectly it comes out.</li><li>Give wait time before offering a cue.</li><li>Use first-sound or meaning clues for word-finding.</li><li>Model a corrected sentence naturally instead of stopping the conversation.</li><li>Keep practice short, playful, and pressure-free.</li></ul></article>
+                            </div>
+                            <div class="edu-plan-grid"><div class="edu-month"><div class="month-badge">Month 1</div><h3>Calm Routine</h3><p>Read 10 minutes most days, retell beginning-middle-end, practice 3-5 speech target words, and use one resilience phrase: <strong>try one small part first</strong>.</p></div><div class="edu-month"><div class="month-badge">Month 2</div><h3>Real Conversation</h3><p>Use play, art, building, cooking, and car rides to describe, compare, sequence, and retell. Model grammar by repeating his idea correctly without turning it into a correction.</p></div><div class="edu-month"><div class="month-badge">Month 3</div><h3>Kindergarten Ready</h3><p>Practice asking for help, using more time, handling transitions, and telling a short story with beginning, middle, and end. Build a one-page teacher handoff summary.</p></div></div>
+                            <div class="activity-lab"><div class="section-header" style="margin-bottom: 1.5rem;"><h2>Activity Lab</h2><p>Short activities matched to the report. Ten minutes is enough. Stop while it still feels successful.</p></div><div class="activity-grid"><button class="activity-card" data-activity="story"><span>📚</span><strong>Story Retell</strong><small>Beginning, middle, end.</small></button><button class="activity-card" data-activity="sounds"><span>🎧</span><strong>Sound Detective</strong><small>/s/, /sh/, final sounds.</small></button><button class="activity-card" data-activity="wordfind"><span>🧠</span><strong>Word-Finding Clues</strong><small>First sound and meaning clues.</small></button><button class="activity-card" data-activity="letters"><span>🔤</span><strong>Letter Sound Play</strong><small>No worksheet pressure.</small></button><button class="activity-card" data-activity="flex"><span>🧩</span><strong>Flexibility Practice</strong><small>One small change at a time.</small></button></div><div id="activity-detail" class="activity-detail"><h3>Pick an activity</h3><p>Choose one card above to see what to do, what to say, and what to track.</p></div></div>
+                            <div class="edu-grid two-col"><article class="edu-card questions"><h3>Questions For The School Team</h3><ol><li>What are the top three speech targets for summer?</li><li>What cue should we use first when he cannot find a word?</li><li>How should we support fluency without making him feel corrected?</li><li>Is rapid naming a reading-readiness concern to monitor?</li><li>What kindergarten supports should be shared with the next teacher?</li></ol></article><article class="edu-card resources"><h3>Helpful Parent Resources</h3><ul><li><a href="https://www.asha.org/public/speech/disorders/stuttering/" target="_blank" rel="noopener">ASHA: Stuttering and cluttering overview</a></li><li><a href="https://www.asha.org/practice-portal/clinical-topics/fluency-disorders" target="_blank" rel="noopener">ASHA: Fluency support approaches</a></li><li><a href="https://www.readingrockets.org/literacy-home/reading-101-guide-parents/your-pre-kindergarten-child/phonological-and-phonemic" target="_blank" rel="noopener">Reading Rockets: Pre-K sound play</a></li><li><a href="https://www.naeyc.org/resources/pubs/tyc/dec2015/explaining-developmentally-appropriate-practice" target="_blank" rel="noopener">NAEYC: Why play supports learning</a></li><li><a href="https://beta.cdc.gov/ncbddd/actearly/milestones/checklist/4-Year-Checklist-form.html" target="_blank" rel="noopener">CDC: 4-year developmental checklist</a></li></ul></article></div>
+                            <div class="edu-card tracker-card"><h3>Weekly Parent Check-In</h3><p>Use this as the simple progress note each week.</p><div class="tracker-grid"><label>Speech target practiced<input type="text" placeholder="Example: /s/ blends"></label><label>Best cue that helped<input type="text" placeholder="First sound, wait time, choice of two..."></label><label>Story he retold<input type="text" placeholder="Book, event, pretend play..."></label><label>Frustration recovery<input type="text" placeholder="What happened and what helped?"></label></div></div>
                         </div>
                     </div>
                 </details>
@@ -165,18 +189,18 @@
                 <h2>Sterling's Interactive Curriculum</h2>
                 <p>Select a learning module below to begin practice.</p>
             </div>
-            
+
             <div class="curriculum-accordion">
                 <!-- Reading & Speech -->
                 <details class="curriculum-module">
                     <summary>✍️ Reading & Speech (Tracing Catalog)</summary>
                     <div class="module-content">
                         <div style="display: flex; flex-direction: column; gap: 2rem; align-items: center; padding-top: 1rem;">
-                            
+
                             <!-- Selection Menu -->
                             <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 900px;">
                                 <h3 style="margin-bottom: 1rem; font-size: 1.2rem; color: var(--text-muted); text-align: center;">Select an Exercise</h3>
-                                
+
                                 <div style="margin-bottom: 1.5rem;">
                                     <strong style="color: var(--primary); display: block; margin-bottom: 0.5rem; text-align: center;">Focus Triggers</strong>
                                     <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;" id="focus-exercises">
@@ -195,12 +219,12 @@
                             <!-- Tracing Area -->
                             <div style="background: rgba(0,0,0,0.5); padding: 2rem; border-radius: 16px; display: inline-block; width: 100%; max-width: 900px; text-align: center;">
                                 <h3 id="tracing-title" style="margin-bottom: 1.5rem; color: var(--primary); font-size: 2rem;">Trace the Letter: 'S'</h3>
-                                
+
                                 <div style="display: flex; gap: 2rem; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
                                     <div>
                                         <!-- The Canvas for Tracing -->
                                         <canvas id="tracingCanvas" width="400" height="400" style="background: #ffffff; border-radius: 12px; cursor: crosshair; touch-action: none; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);"></canvas>
-                                        
+
                                         <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center;">
                                             <button class="btn btn-secondary" onclick="clearCanvas()">Clear Canvas</button>
                                             <button class="btn btn-primary" onclick="finishTracing()">Finish Tracing</button>
@@ -254,7 +278,7 @@
                                     <h4 id="sentence-text" style="color: var(--text-main); font-size: 1.8rem; margin: 1.5rem 0;">"The space man"</h4>
                                     <button class="btn btn-primary" id="btn-play-avatar" onclick="playAvatarSentence()" style="width: 100%; font-size: 1.2rem;">🎙️ Listen to Avatar</button>
                                 </div>
-                                
+
                                 <!-- Recording Area -->
                                 <div id="your-turn-area" style="display: none; background: rgba(14, 165, 233, 0.1); padding: 2rem; border-radius: 16px; border: 1px solid var(--primary); width: 100%; max-width: 400px;">
                                     <h4 style="color: var(--primary); font-size: 1.5rem; margin-bottom: 1rem;">Your Turn!</h4>
@@ -272,11 +296,11 @@
                     <div class="module-content">
                         <div style="background-color: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 16px; width: 100%;">
                             <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-                                
+
                                 <!-- LEFT COLUMN: Creation Station -->
                                 <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 1.5rem;">
                                     <h3 style="font-size: 2rem; color: var(--primary); margin: 0; text-align: center;">Build Your Own Game!</h3>
-                                    
+
                                     <!-- The Game Player -->
                                     <div style="flex: 1; min-height: 400px; background: rgba(0,0,0,0.3); border-radius: 1.5rem; border: 4px solid var(--primary); overflow: hidden; position: relative;">
                                         <div id="cs-loading-overlay" style="display: none; position: absolute; inset: 0; background: rgba(15, 23, 42, 0.95); flex-direction: column; align-items: center; justify-content: center; z-index: 50;">
@@ -285,7 +309,7 @@
                                         </div>
 
                                         <iframe id="cs-game-iframe" style="display: none; width: 100%; height: 100%; border: none;"></iframe>
-                                        
+
                                         <div id="cs-idle-screen" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 2rem;">
                                             <span style="font-size: 4rem;">🎙️</span>
                                             <h4 style="font-size: 1.5rem; font-weight: bold; color: var(--text-muted); text-align: center; margin-top: 1rem;">Type or tap the mic to build!</h4>
@@ -319,7 +343,7 @@
                     </div>
                 </details>
             </div>
-            
+
             <style>
                 .curriculum-accordion {
                     display: flex;
@@ -363,6 +387,28 @@
                     padding: 1.5rem;
                     border-top: 1px solid rgba(255, 255, 255, 0.05);
                 }
+                .education-dashboard { display: flex; flex-direction: column; gap: 1.5rem; }
+                .edu-hero-card, .edu-card, .edu-month, .activity-lab, .activity-detail { background: rgba(255,255,255,0.055); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 1.5rem; }
+                .edu-hero-card h2 { font-size: clamp(1.7rem, 4vw, 3rem); line-height: 1.08; margin: 0.8rem 0 1rem; }
+                .edu-hero-card p, .edu-card li, .edu-card p, .edu-month p, .activity-detail p { color: var(--text-muted); }
+                .edu-pill, .month-badge { display: inline-flex; align-items: center; width: fit-content; padding: 0.35rem 0.75rem; border-radius: 999px; background: rgba(14,165,233,0.16); color: #7dd3fc; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.02em; }
+                .edu-note { border-left: 4px solid var(--primary); padding-left: 1rem; margin-top: 1rem; }
+                .edu-grid, .edu-plan-grid, .activity-grid, .tracker-grid { display: grid; gap: 1rem; }
+                .edu-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+                .two-col { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+                .edu-plan-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+                .edu-card h3, .edu-month h3, .activity-detail h3 { margin-bottom: 0.85rem; color: var(--text-main); }
+                .edu-card ul, .edu-card ol { padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.55rem; }
+                .edu-card a { color: #7dd3fc; text-decoration: none; border-bottom: 1px solid rgba(125, 211, 252, 0.35); }
+                .edu-card a:hover { color: #bae6fd; }
+                .activity-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+                .activity-card { min-height: 135px; border: 1px solid rgba(255,255,255,0.14); border-radius: 16px; background: rgba(15, 23, 42, 0.72); color: var(--text-main); cursor: pointer; display: flex; flex-direction: column; justify-content: center; gap: 0.35rem; padding: 1rem; font-family: inherit; transition: transform .2s, border-color .2s, background .2s; }
+                .activity-card:hover, .activity-card.active { transform: translateY(-3px); border-color: rgba(14,165,233,0.7); background: rgba(14,165,233,0.18); }
+                .activity-card span { font-size: 2rem; }
+                .activity-card small { color: var(--text-muted); }
+                .tracker-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+                .tracker-grid label { color: var(--text-muted); font-weight: 600; }
+                .tracker-grid input { width: 100%; margin-top: 0.35rem; padding: 0.8rem; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.25); color: var(--text-main); }
             </style>
         </section>
         <!-- END CURRICULUM MODULE -->
@@ -385,7 +431,7 @@
                 <h2>Identified Trigger Words</h2>
                 <p>These words and starting letters have been identified as current stuttering triggers for Sterling based on recent evaluations.</p>
             </div>
-            
+
             <div style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); max-width: 600px; margin: 0 auto 2rem auto;">
                 <h3 style="margin-bottom: 1rem; font-size: 1.2rem; color: var(--text-main);">Add New Trigger Observation</h3>
                 <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
@@ -438,7 +484,7 @@
                 <h2>How to Support Sterling (Real-World Examples)</h2>
                 <p>What to do, and what not to do when Sterling is communicating.</p>
             </div>
-            
+
             <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 2rem; align-items: stretch; padding: 1rem;">
                 <div style="flex: 1; min-width: 300px;">
                     <!-- Placeholder for the single video -->
@@ -446,13 +492,13 @@
                         <span style="color: var(--text-muted); font-size: 1.2rem; text-align: center; padding: 1rem;">[ Educational Video Coming Soon ]<br><small style="opacity:0.6;">(Best practices for stuttering scenarios)</small></span>
                     </div>
                 </div>
-                
+
                 <div style="flex: 1; min-width: 300px; background: rgba(0,0,0,0.3); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
                     <h3 style="color: var(--primary); margin-bottom: 1.5rem; font-size: 1.5rem;">The Dinner Example</h3>
                     <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-style: italic;">
                         "At dinner, a patron said the boys were so nice. Robert said 'thank you'. Sterling was excited to speak but started stuttering..."
                     </p>
-                    
+
                     <h4 style="color: var(--text-main); margin-bottom: 1rem; font-size: 1.2rem;">The 3 Keys to Handling This:</h4>
                     <ul style="color: var(--text-muted); padding-left: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
                         <li style="margin-bottom: 0.5rem;"><strong>1. Let him finish:</strong> Maintain eye contact and do not try to finish the sentence for him or rush him. Let him complete the thought at his own pace.</li>
@@ -469,25 +515,25 @@
                 <h2>Sterling's Special Moments</h2>
                 <p>Celebrating the child and the beautiful moments he has created. Select a tab below to watch.</p>
             </div>
-            
+
             <div style="background: rgba(0,0,0,0.3); padding: 2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
                 <!-- Tabs -->
                 <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; justify-content: center;" id="moment-tabs">
                     <button class="btn btn-primary" onclick="openMoment(this, 'earth-day-video')">Earth Day Performance</button>
                     <button class="btn btn-secondary" onclick="openMoment(this, 'other-moments')">Other Moments</button>
                 </div>
-                
+
                 <!-- Content -->
                 <div id="moments-content" style="display: flex; justify-content: center; width: 100%;">
-                    
+
                     <div id="earth-day-video" class="moment-panel" style="display: block; width: 100%; max-width: 800px; aspect-ratio: 16/9;">
-                        <video 
-                            src="<?php echo get_stylesheet_directory_uri(); ?>/videos/earth_day_performance.mp4" 
-                            style="width: 100%; height: 100%; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);" 
+                        <video
+                            src="<?php echo get_stylesheet_directory_uri(); ?>/videos/earth_day_performance.mp4"
+                            style="width: 100%; height: 100%; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);"
                             controls preload="metadata">
                         </video>
                     </div>
-                    
+
                     <div id="other-moments" class="moment-panel" style="display: none; width: 100%; text-align: center; padding: 4rem 2rem;">
                         <div style="font-size: 3rem; margin-bottom: 1rem;">🌟</div>
                         <h3 style="color: var(--text-main); margin-bottom: 1rem;">More beautiful moments coming soon</h3>
@@ -518,6 +564,25 @@
                         const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
                         window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
                     }
+                });
+            });
+
+            // --- EDUCATION PLAN ACTIVITY LAB ---
+            const activityPlans = {
+                story: { title: 'Story Retell', steps: ['Read one short book or talk through one real event.', 'Ask what happened first, next, and at the end.', 'If he gets stuck, offer a picture, first word, or choice of two.'], say: 'Tell me the story your way. I will wait.', track: 'One clear beginning-middle-end retell per week.' },
+                sounds: { title: 'Sound Detective', steps: ['Pick only 3-5 words from the SLP target list.', 'Say the word naturally in play, then try it once together.', 'Move quickly back to play so it does not feel like a test.'], say: 'I heard that sound. Let us try it one more easy time.', track: 'Which sound was easiest in real conversation: /s/, /sh/, blend, or final sound.' },
+                wordfind: { title: 'Word-Finding Clues', steps: ['When he says he forgot, pause first.', 'Give the first sound or a meaning clue.', 'Celebrate the idea even if the word takes time.'], say: 'You know the idea. I can give you the first sound if you want.', track: 'Best cue: wait time, first sound, description, or choice of two.' },
+                letters: { title: 'Letter Sound Play', steps: ['Use fridge magnets, cards, toys, or signs.', 'Ask for sounds in playful bursts, not worksheets.', 'Mix in rhymes, claps, and silly alliteration.'], say: 'I spy something that starts with the ssss sound.', track: 'Letter sounds recognized comfortably this week.' },
+                flex: { title: 'Flexibility Practice', steps: ['Change one tiny part of a game or routine.', 'Name the feeling, then offer a first/then choice.', 'Praise recovery, not perfection.'], say: 'That changed. We can handle one small change together.', track: 'One moment where he recovered after frustration.' }
+            };
+            const activityDetail = document.getElementById('activity-detail');
+            document.querySelectorAll('.activity-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.activity-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    const plan = activityPlans[card.dataset.activity];
+                    if (!plan || !activityDetail) return;
+                    activityDetail.innerHTML = '<h3>' + plan.title + '</h3><ul>' + plan.steps.map(step => '<li>' + step + '</li>').join('') + '</ul><p><strong>Say:</strong> ' + plan.say + '</p><p><strong>Track:</strong> ' + plan.track + '</p>';
                 });
             });
 
@@ -552,7 +617,7 @@
                 'W': { type: 'words', text: 'W', items: [{ word: 'Will', icon: '🔮' }, { word: 'We', icon: '🤝' }, { word: 'Would', icon: '🪵' }] },
                 'TH': { type: 'words', text: 'TH', items: [{ word: 'The', icon: '⭐' }, { word: 'They', icon: '👥' }, { word: 'That', icon: '👉' }] },
                 'I': { type: 'phrases', text: 'I', items: [{ word: 'I want this', icon: '👈' }, { word: 'I want that', icon: '👉' }, { word: 'I can do anything', icon: '🦸‍♂️' }] },
-                
+
                 // Kindergarten / Preschool Alphabet Dictionary
                 'A': { type: 'letter', text: 'A', items: [{ word: 'Apple', icon: '🍎' }, { word: 'And', icon: '➕' }, { word: 'Ant', icon: '🐜' }] },
                 'B': { type: 'letter', text: 'B', items: [{ word: 'But', icon: '✋' }, { word: 'Because', icon: '🤔' }, { word: 'Ball', icon: '⚽' }] },
@@ -588,9 +653,9 @@
             // Initialize Menu UI
             const focusContainer = document.getElementById('focus-exercises');
             const alphaContainer = document.getElementById('alphabet-exercises');
-            
+
             const focusKeys = ['S', 'WH', 'C', 'D', 'W', 'TH', 'I'];
-            
+
             Object.keys(tracingData).forEach(key => {
                 const btn = document.createElement('button');
                 btn.innerText = key;
@@ -600,7 +665,7 @@
                 btn.style.margin = '0';
                 btn.style.opacity = key === 'S' ? '1' : '0.5';
                 btn.onclick = () => loadExercise(key);
-                
+
                 if(focusKeys.includes(key)) {
                     btn.className = 'btn btn-primary exercise-btn';
                     focusContainer.appendChild(btn);
@@ -611,10 +676,10 @@
 
             // --- HIGH FIDELITY TEXT TO SPEECH ---
             async function speakText(text) {
-                // IMPORTANT: Do not commit API keys to GitHub! 
+                // IMPORTANT: Do not commit API keys to GitHub!
                 // Paste your ElevenLabs API Key here to enable high-quality American voices.
-                const ELEVENLABS_API_KEY = ''; 
-                
+                const ELEVENLABS_API_KEY = '';
+
                 // Fallback to Native API if no key is provided
                 if(!ELEVENLABS_API_KEY) {
                     if ('speechSynthesis' in window) {
@@ -642,7 +707,7 @@
                             voice_settings: { stability: 0.5, similarity_boost: 0.5 }
                         })
                     });
-                    
+
                     if (response.ok) {
                         const blob = await response.blob();
                         const audioUrl = URL.createObjectURL(blob);
@@ -666,16 +731,16 @@
             window.loadExercise = function(key) {
                 currentExercise = key;
                 const data = tracingData[key];
-                
+
                 // Update Title
                 let titlePrefix = data.type === 'phrases' ? "Trace Phrase Start:" : (data.type === 'words' ? "Trace Group:" : "Trace Letter:");
                 document.getElementById('tracing-title').innerText = `${titlePrefix} '${data.text}'`;
-                
+
                 // Reset UI
                 clearCanvas();
                 document.getElementById('practice-area').style.display = 'none';
                 document.getElementById('trace-status').innerText = 'Trace the guide, then tap Finish Tracing.';
-                
+
                 // Highlight active button
                 document.querySelectorAll('.exercise-btn').forEach(btn => btn.style.opacity = '0.5');
                 const activeBtn = document.getElementById('btn-ex-' + key);
@@ -688,7 +753,7 @@
                 const data = tracingData[currentExercise];
                 const container = document.getElementById('practice-items');
                 container.innerHTML = '';
-                
+
                 speakText("Great job Sterling! Repeat after me.");
 
                 data.items.forEach((item, index) => {
@@ -740,16 +805,16 @@
 
             // --- MATH GAME LOGIC ---
             let currentApples = 1;
-            
+
             function loadMathLevel() {
                 currentApples = Math.floor(Math.random() * 5) + 1; // 1 to 5
                 const container = document.getElementById('math-problem');
                 container.innerHTML = '🍎'.repeat(currentApples);
-                
+
                 const optionsContainer = document.getElementById('math-options');
                 optionsContainer.innerHTML = '';
                 document.getElementById('math-feedback').innerText = '';
-                
+
                 // Generate 3 unique options including the correct one
                 let options = [currentApples];
                 while(options.length < 3) {
@@ -757,7 +822,7 @@
                     if(!options.includes(rand)) options.push(rand);
                 }
                 options.sort(() => Math.random() - 0.5);
-                
+
                 options.forEach(num => {
                     const btn = document.createElement('button');
                     btn.className = 'btn btn-secondary';
@@ -777,7 +842,7 @@
                     feedback.style.color = '#10b981';
                     feedback.innerText = 'Correct! Great job Sterling!';
                     speakText(`Correct! There are ${currentApples} apples.`);
-                    
+
                     // Add subtle visual celebration
                     btn.style.transform = 'scale(1.1)';
                     setTimeout(() => {
@@ -798,7 +863,7 @@
             if(canvas) {
                 const ctx = canvas.getContext("2d");
                 let isDrawing = false;
-                
+
                 function drawGuide() {
                     const text = tracingData[currentExercise] ? tracingData[currentExercise].text : currentExercise;
                     let fontSize = text.length > 2 ? 150 : (text.length === 2 ? 205 : 305);
@@ -815,7 +880,7 @@
                     ctx.fillText(text, canvas.width/2, canvas.height/2 + 20);
                     ctx.restore();
                 }
-                
+
                 // Initialize guide
                 setTimeout(drawGuide, 100);
 
@@ -824,7 +889,7 @@
                     ctx.beginPath();
                     const { x, y } = getCoord(e);
                     ctx.moveTo(x, y);
-                    e.preventDefault(); 
+                    e.preventDefault();
                 };
 
                 const draw = (e) => {
@@ -853,11 +918,11 @@
                 canvas.addEventListener("mousemove", draw);
                 canvas.addEventListener("mouseup", stopDrawing);
                 canvas.addEventListener("mouseout", stopDrawing);
-                
+
                 canvas.addEventListener("touchstart", startDrawing, {passive: false});
                 canvas.addEventListener("touchmove", draw, {passive: false});
                 canvas.addEventListener("touchend", stopDrawing);
-                
+
                 window.clearCanvas = () => {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     drawGuide();
@@ -875,15 +940,15 @@
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                     mediaRecorder = new MediaRecorder(stream);
                     audioChunks = [];
-                    
+
                     mediaRecorder.ondataavailable = event => {
                         audioChunks.push(event.data);
                     };
-                    
+
                     mediaRecorder.onstop = () => {
                         const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                         const audioUrl = URL.createObjectURL(audioBlob);
-                        
+
                         // Add to progress log
                         const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                         progressLogs.unshift({
@@ -895,11 +960,11 @@
                             audioUrl: audioUrl
                         });
                         renderProgressLogs();
-                        
+
                         // Release mic
                         stream.getTracks().forEach(track => track.stop());
                     };
-                    
+
                     mediaRecorder.start();
                     btnElement.innerHTML = '⏹️ Stop Recording';
                     btnElement.style.background = '#64748b';
@@ -908,7 +973,7 @@
                     alert("Please allow microphone access to record.");
                 }
             }
-            
+
             function stopRealRecording(btnElement) {
                 if(mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.stop();
@@ -939,7 +1004,7 @@
                 progressLogs.forEach(log => {
                     const tr = document.createElement('tr');
                     tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
-                    
+
                     let audioBtnHTML = '';
                     if(log.hasAudio) {
                         if(log.audioUrl) {
@@ -966,7 +1031,7 @@
             window.addTriggerObservation = function() {
                 const soundInput = document.getElementById('trigger-sound');
                 const wordInput = document.getElementById('trigger-next-word');
-                
+
                 if(!soundInput.value || !wordInput.value) {
                     alert("Please fill out both the trigger sound and the following word.");
                     return;
@@ -994,13 +1059,13 @@
                 const img = document.getElementById('avatar-img');
                 placeholder.style.boxShadow = '0 0 30px rgba(14, 165, 233, 0.5)'; // change glow to simulate active
                 img.style.animation = 'pixarFloat 0.5s ease-in-out infinite'; // speak faster animation
-                
+
                 speakText("The space man.");
-                
+
                 setTimeout(() => {
                     placeholder.style.boxShadow = 'none';
                     img.style.animation = 'pixarFloat 3s ease-in-out infinite'; // return to idle
-                    
+
                     const yourTurn = document.getElementById('your-turn-area');
                     yourTurn.style.display = 'block';
                     speakText("Your turn!");
@@ -1011,7 +1076,7 @@
             window.toggleRecording = function() {
                 const btn = document.getElementById('btn-record');
                 const status = document.getElementById('recording-status');
-                
+
                 if(!isRecording) {
                     isRecording = true;
                     status.innerText = 'Listening to Sterling...';
@@ -1026,11 +1091,11 @@
             let csSavedGames = [];
             let csSpeechRecog = null;
             let csRecogTimeout = null;
-            
+
             const csMicBtn = document.getElementById('cs-mic-btn');
             const csTranscriptInput = document.getElementById('cs-transcript-input');
             const csGenerateBtn = document.getElementById('cs-generate-btn');
-            
+
             const csLoadingOverlay = document.getElementById('cs-loading-overlay');
             const csIframe = document.getElementById('cs-game-iframe');
             const csIdleScreen = document.getElementById('cs-idle-screen');
@@ -1043,7 +1108,7 @@
                 csSpeechRecog = new SpeechRecognition();
                 csSpeechRecog.continuous = true;
                 csSpeechRecog.interimResults = true;
-                
+
                 csSpeechRecog.onresult = function(event) {
                     let transcript = '';
                     for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -1053,7 +1118,7 @@
                         csTranscriptInput.value = transcript;
                     }
                 };
-                
+
                 csSpeechRecog.onend = function() {
                     csMicBtn.style.backgroundColor = '#f43f5e';
                     csMicBtn.style.transform = 'scale(1)';
@@ -1065,14 +1130,14 @@
                 if ('speechSynthesis' in window) {
                     const utterance = new SpeechSynthesisUtterance(text);
                     const voices = window.speechSynthesis.getVoices();
-                    
+
                     // Force traditional American English voices (Microsoft Mark/David or Google US)
                     const americanVoice = voices.find(v => v.name === 'Microsoft Mark - English (United States)') ||
                                           voices.find(v => v.name === 'Microsoft David - English (United States)') ||
                                           voices.find(v => v.name === 'Google US English') ||
                                           voices.find(v => v.lang === 'en-US' && v.name.includes('English (United States)')) ||
                                           voices.find(v => v.lang === 'en-US');
-                                          
+
                     if(americanVoice) utterance.voice = americanVoice;
                     utterance.rate = 0.9;
                     utterance.pitch = 1.0;
@@ -1084,7 +1149,7 @@
                 if (csSavedGames.length > 0) {
                     if (csNoGamesMsg) csNoGamesMsg.style.display = 'none';
                 }
-                
+
                 Array.from(csGameGallery.children).forEach(child => {
                     if (child.id !== 'cs-no-games-msg') child.remove();
                 });
@@ -1097,13 +1162,13 @@
                         <h3 style="font-weight: bold; font-size: 1.1rem; color: var(--text-main); margin: 0;">${game.name}</h3>
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.25rem 0 0 0;">Play again</p>
                     `;
-                    
+
                     card.addEventListener('click', () => {
                         csIframe.src = game.url;
                         csIframe.style.display = 'block';
                         csIdleScreen.style.display = 'none';
                     });
-                    
+
                     csGameGallery.appendChild(card);
                 });
             }
@@ -1114,7 +1179,7 @@
                         alert("Speech recognition is not supported in this browser.");
                         return;
                     }
-                    
+
                     // Stop if already running
                     if(csMicBtn.style.backgroundColor === 'rgb(239, 68, 68)' || csMicBtn.style.backgroundColor === '#ef4444') {
                         csSpeechRecog.stop();
@@ -1127,7 +1192,7 @@
                         csMicBtn.style.transform = 'scale(1.1)';
                         csTranscriptInput.placeholder = "Listening... (15s max)";
                         csTranscriptInput.value = ""; // Clear for new dictation
-                        
+
                         // Set 15 second hard cutoff
                         csRecogTimeout = setTimeout(() => {
                             csSpeechRecog.stop();
@@ -1135,7 +1200,7 @@
                             csMicBtn.style.transform = 'scale(1)';
                             csTranscriptInput.placeholder = "Type or say your idea...";
                         }, 15000);
-                        
+
                     } catch(e) {
                         console.error(e);
                     }
@@ -1152,7 +1217,7 @@
 
                     // Show visual clock Loading State
                     csLoadingOverlay.style.display = 'flex';
-                    
+
                     try {
                         // Attempt to hit the local bridge server which proxies to Cloud Ollama
                         const response = await fetch('http://localhost:3008/api/generate-game', {
@@ -1160,17 +1225,17 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ prompt: prompt })
                         });
-                        
+
                         if(response.ok) {
                             const data = await response.json();
                             const blob = new Blob([data.html], {type: 'text/html'});
                             const blobUrl = URL.createObjectURL(blob);
-                            
+
                             csLoadingOverlay.style.display = 'none';
                             csIdleScreen.style.display = 'none';
                             csIframe.src = blobUrl;
                             csIframe.style.display = 'block';
-                            
+
                             csSavedGames.unshift({ id: Date.now(), name: prompt.substring(0, 20) + "...", url: blobUrl });
                             csRenderGallery();
                             csSpeakToChild("I built your game! Let's play it, Sterling!");
@@ -1179,12 +1244,12 @@
                         }
                     } catch(e) {
                         console.warn("Backend not reachable. Falling back to mock render.", e);
-                        
+
                         // MOCK FALLBACK: Simulate a visually appealing render time for 5 seconds
                         setTimeout(() => {
                             csLoadingOverlay.style.display = 'none';
                             csIdleScreen.style.display = 'none';
-                            
+
                             // Load the bundled game engine without injecting raw script markup into this page.
                             csIframe.removeAttribute('src'); // clear any bad routing
                             csIframe.src = "<?php echo esc_url(get_stylesheet_directory_uri()); ?>/sterling-game-engine.html";
