@@ -189,10 +189,55 @@
         .word-bank { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; }
         .word-bank button { border-radius: 8px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.08); color: var(--text); padding: 0.5rem 0.7rem; cursor: pointer; }
         .small { font-size: 0.92rem; color: var(--muted); }
+        .quest-board {
+            background:
+                linear-gradient(135deg, rgba(31, 162, 255, 0.12), rgba(43, 209, 126, 0.08)),
+                var(--panel);
+            padding: 1.25rem;
+        }
+        .quest-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+        .quest-card {
+            min-height: 100%;
+            padding: 1rem;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .quest-card h3 { font-size: 1.05rem; margin-top: 0.65rem; }
+        .quest-card p { margin-top: 0.55rem; font-size: 0.96rem; }
+        .quest-badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 0.36rem 0.62rem;
+            background: rgba(246, 196, 83, 0.18);
+            color: #ffe39a;
+            font-weight: 800;
+            font-size: 0.78rem;
+        }
+        .skill-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.85rem; }
+        .skill-chip {
+            border-radius: 999px;
+            padding: 0.42rem 0.62rem;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            font-size: 0.88rem;
+            font-weight: 700;
+            border: 1px solid var(--line);
+        }
+        .growth-note {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-left: 4px solid var(--green);
+            background: rgba(43, 209, 126, 0.08);
+            border-radius: 8px;
+        }
+        .growth-note strong { color: var(--text); }
         @media (max-width: 900px) {
             .hero { grid-template-columns: 1fr; padding-top: 3rem; }
             .section-head { display: block; }
             .span-4, .span-5, .span-7 { grid-column: span 12; }
+            .quest-grid { grid-template-columns: 1fr; }
             .nav { align-items: start; }
             .nav-links { display: none; }
         }
@@ -202,9 +247,12 @@
     <nav class="nav">
         <div class="brand">Robert's Learning Lab</div>
         <div class="nav-links">
+            <a href="#growth-quest">Growth Quest</a>
+            <a href="#reading-support">Reading Support</a>
             <a href="#writing">Writing</a>
             <a href="#dictation">Dictation</a>
             <a href="#math">Math</a>
+            <a href="#game-center">Game Center</a>
             <a href="#plan">Daily Plan</a>
         </div>
     </nav>
@@ -233,6 +281,114 @@
     </header>
 
     <main>
+        <section id="growth-quest">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow">Teacher update</p>
+                    <h2>Robert's growth quest</h2>
+                </div>
+                <p class="small">Turn the teacher notes into short, fun practice missions.</p>
+            </div>
+            <div class="panel quest-board">
+                <div class="grid">
+                    <div class="span-5">
+                        <h3>Big wins this year</h3>
+                        <p>Robert has grown in keeping materials organized, remembering routines, following classroom steps, and using time more independently. His MAP scores moved up, which means the home support and school practice are helping.</p>
+                        <div class="growth-note">
+                            <p><strong>Parent focus:</strong> Keep practice calm and repeatable. The goal is steady progress in the exact skills his teachers named, not chasing every test category.</p>
+                        </div>
+                    </div>
+                    <div class="span-7">
+                        <div class="quest-grid">
+                            <div class="quest-card">
+                                <span class="quest-badge">Mission 1</span>
+                                <h3>FLOSS Boss</h3>
+                                <p>Practice double f, l, s, and z after a short vowel.</p>
+                                <div class="skill-chips">
+                                    <span class="skill-chip">floss</span>
+                                    <span class="skill-chip">bell</span>
+                                    <span class="skill-chip">miss</span>
+                                </div>
+                            </div>
+                            <div class="quest-card">
+                                <span class="quest-badge">Mission 2</span>
+                                <h3>Blend Builder</h3>
+                                <p>Read and write words with ending blends.</p>
+                                <div class="skill-chips">
+                                    <span class="skill-chip">-mp</span>
+                                    <span class="skill-chip">-nt</span>
+                                    <span class="skill-chip">-sk</span>
+                                </div>
+                            </div>
+                            <div class="quest-card">
+                                <span class="quest-badge">Mission 3</span>
+                                <h3>Letter Gym</h3>
+                                <p>Build smoother lowercase letter formation.</p>
+                                <div class="skill-chips">
+                                    <span class="skill-chip">r</span>
+                                    <span class="skill-chip">p</span>
+                                    <span class="skill-chip">g</span>
+                                    <span class="skill-chip">k</span>
+                                    <span class="skill-chip">b</span>
+                                    <span class="skill-chip">n</span>
+                                    <span class="skill-chip">y</span>
+                                    <span class="skill-chip">z</span>
+                                </div>
+                            </div>
+                            <div class="quest-card">
+                                <span class="quest-badge">Mission 4</span>
+                                <h3>Shape Detective</h3>
+                                <p>Compare 2D and 3D shapes by sides, faces, and vertices.</p>
+                                <div class="skill-chips">
+                                    <span class="skill-chip">sides</span>
+                                    <span class="skill-chip">faces</span>
+                                    <span class="skill-chip">vertices</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span-12">
+                        <div class="paper">
+                            <p><strong>MAP note:</strong> Geometry is the math area to practice first. For reading, the test showed Author's Craft, but the teacher note says to prioritize word study, fluency, and handwriting because those match the classroom goals right now.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="reading-support">
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow">First grade resources</p>
+                    <h2>Foundations reading support</h2>
+                </div>
+                <p class="small">Robert's first-grade packet: decodables, home practice, and fluency games.</p>
+            </div>
+            <div class="grid">
+                <div class="panel card span-4">
+                    <span class="quest-badge">Decodable Reading</span>
+                    <h3 style="margin-top: 0.8rem;">Foundations Decodables - First</h3>
+                    <p style="margin-top: 0.7rem;">Controlled reading practice for decoding accuracy, rereading, and confidence.</p>
+                    <p class="small" style="margin-top: 0.8rem;">File: C:\Users\kidaz\Downloads\Foundations-Decodables-First.pdf</p>
+                </div>
+                <div class="panel card span-4">
+                    <span class="quest-badge">Home Practice</span>
+                    <h3 style="margin-top: 0.8rem;">Foundations Home Practice - First</h3>
+                    <p style="margin-top: 0.7rem;">Short family practice guide for word study, spelling patterns, and daily repetition.</p>
+                    <p class="small" style="margin-top: 0.8rem;">File: C:\Users\kidaz\Downloads\Foundations-Home-Practice-First.pdf</p>
+                </div>
+                <div class="panel card span-4">
+                    <span class="quest-badge">Fluency Practice</span>
+                    <h3 style="margin-top: 0.8rem;">Foundations Roll and Read - First</h3>
+                    <p style="margin-top: 0.7rem;">Quick roll-and-read practice: accuracy first, then speed, then expression.</p>
+                    <p class="small" style="margin-top: 0.8rem;">File: C:\Users\kidaz\Downloads\Foundations-Roll-and-Read-First.pdf</p>
+                </div>
+                <div class="panel card span-12">
+                    <p><strong>Memory tag:</strong> education.robert.first_grade.foundations_reading_support</p>
+                </div>
+            </div>
+        </section>
+
         <section id="writing">
             <div class="section-head">
                 <div>
@@ -372,18 +528,22 @@
             <div class="grid">
                 <div class="panel card span-4">
                     <h3>Monday and Tuesday</h3>
-                    <p>Name writing, friend names, short sentences, addition and subtraction.</p>
+                    <p>Name writing, lowercase letter gym, FLOSS words, short sentences, addition and subtraction.</p>
                 </div>
                 <div class="panel card span-4">
                     <h3>Wednesday and Thursday</h3>
-                    <p>Dictation, sentence cleanup, reading aloud, multiplication as equal groups.</p>
+                    <p>Dictation, sentence cleanup, reading fluency, ending blends, and multiplication as equal groups.</p>
                 </div>
                 <div class="panel card span-4">
                     <h3>Friday</h3>
-                    <p>Review completed work, pick one favorite sentence, and do a five-problem math check.</p>
+                    <p>Review completed work, pick one favorite sentence, and do a shape detective math check.</p>
                 </div>
             </div>
         </section>
+        <?php
+            $bullmight_game_profile = 'robert';
+            include locate_template('inc/kid-game-center.php');
+        ?>
     </main>
 
     <script>
