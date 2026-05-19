@@ -369,19 +369,22 @@
                     <span class="quest-badge">Decodable Reading</span>
                     <h3 style="margin-top: 0.8rem;">Foundations Decodables - First</h3>
                     <p style="margin-top: 0.7rem;">Controlled reading practice for decoding accuracy, rereading, and confidence.</p>
-                    <p class="small" style="margin-top: 0.8rem;">File: C:\Users\kidaz\Downloads\Foundations-Decodables-First.pdf</p>
+                    <p class="small" style="margin-top: 0.8rem;">Use this for short, focused reading reps.</p>
+                    <a class="btn secondary" style="margin-top: 1rem;" href="<?php echo esc_url(get_stylesheet_directory_uri()); ?>/assets/docs/robert/Foundations-Decodables-First.pdf" target="_blank" rel="noopener">Open PDF</a>
                 </div>
                 <div class="panel card span-4">
                     <span class="quest-badge">Home Practice</span>
                     <h3 style="margin-top: 0.8rem;">Foundations Home Practice - First</h3>
                     <p style="margin-top: 0.7rem;">Short family practice guide for word study, spelling patterns, and daily repetition.</p>
-                    <p class="small" style="margin-top: 0.8rem;">File: C:\Users\kidaz\Downloads\Foundations-Home-Practice-First.pdf</p>
+                    <p class="small" style="margin-top: 0.8rem;">Use this to keep the home routine aligned with school practice.</p>
+                    <a class="btn secondary" style="margin-top: 1rem;" href="<?php echo esc_url(get_stylesheet_directory_uri()); ?>/assets/docs/robert/Foundations-Home-Practice-First.pdf" target="_blank" rel="noopener">Open PDF</a>
                 </div>
                 <div class="panel card span-4">
                     <span class="quest-badge">Fluency Practice</span>
                     <h3 style="margin-top: 0.8rem;">Foundations Roll and Read - First</h3>
                     <p style="margin-top: 0.7rem;">Quick roll-and-read practice: accuracy first, then speed, then expression.</p>
-                    <p class="small" style="margin-top: 0.8rem;">File: C:\Users\kidaz\Downloads\Foundations-Roll-and-Read-First.pdf</p>
+                    <p class="small" style="margin-top: 0.8rem;">Use this when he needs a game-like fluency warmup.</p>
+                    <a class="btn secondary" style="margin-top: 1rem;" href="<?php echo esc_url(get_stylesheet_directory_uri()); ?>/assets/docs/robert/Foundations-Roll-and-Read-First.pdf" target="_blank" rel="noopener">Open PDF</a>
                 </div>
                 <div class="panel card span-12">
                     <p><strong>Memory tag:</strong> education.robert.first_grade.foundations_reading_support</p>

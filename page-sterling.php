@@ -76,8 +76,10 @@
         <div class="nav-links">
             <a href="#about">Goals & Vision</a>
             <a href="#education-plan">Education Plan</a>
+            <a href="#kindergarten-reading">Reading</a>
             <a href="#how-to-assist">How to Assist</a>
             <a href="#interactive-games">Curriculum</a>
+            <a href="#game-center">Game Center</a>
             <a href="#progress-tracker" style="color: var(--primary);">Completed Work</a>
             <a href="#upload">Upload Center</a>
             <a href="#videos">Support Guide</a>
@@ -143,6 +145,44 @@
                             <div class="activity-lab"><div class="section-header" style="margin-bottom: 1.5rem;"><h2>Activity Lab</h2><p>Short activities matched to the report. Ten minutes is enough. Stop while it still feels successful.</p></div><div class="activity-grid"><button class="activity-card" data-activity="story"><span>📚</span><strong>Story Retell</strong><small>Beginning, middle, end.</small></button><button class="activity-card" data-activity="sounds"><span>🎧</span><strong>Sound Detective</strong><small>/s/, /sh/, final sounds.</small></button><button class="activity-card" data-activity="wordfind"><span>🧠</span><strong>Word-Finding Clues</strong><small>First sound and meaning clues.</small></button><button class="activity-card" data-activity="letters"><span>🔤</span><strong>Letter Sound Play</strong><small>No worksheet pressure.</small></button><button class="activity-card" data-activity="flex"><span>🧩</span><strong>Flexibility Practice</strong><small>One small change at a time.</small></button></div><div id="activity-detail" class="activity-detail"><h3>Pick an activity</h3><p>Choose one card above to see what to do, what to say, and what to track.</p></div></div>
                             <div class="edu-grid two-col"><article class="edu-card questions"><h3>Questions For The School Team</h3><ol><li>What are the top three speech targets for summer?</li><li>What cue should we use first when he cannot find a word?</li><li>How should we support fluency without making him feel corrected?</li><li>Is rapid naming a reading-readiness concern to monitor?</li><li>What kindergarten supports should be shared with the next teacher?</li></ol></article><article class="edu-card resources"><h3>Helpful Parent Resources</h3><ul><li><a href="https://www.asha.org/public/speech/disorders/stuttering/" target="_blank" rel="noopener">ASHA: Stuttering and cluttering overview</a></li><li><a href="https://www.asha.org/practice-portal/clinical-topics/fluency-disorders" target="_blank" rel="noopener">ASHA: Fluency support approaches</a></li><li><a href="https://www.readingrockets.org/literacy-home/reading-101-guide-parents/your-pre-kindergarten-child/phonological-and-phonemic" target="_blank" rel="noopener">Reading Rockets: Pre-K sound play</a></li><li><a href="https://www.naeyc.org/resources/pubs/tyc/dec2015/explaining-developmentally-appropriate-practice" target="_blank" rel="noopener">NAEYC: Why play supports learning</a></li><li><a href="https://beta.cdc.gov/ncbddd/actearly/milestones/checklist/4-Year-Checklist-form.html" target="_blank" rel="noopener">CDC: 4-year developmental checklist</a></li></ul></article></div>
                             <div class="edu-card tracker-card"><h3>Weekly Parent Check-In</h3><p>Use this as the simple progress note each week.</p><div class="tracker-grid"><label>Speech target practiced<input type="text" placeholder="Example: /s/ blends"></label><label>Best cue that helped<input type="text" placeholder="First sound, wait time, choice of two..."></label><label>Story he retold<input type="text" placeholder="Book, event, pretend play..."></label><label>Frustration recovery<input type="text" placeholder="What happened and what helped?"></label></div></div>
+                        </div>
+                    </div>
+                </details>
+
+                <details id="kindergarten-reading" class="curriculum-module glass-card" open>
+                    <summary>📖 Kindergarten Reading Support</summary>
+                    <div class="module-content">
+                        <div class="education-dashboard">
+                            <div class="edu-hero-card">
+                                <span class="edu-pill">Kindergarten Foundations</span>
+                                <h2>Short reading reps that support speech, confidence, and school readiness.</h2>
+                                <p>These resources give Sterling simple, repeatable practice for early decoding, letter-sound fluency, and reading confidence. Keep the work short, playful, and low-pressure so it supports language growth instead of turning into a test.</p>
+                            </div>
+                            <div class="edu-grid">
+                                <article class="edu-card resources">
+                                    <h3>Foundations Decodables - Kindergarten</h3>
+                                    <p>Use decodable passages for controlled reading practice, sound mapping, and calm rereads.</p>
+                                    <a class="btn btn-secondary" style="margin-top: 1rem;" href="<?php echo esc_url(get_stylesheet_directory_uri()); ?>/assets/docs/sterling/Foundations-Decodables-K.pdf" target="_blank" rel="noopener">Open PDF</a>
+                                </article>
+                                <article class="edu-card resources">
+                                    <h3>Foundations Roll and Read - Kindergarten</h3>
+                                    <p>Use roll-and-read practice for quick sound and word fluency without worksheet pressure.</p>
+                                    <a class="btn btn-secondary" style="margin-top: 1rem;" href="<?php echo esc_url(get_stylesheet_directory_uri()); ?>/assets/docs/sterling/Foundations-Roll-and-Read-K.pdf" target="_blank" rel="noopener">Open PDF</a>
+                                </article>
+                                <article class="edu-card focus">
+                                    <h3>How To Use This At Home</h3>
+                                    <ul>
+                                        <li>Stop after 8-10 minutes while he still feels successful.</li>
+                                        <li>Let him point, trace, clap, or act out the sound before reading it.</li>
+                                        <li>Use wait time before giving a cue.</li>
+                                        <li>Track which sounds feel easy and which ones need more support.</li>
+                                    </ul>
+                                </article>
+                            </div>
+                            <div class="edu-card tracker-card">
+                                <h3>Memory Tag</h3>
+                                <p>education.sterling.kindergarten.foundations_reading_support</p>
+                            </div>
                         </div>
                     </div>
                 </details>
@@ -544,6 +584,10 @@
             </div>
         </section>
         <!-- END SPECIAL MOMENTS -->
+        <?php
+            $bullmight_game_profile = 'sterling';
+            include locate_template('inc/kid-game-center.php');
+        ?>
     </main>
 
     <footer>
