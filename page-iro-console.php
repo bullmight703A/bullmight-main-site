@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://republic-entry-harvard-built.trycloudflare.com';
+        const API_BASE = 'https://fragrances-surname-radiation-america.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
@@ -95,6 +95,11 @@
           
           const [systemHealth, setSystemHealth] = useState({ cpu: 0, ram: 0, diskC: 0, diskD: 0, network: 0 });
 
+          const [commandsList, setCommandsList] = useState({});
+          const [selectedCmd, setSelectedCmd] = useState('');
+          const [cmdOutput, setCmdOutput] = useState('No command run yet.');
+          const [cmdRunning, setCmdRunning] = useState(false);
+
           const [localNotes, setLocalNotes] = useState(() => {
               try { return localStorage.getItem('iro_notes_save') || ''; } catch(e) { return ''; }
           });
@@ -117,16 +122,16 @@
           ]);
 
           const localFalconLocations = [
-              { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
-              { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
-              { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
-              { id: 4, name: 'Summit', url: 'https://localfalcon.com/scans?q=Summit+Kidazzle' },
-              { id: 5, name: 'Memphis', url: 'https://localfalcon.com/scans?q=Memphis+Kidazzle' },
-              { id: 6, name: 'Miami', url: 'https://localfalcon.com/scans?q=Miami+Kidazzle' },
-              { id: 7, name: 'AFC', url: 'https://localfalcon.com/scans?q=Atlanta+Federal+Center+Kidazzle' }
-            ];
+            { id: 1, name: 'Hampton', url: 'https://localfalcon.com/scans?q=Hampton+Kidazzle' },
+            { id: 2, name: 'College Pk', url: 'https://localfalcon.com/scans?q=College+Park+Kidazzle' },
+            { id: 3, name: 'West End', url: 'https://localfalcon.com/scans?q=West+End+Kidazzle' },
+            { id: 4, name: 'Summit', url: 'https://localfalcon.com/scans?q=Summit+Kidazzle' },
+            { id: 5, name: 'Memphis', url: 'https://localfalcon.com/scans?q=Memphis+Kidazzle' },
+            { id: 6, name: 'AFC', url: 'https://localfalcon.com/scans?q=Atlanta+Federal+Center+Kidazzle' },
+            { id: 7, name: 'Miami', url: 'https://localfalcon.com/scans?q=Miami+Kidazzle' },
+          ];
 
-          const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] } });
+          const [telemetryData, setTelemetryData] = useState({ seo: { matrix: [] }, kidazzle: { lessonPlans: [] }, social: [] });
           const [n8nErrors, setN8nErrors] = useState([]);
           const messagesEndRef = useRef(null);
 
@@ -137,7 +142,7 @@
           useEffect(() => {
               const fetchHealth = async () => {
                   try {
-                      const res = await fetch(`${TUNNELS.SYSTEM}/api/system-health`, { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
+                      const res = await fetch(`${TUNNELS.SYSTEM}/api/system-health`);
                       const data = await res.json();
                       if(!data.error) setSystemHealth(data);
                   } catch(e) {}
@@ -146,17 +151,23 @@
               const fetchTelemetry = async () => {
                   try {
                       // Kidazzle array
-                      const resK = await fetch(`${TUNNELS.SYSTEM}/api/kidazzle-matrix`, { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
+                      const resK = await fetch(`${TUNNELS.SYSTEM}/api/kidazzle-matrix`);
                       const dataK = await resK.json();
                       
                       // SEO array
-                      const resS = await fetch(`${TUNNELS.SYSTEM}/api/seo-matrix`, { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
+                      const resS = await fetch(`${TUNNELS.SYSTEM}/api/seo-matrix`);
                       const dataS = await resS.json();
+
+                      // Social array
+                      const resSoc = await fetch(`${TUNNELS.SYSTEM}/deliverables/social_telemetry.json`);
+                      let dataSoc = [];
+                      if(resSoc.ok) dataSoc = await resSoc.json();
                       
                       setTelemetryData(prev => ({
                           ...prev, 
                           kidazzle: { ...prev.kidazzle, lessonPlans: dataK },
-                          seo: { ...prev.seo, matrix: dataS }
+                          seo: { ...prev.seo, matrix: dataS },
+                          social: Array.isArray(dataSoc) ? dataSoc : []
                       }));
                   } catch(e) {}
               };
@@ -167,11 +178,58 @@
               return () => clearInterval(interval);
           }, []);
 
+          useEffect(() => {
+              const fetchCommands = async () => {
+                  try {
+                      const token = localStorage.getItem('openclight_session_token') || localStorage.getItem('openclight_token') || '';
+                      const res = await fetch(`${API_BASE}/api/commands`, {
+                          headers: {
+                              'Authorization': token ? `Bearer ${token}` : ''
+                          }
+                      });
+                      const data = await res.json();
+                      if (data.commands) {
+                          setCommandsList(data.commands);
+                          const keys = Object.keys(data.commands);
+                          if (keys.length > 0) setSelectedCmd(keys[0]);
+                      }
+                  } catch (e) {
+                      console.error("Failed to load commands:", e);
+                  }
+              };
+              if (activeTab === 'TERMINAL') {
+                  fetchCommands();
+              }
+          }, [activeTab]);
+
+          const handleRunCommand = async () => {
+              if (!selectedCmd || cmdRunning) return;
+              setCmdRunning(true);
+              setCmdOutput(`Running ${selectedCmd}...`);
+              try {
+                  const token = localStorage.getItem('openclight_session_token') || localStorage.getItem('openclight_token') || '';
+                  const res = await fetch(`${API_BASE}/api/terminal/chat`, {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': token ? `Bearer ${token}` : ''
+                      },
+                      body: JSON.stringify({ command: selectedCmd, threadId: 'default' })
+                  });
+                  const data = await res.json();
+                  setCmdOutput((data.stdout || '') + (data.stderr ? `\n\nERR:\n${data.stderr}` : ''));
+              } catch (err) {
+                  setCmdOutput(`Execution failed: ${err.message}`);
+              } finally {
+                  setCmdRunning(false);
+              }
+          };
+
           const [brainLogs, setBrainLogs] = useState({ memory: 'Loading core traits...', thoughts: 'Connecting to neural net...' });
           useEffect(() => {
               const fetchBrain = async () => {
                   try {
-                      const res = await fetch(`${TUNNELS.SYSTEM}/api/brain-logs`, { headers: { 'Bypass-Tunnel-Reminder': 'true' } });
+                      const res = await fetch(`${TUNNELS.SYSTEM}/api/brain-logs`);
                       const data = await res.json();
                       if(!data.error) setBrainLogs(data);
                   } catch(e) {}
@@ -189,7 +247,7 @@
             try {
                 await fetch(`${API_BASE}/api/restart-agent`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true'},
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ agent: agName })
                 });
             } catch(e) {}
@@ -211,7 +269,7 @@
             try {
                 const res = await fetch(`${TUNNELS.CHAT}/api/chat`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json', 'Bypass-Tunnel-Reminder': 'true'},
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ message: txt })
                 });
                 const data = await res.json();
@@ -342,7 +400,7 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'BRAIN', 'GROWTH', 'SEO', 'KIDAZZLE', 'WIMPER', 'NOTES'].map(tab => (
+                      {['CHAT', 'UNIFIED CHAT', 'TERMINAL', 'BRAIN', 'GROWTH', 'SEO', 'KIDAZZLE', 'CALL COCKPIT', 'ARROW', 'WIMPER', 'NOTES', 'ARCHITECTURE', 'CAPABILITIES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -380,6 +438,56 @@
                             <button type="button" className="text-slate-500 p-2 hover:text-cyan-400 transition-all focus:outline-none" title="British Auto-Talking (Standby)"><Mic size={14} /></button>
                             <button type="submit" className="text-cyan-500 p-2 hover:bg-cyan-500 hover:text-black rounded transition-all"><Send size={14} /></button>
                           </form>
+                        </div>
+                      )}
+
+                      {/* UNIFIED CHAT TAB */}
+                      {activeTab === 'UNIFIED CHAT' && (
+                        <div className="h-full flex flex-col p-0 overflow-hidden bg-slate-950/20">
+                          <iframe 
+                            src={`${API_BASE}/pdf-assets/unified_chat.html`} 
+                            className="w-full h-full border-none rounded bg-transparent"
+                            style={{ height: 'calc(100vh - 180px)', minHeight: '620px' }}
+                            id="unifiedChatIframe"
+                          />
+                        </div>
+                      )}
+
+                      {/* TERMINAL TAB */}
+                      {activeTab === 'TERMINAL' && (
+                        <div className="p-4 h-full flex flex-col space-y-4 overflow-y-auto scrollbar-hide font-mono text-xs">
+                          <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0 flex flex-col gap-4">
+                            <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest flex items-center justify-between">
+                              <span>Bounded Terminal Execution</span>
+                              <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Safe Operations Gate</span>
+                            </p>
+                            <p className="text-[10px] text-slate-500">This runs pre-approved operational commands only. It does not expose raw shell access.</p>
+                            <div className="flex flex-col sm:flex-row gap-3">
+                              <select 
+                                value={selectedCmd} 
+                                onChange={(e) => setSelectedCmd(e.target.value)} 
+                                className="flex-grow bg-slate-950/60 border border-slate-800 rounded py-2 px-3 focus:outline-none focus:border-cyan-500 text-slate-100 font-bold"
+                              >
+                                {Object.entries(commandsList).map(([id, label]) => (
+                                  <option key={id} value={id}>{label}</option>
+                                ))}
+                              </select>
+                              <button 
+                                onClick={handleRunCommand} 
+                                disabled={cmdRunning || !selectedCmd}
+                                className="bg-yellow-600 hover:bg-yellow-500 disabled:opacity-50 text-black font-bold py-2 px-6 rounded uppercase transition-all shadow-[0_0_10px_rgba(234,179,8,0.2)] active:scale-95 whitespace-nowrap"
+                              >
+                                {cmdRunning ? 'Running...' : 'Execute'}
+                              </button>
+                            </div>
+                          </div>
+                          
+                          <div className="bg-slate-900/40 border border-slate-800 rounded p-4 flex-grow flex flex-col min-h-[300px] overflow-hidden">
+                            <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-3">Terminal Output</p>
+                            <pre className="bg-slate-950/60 p-3 rounded border border-slate-800/40 flex-grow overflow-auto text-slate-300 font-mono text-[10px] whitespace-pre-wrap select-text">
+                              {cmdOutput}
+                            </pre>
+                          </div>
                         </div>
                       )}
 
@@ -463,32 +571,25 @@
                                   <span><Eye size={12} className="inline mr-2"/> Generated Content Approval Queue</span>
                                </p>
                                <div className="flex-1 bg-slate-950/50 p-3 rounded border border-slate-800/40 overflow-y-auto space-y-4 font-mono text-[10px]">
-                                   {/* Kidazzle Post */}
-                                   <div className="p-3 border border-slate-800 bg-slate-900/60 rounded">
-                                       <div className="flex justify-between items-center mb-2">
-                                           <span className="text-cyan-400 font-bold uppercase">TARGET: KIDAZZLE (FB/IG)</span>
-                                           <span className="text-green-500 bg-green-900/30 px-2 rounded border border-green-800">READY IN GHL</span>
+                                   {Array.isArray(telemetryData?.social) && telemetryData.social.length > 0 ? (
+                                       telemetryData.social.map((post, idx) => (
+                                           <div key={idx} className="p-3 border border-slate-800 bg-slate-900/60 rounded">
+                                               <div className="flex justify-between items-center mb-2">
+                                                   <span className={post.target === 'WIMPER' ? "text-yellow-400 font-bold uppercase" : "text-cyan-400 font-bold uppercase"}>TARGET: {post.target}</span>
+                                                   <span className="text-green-500 bg-green-900/30 px-2 rounded border border-green-800 uppercase">{post.status} IN GHL</span>
+                                               </div>
+                                               <p className="text-slate-300 leading-relaxed truncate">{post.content || "(No Caption)"}</p>
+                                               <div className="flex gap-2 mt-2">
+                                                   <span className="text-[8px] text-slate-500 bg-slate-800 px-1.5 rounded uppercase">Type: {post.type}</span>
+                                                   <span className="text-[8px] text-slate-500 bg-slate-800 px-1.5 rounded uppercase">Media: {post.media ? post.media.type : 'None'}</span>
+                                               </div>
+                                           </div>
+                                       ))
+                                   ) : (
+                                       <div className="text-center text-[10px] text-slate-500 font-mono animate-pulse p-4">
+                                           AWAITING LIVE SOCIAL TELEMETRY...
                                        </div>
-                                       <p className="text-slate-300 leading-relaxed">"At Kidazzle, we don't just watch your children—we help them shine. Discover early education that feels like family in Hampton and College Park."</p>
-                                       <div className="flex gap-2 mt-2">
-                                           <span className="text-[8px] text-slate-500 bg-slate-800 px-1.5 rounded">Asset: ltx_test.mp4 (LTX-2/Minimax)</span>
-                                           <span className="text-[8px] text-slate-500 bg-slate-800 px-1.5 rounded">SEO Keyword: Childcare Hampton</span>
-                                       </div>
-                                   </div>
-
-                                   {/* Wimper Post */}
-                                   <div className="p-3 border border-slate-800 bg-slate-900/60 rounded">
-                                       <div className="flex justify-between items-center mb-2">
-                                           <span className="text-yellow-400 font-bold uppercase">TARGET: WIMPER (LINKEDIN)</span>
-                                           <span className="text-green-500 bg-green-900/30 px-2 rounded border border-green-800">READY IN GHL</span>
-                                       </div>
-                                       <p className="text-slate-300 leading-relaxed">"Stop leaving earned capital on the table. WIMPER runs an automated compliance check to unlock Section 125 tax advantages you didn't know you qualified for."</p>
-                                       <div className="flex gap-2 mt-2">
-                                           <span className="text-[8px] text-slate-500 bg-slate-800 px-1.5 rounded">Asset: wimper_expert.png (DALL-E)</span>
-                                           <span className="text-[8px] text-slate-500 bg-slate-800 px-1.5 rounded">SEO Keyword: Section 125 Calculators</span>
-                                       </div>
-                                   </div>
-
+                                   )}
                                </div>
                            </div>
                         </div>
@@ -535,41 +636,245 @@
                                </p>
                                <div className="bg-slate-950/50 p-3 rounded border border-slate-800/40 flex-1 overflow-y-auto space-y-3 font-mono text-[10px]">
                                    <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                         <span className="text-slate-300 truncate">/childcare-college-park (Kidazzle)</span>
-                                         <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
-                                     </div>
-                                     <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                         <span className="text-slate-300 truncate">/childcare-hampton (Kidazzle)</span>
-                                         <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
-                                     </div>
-                                     <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                         <span className="text-slate-300 truncate">/childcare-west-end (Kidazzle)</span>
-                                         <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded">CRAWLED_WAITING</span>
-                                     </div>
-                                     <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
-                                         <span className="text-slate-300 truncate">/wimper-employer-tax-advantage (Wimper)</span>
-                                         <span className="text-cyan-500 whitespace-nowrap bg-cyan-900/20 px-2 rounded">DISPATCHED</span>
-                                     </div>
-                                 </div>
+                                       <span className="text-slate-300 truncate">/daycare-roswell-toddlers (Kidazzle)</span>
+                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/childcare-hampton-infants (Kidazzle)</span>
+                                       <span className="text-green-500 whitespace-nowrap bg-green-900/20 px-2 rounded">✓ INDEXED</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/wimper-employer-tax-advantage (Wimper)</span>
+                                       <span className="text-yellow-500 whitespace-nowrap bg-yellow-900/20 px-2 rounded">CRAWLED_WAITING</span>
+                                   </div>
+                                   <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                                       <span className="text-slate-300 truncate">/section-125-calculators (Wimper)</span>
+                                       <span className="text-cyan-500 whitespace-nowrap bg-cyan-900/20 px-2 rounded">DISPATCHED</span>
+                                   </div>
                                </div>
                            </div>
-                          )}
+                        </div>
+                      )}
 
-                        {/* KIDAZZLE TAB */}
-                        {activeTab === 'KIDAZZLE' && (
-                          <div className="p-4 h-full flex flex-col items-center justify-center text-slate-500">
-                             <p className="text-xs uppercase tracking-widest">Kidazzle Intelligence Stream Offline</p>
+                      {/* KIDAZZLE TAB */}
+                      {activeTab === 'KIDAZZLE' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
+                              <p className="text-[9px] text-slate-500 uppercase font-bold mb-1">GHL Pipeline Opportunities</p>
+                              <p className="text-xl font-bold text-cyan-400">Active Syncing...</p>
+                              <div className="mt-2 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-cyan-500 w-[100%] animate-pulse" />
+                              </div>
+                            </div>
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded flex flex-col justify-center">
+                              <a href="https://app.bullmight.com/v2/location/ZR2UvxPL2wlZNSvHjmJD/opportunities/list" target="_blank" className="w-full py-2 bg-cyan-600/10 border border-cyan-600/40 text-cyan-500 rounded text-[10px] hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
+                                 <ExternalLink size={12} /> Launch GHL Portal
+                              </a>
+                            </div>
                           </div>
-                        )}
 
-                        {/* WIMPER TAB */}
-                        {activeTab === 'WIMPER' && (
-                          <div className="p-4 h-full flex flex-col items-center justify-center text-slate-500">
-                             <p className="text-xs uppercase tracking-widest">Wimper Intelligence Stream Offline</p>
+                          <div className="bg-slate-900/40 border border-slate-800 rounded overflow-hidden mt-4">
+                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
+                              <h3 className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-2 font-bold"><Users size={12}/> Opportunity Pipeline Status</h3>
+                              <span className="text-[8px] bg-cyan-900/40 text-cyan-500 px-2 rounded border border-cyan-800/40">GHL Live Tracking</span>
+                            </div>
+                            <div className="p-2 space-y-2">
+                              {[
+                                { group: 'Intake Leads (New)', value: 177 },
+                                { group: 'Tours Scheduled & Completed', value: 23 },
+                                { group: 'Confirmed Enrollments (Won)', value: 0 }
+                              ].map((metric, i) => (
+                                <div key={i} className="p-3 bg-slate-950/40 border border-slate-800/40 rounded flex flex-col sm:flex-row gap-4 group hover:border-cyan-900 transition-all justify-between items-center">
+                                  <div className="flex-1 w-full flex justify-between items-center">
+                                     <span className="text-xs font-bold text-slate-200 uppercase">{metric.group}</span>
+                                     <span className="font-bold text-cyan-400 text-lg">{metric.value}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        )}
 
-                        {/* NOTES TAB */}
+                           <div className="bg-slate-900/40 border border-slate-800/60 shadow-lg rounded overflow-hidden mt-4">
+                            <div className="bg-slate-950 p-3 border-b border-slate-800 flex justify-between items-center">
+                              <h3 className="text-[10px] text-slate-400 uppercase tracking-widest flex items-center gap-2 font-bold"><FileText size={12}/> Lesson Plan Assembly Engine</h3>
+                              <span className="text-[8px] bg-yellow-900/40 text-yellow-500 px-2 rounded border border-yellow-800/40">Weekly PDF Pipeline</span>
+                            </div>
+                            <div className="p-4 grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-900/20">
+                               {Array.isArray(telemetryData?.kidazzle?.lessonPlans) && telemetryData.kidazzle.lessonPlans.length > 0 ? telemetryData.kidazzle.lessonPlans.map((loc, i) => (
+                                  <div key={i} className={`p-3 rounded border text-center flex flex-col items-center justify-center transition-all bg-opacity-30 backdrop-blur-sm shadow-inner ${loc.code === 'CRAWLED' ? 'bg-cyan-900/40 border-cyan-700/60' : loc.code === 'ERROR' ? 'bg-red-900/40 border-red-700/60' : 'bg-yellow-900/40 border-yellow-700/60'}`}>
+                                      <span className="text-[10px] uppercase font-bold text-slate-100">{loc.name}</span>
+                                      <span className={`text-[8px] mt-1.5 uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-black/40 ${loc.code === 'CRAWLED' ? 'text-cyan-400 border border-cyan-900/50' : loc.code === 'ERROR' ? 'text-red-400 border border-red-900/50' : 'text-yellow-400 border border-yellow-900/50'}`}>{loc.status}</span>
+                                  </div>
+                               )) : (
+                                  <div className="text-center text-[10px] text-slate-400 col-span-4 p-8 font-mono animate-pulse bg-slate-900/30 border border-slate-800 rounded">
+                                      <Zap size={14} className="mx-auto mb-2 opacity-50" />
+                                      AWAITING LIVE METRICS FROM IRO BRIDGE...
+                                  </div>
+                               )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* CALL COCKPIT TAB */}
+                      {activeTab === 'CALL COCKPIT' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide flex flex-col" style={{ minHeight: '85vh' }}>
+                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row justify-between items-center gap-4 shrink-0">
+                            <div className="flex items-center gap-3">
+                              <Layers size={24} className="text-cyan-500" />
+                              <div>
+                                <h3 className="text-xs font-bold text-slate-200 uppercase">KIDazzle Outreach Cockpit Integration</h3>
+                                <p className="text-[9px] text-slate-500 uppercase">Synchronized with GHL V2 & Leads Pipeline</p>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 w-full sm:w-auto">
+                              <button 
+                                onClick={async () => {
+                                  if (confirm("Trigger active pipeline rebuild?")) {
+                                    alert("Rebuilding leads list... This will take a few seconds.");
+                                    try {
+                                      const res = await fetch('/api/public/ghl/rebuild', {
+                                        method: 'POST'
+                                      });
+                                      const data = await res.json();
+                                      if (data.success) {
+                                        alert("Leads list rebuilt successfully!");
+                                        const iframe = document.getElementById('cockpit-iframe');
+                                        if (iframe) iframe.src = iframe.src;
+                                      } else {
+                                        alert("Rebuild failed: " + data.error);
+                                      }
+                                    } catch (err) {
+                                      alert("Error: " + err.message);
+                                    }
+                                  }
+                                }}
+                                className="flex-1 sm:flex-none text-[9px] bg-cyan-600/10 border border-cyan-600/40 text-cyan-400 px-4 py-2 rounded hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2"
+                              >
+                                 <RefreshCw size={12} /> Rebuild Leads List
+                              </button>
+                              <a 
+                                href="/call-cockpit" 
+                                target="_blank" 
+                                className="flex-1 sm:flex-none text-[9px] bg-slate-800 border border-slate-700 text-slate-300 px-4 py-2 rounded hover:bg-slate-700 hover:text-white transition-all font-bold uppercase flex items-center justify-center gap-2"
+                              >
+                                 <ExternalLink size={12} /> Open in New Tab
+                              </a>
+                            </div>
+                          </div>
+
+                          <div className="flex-grow bg-slate-950/20 border border-slate-800 rounded overflow-hidden min-h-[500px] flex flex-col">
+                            <iframe 
+                              id="cockpit-iframe"
+                              src="/call-cockpit" 
+                              className="w-full h-full border-none rounded bg-transparent flex-grow"
+                              style={{ height: '600px', minHeight: '600px' }}
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ARROW TAB */}
+                      {activeTab === 'ARROW' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide flex flex-col" style={{ minHeight: '85vh' }}>
+                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row justify-between items-center gap-4 shrink-0">
+                            <div className="flex items-center gap-3">
+                              <Zap size={24} className="text-cyan-500" />
+                              <div>
+                                <h3 className="text-xs font-bold text-slate-200 uppercase">Arrow Agent Ecosystem Dashboard</h3>
+                                <p className="text-[9px] text-slate-500 uppercase">Real-time health, logs, and controls for Arrow agents</p>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 w-full sm:w-auto">
+                              <a 
+                                href="/components/arrow-dashboard.html" 
+                                target="_blank" 
+                                className="flex-1 sm:flex-none text-[9px] bg-slate-800 border border-slate-700 text-slate-300 px-4 py-2 rounded hover:bg-slate-700 hover:text-white transition-all font-bold uppercase flex items-center justify-center gap-2"
+                              >
+                                 <ExternalLink size={12} /> Open in New Tab
+                              </a>
+                            </div>
+                          </div>
+
+                          <div className="flex-grow bg-slate-950/20 border border-slate-800 rounded overflow-hidden min-h-[500px] flex flex-col">
+                            <iframe 
+                              id="arrow-iframe"
+                              src="/components/arrow-dashboard.html" 
+                              className="w-full h-full border-none rounded bg-transparent flex-grow"
+                              style={{ height: '600px', minHeight: '600px' }}
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* WIMPER TAB */}
+                      {activeTab === 'WIMPER' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide">
+                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row justify-between items-center gap-4">
+                            <div className="flex items-center gap-3">
+                              <FileBarChart size={24} className="text-cyan-500" />
+                              <div>
+                                <h3 className="text-xs font-bold text-slate-200 uppercase">Wimper Tech EOD Summary</h3>
+                                <p className="text-[9px] text-slate-500 uppercase">Status: Awaiting Final Validation</p>
+                              </div>
+                            </div>
+                            <button className="w-full sm:w-auto text-[9px] bg-cyan-600/10 border border-cyan-600/40 text-cyan-400 px-4 py-2 rounded hover:bg-cyan-500 hover:text-black transition-all font-bold uppercase flex items-center justify-center gap-2">
+                               <Clock size={12} /> Generate Tech EOD
+                            </button>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
+                              <div className="flex items-center gap-2 mb-3 text-cyan-400 font-bold uppercase text-[10px]">
+                                <Mail size={14} /> Global Email Status
+                              </div>
+                              <div className="space-y-4">
+                                <div>
+                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Total Dispatched</span><span>14,000+</span></div>
+                                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                    <div className="h-full bg-cyan-500 w-[100%]" />
+                                  </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 text-center text-xs">
+                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
+                                     <p className="text-[8px] uppercase tracking-wider text-slate-500">Open Rate</p>
+                                     <p className="font-bold text-white mt-1">Pending Sync</p>
+                                  </div>
+                                  <div className="p-2 bg-slate-950/50 border border-slate-800/50 rounded">
+                                     <p className="text-[8px] uppercase tracking-wider text-slate-500">Response Rate</p>
+                                     <p className="font-bold text-cyan-400 mt-1">Pending Sync</p>
+                                  </div>
+                                </div>
+                                <div className="p-2 border border-green-900/40 bg-green-950/20 rounded">
+                                  <p className="text-[8px] uppercase tracking-wider text-green-500 font-bold">Deliverability Health</p>
+                                  <p className="font-bold text-green-300 text-xs mt-1">99.8% - No Spam Bounding</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="bg-slate-900/40 border border-slate-800 p-3 rounded">
+                              <div className="flex items-center gap-2 mb-3 text-yellow-500 font-bold uppercase text-[10px]">
+                                <Search size={14} /> Scraper Intelligence
+                              </div>
+                              <div className="space-y-3">
+                                <div>
+                                  <div className="flex justify-between mb-1 uppercase font-bold text-[9px]"><span>Active Progress</span><span>72%</span></div>
+                                  <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                    <div className="h-full bg-yellow-500 w-[72%] shadow-[0_0_8px_orange]" />
+                                  </div>
+                                </div>
+                                <div className="bg-slate-950/60 p-2 rounded text-[9px] text-slate-500 border-l-2 border-yellow-600">
+                                   [INF] Extraction: LinkedIn-Lead-Pool-B
+                                   <br />[RES] 4,201 records indexed
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* NOTES TAB */}
                       {activeTab === 'NOTES' && (
                         <div className="p-4 h-full flex flex-col">
                           <div className="bg-slate-900/40 p-3 border border-slate-800 flex flex-col flex-1 rounded overflow-hidden">
@@ -584,6 +889,150 @@
                                onChange={handleNotesChange}
                              />
                           </div>
+                        </div>
+                      )}
+
+                      {/* ARCHITECTURE TAB */}
+                      {activeTab === 'ARCHITECTURE' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-6 scrollbar-hide flex flex-col font-mono">
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0">
+                               <p className="text-[10px] text-cyan-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                                  <span><Layers size={12} className="inline mr-2"/> AGI Content Generation Flow</span>
+                                  <span className="text-[8px] bg-cyan-900/30 text-cyan-400 px-2 py-0.5 rounded">Live Pipeline</span>
+                               </p>
+                               <div className="space-y-4 relative">
+                                   {/* Connecting Line */}
+                                   <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-slate-800"></div>
+
+                                   <div className="relative flex items-center gap-4 z-10">
+                                       <div className="w-12 h-12 rounded bg-slate-950 border border-cyan-800 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(34,211,238,0.2)]">
+                                           <Users size={20} className="text-cyan-400" />
+                                       </div>
+                                       <div className="bg-slate-950/60 border border-slate-800 rounded p-3 flex-1">
+                                           <h4 className="text-[10px] font-bold text-cyan-400 uppercase mb-1">1. The Brain (Llama 3.2 3B)</h4>
+                                           <p className="text-[9px] text-slate-400">IRO runs 100% locally on the D-Drive. He parses your Telegram request, checks his memory, and uses the <span className="text-cyan-300">generate_quote_drafts</span> tool.</p>
+                                       </div>
+                                   </div>
+
+                                   <div className="relative flex items-center gap-4 z-10">
+                                       <div className="w-12 h-12 rounded bg-slate-950 border border-purple-800 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
+                                           <Zap size={20} className="text-purple-400" />
+                                       </div>
+                                       <div className="bg-slate-950/60 border border-slate-800 rounded p-3 flex-1">
+                                           <h4 className="text-[10px] font-bold text-purple-400 uppercase mb-1">2. The Copywriter (Gemini 2.5 Flash API)</h4>
+                                           <p className="text-[9px] text-slate-400">The Node.js script wakes up Gemini to dynamically invent 3 brand new, highly engaging social media quotes and hashtags based on Kidazzle's core themes.</p>
+                                       </div>
+                                   </div>
+
+                                   <div className="relative flex items-center gap-4 z-10">
+                                       <div className="w-12 h-12 rounded bg-slate-950 border border-yellow-800 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(234,179,8,0.2)]">
+                                           <Video size={20} className="text-yellow-400" />
+                                       </div>
+                                       <div className="bg-slate-950/60 border border-slate-800 rounded p-3 flex-1">
+                                           <h4 className="text-[10px] font-bold text-yellow-400 uppercase mb-1">3. The Image Creator (Puppeteer)</h4>
+                                           <p className="text-[9px] text-slate-400">The script injects Gemini's text into the exact HTML/CSS torn-paper template. Puppeteer snaps a high-res 1080x1920 screenshot of the HTML to create the final image.</p>
+                                       </div>
+                                   </div>
+
+                                   <div className="relative flex items-center gap-4 z-10">
+                                       <div className="w-12 h-12 rounded bg-slate-950 border border-green-800 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(34,197,94,0.2)]">
+                                           <Send size={20} className="text-green-400" />
+                                       </div>
+                                       <div className="bg-slate-950/60 border border-slate-800 rounded p-3 flex-1">
+                                           <h4 className="text-[10px] font-bold text-green-400 uppercase mb-1">4. The Publisher (GHL API)</h4>
+                                           <p className="text-[9px] text-slate-400">The script uploads the generated images directly to GoHighLevel's media library and schedules the posts for 9:00 AM, 1:00 PM, and 7:00 PM.</p>
+                                       </div>
+                                   </div>
+
+                                   <div className="relative flex items-center gap-4 z-10">
+                                       <div className="w-12 h-12 rounded bg-slate-950 border border-slate-600 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(71,85,105,0.2)]">
+                                           <Database size={20} className="text-slate-300" />
+                                       </div>
+                                       <div className="bg-slate-950/60 border border-slate-800 rounded p-3 flex-1">
+                                           <h4 className="text-[10px] font-bold text-slate-300 uppercase mb-1">5. Local Telemetry (D Drive JSON)</h4>
+                                           <p className="text-[9px] text-slate-400">GHL Post IDs and content are appended to <span className="text-slate-300">D:\OpenClaw_Analytics\social_posts.json</span> so IRO can analyze performance and rewrite scripts later.</p>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                        </div>
+                      )}
+
+                      {/* AGENTIC CAPABILITIES TAB */}
+                      {activeTab === 'CAPABILITIES' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide flex flex-col font-mono">
+                           <div className="bg-slate-900/40 border border-slate-800 rounded p-4 shrink-0">
+                               <p className="text-[10px] text-yellow-500 uppercase font-bold tracking-widest mb-4 flex items-center justify-between">
+                                  <span><Zap size={12} className="inline mr-2"/> Active Agentic Infrastructure</span>
+                                  <span className="text-[8px] bg-yellow-900/30 text-yellow-500 px-2 py-0.5 rounded">Capabilities Mapping</span>
+                               </p>
+                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                   
+                                   <div className="p-3 bg-slate-950/50 border border-slate-800/40 rounded group hover:border-cyan-900 transition-colors">
+                                       <div className="flex items-center justify-between mb-2">
+                                          <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-1"><Users size={12}/> The Brain (IRO)</span>
+                                          <span className="text-[8px] text-green-500 uppercase tracking-widest px-1 border border-green-800 rounded">Port: 3008</span>
+                                       </div>
+                                       <p className="text-[9px] text-slate-400 mb-2">Master orchestration node. Intercepts Telegram commands, manages sub-agents, reads Master Memory, and performs local telemetry logging.</p>
+                                       <div className="flex flex-wrap gap-1">
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">Llama 3.2 3B</span>
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">MCP Bridge</span>
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">Telegram Bot</span>
+                                       </div>
+                                   </div>
+
+                                   <div className="p-3 bg-slate-950/50 border border-slate-800/40 rounded group hover:border-purple-900 transition-colors">
+                                       <div className="flex items-center justify-between mb-2">
+                                          <span className="text-[10px] text-purple-400 font-bold uppercase tracking-wider flex items-center gap-1"><Video size={12}/> Princess Coi (Marketing)</span>
+                                          <span className="text-[8px] text-green-500 uppercase tracking-widest px-1 border border-green-800 rounded">Port: 3010</span>
+                                       </div>
+                                       <p className="text-[9px] text-slate-400 mb-2">Viral marketing director. Specializes in short-form UGC hooks, trending TikTok formats, and high-CTR social media copy.</p>
+                                       <div className="flex flex-wrap gap-1">
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">Gemini 2.5 Flash</span>
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">UGC Hooks</span>
+                                       </div>
+                                   </div>
+
+                                   <div className="p-3 bg-slate-950/50 border border-slate-800/40 rounded group hover:border-yellow-900 transition-colors">
+                                       <div className="flex items-center justify-between mb-2">
+                                          <span className="text-[10px] text-yellow-400 font-bold uppercase tracking-wider flex items-center gap-1"><FileText size={12}/> AGI Quote Engine</span>
+                                          <span className="text-[8px] text-green-500 uppercase tracking-widest px-1 border border-green-800 rounded">Tool Active</span>
+                                       </div>
+                                       <p className="text-[9px] text-slate-400 mb-2">Dynamically writes daily social media quotes via Gemini, converts them to torn-paper HTML, and renders them to MP4/Image using Puppeteer for GoHighLevel posting.</p>
+                                       <div className="flex flex-wrap gap-1">
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">Gemini API</span>
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">Puppeteer</span>
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">GHL API</span>
+                                       </div>
+                                   </div>
+
+                                   <div className="p-3 bg-slate-950/50 border border-slate-800/40 rounded group hover:border-pink-900 transition-colors">
+                                       <div className="flex items-center justify-between mb-2">
+                                          <span className="text-[10px] text-pink-400 font-bold uppercase tracking-wider flex items-center gap-1"><Mic size={12}/> UGC Skit Factory</span>
+                                          <span className="text-[8px] text-green-500 uppercase tracking-widest px-1 border border-green-800 rounded">Tool Active</span>
+                                       </div>
+                                       <p className="text-[9px] text-slate-400 mb-2">Autonomously writes UGC hooks, generates female voiceovers via ElevenLabs, and lip-syncs permanent Arcads baseline avatars (Harper/Victoria) via SyncLabs.</p>
+                                       <div className="flex flex-wrap gap-1">
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">ElevenLabs</span>
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">SyncLabs</span>
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">Princess Coi</span>
+                                       </div>
+                                   </div>
+
+                                   <div className="p-3 bg-slate-950/50 border border-slate-800/40 rounded group hover:border-blue-900 transition-colors">
+                                       <div className="flex items-center justify-between mb-2">
+                                          <span className="text-[10px] text-blue-400 font-bold uppercase tracking-wider flex items-center gap-1"><Crosshair size={12}/> Courtney Node (Remote)</span>
+                                          <span className="text-[8px] text-yellow-500 uppercase tracking-widest px-1 border border-yellow-800 rounded">Awaiting IP Bind</span>
+                                       </div>
+                                       <p className="text-[9px] text-slate-400 mb-2">Independent execution node capable of taking offloaded reasoning tasks from IRO. Currently configuring `0.0.0.0` local network handshake.</p>
+                                       <div className="flex flex-wrap gap-1">
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">Physical Node</span>
+                                          <span className="text-[8px] text-slate-500 bg-slate-900 px-1 rounded border border-slate-800">Remote API</span>
+                                       </div>
+                                   </div>
+
+                               </div>
+                           </div>
                         </div>
                       )}
                     </div>
