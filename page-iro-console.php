@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://left-opt-tube-newspaper.trycloudflare.com';
+        const API_BASE = 'https://webshots-factory-voted-palestinian.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
