@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://healthcare-gilbert-knitting-momentum.trycloudflare.com';
+        const API_BASE = 'https://manufacturers-others-managed-cloud.trycloudflare.com';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
@@ -92,6 +92,10 @@
           const [activeTab, setActiveTab] = useState('CHAT');
           const [inputValue, setInputValue] = useState('');
           const [activeIframe, setActiveIframe] = useState(null);
+          
+          const [isRecording, setIsRecording] = useState(false);
+          const mediaRecorderRef = useRef(null);
+          const audioChunksRef = useRef([]);
           
           const [systemHealth, setSystemHealth] = useState({ cpu: 0, ram: 0, diskC: 0, diskD: 0, network: 0 });
 
@@ -256,6 +260,61 @@
             }, 2000);
           };
 
+          const toggleRecording = async () => {
+            if (isRecording) {
+              if (mediaRecorderRef.current) {
+                mediaRecorderRef.current.stop();
+              }
+              setIsRecording(false);
+            } else {
+              audioChunksRef.current = [];
+              try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                mediaRecorderRef.current = mediaRecorder;
+                
+                mediaRecorder.ondataavailable = (event) => {
+                  if (event.data.size > 0) {
+                    audioChunksRef.current.push(event.data);
+                  }
+                };
+
+                mediaRecorder.onstop = async () => {
+                  const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                  const reader = new FileReader();
+                  reader.readAsDataURL(audioBlob);
+                  reader.onloadend = async () => {
+                    const base64Data = reader.result.split(',')[1];
+                    setChatMessages(prev => [...prev, { role: 'system', text: '🎙️ Transcribing voice note...' }]);
+                    try {
+                      const res = await fetch(`${TUNNELS.SYSTEM}/api/transcribe`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ audio: base64Data, mimeType: 'audio/webm' })
+                      });
+                      const data = await res.json();
+                      if (data.text) {
+                        setInputValue(data.text);
+                        setChatMessages(prev => prev.filter(m => m.text !== '🎙️ Transcribing voice note...'));
+                      } else {
+                        throw new Error(data.error || 'No text transcribed');
+                      }
+                    } catch (err) {
+                      setChatMessages(prev => prev.filter(m => m.text !== '🎙️ Transcribing voice note...'));
+                      setChatMessages(prev => [...prev, { role: 'system', text: `⚠️ Transcription failed: ${err.message}` }]);
+                    }
+                  };
+                  stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+                setIsRecording(true);
+              } catch (err) {
+                setChatMessages(prev => [...prev, { role: 'system', text: `⚠️ Mic Access Denied: ${err.message}` }]);
+              }
+            }
+          };
+
           const handleSendMessage = async (e) => {
             e.preventDefault();
             if (!inputValue.trim()) return;
@@ -400,7 +459,7 @@
                   {/* Dynamic Middle Area Box */}
                   <section className="flex-1 flex flex-col bg-slate-900/10 border border-slate-800/60 rounded overflow-hidden min-h-0">
                     <div className="flex flex-none border-b border-slate-800 bg-slate-950/20 overflow-x-auto scrollbar-hide">
-                      {['CHAT', 'UNIFIED CHAT', 'TERMINAL', 'BRAIN', 'GROWTH', 'SEO', 'KIDAZZLE', 'CALL COCKPIT', 'ARROW', 'WIMPER', 'NOTES', 'ARCHITECTURE', 'CAPABILITIES'].map(tab => (
+                      {['CHAT', 'UNIFIED CHAT', 'TERMINAL', 'BRAIN', 'GROWTH', 'SEO', 'KIDAZZLE', 'MARKETING', 'CALL COCKPIT', 'ARROW', 'WIMPER', 'NOTES', 'ARCHITECTURE', 'CAPABILITIES'].map(tab => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`flex-1 sm:flex-none px-4 sm:px-8 py-3 text-[10px] font-bold tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-cyan-400 bg-slate-950 border-b-2 border-cyan-400' : 'text-slate-500 hover:text-slate-300'}`}>
                           {tab}
                         </button>
@@ -435,7 +494,14 @@
                           <form onSubmit={handleSendMessage} className="flex gap-2 bg-slate-950/40 p-1 rounded border border-slate-800 flex-none items-center">
                             <button type="button" className="text-slate-500 p-2 hover:text-cyan-400 transition-all focus:outline-none"><Paperclip size={14} /></button>
                             <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Wait for prompt or type query..." className="flex-1 bg-transparent p-2 text-xs focus:outline-none font-bold text-white placeholder-slate-600" />
-                            <button type="button" className="text-slate-500 p-2 hover:text-cyan-400 transition-all focus:outline-none" title="British Auto-Talking (Standby)"><Mic size={14} /></button>
+                            <button 
+                              type="button" 
+                              onClick={toggleRecording} 
+                              className={`p-2 transition-all focus:outline-none ${isRecording ? 'text-red-500 animate-pulse bg-red-950/20 rounded' : 'text-slate-500 hover:text-cyan-400'}`} 
+                              title={isRecording ? 'Recording... Click to Stop & Transcribe' : 'Record Voice Message'}
+                            >
+                              <Mic size={14} />
+                            </button>
                             <button type="submit" className="text-cyan-500 p-2 hover:bg-cyan-500 hover:text-black rounded transition-all"><Send size={14} /></button>
                           </form>
                         </div>
@@ -713,6 +779,39 @@
                                   </div>
                                )}
                             </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* MARKETING TAB */}
+                      {activeTab === 'MARKETING' && (
+                        <div className="p-4 h-full overflow-y-auto space-y-4 scrollbar-hide flex flex-col" style={{ minHeight: '85vh' }}>
+                          <div className="bg-slate-900/40 border border-slate-800 p-4 rounded flex flex-col sm:flex-row justify-between items-center gap-4 shrink-0">
+                            <div className="flex items-center gap-3">
+                              <Layers size={24} className="text-cyan-500" />
+                              <div>
+                                <h3 className="text-xs font-bold text-slate-200 uppercase">KIDazzle Inbound Growth Map & Marketing Overview</h3>
+                                <p className="text-[9px] text-slate-500 uppercase">High-level insights on lead acquisition channels, GMB rankings, and campaign metrics</p>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 w-full sm:w-auto">
+                              <a 
+                                href="/marketing" 
+                                target="_blank" 
+                                className="flex-1 sm:flex-none text-[9px] bg-slate-800 border border-slate-700 text-slate-300 px-4 py-2 rounded hover:bg-slate-700 hover:text-white transition-all font-bold uppercase flex items-center justify-center gap-2"
+                              >
+                                 <ExternalLink size={12} /> Open in New Tab
+                              </a>
+                            </div>
+                          </div>
+
+                          <div className="flex-grow bg-slate-950/20 border border-slate-800 rounded overflow-hidden min-h-[600px] flex flex-col">
+                            <iframe 
+                              id="marketing-iframe"
+                              src="/marketing" 
+                              className="w-full h-full border-none rounded bg-transparent flex-grow"
+                              style={{ height: '700px', minHeight: '600px' }}
+                            />
                           </div>
                         </div>
                       )}
