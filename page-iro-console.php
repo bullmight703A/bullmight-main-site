@@ -45,7 +45,7 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        const API_BASE = 'https://manufacturers-others-managed-cloud.trycloudflare.com';
+        const API_BASE = 'https://iro.bullmight.com';
         
         // Hardcore Dedicated Tunnels (Replace API_BASE with HTTPS Cloudflare tunnel URLs when bound to ports)
         const TUNNELS = {
@@ -142,6 +142,29 @@
           useEffect(() => {
               messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
           }, [chatMessages]);
+
+          useEffect(() => {
+              const fetchHistory = async () => {
+                  try {
+                      const res = await fetch(`${API_BASE}/deliverables/public/unified_chat.json`);
+                      if (res.ok) {
+                          const data = await res.json();
+                          const formatted = data.map(item => ({
+                              role: item.sender === 'User' || item.sender === 'Robert' ? 'user' : 'agent',
+                              name: item.sender === 'User' || item.sender === 'Robert' ? 'User' : 'IRO',
+                              text: item.message
+                          }));
+                          setChatMessages([
+                              { role: 'system', text: 'Secure connection established to iro.bullmight.com.' },
+                              ...formatted
+                          ]);
+                      }
+                  } catch (e) {
+                      console.error("Failed to load unified chat history:", e);
+                  }
+              };
+              fetchHistory();
+          }, []);
 
           useEffect(() => {
               const fetchHealth = async () => {
@@ -326,10 +349,14 @@
             setChatMessages(prev => [...prev, { role: 'system', text: 'Executing query on internal vectors...', temp: true }]);
 
             try {
+                const token = localStorage.getItem('openclight_session_token') || localStorage.getItem('openclight_token') || '';
                 const res = await fetch(`${TUNNELS.CHAT}/api/chat`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ message: txt })
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token ? `Bearer ${token}` : ''
+                    },
+                    body: JSON.stringify({ prompt: txt })
                 });
                 const data = await res.json();
                 
