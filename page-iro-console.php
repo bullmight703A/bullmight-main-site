@@ -93,6 +93,7 @@
           const [inputValue, setInputValue] = useState('');
           const [activeIframe, setActiveIframe] = useState(null);
           
+          const [businessContext, setBusinessContext] = useState('wimper');
           const [isRecording, setIsRecording] = useState(false);
           const mediaRecorderRef = useRef(null);
           const audioChunksRef = useRef([]);
@@ -146,17 +147,22 @@
           useEffect(() => {
               const fetchHistory = async () => {
                   try {
-                      const res = await fetch(`${API_BASE}/deliverables/public/unified_chat.json`);
+                      const res = await fetch(`${API_BASE}/deliverables/public/${businessContext}_chat.json`);
                       if (res.ok) {
                           const data = await res.json();
                           const formatted = data.map(item => ({
                               role: item.sender === 'User' || item.sender === 'Robert' ? 'user' : 'agent',
                               name: item.sender === 'User' || item.sender === 'Robert' ? 'User' : 'IRO',
-                              text: item.message
+                              text: item.message,
+                              audioUrl: item.audioUrl || null
                           }));
                           setChatMessages([
-                              { role: 'system', text: 'Secure connection established to iro.bullmight.com.' },
+                              { role: 'system', text: `Secure connection established for ${businessContext.toUpperCase()} context.` },
                               ...formatted
+                          ]);
+                      } else {
+                          setChatMessages([
+                              { role: 'system', text: `No active conversation history found for ${businessContext.toUpperCase()}. Start typing below!` }
                           ]);
                       }
                   } catch (e) {
@@ -164,7 +170,11 @@
                   }
               };
               fetchHistory();
-          }, []);
+              
+              // Set up 5-second polling interval for live synchronization
+              const interval = setInterval(fetchHistory, 5000);
+              return () => clearInterval(interval);
+          }, [businessContext]);
 
           useEffect(() => {
               const fetchHealth = async () => {
@@ -313,7 +323,7 @@
                       const res = await fetch(`${TUNNELS.SYSTEM}/api/transcribe`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ audio: base64Data, mimeType: 'audio/webm' })
+                        body: JSON.stringify({ audio: base64Data, mimeType: 'audio/webm', business: businessContext })
                       });
                       const data = await res.json();
                       if (data.text) {
@@ -356,7 +366,7 @@
                         'Content-Type': 'application/json',
                         'Authorization': token ? `Bearer ${token}` : ''
                     },
-                    body: JSON.stringify({ prompt: txt })
+                    body: JSON.stringify({ prompt: txt, business: businessContext })
                 });
                 const data = await res.json();
                 
@@ -498,6 +508,17 @@
                       {/* CHAT TAB */}
                       {activeTab === 'CHAT' && (
                         <div className="h-full flex flex-col p-4">
+                          <div className="flex justify-between items-center pb-2 mb-2 border-b border-slate-800/60 flex-none">
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Active Business Channel</span>
+                            <select 
+                              value={businessContext} 
+                              onChange={(e) => setBusinessContext(e.target.value)} 
+                              className="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-[10px] text-cyan-400 font-bold uppercase focus:outline-none cursor-pointer"
+                            >
+                              <option value="wimper">WIMPER / Shielded Horizon</option>
+                              <option value="kidazzle">KIDazzle Childcare</option>
+                            </select>
+                          </div>
                           <div className="flex-1 overflow-y-auto space-y-4 mb-4 scrollbar-hide pr-2">
                             {chatMessages.map((msg, i) => (
                               <div key={i} className="text-[11px] animate-in fade-in slide-in-from-bottom-1 duration-300">
@@ -511,7 +532,11 @@
                                       </span>
                                       <span className="text-slate-300 ml-2 leading-relaxed whitespace-pre-wrap">{msg.text}</span>
                                     </div>
-                                      {/* Thought block removed - Native to BRAIN tab only */}
+                                    {msg.audioUrl && (
+                                      <div className="mt-2 flex-none">
+                                        <audio src={msg.audioUrl} controls className="h-6 w-full max-w-[240px] opacity-70 hover:opacity-100 transition-opacity bg-slate-950/60 rounded" />
+                                      </div>
+                                    )}
                                   </div>
                                 )}
                               </div>
