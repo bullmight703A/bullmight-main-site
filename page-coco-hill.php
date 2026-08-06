@@ -4,9 +4,7 @@
  */
 if (isset($_GET['iro_proxy'])) {
     $action = $_GET['iro_proxy'];
-    $url = ($action === 'action') 
-        ? "https://iro-bullmight-action16.loca.lt/api/" . $action 
-        : "https://iro-bullmight-coco3010.loca.lt/api/" . $action;
+    $url = "https://coy.bullmight.com/webhook/" . $action;
     
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
