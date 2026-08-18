@@ -187,7 +187,12 @@
             };
 
             // Headshot Image URL
-            const headshotUrl = "<?php echo esc_url(get_template_directory_uri() . '/images/dr_allen_headshot.png'); ?>";
+            const headshotUrl = "<?php echo esc_url(get_template_directory_uri() . '/images/dr_allen_headshot_v2.jpg'); ?>";
+
+            // Advisory Image URLs
+            const advisoryExecUrl = "<?php echo esc_url(get_template_directory_uri() . '/images/advisory_exec.jpg'); ?>";
+            const advisorySpeakingUrl = "<?php echo esc_url(get_template_directory_uri() . '/images/advisory_speaking.jpg'); ?>";
+            const advisoryThoughtUrl = "<?php echo esc_url(get_template_directory_uri() . '/images/advisory_thought.jpg'); ?>";
 
             return (
                 <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 flex flex-col min-h-screen">
@@ -386,6 +391,7 @@
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     <div className="bg-white border border-slate-200/60 p-6 rounded-2xl flex flex-col justify-between hover:border-brand-teal/30 hover:bg-brand-slateLight/20 shadow-sm transition-all duration-300">
                                         <div className="space-y-4">
+                                            <img src={advisoryExecUrl} alt="Executive Advisory" className="w-full h-48 object-cover rounded-xl shadow-sm border border-slate-100" />
                                             <div className="p-3 bg-brand-teal/10 rounded-xl w-fit text-brand-teal">
                                                 <Icon name="Activity" size={24} />
                                             </div>
@@ -401,6 +407,7 @@
 
                                     <div className="bg-white border border-slate-200/60 p-6 rounded-2xl flex flex-col justify-between hover:border-brand-gold/30 hover:bg-brand-slateLight/20 shadow-sm transition-all duration-300">
                                         <div className="space-y-4">
+                                            <img src={advisorySpeakingUrl} alt="Keynotes & Speaking" className="w-full h-48 object-cover rounded-xl shadow-sm border border-slate-100" />
                                             <div className="p-3 bg-brand-gold/10 rounded-xl w-fit text-brand-gold">
                                                 <Icon name="MessageSquare" size={24} />
                                             </div>
@@ -416,6 +423,7 @@
 
                                     <div className="bg-white border border-slate-200/60 p-6 rounded-2xl flex flex-col justify-between hover:border-brand-teal/30 hover:bg-brand-slateLight/20 shadow-sm transition-all duration-300">
                                         <div className="space-y-4">
+                                            <img src={advisoryThoughtUrl} alt="Thought Leadership" className="w-full h-48 object-cover rounded-xl shadow-sm border border-slate-100" />
                                             <div className="p-3 bg-brand-teal/10 rounded-xl w-fit text-brand-teal">
                                                 <Icon name="Shield" size={24} />
                                             </div>
