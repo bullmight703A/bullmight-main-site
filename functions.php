@@ -60,6 +60,7 @@ function bullmight_subdomain_router($template) {
         'iro.bullmight.com' => 'iro-dashboard.php',
         'sterling.bullmight.com' => 'page-sterling.php',
         'robert.bullmight.com' => 'page-robert.php',
+        'drallen.bullmight.com' => 'page-dr-allen.php',
     );
 
     foreach ($routes as $domain => $template_file) {
@@ -73,6 +74,13 @@ function bullmight_subdomain_router($template) {
 
     if ($path === 'robert') {
         $new_template = locate_template(array('page-robert.php'));
+        if (!empty($new_template)) {
+            return $new_template;
+        }
+    }
+
+    if ($path === 'dr-allen') {
+        $new_template = locate_template(array('page-dr-allen.php'));
         if (!empty($new_template)) {
             return $new_template;
         }
