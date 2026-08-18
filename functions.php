@@ -61,6 +61,7 @@ function bullmight_subdomain_router($template) {
         'sterling.bullmight.com' => 'page-sterling.php',
         'robert.bullmight.com' => 'page-robert.php',
         'drallen.bullmight.com' => 'page-dr-allen.php',
+        'dr.bullmight.com' => 'page-dr-allen.php',
     );
 
     foreach ($routes as $domain => $template_file) {
